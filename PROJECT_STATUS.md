@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-04T23:01:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-04T23:22:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
@@ -36,6 +36,8 @@ Each conversion includes its own game-template README, original-asset record, nu
 The catalog and asset inventory reflect these implementations without prematurely claiming new 4K or deployment evidence. `GAMES_STATUS.md` now includes Ark and correctly identifies the previously released Tactics Grid as 3D. Release syntax checks derive routes from the complete catalog. A concrete racing input defect was fixed: a second touch/focus change no longer releases an already held throttle or steering control.
 
 ## Verification so far
+
+Exact candidate `8a9ff73d1de2184f4b9abe5b646012892830b81e` failed [CI 41921885769](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41921885769): **197 JavaScript + 52 API tests passed**, **13 accessibility + 8 contract/fallback + 22/23 rendered gameplay checks passed**. The sole failure was the Penalty Pro test’s exact `getByLabel` locator on a wrapping select label; the captured accessibility tree correctly exposes a Graphics combobox. The test now addresses that actual accessible role/name. No gameplay assertion was removed and no timeout was increased. A new exact-candidate gate remains required. The inspected Neon and Apex frames show actual original 3D; Neon’s first-board camera framing will be improved in the engineering integration.
 
 | Check | Actual outcome / limit |
 | --- | --- |

@@ -1,0 +1,62 @@
+{
+  "source": "8a9ff73d1de2184f4b9abe5b646012892830b81e",
+  "ciRun": 41921885769,
+  "ciJob": 126896505986,
+  "conclusion": "failure; not integrated or deployed",
+  "node": {
+    "passed": 197,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api": {
+    "passed": 52,
+    "warnings": 1
+  },
+  "browser": {
+    "accessibility-results": {
+      "startTime": "2026-11-04T22:06:12.409Z",
+      "duration": 36164.82,
+      "expected": 13,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "browser-results": {
+      "startTime": "2026-11-04T22:08:26.285Z",
+      "duration": 578761.1950000001,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "contract-results": {
+      "startTime": "2026-11-04T22:06:49.542Z",
+      "duration": 95800.74799999999,
+      "expected": 8,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "build": {
+    "source": "8a9ff73d1de2184f4b9abe5b646012892830b81e",
+    "modified": false,
+    "runtimeFiles": 159,
+    "fingerprintSha256": "b4999ba6417de2bc555632f2486a92836b8d4b04d756420762d7059ddc9bb56b"
+  },
+  "failure": "Penalty Pro exact getByLabel Graphics locator included wrapping-label content. Accessibility tree exposes Graphics combobox; corrected to actual accessible role/name. Assertions and timeouts retained. New exact-candidate gate required.",
+  "artifact": {
+    "id": 13367808732,
+    "sha256": "a14f087a96cf7285735e98eb05dd680f4f3a7f782da3ef31252ec9c5c5eff997"
+  },
+  "inspectedFrames": [
+    {
+      "pathInArtifact": "test-results/neon-4k.png",
+      "sha256": "a7adc1369f39efda0d1baee7bbaa802a9e5170c6ed47ef54cc5365e7462a1732"
+    },
+    {
+      "pathInArtifact": "test-results/browser/racing-APEX-renders-a-real-26417-h-keyboard-and-step-driving/apex-4k.png",
+      "sha256": "94ed9f4fe3f8fa574471812d014e9a68e5f3104e3dd9473948e0cf91d8c761fa"
+    }
+  ]
+}

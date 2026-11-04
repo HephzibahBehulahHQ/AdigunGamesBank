@@ -67,13 +67,13 @@ test('Penalty Pro renders actual 4K and wins through five shots and five goalkee
   await page.goto('/game17/');
   const canvas = page.locator('#penalty-canvas');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2');
-  await page.getByLabel('Graphics', { exact: true }).selectOption('4k');
+  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await canvas.screenshot({ path: testInfo.outputPath('penalty-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('penalty-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
-  await page.getByLabel('Graphics', { exact: true }).selectOption('auto');
+  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
   await page.setViewportSize({ width: 800, height: 900 });
   await shootFive(page);
   await expect(page.locator('#goals')).toHaveText('5 / 5');
