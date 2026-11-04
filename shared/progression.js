@@ -10,7 +10,8 @@ export function randomFor(seed) {
   return () => { state += 0x6D2B79F5; let t = state; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 }
 /** Browser-local progression. A final-level clear is recorded separately from unlocking it. */
-export function campaign(id, storage = globalThis.localStorage) {
+export function campaign(id, storage) {
+  if (!storage) { try { storage = globalThis.localStorage; } catch { storage = null; } }
   const key = `adigun.campaign.v1.${id}`;
   let data = { version: 1, unlocked: 1, completed: 0 };
   try {

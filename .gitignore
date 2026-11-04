@@ -2,6 +2,7 @@
 node_modules/
 dist/
 test-results/
+.openai/
 .playwright/
 *.log
 couch-suite/.godot/

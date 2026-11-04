@@ -1,3 +1,63 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06101e"><title>WORLD FOOTBALL | Hephzibah Behulah</title><style>
-:root{color-scheme:dark;--cyan:#55f5e5;--mint:#b1ffcf;--bg:#06101e;--panel:#102034;--muted:#a6becd}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#153b50,var(--bg) 65%);color:#eafaff;font:15px/1.45 system-ui,sans-serif;text-align:center}.brand{display:flex;justify-content:center;align-items:center;gap:10px;margin:10px auto;width:min(92%,500px);padding:8px;background:#071522;border:1px solid #55f5e544;border-radius:12px;color:#eafaff;text-decoration:none;font-weight:800;letter-spacing:.1em}.brand img{width:145px;max-height:42px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px}.wrap{width:min(1000px,96%);margin:16px auto}.eyebrow{color:var(--cyan);letter-spacing:.2em;font:700 11px ui-monospace,monospace}h1{font-size:clamp(32px,6vw,56px);line-height:1;margin:6px}.lead{color:var(--muted)}.selectors,.hud,.controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px}.selectors label{color:var(--muted);font-size:12px}select,button{font:inherit}select{background:#102034;color:#eafaff;border:1px solid #55f5e566;border-radius:8px;padding:10px;max-width:94vw}.pill{padding:7px 12px;border:1px solid #55f5e555;border-radius:99px;background:#081827}.field{width:min(100%,860px);margin:auto;border:2px solid #7dfbd0;border-radius:14px;overflow:hidden;box-shadow:0 0 28px #00e5aa20}canvas{display:block;width:100%;height:auto;background:#05603c;touch-action:none}.controls button{min-width:62px;padding:10px;border:1px solid #55f5e577;border-radius:10px;background:#102034;color:#eafaff;font-weight:850;cursor:pointer}.controls .accent{background:linear-gradient(90deg,var(--cyan),var(--mint));color:#06131b;border:0}.controls button:disabled{opacity:.45}#message{min-height:24px;color:var(--mint);font-weight:700}.guide{color:var(--muted);font-size:12px}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style></head><body><a class="brand" href="../" aria-label="Game Bank home"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a><main class="wrap"><p class="eyebrow">CLUB & INTERNATIONAL FOOTBALL · SEASON PLAY</p><h1>WORLD FOOTBALL</h1><p class="lead">Choose a real competition and club or nation, then play a short 2D match against the computer. Win to advance through the 10,000-stage season ladder.</p><div class="selectors"><label for="competition">Competition</label><select id="competition"></select><label for="team">Your team</label><select id="team"></select><label for="opponent">Opponent</label><select id="opponent"></select></div><div class="hud"><span class="pill"><span id="homeName">Home</span> <b id="homeScore">0</b> — <b id="awayScore">0</b> <span id="awayName">Away</span></span><span class="pill">Time <b id="clock">90</b>'</span><span class="pill">Season stage <b id="stage">1</b>/10,000</span></div><div class="field"><canvas id="pitch" width="900" height="540" aria-label="Interactive football field. Move with arrow keys or WASD. Pass with P and shoot with Space."></canvas></div><div class="controls"><button id="up" aria-label="Move up">▲</button><button id="left" aria-label="Move left">◀</button><button id="down" aria-label="Move down">▼</button><button id="right" aria-label="Move right">▶</button><button id="pass">PASS · P</button><button id="shoot" class="accent">SHOOT · SPACE</button><button id="start" class="accent">KICK OFF</button></div><p id="message" role="status" aria-live="polite">Choose a team and kick off. You control the highlighted player.</p><p class="guide">Move: WASD / arrows or touch arrows · Pass: P · Shoot: Space · Change controlled player: click a teammate. Match results and progress are saved on this device.</p></main><script src="../assets/game-levels.js"></script><script src="../assets/football-data.js"></script><script src="../assets/game11.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B1220">
+  <title>Adigun Football · Game Bank</title>
+  <link rel="stylesheet" href="../shared/game.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#pitch">Skip to the football pitch</a>
+  <header class="game-header">
+    <a class="identity" href="../"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK<small>ONE COMPANY. FIVE BRANDS.</small></span></a>
+    <a class="back-link" href="../">← All games</a>
+  </header>
+  <main>
+    <div class="intro-row"><div><p class="eyebrow">Original teams · 11 versus 11 · Live match play</p><h1>Adigun Football</h1><p class="muted">Build the attack, find the pass and finish the chance. You play as Adigun XI, with a full team moving around you.</p></div><span class="badge">In progress · Browser build</span></div>
+    <div class="toolbar">
+      <label for="level">Campaign level <input id="level" type="number" min="1" max="1" value="1" aria-describedby="campaign-status"></label>
+      <button id="load-level" type="button">Load level</button>
+      <span id="tier" class="badge">Beginner</span>
+      <span id="campaign-status" class="hint">Level 1 unlocked</span>
+      <label for="quality">Render quality <select id="quality"><option value="auto">Auto</option><option value="1080">1920 × 1080</option><option value="4k">3840 × 2160</option></select></label>
+    </div>
+    <div class="layout">
+      <section aria-label="Football match">
+        <div class="scoreboard" aria-label="Match score"><div><span class="team-swatch home"></span><span>Adigun XI</span></div><strong><span id="home-score">0</span><span class="score-divider">:</span><span id="away-score">0</span></strong><div><span id="opponent">Copper Coast XI</span><span class="team-swatch away"></span></div><span class="clock" id="clock" aria-label="Time remaining">02:00</span></div>
+        <div class="viewport" id="match-viewport">
+          <canvas id="pitch" tabindex="0" aria-label="3D football pitch. You control the highlighted Adigun XI player." aria-describedby="instructions situation"></canvas>
+          <div class="match-overlay" id="match-overlay"><h2 id="overlay-title">Your match starts here.</h2><p id="overlay-copy">Read the objective, then press Kick off.</p></div>
+        </div>
+        <div class="stats"><span id="render-status" role="status">Loading the 3D pitch…</span><span>Controlled <strong id="controlled">#10</strong></span><span>Stamina <strong id="stamina">100%</strong></span><span>Possession <strong id="possession">Adigun XI</strong></span></div>
+        <div class="controls">
+          <button class="primary" id="start" type="button" disabled>Kick off</button>
+          <button id="pause" type="button" disabled>Pause · Esc</button>
+          <button id="restart" type="button">Restart · R</button>
+          <button class="primary" id="next" type="button" hidden>Next level</button>
+        </div>
+        <p id="message" class="message" role="status" aria-live="polite">Loading match controls.</p>
+        <div class="touch-controls" aria-label="Touch and mouse match controls">
+          <div class="direction-pad"><button id="up" type="button" aria-label="Move toward the far touchline">↑</button><button id="left" type="button" aria-label="Move left toward your own goal">←</button><button id="down" type="button" aria-label="Move toward the near touchline">↓</button><button id="right" type="button" aria-label="Move right toward the opposing goal">→</button></div>
+          <div class="ball-controls"><button id="pass" type="button">Pass · P</button><button class="primary" id="shoot" type="button">Shoot · Space</button><button id="switch" type="button">Switch · Q</button><button id="tackle" type="button">Tackle · E</button><button id="sprint" type="button" aria-pressed="false">Sprint · Shift</button></div>
+        </div>
+        <p id="instructions" class="instructions">Focus the pitch to use <kbd>W A S D</kbd> or <kbd>↑ ← ↓ →</kbd> to move. <kbd>P</kbd> passes, <kbd>Space</kbd> shoots, <kbd>Q</kbd> switches player, <kbd>E</kbd> tackles, <kbd>Shift</kbd> sprints, <kbd>Esc</kbd> pauses and <kbd>R</kbd> restarts. <kbd>J K L</kbd> aims at the far post, centre or near post. Click an Adigun player to control them. Hold the direction buttons on a touch screen.</p>
+      </section>
+      <aside class="panel" aria-label="Match objective and tactics">
+        <p class="eyebrow">Campaign briefing</p><h2 id="objective-heading">Win the opening match.</h2><p id="objective"></p>
+        <div class="match-facts"><div><span>Level</span><strong id="level-readout">1 / 10,000</strong></div><div><span>Difficulty</span><strong id="difficulty-readout">Beginner</strong></div><div><span>Match length</span><strong id="duration-readout">2 minutes</strong></div></div>
+        <label for="aim">Shot target</label><select id="aim"><option value="-1">Far post · J</option><option value="0" selected>Centre · K</option><option value="1">Near post · L</option></select>
+        <label for="player-select">Control a player</label><select id="player-select" aria-describedby="situation"></select>
+        <p id="situation" class="hint">Your striker begins with the ball at the centre spot.</p>
+        <h2>Match record</h2><table><thead><tr><th scope="col">Action</th><th scope="col">Adigun</th><th scope="col">Opponent</th></tr></thead><tbody><tr><th scope="row">Shots</th><td id="home-shots">0</td><td id="away-shots">0</td></tr><tr><th scope="row">Passes</th><td id="home-passes">0</td><td id="away-passes">0</td></tr><tr><th scope="row">Saves</th><td id="home-saves">0</td><td id="away-saves">0</td></tr></tbody></table>
+        <p class="hint">Gold marks the player you control. Adigun attacks right. Pass into space and shoot across the goalkeeper.</p>
+      </aside>
+    </div>
+    <details><summary>Rules, access and development status</summary><p>This is an original 11-a-side football game with fictional players and kits. A complete ball crossing the goal line inside the frame scores. Throw-ins, corners and goal kicks restart automatically; time stops while paused or during a restart. Offside, fouls, cards, substitutions, league management and online multiplayer are not implemented.</p><p>The campaign contains 10,000 deterministic match configurations. AI speed, decision time, pressure, shot accuracy and match objectives change with level. Configuration tests do not mean all 10,000 matches have been manually played. Progress is saved on this device after a qualifying full-time result.</p><p>The pitch uses real WebGL geometry and the quality readout shows its actual drawing buffer. 4K requires compatible hardware; production visual quality, full accessibility and hardware performance remain under evaluation. Keyboard and touch controls, text match events, visible focus and reduced camera motion are implemented. Spatial play still relies on seeing the pitch.</p><p><a href="README.md">Game evidence and controls</a> · <a href="../PROJECT_STATUS.md">Current project status</a></p></details>
+    <noscript><p class="message error">JavaScript is required to run this football game.</p></noscript>
+  </main>
+  <footer>HEPHZIBAH BEHULAH · ADIGUN GAME BANK · Original browser football.<br><a href="../">Game Bank</a><a href="https://hephzibahbehulahhq.github.io/">Corporate home</a><a href="../PROJECT_STATUS.md">Project status</a></footer>
+  <script type="module">import('./app.js').catch(() => { const status = document.getElementById('render-status'); status.textContent = 'The 3D game could not load. Check the connection and WebGL support, then reload this page.'; document.getElementById('message').textContent = 'Match unavailable because the renderer did not load.'; });</script>
+</body>
+</html>

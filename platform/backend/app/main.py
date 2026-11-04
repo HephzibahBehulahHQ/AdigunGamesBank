@@ -1,13 +1,24 @@
 import asyncio, base64, hashlib, hmac, json, os, re, secrets, time, uuid
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Literal
+
+from sqlalchemy.exc import IntegrityError
+from starlette.responses import JSONResponse
+from .providers import LABELS, PROVIDERS, compete, provider_status, provider_ready
+from .judging import judge_status, match_ranking, score_answers, scoring_policy
+from .evaluation import validate_cases
 
 from fastapi import Depends, FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, create_engine, select, func, inspect, text
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, create_engine, select, func, inspect, text, update, delete
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, Session
+
+if os.getenv("APP_ENV") == "production":
+    configured_secret = os.getenv("JWT_SECRET", "")
+    if len(configured_secret) < 32 or "replace-" in configured_secret.lower() or configured_secret == "local-development-secret-change-this":
+        raise RuntimeError("Production requires a unique JWT_SECRET of at least 32 characters")
 
 ROOT=Path(__file__).resolve().parent
 DB_URL=os.getenv("DATABASE_URL",f"sqlite:///{ROOT/'gamebank.db'}")
@@ -30,6 +41,16 @@ class Response(Base):
 class Score(Base):
     __tablename__="scores"
     id:Mapped[int]=mapped_column(Integer,primary_key=True); match_id:Mapped[str]=mapped_column(ForeignKey("matches.id"),index=True); model_key:Mapped[str]=mapped_column(String(50)); accuracy:Mapped[Optional[float]]=mapped_column(Float,nullable=True); final_score:Mapped[Optional[float]]=mapped_column(Float,nullable=True); source:Mapped[str]=mapped_column(String(24)); rating:Mapped[Optional[int]]=mapped_column(Integer,nullable=True)
+    details_json:Mapped[Optional[str]]=mapped_column(Text,nullable=True)
+class ArenaLease(Base):
+    __tablename__="arena_leases"
+    user_id:Mapped[int]=mapped_column(Integer,primary_key=True)
+    match_id:Mapped[str]=mapped_column(String(36),unique=True)
+    started_at:Mapped[float]=mapped_column(Float)
+class AdmissionLock(Base):
+    __tablename__="arena_admission_lock"
+    id:Mapped[int]=mapped_column(Integer,primary_key=True)
+    touched:Mapped[float]=mapped_column(Float)
 class Audit(Base):
     __tablename__="audit_log"
     id:Mapped[int]=mapped_column(Integer,primary_key=True); actor_id:Mapped[Optional[int]]=mapped_column(Integer,nullable=True); action:Mapped[str]=mapped_column(String(60)); subject:Mapped[str]=mapped_column(String(120)); created_at:Mapped[datetime]=mapped_column(DateTime,default=lambda:datetime.now(timezone.utc))
@@ -38,18 +59,49 @@ class IQRun(Base):
     id:Mapped[str]=mapped_column(String(36),primary_key=True); user_id:Mapped[int]=mapped_column(ForeignKey("users.id")); difficulty:Mapped[int]=mapped_column(Integer,default=2); question_no:Mapped[int]=mapped_column(Integer,default=0); score:Mapped[int]=mapped_column(Integer,default=0); categories:Mapped[str]=mapped_column(Text,default="{}"); finished:Mapped[bool]=mapped_column(Boolean,default=False); seed:Mapped[int]=mapped_column(Integer)
 Base.metadata.create_all(engine)
 with engine.begin() as conn:
-    if "rating" not in {column["name"] for column in inspect(conn).get_columns("scores")}:
-        conn.execute(text("ALTER TABLE scores ADD COLUMN rating INTEGER"))
+    columns = {column["name"] for column in inspect(conn).get_columns("scores")}
+    for name, kind in (("rating", "INTEGER"), ("details_json", "TEXT")):
+        if name not in columns:
+            conn.execute(text(f"ALTER TABLE scores ADD COLUMN {name} {kind}"))
 with SessionLocal() as db:
-    for key,label,provider in [("openai","OpenAI","openai"),("anthropic","Anthropic","anthropic"),("gemini","Google Gemini","gemini"),("deepseek","DeepSeek","deepseek"),("grok","Grok","xai"),("ollama","Ollama","ollama")]:
-        if not db.scalar(select(Model).where(Model.key==key)): db.add(Model(key=key,label=label,provider=provider,enabled=True))
+    for key, provider in PROVIDERS.items():
+        if not db.scalar(select(Model).where(Model.key == key)):
+            db.add(Model(key=key, label=provider.label, provider=key, enabled=True))
+    if db.get(AdmissionLock, 1) is None:
+        db.add(AdmissionLock(id=1, touched=0))
     db.commit()
 
-if os.getenv("APP_ENV")=="production":
-    configured_secret=os.getenv("JWT_SECRET","")
-    if len(configured_secret)<32 or "replace-" in configured_secret.lower() or configured_secret=="local-development-secret-change-this":raise RuntimeError("Production requires a unique JWT_SECRET of at least 32 characters")
-app=FastAPI(title="Hephzibah Behulah Game Platform API",version="1.0.0")
-app.add_middleware(CORSMiddleware,allow_origins=os.getenv("CORS_ORIGINS","http://localhost:3000").split(","),allow_credentials=True,allow_methods=["GET","POST"],allow_headers=["Authorization","Content-Type"])
+app=FastAPI(title="Hephzibah Behulah Game Platform API",version="1.1.0")
+app.add_middleware(CORSMiddleware,allow_origins=[origin.strip() for origin in os.getenv("CORS_ORIGINS","http://localhost:3000").split(",") if origin.strip()],allow_credentials=True,allow_methods=["GET","POST"],allow_headers=["Authorization","Content-Type"])
+class BoundedRequestBody:
+    """Limit streamed input before JSON parsing, including chunked requests."""
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http" or scope["method"] not in {"POST", "PUT", "PATCH"}:
+            return await self.app(scope, receive, send)
+        body = bytearray()
+        while True:
+            event = await receive()
+            if event["type"] == "http.disconnect":
+                return
+            body.extend(event.get("body", b""))
+            if len(body) > 65_536:
+                return await JSONResponse({"detail": "Request body exceeds 64 KiB"}, status_code=413)(scope, receive, send)
+            if not event.get("more_body", False):
+                break
+        sent = False
+        async def bounded_receive():
+            nonlocal sent
+            if not sent:
+                sent = True
+                return {"type": "http.request", "body": bytes(body), "more_body": False}
+            return await receive()
+        await self.app(scope, bounded_receive, send)
+
+app.add_middleware(BoundedRequestBody)
+
 def get_db():
     with SessionLocal() as db: yield db
 
@@ -67,7 +119,9 @@ def token_for(user:User)->str:
 def current_user(authorization:str=Header(default=""),db:Session=Depends(get_db))->User:
     if not authorization.startswith("Bearer "): raise HTTPException(401,"Sign in required")
     try:
-        head,pay,sig=authorization[7:].split("."); secret=os.getenv("JWT_SECRET","local-development-secret-change-this"); expected=b64(hmac.new(secret.encode(),f"{head}.{pay}".encode(),hashlib.sha256).digest())
+        head,pay,sig=authorization[7:].split(".")
+        if json.loads(base64.urlsafe_b64decode(head+"==")) != {"alg":"HS256","typ":"JWT"}: raise ValueError()
+        secret=os.getenv("JWT_SECRET","local-development-secret-change-this"); expected=b64(hmac.new(secret.encode(),f"{head}.{pay}".encode(),hashlib.sha256).digest())
         if not hmac.compare_digest(sig,expected): raise ValueError()
         data=json.loads(base64.urlsafe_b64decode(pay+"=="));
         if data["exp"]<time.time(): raise ValueError()
@@ -80,18 +134,56 @@ def admin_user(user:User=Depends(current_user))->User:
     return user
 
 class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=12,max_length=128); display_name:str=Field(min_length=2,max_length=80)
-class LoginIn(BaseModel): email:EmailStr; password:str
+class LoginIn(BaseModel): email:EmailStr; password:str=Field(min_length=1,max_length=128)
 class BootstrapIn(RegisterIn): bootstrap_token:str
-class ArenaIn(BaseModel): prompt:str=Field(min_length=12,max_length=8000); task_type:str="factual"; tests:list[dict]=Field(default_factory=list)
+class ArenaIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    prompt:str=Field(min_length=12,max_length=8000)
+    task_type:Literal["factual", "creative", "coding"]="factual"
+    tests:list[dict]=Field(default_factory=list,max_length=25)
+    providers:list[str]=Field(default_factory=lambda:list(PROVIDERS),min_length=2,max_length=8)
+
+    @field_validator("prompt")
+    @classmethod
+    def meaningful_prompt(cls, value):
+        value = value.strip()
+        if len(value) < 12:
+            raise ValueError("Write at least 12 non-padding characters")
+        return value
+
+    @field_validator("providers")
+    @classmethod
+    def known_providers(cls, value):
+        if len(value) != len(set(value)) or any(key not in PROVIDERS for key in value):
+            raise ValueError("Choose unique providers from the supported lineup")
+        return value
 class RateIn(BaseModel): model_key:str; rating:int=Field(ge=1,le=5)
 
+def registration_allowed():
+    default = "false" if os.getenv("APP_ENV") == "production" else "true"
+    return os.getenv("ALLOW_REGISTRATION", default).lower() == "true"
+
+
+def enabled_providers(db):
+    return {model.key for model in db.scalars(select(Model).where(Model.enabled == True)).all() if model.key in PROVIDERS}
+
+
 @app.get("/api/health")
-def health():
-    mode=os.getenv("AI_MODE","replay").lower()
-    providers={key:mode=="live" and _provider_ready(key) for key in LABELS}
-    return {"ok":True,"service":"game-platform-api","ai_mode":mode,"providers":providers}
+def health(db:Session=Depends(get_db)):
+    mode = os.getenv("AI_MODE", "disabled").lower()
+    enabled = enabled_providers(db)
+    states = {key: provider_status(key, key in enabled) for key in PROVIDERS}
+    judge = judge_status()
+    if judge["provider"] not in enabled:
+        judge["configured"] = False
+    return {"ok": True, "service": "game-platform-api", "ai_mode": mode,
+            "providers": {key: value["configured"] for key, value in states.items()},
+            "provider_details": states, "judge": judge,
+            "registration_allowed": registration_allowed(), "scoring": scoring_policy()}
 @app.post("/api/auth/register")
 def register(data:RegisterIn,db:Session=Depends(get_db)):
+    if not registration_allowed():
+        raise HTTPException(403,"Account registration is disabled by the gateway operator")
     email=str(data.email).lower()
     if db.scalar(select(User).where(User.email==email)): raise HTTPException(409,"Email already registered")
     user=User(email=email,display_name=data.display_name,password_hash=pw_hash(data.password),role="player"); db.add(user); db.commit(); db.refresh(user)
@@ -117,152 +209,86 @@ def dashboard(user:User=Depends(current_user),db:Session=Depends(get_db)):
     recent=db.scalars(select(Match).where(Match.user_id==user.id).order_by(Match.created_at.desc()).limit(10)).all()
     return {"matches":total,"strong_answers":wins,"recent":[{"id":m.id,"task_type":m.task_type,"mode":m.mode,"created_at":m.created_at.isoformat()} for m in recent]}
 
-# Each model uses its provider's server-side API key; never expose these secrets in the browser.
-PROVIDERS={"openai":"openai","anthropic":"anthropic","gemini":"gemini","deepseek":"deepseek","grok":"xai","ollama":"ollama"}
-LABELS={"openai":"ChatGPT","anthropic":"Claude","gemini":"Gemini","deepseek":"DeepSeek","grok":"Grok","ollama":"Ollama"}
-ENV_KEYS={"openai":"OPENAI_API_KEY","anthropic":"ANTHROPIC_API_KEY","gemini":"GEMINI_API_KEY","deepseek":"DEEPSEEK_API_KEY","grok":"XAI_API_KEY","ollama":"OLLAMA_BASE_URL"}
-MODEL_ENV={"openai":"OPENAI_MODEL","anthropic":"ANTHROPIC_MODEL","gemini":"GEMINI_MODEL","deepseek":"DEEPSEEK_MODEL","grok":"GROK_MODEL","ollama":"OLLAMA_MODEL"}
-def _provider_ready(key:str)->bool:
-    return bool(os.getenv(ENV_KEYS[key]) and os.getenv(MODEL_ENV[key]))
+# Admission is reserved in the database before any chargeable provider request.
+# A single lock-row UPDATE serializes admission in SQLite and PostgreSQL.
+def reserve_match(data, user, db):
+    now = time.time()
+    db.execute(update(AdmissionLock).where(AdmissionLock.id == 1).values(touched=now))
+    db.execute(delete(ArenaLease).where(ArenaLease.started_at < now - 180))
+    active = db.get(ArenaLease, user.id)
+    if active is not None:
+        db.rollback()
+        raise HTTPException(429, "You already have a match running")
+    maximum = max(1, min(32, int(os.getenv("ARENA_MAX_CONCURRENT_MATCHES", "4"))))
+    total = db.scalar(select(func.count(ArenaLease.user_id))) or 0
+    if total >= maximum:
+        db.rollback()
+        raise HTTPException(429, "The arena is at capacity. Try again shortly.")
+    recent = db.scalar(select(func.count(Match.id)).where(Match.user_id == user.id, Match.created_at >= datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(minutes=1))) or 0
+    if recent >= 3:
+        db.rollback()
+        raise HTTPException(429, "Arena limit reached. Try again in one minute.")
+    record = Match(id=str(uuid.uuid4()), user_id=user.id, prompt=data.prompt, task_type=data.task_type, mode="running")
+    db.add(record)
+    db.add(ArenaLease(user_id=user.id, match_id=record.id, started_at=now))
+    db.commit()
+    return record
 
-async def _sdk_call(key:str,prompt:str)->str:
-    provider=PROVIDERS[key]; model=os.getenv(MODEL_ENV[key],"")
-    if not model: raise RuntimeError(f"Set {MODEL_ENV[key]} to an active provider model identifier")
-    secret=os.environ[ENV_KEYS[key]]
-    def run():
-        if provider=="ollama":
-            from openai import OpenAI
-            client=OpenAI(api_key=os.getenv("OLLAMA_API_KEY","ollama"),base_url=secret.rstrip("/"),timeout=50,max_retries=0)
-            return client.chat.completions.create(model=model,messages=[{"role":"user","content":prompt}],max_tokens=1200).choices[0].message.content or ""
-        if provider=="openai":
-            from openai import OpenAI
-            client=OpenAI(api_key=secret,timeout=45,max_retries=1)
-            return client.responses.create(model=model,input=prompt,max_output_tokens=1200).output_text or ""
-        if provider=="anthropic":
-            from anthropic import Anthropic
-            result=Anthropic(api_key=secret,timeout=45,max_retries=1).messages.create(model=model,max_tokens=1200,messages=[{"role":"user","content":prompt}])
-            return "".join(block.text for block in result.content if getattr(block,"type",None)=="text")
-        if provider=="gemini":
-            from google import genai
-            return genai.Client(api_key=secret).models.generate_content(model=model,contents=prompt).text or ""
-        from openai import OpenAI
-        if provider=="deepseek":
-            client=OpenAI(api_key=secret,base_url="https://api.deepseek.com",timeout=45,max_retries=1)
-            return client.chat.completions.create(model=model,messages=[{"role":"user","content":prompt}],max_tokens=1200).choices[0].message.content or ""
-        client=OpenAI(api_key=secret,base_url="https://api.x.ai/v1",timeout=45,max_retries=1)
-        return client.responses.create(model=model,input=prompt,max_output_tokens=1200).output_text or ""
-    return await asyncio.to_thread(run)
-async def _compete(key:str,prompt:str,task_type:str,tests:list[dict])->dict:
-    started=time.perf_counter(); live=os.getenv("AI_MODE","replay").lower()=="live" and _provider_ready(key)
-    if live:
-        try:
-            body=await asyncio.wait_for(_sdk_call(key,prompt),timeout=50); latency=(time.perf_counter()-started)*1000; accuracy=None; source="live_unscored"
-            if task_type=="coding" and tests:
-                accuracy=_run_submission(body,tests); source="sandboxed_tests"
-            elif task_type in ("factual","creative"):
-                judge=os.getenv("JUDGE_PROVIDER","")
-                judge_key=next((p for p in [judge,"openai","anthropic","gemini"] if p and p!=key and os.getenv(ENV_KEYS.get(p,""))),None)
-                if judge_key:
-                    rubric=("Assess factual correctness." if task_type=="factual" else "Assess coherence, originality, and adherence to the task constraints.")
-                    try:
-                        judged=await _sdk_call(judge_key,"Return only JSON {accuracy: number 0..1, reason: string}. Task: "+prompt+"\nAnswer: "+body+"\nRubric: "+rubric)
-                        match=re.search(r"\{.*\}",judged,re.S); data=json.loads(match.group(0)) if match else {}; accuracy=max(0,min(1,float(data["accuracy"]))); source="independent_judge"
-                    except Exception: pass
-            return {"key":key,"label":LABELS[key],"body":body,"latency_ms":round(latency,1),"accuracy":accuracy,"source":source,"state":"ok","error":None}
-        except Exception as exc:
-            return {"key":key,"label":LABELS[key],"body":"","latency_ms":round((time.perf_counter()-started)*1000,1),"accuracy":None,"source":"live","state":"error","error":"Provider request failed. Check its server-side configuration and availability."}
-    return {"key":key,"label":LABELS[key],"body":"","latency_ms":round((time.perf_counter()-started)*1000,1),"accuracy":None,"source":"unavailable","state":"unconfigured","error":"Live provider is not configured on the server."}
-
-
-# A constrained Python interpreter for contest code. It accepts small pure functions,
-# supports bounded range loops, and never executes arbitrary Python or imports modules.
-def _run_submission(text:str,tests:list[dict])->float:
-    import ast,operator
-    if not tests:return 0.0
-    try:
-        code=re.sub(r"^```(?:python)?\s*|\s*```$","",text.strip(),flags=re.I)
-        tree=ast.parse(code)
-        fn=next(n for n in tree.body if isinstance(n,(ast.FunctionDef,)))
-        if fn.decorator_list or fn.args.vararg or fn.args.kwarg or fn.args.kwonlyargs: return 0.0
-        allowed=(ast.FunctionDef,ast.arguments,ast.arg,ast.Return,ast.Assign,ast.AnnAssign,ast.AugAssign,ast.For,ast.If,ast.Expr,ast.Name,ast.Load,ast.Store,ast.Constant,ast.Tuple,ast.List,ast.BinOp,ast.UnaryOp,ast.Compare,ast.Call,ast.Add,ast.Sub,ast.Mult,ast.Div,ast.FloorDiv,ast.Mod,ast.Pow,ast.USub,ast.UAdd,ast.Eq,ast.NotEq,ast.Lt,ast.LtE,ast.Gt,ast.GtE,ast.Gt,ast.IfExp,ast.BoolOp,ast.And,ast.Or)
-        if any(not isinstance(n,allowed) for n in ast.walk(fn)) or any(isinstance(n,ast.Name) and n.id.startswith("__") for n in ast.walk(fn)):return 0.0
-        ops={ast.Add:operator.add,ast.Sub:operator.sub,ast.Mult:operator.mul,ast.Div:operator.truediv,ast.FloorDiv:operator.floordiv,ast.Mod:operator.mod,ast.Pow:operator.pow,ast.Eq:operator.eq,ast.NotEq:operator.ne,ast.Lt:operator.lt,ast.LtE:operator.le,ast.Gt:operator.gt,ast.GtE:operator.ge}
-        def ev(node,env):
-            if isinstance(node,ast.Constant):return node.value
-            if isinstance(node,ast.Name):
-                if node.id not in env:raise ValueError("unknown name")
-                return env[node.id]
-            if isinstance(node,(ast.Tuple,ast.List)):return [ev(x,env) for x in node.elts]
-            if isinstance(node,ast.BinOp):
-                a,b=ev(node.left,env),ev(node.right,env)
-                if isinstance(node.op,ast.Pow) and (abs(b)>12 or abs(a)>100000):raise ValueError("exponent limit")
-                return ops[type(node.op)](a,b)
-            if isinstance(node,ast.UnaryOp):return -ev(node.operand,env) if isinstance(node.op,ast.USub) else +ev(node.operand,env)
-            if isinstance(node,ast.Compare):
-                left=ev(node.left,env)
-                for op,right_node in zip(node.ops,node.comparators):
-                    right=ev(right_node,env)
-                    if not ops[type(op)](left,right):return False
-                    left=right
-                return True
-            if isinstance(node,ast.BoolOp):
-                vals=[bool(ev(v,env)) for v in node.values];return all(vals) if isinstance(node.op,ast.And) else any(vals)
-            if isinstance(node,ast.IfExp):return ev(node.body if ev(node.test,env) else node.orelse,env)
-            if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=="range":
-                args=[int(ev(a,env)) for a in node.args]; result=range(*args)
-                if len(result)>10000:raise ValueError("loop limit")
-                return result
-            raise ValueError("unsupported expression")
-        class Returned(Exception):
-            def __init__(self,value):self.value=value
-        def assign(target,value,env):
-            if isinstance(target,ast.Name):env[target.id]=value
-            elif isinstance(target,(ast.Tuple,ast.List)) and len(target.elts)==len(value):
-                for t,v in zip(target.elts,value):assign(t,v,env)
-            else:raise ValueError("unsupported assignment")
-        def exec_block(stmts,env):
-            for stmt in stmts:
-                if isinstance(stmt,ast.Return):raise Returned(ev(stmt.value,env) if stmt.value else None)
-                if isinstance(stmt,ast.Assign):
-                    value=ev(stmt.value,env)
-                    for target in stmt.targets:assign(target,value,env)
-                elif isinstance(stmt,ast.AnnAssign):assign(stmt.target,ev(stmt.value,env),env)
-                elif isinstance(stmt,ast.AugAssign):assign(stmt.target,ops[type(stmt.op)](ev(stmt.target,env),ev(stmt.value,env)),env)
-                elif isinstance(stmt,ast.If):exec_block(stmt.body if ev(stmt.test,env) else stmt.orelse,env)
-                elif isinstance(stmt,ast.For):
-                    for value in ev(stmt.iter,env):assign(stmt.target,value,env);exec_block(stmt.body,env)
-                elif isinstance(stmt,ast.Expr):ev(stmt.value,env)
-                else:raise ValueError("unsupported statement")
-        passed=0
-        for case in tests[:100]:
-            try:
-                env={a.arg:v for a,v in zip(fn.args.args,case.get("args",[]))}
-                exec_block(fn.body,env);raise ValueError("function did not return")
-            except Returned as result:
-                if result.value==case.get("expected"):passed+=1
-            except Exception:pass
-        return passed/len(tests[:100])
-    except Exception:return 0.0
 
 @app.post("/api/arena/matches")
 async def arena_match(data:ArenaIn,user:User=Depends(current_user),db:Session=Depends(get_db)):
-    if data.task_type not in ("coding","factual","creative"):raise HTTPException(422,"task_type must be coding, factual, or creative")
-    if data.task_type=="coding" and not data.tests:raise HTTPException(422,"Coding matches require explicit test cases; code is evaluated by the restricted interpreter")
-    recent_count=db.scalar(select(func.count(Match.id)).where(Match.user_id==user.id,Match.created_at>=datetime.now(timezone.utc).replace(tzinfo=None)-timedelta(minutes=1))) or 0
-    if recent_count>=3:raise HTTPException(429,"Arena limit reached. Try again in one minute.")
-    results=await asyncio.gather(*[_compete(k,data.prompt,data.task_type,data.tests) for k in LABELS])
-    record=Match(id=str(uuid.uuid4()),user_id=user.id,prompt=data.prompt,task_type=data.task_type,mode="live" if any(x["state"]=="ok" and x["source"]!="replay_fixture" for x in results) else "unavailable")
-    db.add(record);db.flush()
-    for result in results:
-        response=Response(match_id=record.id,model_key=result["key"],body=result["body"],latency_ms=result["latency_ms"],state=result["state"],error=result["error"]);db.add(response)
-        accuracy=result["accuracy"]; final=(accuracy*0.8 - min(result["latency_ms"]/30000,1)*0.2) if accuracy is not None else None
-        db.add(Score(match_id=record.id,model_key=result["key"],accuracy=accuracy,final_score=final,source=result["source"]))
-    db.commit()
-    return {"id":record.id,"mode":record.mode,"task_type":record.task_type,"responses":results}
+    if data.task_type == "coding":
+        try:
+            validate_cases(data.tests)
+        except ValueError as error:
+            raise HTTPException(422, str(error))
+    elif data.tests:
+        raise HTTPException(422, "Test cases apply only to coding matches")
+    enabled = enabled_providers(db)
+    if os.getenv("AI_MODE", "disabled").lower() != "live" or sum(key in enabled and provider_ready(key) for key in data.providers) < 2:
+        raise HTTPException(503, "Configure at least two selected live providers before starting a competition")
+    record = reserve_match(data, user, db)
+    try:
+        # All competitor tasks are scheduled together. Judging starts only after
+        # answer latency has been recorded for every provider.
+        results = await asyncio.gather(*(compete(key, data.prompt, key in enabled) for key in data.providers))
+        await score_answers(results, data.prompt, data.task_type, data.tests, judge_enabled=judge_status()["provider"] in enabled)
+        record.mode = "live" if any(result["state"] == "ok" for result in results) else "unavailable"
+        for result in results:
+            db.add(Response(match_id=record.id, model_key=result["key"], body=result["body"], latency_ms=result["latency_ms"] or 0, state=result["state"], error=result["error"]))
+            details = {name: value for name, value in result.items() if name != "body"}
+            db.add(Score(match_id=record.id, model_key=result["key"], accuracy=result["accuracy"], final_score=result["final_score"], source=result["source"], details_json=json.dumps(details)))
+        db.commit()
+        return {"id": record.id, "mode": record.mode, "task_type": record.task_type,
+                "responses": results, "ranking": match_ranking(results), "scoring": scoring_policy(),
+                "created_at": record.created_at.replace(tzinfo=timezone.utc).isoformat()}
+    except BaseException:
+        db.rollback()
+        record.mode = "interrupted"
+        db.add(record)
+        db.commit()
+        raise
+    finally:
+        db.execute(delete(ArenaLease).where(ArenaLease.user_id == user.id, ArenaLease.match_id == record.id))
+        db.commit()
+
+
 @app.get("/api/arena/history")
 def arena_history(user:User=Depends(current_user),db:Session=Depends(get_db)):
-    matches=db.scalars(select(Match).where(Match.user_id==user.id).order_by(Match.created_at.desc()).limit(50)).all()
-    return [{"id":m.id,"prompt":m.prompt,"task_type":m.task_type,"mode":m.mode,"created_at":m.created_at.isoformat(),"responses":[{"model_key":r.model_key,"body":r.body,"latency_ms":r.latency_ms,"state":r.state} for r in db.scalars(select(Response).where(Response.match_id==m.id)).all()]} for m in matches]
+    matches = db.scalars(select(Match).where(Match.user_id == user.id).order_by(Match.created_at.desc()).limit(50)).all()
+    history = []
+    for match in matches:
+        scores = {score.model_key: score for score in db.scalars(select(Score).where(Score.match_id == match.id)).all()}
+        responses = []
+        for response in db.scalars(select(Response).where(Response.match_id == match.id)).all():
+            score = scores.get(response.model_key)
+            details = json.loads(score.details_json) if score and score.details_json else {"key": response.model_key, "model": None, "source": score.source if score else "legacy", "final_score": None, "accuracy": score.accuracy if score else None}
+            responses.append({**details, "model_key": response.model_key, "body": response.body, "state": response.state, "latency_ms": details.get("latency_ms", response.latency_ms), "rating": score.rating if score else None})
+        history.append({"id": match.id, "prompt": match.prompt, "task_type": match.task_type, "mode": match.mode,
+                        "created_at": match.created_at.replace(tzinfo=timezone.utc).isoformat(), "responses": responses})
+    return history
+
+
 @app.post("/api/arena/{match_id}/rate")
 def rate_answer(match_id:str,data:RateIn,user:User=Depends(current_user),db:Session=Depends(get_db)):
     match=db.get(Match,match_id)

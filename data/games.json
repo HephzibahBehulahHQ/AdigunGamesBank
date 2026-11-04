@@ -1,0 +1,1372 @@
+{
+  "schemaVersion": 1,
+  "targetGames": 2000,
+  "games": [
+    {
+      "id": "game1",
+      "title": "NEON PULSE",
+      "description": "Mix LED colors, build animated light patterns, and save your favorite presets.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game1/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game1/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game2",
+      "title": "CIRCUIT RUSH",
+      "description": "Rotate wire pieces to connect the source and load without creating a short.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game2/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game2/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game3",
+      "title": "ELECTRONICER",
+      "description": "Wire a real DC circuit. Read the meters, protect the fuse and deliver the exact output.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game3/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": 10000,
+        "method": "Deterministic, game-specific generated challenges; verification pending",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": true
+      },
+      "assetRights": {
+        "status": "Original procedural geometry; Three.js under MIT. No real club or player likenesses."
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game3/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game4",
+      "title": "VOLT DODGE",
+      "description": "Steer through the field and dodge incoming electrical sparks.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game4/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game4/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game5",
+      "title": "RESISTOR MATCH",
+      "description": "Flip cards, find matching resistor values, and beat your previous move count.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game5/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game5/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game6",
+      "title": "CAPACITOR CHARGE",
+      "description": "Hold to charge, release at the right time, and keep the meter under control.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game6/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game6/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game7",
+      "title": "BINARY FLASH",
+      "description": "Decode a changing binary signal into decimal before the next round.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game7/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game7/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game8",
+      "title": "FUSE BOX",
+      "description": "Switch every circuit on and solve the board's electrical logic puzzle.",
+      "genre": "engineering",
+      "division": "Elektroniker",
+      "path": "game8/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game8/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game9",
+      "title": "GOAL LINE",
+      "description": "Read the keeper, aim your penalty and score to progress through competitive shootout stages.",
+      "genre": "sports",
+      "division": "Artificial Intelligence",
+      "path": "game9/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game9/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game10",
+      "title": "APEX CIRCUIT",
+      "description": "Drive a neon time trial, dodge traffic and chase a personal best across rising levels.",
+      "genre": "sports",
+      "division": "Artificial Intelligence",
+      "path": "game10/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game10/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game11",
+      "title": "WORLD FOOTBALL",
+      "description": "Take the pitch with two original teams. Move, pass, shoot and play a complete 3D match.",
+      "genre": "sports",
+      "division": "Artificial Intelligence",
+      "path": "game11/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": 10000,
+        "method": "Deterministic, game-specific generated challenges; verification pending",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": true
+      },
+      "assetRights": {
+        "status": "Original procedural geometry; Three.js under MIT. No real club or player likenesses."
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game11/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game12",
+      "title": "CORTEX PRIME",
+      "description": "Crack number sequences, matrix patterns and hidden-rule puzzles across three reasoning arenas.",
+      "genre": "thinking",
+      "division": "Artificial Intelligence",
+      "path": "game12/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game12/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game13",
+      "title": "SYNAPSE SPRINT",
+      "description": "Memorize and reproduce accelerating light sequences to train focus and recall.",
+      "genre": "thinking",
+      "division": "Artificial Intelligence",
+      "path": "game13/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game13/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game14",
+      "title": "BILLIONAIRE CHALLENGE",
+      "description": "Climb a 15-question prize ladder through original science, logic and general-knowledge questions.",
+      "genre": "thinking",
+      "division": "Artificial Intelligence",
+      "path": "game14/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game14/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game15",
+      "title": "TACTICS GRID",
+      "description": "Command a three-unit squad, use cover and outthink an adaptive local tactical AI on an 8\u00d78 grid.",
+      "genre": "strategy",
+      "division": "Artificial Intelligence",
+      "path": "game15/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game15/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game16",
+      "title": "APEX STRATEGY",
+      "description": "Engineer a ten-lap race: call tyres, fuel and aggression for three drivers against rival race AI.",
+      "genre": "sports",
+      "division": "Artificial Intelligence",
+      "path": "game16/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game16/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game17",
+      "title": "PENALTY PRO",
+      "description": "Play five penalties and five goalkeeper rounds against an opponent that adapts to your shot and dive tendencies.",
+      "genre": "sports",
+      "division": "Artificial Intelligence",
+      "path": "game17/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game17/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game18",
+      "title": "DEBATE ARENA",
+      "description": "Argue five current topics against curated replay counterarguments and a transparent logic, evidence and rhetoric rubric.",
+      "genre": "strategy",
+      "division": "Artificial Intelligence",
+      "path": "game18/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game18/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game19",
+      "title": "CASEFILE",
+      "description": "Investigate three mysteries, question consistent suspect accounts and identify the culprit within ten questions.",
+      "genre": "thinking",
+      "division": "Artificial Intelligence",
+      "path": "game19/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game19/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game20",
+      "title": "MARKET DUEL",
+      "description": "Trade five fictional stocks against a moving-average AI over a 30-day market simulation.",
+      "genre": "trading",
+      "division": "Trading",
+      "path": "game20/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game20/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game22",
+      "title": "AI ARENA",
+      "description": "Put one prompt to configured live AI models. Compare measured speed and transparent judge scores.",
+      "genre": "strategy",
+      "division": "Artificial Intelligence",
+      "path": "game22/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "Blocked",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game22/",
+        "verifiedUrl": null
+      },
+      "blockers": [
+        "Configured API host, provider keys/model IDs and judge"
+      ],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game21",
+      "title": "LAST SIGNAL",
+      "description": "Outlast nine tactical bot contestants, collect field supplies, use cover and escape the closing storm.",
+      "genre": "strategy",
+      "division": "Artificial Intelligence",
+      "path": "game21/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "DOM / Canvas 2D",
+        "is3D": false,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": null,
+        "method": "Legacy progression requires redesign and verification",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": false
+      },
+      "assetRights": {
+        "status": "Legacy asset review incomplete"
+      },
+      "testing": {
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game21/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    }
+  ]
+}

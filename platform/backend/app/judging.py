@@ -35,9 +35,10 @@ def _metric(value):
     return float(value)
 
 
-async def score_answers(results, prompt, task_type, tests):
+async def score_answers(results, prompt, task_type, tests, judge_enabled=True):
     eligible = []
     judge = judge_status()
+    judge["configured"] = judge["configured"] and judge_enabled
     for result in results:
         result["speed_score"] = None
         result["accuracy_source"] = None
