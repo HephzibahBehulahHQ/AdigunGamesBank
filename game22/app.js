@@ -326,10 +326,10 @@ async function rateAnswer(matchId, key, rating, group) {
   } catch (error) { if (version === epoch) note('Your rating was not saved: ' + error.message, true); }
   finally { group.querySelectorAll('button').forEach(button => { button.disabled = false; }); }
 }
-function renderAnswer(answer, matchId, fromHistory = false) {
+function renderAnswer(answer, matchId, fromHistory = false, liveMode = true) {
   const key = answer.key || answer.model_key;
   const name = providerByKey[key]?.label || answer.label || key;
-  const live = isLiveAnswer(answer);
+  const live = liveMode && isLiveAnswer(answer);
   const article = node('article', '', 'answer' + (live ? ' live' : ''));
   const header = node('div', '', 'answer-header');
   header.append(node('h3', name), node('p', answer.model || 'Model identifier not recorded'));
@@ -371,15 +371,15 @@ function renderAnswer(answer, matchId, fromHistory = false) {
 function renderMatch(match, fromHistory = false) {
   currentMatch = match; historicalMatch = fromHistory;
   $('results').replaceChildren();
-  const answers = match.responses || [];
-  const live = answers.filter(isLiveAnswer).length;
-  for (const answer of answers) $('results').append(renderAnswer(answer, match.id, fromHistory));
+  const answers = Array.isArray(match.responses) ? match.responses.filter(answer => answer && typeof answer === 'object') : [];
+  const live = match.mode === 'live' ? answers.filter(isLiveAnswer).length : 0;
+  for (const answer of answers) $('results').append(renderAnswer(answer, match.id, fromHistory, match.mode === 'live'));
   $('match-state').textContent = `${live}/${answers.length} ${fromHistory ? 'recorded' : 'live'} responses`;
   $('result-summary').hidden = false;
   $('history-prompt').hidden = !fromHistory;
   $('history-prompt').textContent = fromHistory ? 'Saved prompt: ' + match.prompt : '';
-  const winner = match.ranking?.winner;
-  $('result-outcome').textContent = winner ? `Highest score for this prompt: ${providerByKey[winner]?.label || winner}.` : match.ranking?.tied ? 'The highest-scoring answers are tied for this prompt.' : 'No complete ranking is available. Compare the returned evidence and any scored metrics below.';
+  const leaders = stageRows({ match }).filter(row => row.leader);
+  $('result-outcome').textContent = leaders.length === 1 ? `Highest complete score for this prompt: ${leaders[0].label}.` : leaders.length > 1 ? 'The highest-scoring answers are tied for this prompt.' : 'No complete ranking is available. Compare the returned evidence and any scored metrics below.';
   note(live ? `${live} actual provider response${live === 1 ? '' : 's'} ${fromHistory ? 'in this saved match' : 'received'}. Failed providers are shown separately.` : 'No live provider answered. Demonstration text is never substituted.', live === 0);
   $('result-title').tabIndex = -1;
   $('result-title').focus({ preventScroll: true });

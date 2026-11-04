@@ -41,7 +41,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -103,7 +103,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -237,7 +237,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -299,7 +299,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -361,7 +361,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -423,7 +423,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -485,7 +485,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -547,7 +547,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -609,7 +609,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -635,7 +635,7 @@
     {
       "id": "game11",
       "title": "WORLD FOOTBALL",
-      "description": "Take the pitch with two original teams. Move, pass, shoot and play a complete 3D match.",
+      "description": "Play an original 11v11 3D match with offside, fouls, cards, penalties and tactical substitutions.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game11/",
@@ -679,9 +679,9 @@
         "status": "Original procedural geometry; Three.js under MIT. No real club or player likenesses."
       },
       "testing": {
-        "unit": "16 tests, including 10,000 unique match configs, physical outcomes and input-only win",
-        "integration": "All 10,000 configurations distinct; input-only winning simulation, collision/goal/restart and fixed-step checks",
-        "browser": "CI 41772713488 passed: actual 4K framebuffer, real keyboard movement/shots/pause and full 6\u20130 match with level 2 unlocked; inspected desktop/mobile frames"
+        "unit": "37 football engine/rules tests passed locally, including 10,000 distinct match configurations",
+        "integration": "Input-only winning match; offside touch/save/rebound, restart exemptions, penalties, cards, send-offs and five-substitute/three-window limits.",
+        "browser": "Prior b9db74c 4K/full-match evidence retained; new rules/substitution browser flow pending CI."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
@@ -743,7 +743,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -805,7 +805,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -867,7 +867,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -893,7 +893,7 @@
     {
       "id": "game15",
       "title": "TACTICS GRID",
-      "description": "Command a three-unit squad, use cover and outthink an adaptive local tactical AI on an 8\u00d78 grid.",
+      "description": "Command three original drones across connected 3D terrain. Eliminate opponents, hold uplinks and recover data cores.",
       "genre": "strategy",
       "division": "Artificial Intelligence",
       "path": "game15/",
@@ -902,36 +902,37 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
         "verified4K": false
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 unique connected terrain layouts; elimination, uplink and retrieval objectives with five difficulty tiers. Generator validity and selected complete playthroughs tested; not 10,000 manual wins.",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
-        "Keyboard",
-        "Mouse / touch where implemented"
+        "Keyboard commands and focusable sector board",
+        "Mouse / touch command controls",
+        "3D pointer picking"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Equivalent text board and commands, visible focus and reduced motion implemented; new 320px automated and gameplay checks pending."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural drones, industrial terrain and materials; Three.js MIT. No external character, photo, music or faction assets."
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "23 tactical engine, campaign and save tests passed locally",
+        "integration": "All 10,000 maps unique/connected/reachable; complete elimination, uplink, retrieval and master-level sequences; losses and storage failures",
+        "browser": "New actual 4K, first-mission win, next-level/reload and responsive checks pending CI."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game15/",
@@ -991,7 +992,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1053,7 +1054,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1115,7 +1116,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1177,7 +1178,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1239,7 +1240,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1265,7 +1266,7 @@
     {
       "id": "game22",
       "title": "AI ARENA",
-      "description": "Put one prompt to configured live AI models. Compare measured speed and transparent judge scores.",
+      "description": "Forecast the winner of real live AI challenges. Compare concurrent answers, measured speed and independent judging in a 3D arena.",
       "genre": "strategy",
       "division": "Artificial Intelligence",
       "path": "game22/",
@@ -1274,36 +1275,37 @@
       ],
       "status": "Blocked",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
         "verified4K": false
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "10,000-level AI competition curriculum remains unimplemented; current client compares configured live providers",
+        "implemented": 10000,
+        "method": "20 original restricted-Python problem families × 500 substantive parameterizations, five tiers; live scoring required for completion. Authored references are tests, never model output.",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse / touch controls",
+        "Optional supported-browser voice input"
       ],
       "accessibility": {
-        "status": "390px width, reduced-motion layout and first keyboard focus checked in Chromium; complete assistive-technology and microphone-permission testing unfinished"
+        "status": "320px reflow, visible focus, reduced motion and WCAG 2.1 A/AA automated scan passed in CI 41789483842. Full assistive-technology and microphone-permission testing unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Original interface with text-only model/platform identifiers; no provider logos or likenesses"
+        "status": "Original procedural arena, podiums and materials; text-only platform identifiers; Three.js MIT. No provider logos or likenesses."
       },
       "testing": {
-        "unit": "5 frontend + 49 backend tests; all API transport tests are explicit doubles",
-        "integration": "49 backend tests cover provider transports, bounds, evaluation, concurrency admission and failures using explicit test doubles; real provider calls NOT TESTED",
-        "browser": "CI 41772713488 passed: zero configured providers, empty results, eight disabled provider controls and 390px layout. Live API/microphone permission tests remain unperformed."
+        "unit": "13 frontend/curriculum tests; 50 backend tests including every one of the 10,000 reference solutions in the real evaluator",
+        "integration": "Deterministic challenge uniqueness, real restricted-evaluator oracle contract and adversarial live-result grading. Provider transport doubles are explicit tests; real provider calls NOT TESTED.",
+        "browser": "New actual 4K and campaign-preview checks pending CI; live API and microphone permission checks remain unperformed."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
@@ -1367,7 +1369,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },

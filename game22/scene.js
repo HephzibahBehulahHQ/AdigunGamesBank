@@ -129,7 +129,7 @@ export function createArenaStage({ canvas, qualitySelect, status, viewSelect, on
   const onQuality = () => render();
   const onMotion = () => animationState();
   const onVisibility = () => { if (document.hidden && frame) { cancelAnimationFrame(frame); frame = 0; } else animationState(); };
-  const onLost = () => { lost = true; if (frame) cancelAnimationFrame(frame); frame = 0; };
+  const onLost = () => { lost = true; if (frame) cancelAnimationFrame(frame); frame = 0; if (status) status.textContent = '3D graphics connection lost. Reload to restore the scene. The comparison desk remains available.'; };
   const onKey = event => {
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', '+', '=', '-', '_'].includes(event.key)) return;
     event.preventDefault();
@@ -165,6 +165,7 @@ export function createArenaStage({ canvas, qualitySelect, status, viewSelect, on
   canvas.addEventListener('stage-lost', onLost); canvas.addEventListener('keydown', onKey);
   canvas.addEventListener('pointerdown', onDown); canvas.addEventListener('pointermove', onMove); canvas.addEventListener('pointerup', onUp); canvas.addEventListener('pointercancel', onCancel);
   const observer = new ResizeObserver(render); observer.observe(canvas);
+  if (qualitySelect) stage.setQuality(qualitySelect.value);
   update();
   return {
     update, render, view,

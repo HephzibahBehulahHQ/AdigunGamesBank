@@ -1,6 +1,6 @@
 # Asset record
 
-- `game15` (TACTICS GRID): all board, terrain, and unit visuals are generated with Canvas drawing commands in `app.js`. No third-party images, fonts, sound, logos, or other external assets are included.
+- `game15` (TACTICS GRID): original procedural 3D drones, industrial barriers, uplink, data core, grid and materials in `scene.js`. No third-party character art, images, fonts, sounds or faction marks. Three.js is MIT licensed as recorded below.
 - Root brand asset `assets/hb-logo.svg` is the repository's supplied Hephzibah Behulah logo.
 - `game16` (APEX STRATEGY): circuit visualization and timing chart are drawn in Canvas. No third-party images, fonts, sound, logos, or external race data are included.
 
@@ -17,3 +17,6 @@
 - World Football: original fictional team names, procedural articulated players, stadium, pitch, nets, ball and kit colors. No real player likenesses, club crests or licensed kits are used by the rebuilt game. Production rigging/art qualification remains unfinished.
 - Catalog pitch art and category symbols are interface illustrations, not gameplay screenshots.
 - Bible chapter: original procedural scene and original adaptation summaries, with passage references in its game README. No claim of archaeological reconstruction or entire-Bible coverage.
+
+- AI Arena: original procedural 3D stage, podiums, status columns and materials; model/provider names are text identifiers only. No provider logos, avatar likenesses or simulated answer assets.
+- Accessibility test tooling: `@axe-core/playwright` and `axe-core` 4.14.0, MPL-2.0; development-only dependencies, not included in the browser game bundle. Package license files are retained in installed dependencies.

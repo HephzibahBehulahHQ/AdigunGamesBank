@@ -338,11 +338,11 @@ function ballStep(s, dt) {
       const height = previous.z + (b.z - previous.z) * contact.t;
       const hands = p.keeper && inPenaltyArea(p, p.team);
       if (contact.distance < (hands ? 1.03 : 0.62) && height < (hands ? 2.05 : 0.82) && p.cooldown <= 0) {
-        claim(s, p, hands && Math.hypot(b.vx, b.vy) > 12);
-        if (s.phase !== 'live') return;
         b.x = previous.x + (b.x - previous.x) * contact.t;
         b.y = previous.y + (b.y - previous.y) * contact.t;
         b.z = Math.max(FIELD.ballRadius, height);
+        claim(s, p, hands && Math.hypot(b.vx, b.vy) > 12);
+        if (s.phase !== 'live') return;
         break;
       }
     }
