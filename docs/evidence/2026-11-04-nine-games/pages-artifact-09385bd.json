@@ -1,0 +1,221 @@
+{
+  "source_sha": "09385bd8105e235f90493390fccbbe133083bd72",
+  "artifact_id": 13371183935,
+  "zip_bytes": 9029786,
+  "zip_sha256": "07f2c39bbd3c16bfb4c636d179e5557db768a1b6d6f9dc3b04df175d2cea93d0",
+  "zip_members": [
+    {
+      "name": "artifact.tar",
+      "bytes": 11724800,
+      "compressed_bytes": 9029648,
+      "mode": "0o100644"
+    }
+  ],
+  "zip_unsafe_paths": [],
+  "zip_link_entries": [],
+  "zip_encrypted_entries": [],
+  "zip_crc_failure": null,
+  "tar_bytes": 11724800,
+  "tar_sha256": "f57e6385ff337ec7f126d654aa9f48712df61f4a0ba1559992830ae37cb4739f",
+  "tar_entries": 446,
+  "tar_directories": 60,
+  "tar_regular_files": 386,
+  "tar_uncompressed_file_bytes": 11386541,
+  "tar_unsafe_paths": [],
+  "tar_symlinks": [],
+  "tar_hardlinks": [],
+  "tar_special_entries": [],
+  "tar_duplicate_normalized_paths": [],
+  "tar_case_collisions": [],
+  "immutable_source_files": 387,
+  "source_files_in_artifact": 386,
+  "byte_identical_source_files": 386,
+  "byte_mismatches": [],
+  "artifact_only_files": [],
+  "source_files_omitted": [
+    ".github/workflows/verify.yml"
+  ],
+  "root_index": {
+    "present": true,
+    "byte_identical": true,
+    "sha256": "d1e9b7f300e6373a59c884b2787e1ab53d6ec053e13e1e7f4ee42f9fbb12b6e5"
+  },
+  "nine_games": [
+    {
+      "game": "game1",
+      "title": "NEON PULSE",
+      "entry": "game1/index.html",
+      "runtime_files": [
+        "game1/app.js",
+        "game1/engine.js",
+        "game1/index.html",
+        "game1/scene.js",
+        "game1/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game2",
+      "title": "CIRCUIT RUSH",
+      "entry": "game2/index.html",
+      "runtime_files": [
+        "game2/app.js",
+        "game2/campaign.js",
+        "game2/engine.js",
+        "game2/index.html",
+        "game2/scene.js",
+        "game2/script.js",
+        "game2/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game4",
+      "title": "VOLT DODGE",
+      "entry": "game4/index.html",
+      "runtime_files": [
+        "game4/app.js",
+        "game4/campaign.js",
+        "game4/engine.js",
+        "game4/index.html",
+        "game4/map.js",
+        "game4/scene.js",
+        "game4/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game5",
+      "title": "RESISTOR MATCH",
+      "entry": "game5/index.html",
+      "runtime_files": [
+        "game5/app.js",
+        "game5/engine.js",
+        "game5/index.html",
+        "game5/scene.js",
+        "game5/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game6",
+      "title": "CAPACITOR CHARGE",
+      "entry": "game6/index.html",
+      "runtime_files": [
+        "game6/app.js",
+        "game6/campaign.js",
+        "game6/engine.js",
+        "game6/index.html",
+        "game6/scene.js",
+        "game6/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game7",
+      "title": "BINARY FLASH",
+      "entry": "game7/index.html",
+      "runtime_files": [
+        "game7/app.js",
+        "game7/campaign.js",
+        "game7/engine.js",
+        "game7/index.html",
+        "game7/scene.js",
+        "game7/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game8",
+      "title": "FUSE BOX",
+      "entry": "game8/index.html",
+      "runtime_files": [
+        "game8/app.js",
+        "game8/campaign.js",
+        "game8/engine.js",
+        "game8/index.html",
+        "game8/scene.js",
+        "game8/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game10",
+      "title": "APEX CIRCUIT",
+      "entry": "game10/index.html",
+      "runtime_files": [
+        "game10/app.js",
+        "game10/campaign.js",
+        "game10/engine.js",
+        "game10/index.html",
+        "game10/input.js",
+        "game10/scene.js",
+        "game10/style.css"
+      ],
+      "missing": [],
+      "changed": []
+    },
+    {
+      "game": "game17",
+      "title": "PENALTY PRO",
+      "entry": "game17/index.html",
+      "runtime_files": [
+        "game17/app.js",
+        "game17/engine.js",
+        "game17/index.html",
+        "game17/package.json",
+        "game17/penalty-engine.js",
+        "game17/penalty.css",
+        "game17/scene.js",
+        "game17/style.css",
+        "game17/test.js"
+      ],
+      "missing": [],
+      "changed": []
+    }
+  ],
+  "shared_runtime": [
+    {
+      "path": "shared/three-stage.js",
+      "present": true,
+      "byte_identical": true
+    },
+    {
+      "path": "shared/progression.js",
+      "present": true,
+      "byte_identical": true
+    },
+    {
+      "path": "shared/game.css",
+      "present": true,
+      "byte_identical": true
+    },
+    {
+      "path": "vendor/three/three.module.js",
+      "present": true,
+      "byte_identical": true
+    },
+    {
+      "path": "assets/corporate/hephzibah-behulah-official.jpg",
+      "present": true,
+      "byte_identical": true
+    },
+    {
+      "path": "data/games.json",
+      "present": true,
+      "byte_identical": true
+    }
+  ],
+  "runtime_scope_missing": [],
+  "checked_without_execution": true,
+  "inspectedAt": "2026-11-04T23:29:03Z",
+  "method": "Python zipfile CRC check, tarfile metadata inspection, and SHA-256 comparisons with every immutable09385bd Git blob. Archive content was not executed.",
+  "conclusion": "Archive structure and every packaged source file match the tested revision. No inspected packaging or missing-runtime defect explains the Pages publishing stall."
+}

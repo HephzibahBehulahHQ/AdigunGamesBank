@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-05T00:24:32+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-05T00:32:51+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
@@ -70,6 +70,12 @@ Root cloud-control checks completed Neon and Fuse first boards, Circuit's 100.0 
 - `748fb20`:251 JavaScript+52 API passed;15/16 accessibility passed. Circuit's redundant labels differed from visible spans in whitespace. Native visible names plus screen-reader terminal descriptions fixed it; no axe exclusion. [Receipt](docs/evidence/2026-11-04-nine-games/verification-748fb20.json).
 - `10e3b16`: 269 JavaScript+52 API passed;67/69 browser passed, including every new 4K/control completion. Advanced Circuit/Binary page widths were 426px/519px at 390px. Shrinkable grid tracks/children and wrapped weight labels fixed both without reducing touch targets. [Measured failed-run receipt and original frames](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 - Earlier WIP missing-guide/accessibility failures were corrected before the passing release candidate. Failed WIP candidates were never integrated to main or deployed.
+
+## Uploaded Pages package diagnosis
+
+The exact failed-run artifact was inspected at **2026-11-04T23:29:03Z**: ZIP CRC passed; its single tar has **386 regular files**, 60 directories and 11,386,541 bytes of contents. No symbolic/hard links, unsafe paths, special entries, duplicate names or case collisions were found. All **386/386 packaged files match 09385bd exactly**; root index, all nine game runtimes and shared assets are present. The only omitted repository file is `.github/workflows/verify.yml`. [Complete immutable-source comparison](docs/evidence/2026-11-04-nine-games/pages-artifact-09385bd.json). No inspected package defect explains the publishing stall. Internal Pages state remains unavailable.
+
+This diagnostic follow-up is isolated on `work/pages-diagnostics-2026-11-04`, based on exact final-record candidate **0fc4f09892639a94f1bca3f1bffee9ee777f711e**. The primary candidate's full gate continues without interruption; diagnostic source/records are checkpointed separately.
 
 ## Checkpoints and recovery
 

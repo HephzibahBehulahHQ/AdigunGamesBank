@@ -47,7 +47,7 @@
     "2026-11-04T23:22:16.1594315Z ##[error]Timeout reached, aborting!",
     "2026-11-04T23:22:17.4352696Z Canceled deployment with ID 09385bd8105e235f90493390fccbbe133083bd72"
   ],
-  "diagnosticLimits": "The current source and earlier e7c60ac attempts failed after build/upload. No concrete code, artifact, permission, DNS or host correction is established. Official GitHub status currently reports Actions/Pages operational; resolved earlier incidents do not prove causation.",
+  "diagnosticLimits": "The current source and earlier e7c60ac attempts failed after build/upload. No concrete code, artifact, permission, DNS or host correction is established. Official GitHub status reported Actions/Pages operational when checked during this attempt; resolved earlier incidents do not prove causation.",
   "officialStatusUrl": "https://www.githubstatus.com/",
   "noConfigurationChanges": true,
   "publicVerification": {
@@ -64,5 +64,6 @@
       "newPathsAbsentFromPreviousSource": 42,
       "method": "Compared already-fetched public SHA-256 bytes with immutable prior Git blobs; no additional network request."
     }
-  }
+  },
+  "artifactInspection": "pages-artifact-09385bd.json"
 }
