@@ -71,6 +71,11 @@ function makeCargo(item) {
     crate(group, 0, 0.85, -0.3, color, 0.86);
     barrel(group, 0, 0, 1.1, '#9b744f');
   }
+  // Cargo height participates in the stability calculation; show that same
+  // height above the actual cargo-deck elevation instead of a fixed icon size.
+  const bounds = new THREE.Box3().setFromObject(group);
+  for (const child of group.children) child.position.y -= bounds.min.y;
+  group.scale.y = item.height / Math.max(0.01, bounds.max.y - bounds.min.y);
   return group;
 }
 
@@ -105,7 +110,7 @@ export function createScene(canvas, { onSelectBay = () => {}, onSelectCargo = ()
     clearGroup(ark); clearGroup(dock);
     bayMeshes.length = bayEdges.length = cargoGroups.length = tankFills.length = pickables.length = 0;
     const { beam: width, length, depth } = config.hull;
-    const deckY = 2.55;
+    const deckY = config.slots[0].z;
     // A keel, staggered floorboards, individual side strakes and visible ribs.
     box(ark, [width * 0.79, 0.45, length * 0.96], [0, 0.3, 0], '#563922');
     box(ark, [0.65, 0.7, length + 0.4], [0, 0.25, 0], '#4c321f');
@@ -115,17 +120,18 @@ export function createScene(canvas, { onSelectBay = () => {}, onSelectCargo = ()
     }
     for (const side of [-1, 1]) {
       // The near side is cut away at deck height; far side retains full framing.
-      const rows = side < 0 ? 6 : 10;
+      const top = side < 0 ? deckY + 0.4 : depth;
+      const rows = Math.ceil((top - 0.35) / 0.43);
       for (let row = 0; row < rows; row++) {
-        const y = 0.55 + row * 0.43;
+        const y = 0.35 + (row + 0.5) * (top - 0.35) / rows;
         const x = side * (width * 0.42 + Math.min(y / depth, 1) * width * 0.07);
-        box(ark, [0.24, 0.4, length], [x, y, 0], WOOD[(row + 1) % WOOD.length]);
+        box(ark, [0.24, (top - 0.35) / rows - 0.025, length], [x, y, 0], WOOD[(row + 1) % WOOD.length]);
       }
       for (let rib = 0; rib < 9; rib++) {
         const z = (rib / 8 - 0.5) * length * 0.94;
-        beam(ark, [side * width * 0.41, 0.45, z], [side * width * 0.49, side < 0 ? 2.9 : 4.95, z], 0.25, '#543923');
+        beam(ark, [side * width * 0.41, 0.45, z], [side * width * 0.49, top, z], 0.25, '#543923');
       }
-      box(ark, [0.42, 0.24, length + 0.2], [side * width * 0.485, side < 0 ? 2.95 : 4.93, 0], '#c59a5e');
+      box(ark, [0.42, 0.24, length + 0.2], [side * width * 0.485, top, 0], '#c59a5e');
     }
     for (const end of [-1, 1]) {
       for (let row = 0; row < 7; row++) box(ark, [width * 0.94, 0.39, 0.26], [0, 0.54 + row * 0.43, end * length * 0.5], WOOD[(row + 2) % WOOD.length]);
@@ -213,7 +219,7 @@ export function createScene(canvas, { onSelectBay = () => {}, onSelectCargo = ()
       group.visible = Number.isInteger(slotIndex) && slotIndex >= 0;
       if (group.visible) {
         const slot = state.config.slots[slotIndex];
-        group.position.set(slot.y, 2.69, -slot.x);
+        group.position.set(slot.y, slot.z, -slot.x);
         group.rotation.y = index % 2 ? Math.PI / 2 : 0;
       }
     }

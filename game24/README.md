@@ -4,7 +4,7 @@
 
 A distinct browser cargo and ballast commissioning simulation inspired by Genesis 6–9. The player arranges six loads in suitable stations, adjusts low ballast tanks, and launches a simplified floating hull through a timed wave trial. Draft, freeboard, heel, trim, and stability reserve respond to the actual loading plan. The narrative introduces the setting; successful commissioning depends on the physical model.
 
-The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. Browser integration, the finished 3D scene, accessibility, actual 4K rendering, measured performance, and public deployment remain pending. Passing numerical tests does not close those acceptance gates.
+The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. The accessible command interface and original 3D scene are implemented. Browser verification, actual 4K evidence, measured performance, and public deployment remain pending. Passing numerical tests does not close those acceptance gates.
 
 ## 1. Identity and scope
 
@@ -18,7 +18,7 @@ The campaign and numerical engine are implemented and have completed automated l
 | Product divisions | Hephzibah Behulah Elektroniker, AI and Evangelism |
 | Ownership | Core: campaign, engine and numerical tests. Scene: 3D rendering. Integration owner: application, repository checkpoints, CI, catalogue and release. Independent review: this README and bounded defect review |
 | Implementation | `game24/campaign.js`, `game24/engine.js`; HTML/CSS integration and scene work are in progress |
-| Acceptance blocker | Browser and visual evidence, rights inventory for the finished scene, measured load/performance results, and exact public release verification are outstanding |
+| Acceptance blocker | Browser and visual evidence, measured load/performance results, and exact public release verification are outstanding; the original geometry/material inventory is recorded in ASSETS.md |
 
 This is one game in the wider bank. The requested bank-wide target of 2,000 distinct games does not establish delivery or acceptance of other entries.
 
@@ -91,7 +91,7 @@ Conceptual reference: the [NSW Government vessel guide](https://www.nsw.gov.au/e
 | --- | --- |
 | Genuine 3D scene | Scene implementation is in progress; renderer, geometry, camera, lighting, materials and interactive synchronization need a finished-code inventory and browser inspection |
 | Visual causality | Cargo placement, ballast and hull motion must visibly agree with the numerical state; browser verification pending |
-| Render modes | HTML declares Adaptive, 1080p and 4K choices; integrated behavior pending |
+| Render modes | Adaptive, 1080p and 4K drawing-buffer controls are implemented through the shared renderer; actual buffer evidence pending |
 | Actual 4K | **PENDING.** Required proof is a 3840×2160 drawing buffer, the selected mode, device/browser details, screenshot and CI receipt. A menu label or screenshot resized to 4K is not evidence |
 | Responsive layout | Planned checks at 390×844, 768×1024, 1920×1080 and 3840×2160; overflow, focus visibility and telemetry readability pending |
 | Degraded graphics | Accessible loading controls and telemetry must remain usable if rendering fails; retry and failure-state behavior pending |
@@ -102,13 +102,13 @@ The engine suite uses simulated frame advances. It does not create a WebGL conte
 
 | Input / feature | Declared or intended behavior | Verification |
 | --- | --- | --- |
-| Keyboard | Tab between controls; Enter/Space activate buttons; canvas arrows select a bay; Enter loads; Backspace unloads; Space pauses/resumes | HTML instructions inspected; actual handlers and focus behavior pending |
+| Keyboard | Tab between controls; Enter/Space activate buttons; canvas arrows select a bay; Enter loads; Backspace unloads; Space pauses/resumes | Handlers implemented; edge-of-grid vertical navigation corrected after independent review; real-input browser evidence pending |
 | Pointer / touch | Cargo/bay selection and labeled ballast, launch, pause, retry and next controls | Browser integration pending |
 | Gamepad | No implemented support claimed | Pending scope decision; no console claim |
 | Screen reader | Named controls, readable telemetry, a focusable scene description, and polite live status | Markup inspected; name/state announcements and screen-reader testing pending |
 | Focus / contrast | Visible focus, no keyboard trap, readable non-color status, target WCAG 2.2 AA contrast | Measured and manual evidence pending |
-| Target sizes | Minimum intended touch target 44×44 CSS px | Measurement pending |
-| Reduced motion | Respect `prefers-reduced-motion` and retain necessary state feedback | Integrated implementation and testing pending |
+| Target sizes | Ballast buttons and numeric inputs now specify at least 44×44 CSS px | Physical touch testing pending |
+| Reduced motion | Respect `prefers-reduced-motion` and retain necessary state feedback | Decorative water motion is suppressed; essential physics feedback remains; browser evidence pending |
 | Languages | EN, DE, YO and PCM are the bank's required locales | Complete gameplay strings, layout, language tags and human review pending; coverage is not claimed |
 
 No personal names, religious knowledge test or memorized Scripture answer is required to operate the simulation. Narrative summaries are separate from the commissioning controls.
@@ -142,16 +142,20 @@ The [World English Bible publisher](https://worldenglish.bible/) states that the
 
 | Asset / material | Source and rights status |
 | --- | --- |
-| Game code and original summary prose | Created for this repository by the development team; release under the repository's adopted license and ownership policy. Final file inventory pending integration |
+| Game code and original summary prose | Created for this repository by the development team; release under the repository's adopted license and ownership policy. Files recorded in `ASSETS.md`: campaign, engine, app and procedural scene |
 | Hull, cargo, water and other scene geometry/materials | Intended original procedural assets. Finished scene must be inspected for imported models, textures, external images or generated assets and each recorded before acceptance |
 | Corporate logo | Repository asset `assets/corporate/hephzibah-behulah-official.jpg`; adopted corporate asset blob `f7b0e4a650d861fb9d52ed91ea894edec030e03b`, 54,461 bytes; corporate use under the adopted identity policy, not a public-domain asset |
 | Third-party rendering/software | Exact dependency version, license, bundled notices and CDN/download behavior must be reconciled with the finished implementation; no unverified license inventory is claimed |
 | Fonts | Intended Inter/system sans stack with Georgia editorial text; any downloaded or bundled font requires its own license inventory |
-| Audio | No reviewed audio asset inventory yet; do not imply cleared music or sound effects |
+| Audio | No audio assets or audio playback are included |
 | Bible text | Original summaries with linked passages; no bundled translation or copied illustration |
 | Persons, clubs, trading or financial content | Not applicable to this game's adopted scope; no likeness, sports licence or financial-performance claim |
 
 ## 9. Test and release evidence
+
+Candidate `05a4704bed526bb4e6c8b807239ccc55bd7570e8` passed 153 JavaScript and 52 API tests in [CI 41881414221](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41881414221). Eight of nine accessibility checks passed; ark bay accessible names failed because they differed from their visible text. The redundant overriding names were removed in checkpoint `9d53b1e8b477279fa445455137015ae72aa17c71`, verified remotely at 2026-11-04T17:56:29Z. Later gameplay checks were blocked by that failure and are not claimed as passed.
+
+Source review also corrected vertical keyboard navigation at grid edges. The scene now uses generated deck elevations and cargo heights, and the intact hull edge uses the configured depth; its near wall is explicitly a cutaway. Browser regressions cover both arrow boundaries and an actual unbalanced launch, no award on failure, preserved-plan retry, rebalancing and completion. Their execution evidence is pending.
 
 | Check | Result and scope |
 | --- | --- |

@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T18:56:00+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T18:59:00+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
@@ -23,6 +23,7 @@ A separate recoverable worktree/branch `work/genesis-ark-2026-11-04` develops a 
 - **Verified locally:** seven domain tests pass, including complete numerical launch trials through normal engine controls for all 10,000 physically distinct configurations. This is automated coverage, not manual playtesting or rendered-frame evidence. UI and actual 4K verification are pending.
 - **Latest inherited gate:** [CI 41877585283](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41877585283), source `5a446aa156b762901ed10d1e8d03c8b165dbee41`, passed 146 JavaScript, 52 API, eight accessibility, two contract/fallback and twelve gameplay checks. The football shot assertion failed its five-second wait; the final failure snapshot shows one actual shot. Timing is being investigated, and the failure has not been waived.
 - **Candidate `05a4704`:** [CI 41881414221](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41881414221) passed 153 JavaScript and 52 API tests plus eight of nine accessibility checks. Ark bay buttons had visible-name/accessible-name mismatches; their redundant overriding labels were removed. The failure blocked later gameplay checks. A genuine unbalanced-load loss, retained-plan retry and successful rebalance are now included in the keyboard fallback browser test. The original 138-file clean build fingerprint was `6ef262b10cdd6e641ac96e73c93ddac386d4992068f1972e7689d3b849b2259b`.
+- **Follow-up `9d53b1e8b477279fa445455137015ae72aa17c71`:** verified remote readback at **2026-11-04T17:56:29Z**; [replacement CI 41882172834](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41882172834) was running at last check. Independent review subsequently found vertical arrow keys changing columns at grid boundaries; source and browser regression are corrected. Scene deck/cargo heights and the intact hull edge now track the physical configuration.
 - **Unfinished acceptance:** ark actual rendering, UI completion/reload/fallback and automated accessibility; the inherited football gate; device performance, screen-reader and physical touch qualification. Live AI and native-console dependencies remain unchanged.
 
 ## Delivered second implementation wave

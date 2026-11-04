@@ -15,6 +15,12 @@ async function loadFirstVoyage(page, keyboardOnly = false, ballasted = true) {
     } else if (index === 0) {
       await cargo.press('Enter');
       const canvas = page.locator('#ark-canvas');
+      await canvas.press('ArrowDown');
+      await expect(page.locator('#selected-bay-label')).toHaveText('Aft port');
+      await canvas.press('ArrowUp'); await canvas.press('ArrowUp'); await canvas.press('ArrowRight');
+      await canvas.press('ArrowUp');
+      await expect(page.locator('#selected-bay-label')).toHaveText('Fore starboard');
+      await canvas.press('ArrowDown'); await canvas.press('ArrowDown'); await canvas.press('ArrowLeft');
       await canvas.press('ArrowRight');
       await expect(page.locator('#selected-bay-label')).toHaveText('Aft starboard');
       await canvas.press('ArrowLeft');

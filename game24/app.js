@@ -150,8 +150,8 @@ $('quality').addEventListener('change', () => { scene?.setQuality($('quality').v
 canvas.addEventListener('keydown', event => {
   const index = deckOrder.indexOf(selectedBay);
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Backspace',' '].includes(event.key)) event.preventDefault(); else return;
-  if (event.key === 'ArrowUp') selectBay(deckOrder[Math.max(0, index - 2)]);
-  else if (event.key === 'ArrowDown') selectBay(deckOrder[Math.min(5, index + 2)]);
+  if (event.key === 'ArrowUp') selectBay(deckOrder[index >= 2 ? index - 2 : index]);
+  else if (event.key === 'ArrowDown') selectBay(deckOrder[index <= 3 ? index + 2 : index]);
   else if (event.key === 'ArrowLeft') selectBay(deckOrder[index - index % 2]);
   else if (event.key === 'ArrowRight') selectBay(deckOrder[index + (index % 2 ? 0 : 1)]);
   else if (event.key === 'Enter') command(() => loadCargo(state, selectedCargo, selectedBay));
