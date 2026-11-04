@@ -93,9 +93,14 @@ textures are original programmatic assets. Wiring and instrument values reflect
 the current solved configuration.
 
 The shared renderer offers adaptive, 1920 × 1080 and 3840 × 2160 drawing buffers.
-**4K acceptance requires an observed 3840 × 2160 buffer and inspected frame** on
-the recorded runtime; a menu option does not establish that verification.
-Refer to the project status for the actual graphics/browser evidence.
+**The 3840 × 2160 WebGL 2 drawing buffer was verified**, with `getError() === 0`
+and an inspected rendered screenshot, in
+[CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966)
+at commit `484141c50acfebe5526085fd983b7964a2b02e44` on 2026-11-04. That run
+passed all nine browser tests across the catalog and covered games. Its Chromium
+SwiftShader renderer is software rendering: the result verifies actual 3D/4K
+output, not hardware frame rate or production visual quality. The native cloud
+preview had GL disabled; its UI checks are separate from this rendering evidence.
 
 Loading target: first usable bench within **3 seconds** on a desktop with WebGL
 2, a 10 Mbit/s connection and a cold cache. This is a target, not a measured
@@ -127,12 +132,13 @@ text is documented in the shared token stylesheet.
 | --- | --- |
 | Unit/model/integration | `node --test tests/electronicer.test.js`: seven tests passed during implementation, including all 10,000 solutions, uniqueness, independent formulas, KCL/power balance, every open-lead mask, contacts, fuse behavior and failure cases |
 | JavaScript syntax | `node --check game3/app.js` and `node --check game3/bench.js` passed during implementation |
-| Browser play, storage and errors | Root browser suite; exact candidate and result belong in project status |
-| 4K drawing buffer and visual inspection | Record actual runtime/frame evidence before claiming confirmation |
-| Accessibility, responsive and performance qualification | Record tested coverage and remaining limitations in project status |
+| Browser play, storage and errors | [CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966), commit `484141c50acfebe5526085fd983b7964a2b02e44`: legitimate 15 mA circuit completion through controls, duplicate-clear prevention, next-level unlock, reload persistence, fuse trip and repair passed; no page errors in the completion test |
+| 4K drawing buffer and visual inspection | Same run: actual `[3840, 2160, 0]` for WebGL width, height and error; `electronicer-4k.png` inspected |
+| Responsive and focus check | Same run: 390 px viewport, no horizontal page overflow, keyboard entry focus and reduced-motion preference checked |
+| Remaining qualification | Physical-device touch, assistive-technology play, measured contrast, loading targets and sustained hardware FPS are **NOT TESTED**; CI software rendering does not establish these results |
 | GitHub Pages path | `/AdigunGamesBank/game3/` |
 | Public URL | https://hephzibahbehulahhq.github.io/AdigunGamesBank/game3/ |
-| Deployed revision and verified public play | See project status; a URL in documentation is not a deployment receipt |
+| Deployed revision and verified public play | Final deployment verification pending; see project status. A URL in documentation is not a deployment receipt |
 
 No native PlayStation or other console release is claimed. Fully localized,
 cross-device production qualification remains part of the broader project.

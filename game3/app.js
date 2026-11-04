@@ -152,4 +152,5 @@ try {
 const restored = restore();
 brief(); update();
 if (restored) announce('Bench settings restored with the supply off. Your completed levels are saved.');
-window.addEventListener('pagehide', () => bench?.dispose(), { once: true });
+window.addEventListener('pagehide', event => { if (!event.persisted) bench?.dispose(); });
+window.addEventListener('pageshow', event => { if (event.persisted) bench?.render(setup, simulateCircuit(setup)); });

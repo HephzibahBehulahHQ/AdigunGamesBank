@@ -15,9 +15,18 @@ const actionButtons = ['pass','shoot','switch','tackle','sprint','up','down','le
 function clearInput() { held.clear(); queued = {}; touchSprint = false; $('sprint').setAttribute('aria-pressed','false'); }
 function focusPitch() { canvas.focus({preventScroll:true}); }
 function message(text) { $('message').textContent = text; }
+function progressSaved() {
+  try {
+    const stored = JSON.parse(globalThis.localStorage.getItem('adigun.campaign.v1.football') || 'null');
+    return stored?.version === 1 && Number.isInteger(stored.completed) && stored.completed >= save.completed;
+  } catch { return false; }
+}
+function saveFeedback() {
+  return progressSaved() ? 'Campaign progress is saved on this device.' : 'Progress is available for this session only. Browser storage could not save it; keep this page open.';
+}
 function brief() {
   $('level').max = String(save.unlocked); $('level').value = String(match.config.level);
-  $('campaign-status').textContent = save.mastered ? 'Campaign complete · all levels replayable' : `Level ${save.unlocked.toLocaleString()} unlocked · ${save.completed.toLocaleString()} cleared`;
+  $('campaign-status').textContent = (save.mastered ? 'Campaign complete · all levels replayable.' : `Level ${save.unlocked.toLocaleString()} unlocked · ${save.completed.toLocaleString()} cleared.`) + (save.completed > 0 ? ` ${saveFeedback()}` : ' Completed levels save here when browser storage is available.');
   $('tier').textContent = match.config.tier; $('difficulty-readout').textContent = match.config.tier;
   $('level-readout').textContent = `${match.config.level.toLocaleString()} / 10,000`;
   $('duration-readout').textContent = `${match.config.matchSeconds} seconds`;
@@ -60,7 +69,7 @@ function updateUI(force = false) {
   if (finished) {
     if(!recorded) { if(match.qualified) save.complete(match.config.level);recorded=true;brief();$('player-select').value=match.controlledId; }
     $('overlay-title').textContent=match.qualified?'Objective achieved':match.winner==='draw'?'Full time · Draw':match.winner==='home'?'Win · Target not met':'Full time · Defeat';
-    $('overlay-copy').textContent=`Adigun XI ${match.score[0]} – ${match.score[1]} ${match.config.opponent}. ${match.qualified?'Your result is saved on this device.':'Restart to try this level again.'}`;
+    $('overlay-copy').textContent=`Adigun XI ${match.score[0]} – ${match.score[1]} ${match.config.opponent}. ${match.qualified?saveFeedback():'Restart to try this level again.'}`;
   }
   $('next').hidden=!(finished&&match.qualified&&match.config.level<10000&&save.unlocked>match.config.level);
 }

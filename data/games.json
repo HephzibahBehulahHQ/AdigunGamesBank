@@ -140,7 +140,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "484141c50acfebe5526085fd983b7964a2b02e44",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966",
+          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+        }
       },
       "levels": {
         "target": 10000,
@@ -154,7 +162,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -166,8 +174,8 @@
       },
       "testing": {
         "unit": "7 tests, including 10,000 distinct solvable networks and independent equations",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "integration": "All 10,000 DC networks independently checked for solvability, conservation and distinctness",
+        "browser": "CI 41770210966: real 15 mA circuit completion, fuse trip/repair, next level and reload persistence; inspected 4K and 390px frames"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game3/",
@@ -636,7 +644,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "484141c50acfebe5526085fd983b7964a2b02e44",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966",
+          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+        }
       },
       "levels": {
         "target": 10000,
@@ -650,7 +666,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -662,8 +678,8 @@
       },
       "testing": {
         "unit": "16 tests, including 10,000 unique match configs, physical outcomes and input-only win",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "integration": "All 10,000 configurations distinct; input-only winning simulation, collision/goal/restart and fixed-step checks",
+        "browser": "CI 41770210966: actual 4K framebuffer, real keyboard movement/shots/pause and full 4\u20130 match with level 2 unlocked; inspected desktop/mobile frames"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
@@ -1261,7 +1277,7 @@
       "levels": {
         "target": 10000,
         "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "method": "10,000-level AI competition curriculum remains unimplemented; current client compares configured live providers",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
@@ -1270,7 +1286,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "390px width, reduced-motion layout and first keyboard focus checked in Chromium; complete assistive-technology and microphone-permission testing unfinished"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1278,12 +1294,12 @@
         "lazy3DAssets": false
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original interface with text-only model/platform identifiers; no provider logos or likenesses"
       },
       "testing": {
         "unit": "5 frontend + 49 backend tests; all API transport tests are explicit doubles",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "integration": "49 backend tests cover provider transports, bounds, evaluation, concurrency admission and failures using explicit test doubles; real provider calls NOT TESTED",
+        "browser": "CI 41770210966 verified the unconfigured client and 390px layout; stricter zero-results/eight-disabled-provider assertions await CI 41771833545"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
@@ -1382,7 +1398,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "33e63d8e24e988aabf6af5d608476d4c6ab46471",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770823345",
+          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+        }
       },
       "levels": {
         "target": 10000,
@@ -1396,7 +1420,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1408,8 +1432,8 @@
       },
       "testing": {
         "unit": "7 tests, including 10,000 complete wins and all 30,000 target shots",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "integration": "All 30,000 target shots across 10,000 distinct levels pass at 0.1-unit input precision",
+        "browser": "CI 41770823345: 4K framebuffer and responsive layout passed; chapter completion test failed by adjusting a disabled feedback-state slider. Corrected test awaits rerun."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game23/",

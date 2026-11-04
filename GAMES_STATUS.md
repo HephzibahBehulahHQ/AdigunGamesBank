@@ -6,7 +6,7 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 |---|---|---|---|
 | game1/ | NEON PULSE | Legacy 2D | In progress |
 | game2/ | CIRCUIT RUSH | Legacy 2D | In progress |
-| game3/ | ELECTRONICER | 3D rebuild | In progress |
+| game3/ | ELECTRONICER | Playable 3D DC bench; verified 4K/circuit/fuse/reload milestone | In progress |
 | game4/ | VOLT DODGE | Legacy 2D | In progress |
 | game5/ | RESISTOR MATCH | Legacy 2D | In progress |
 | game6/ | CAPACITOR CHARGE | Legacy 2D | In progress |
@@ -14,7 +14,7 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game8/ | FUSE BOX | Legacy 2D | In progress |
 | game9/ | GOAL LINE | Legacy 2D | In progress |
 | game10/ | APEX CIRCUIT | Legacy 2D | In progress |
-| game11/ | WORLD FOOTBALL | 3D rebuild | In progress |
+| game11/ | WORLD FOOTBALL | Playable 3D 11-a-side match; verified 4K and full-time UI win | In progress |
 | game12/ | CORTEX PRIME | Legacy 2D | In progress |
 | game13/ | SYNAPSE SPRINT | Legacy 2D | In progress |
 | game14/ | BILLIONAIRE CHALLENGE | Legacy 2D | In progress |
@@ -26,8 +26,15 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game20/ | MARKET DUEL | Legacy 2D | In progress |
 | game22/ | AI ARENA | Live API client; configuration required | Blocked |
 | game21/ | LAST SIGNAL | Legacy 2D | In progress |
-
 | game23/ | VALLEY OF ELAH | First Bible chapter, 3D ballistic game | In progress |
+
+Electronicer and football milestones are supported by
+[successful CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966)
+at `484141c50acfebe5526085fd983b7964a2b02e44`: nine browser checks passed;
+actual 3840 × 2160 WebGL 2 buffers and rendered screenshots were inspected.
+This is software-rendering and browser-flow evidence. Hardware FPS, physical
+touch, full assistive-technology play and final deployment verification remain
+open. See the per-game records for the exact tested scope.
 
 The ten Godot couch-suite source games remain separate Node2D implementations. Their previous headless checks have not been rerun here; hardware controller validation and 3D conversion remain unfinished.
 

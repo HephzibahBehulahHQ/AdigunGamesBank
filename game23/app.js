@@ -32,6 +32,15 @@ function aimTelemetry() {
   else if (expected.hit) $('aim-telemetry').textContent = `Projected hit inside the gold ring. Flight to target: ${expected.arrival.toFixed(2)} seconds. Release when ready.`;
   else $('aim-telemetry').textContent = `Projected miss: ${Math.abs(expected.dx).toFixed(2)} metres ${expected.dx < 0 ? 'left' : 'right'}, ${Math.abs(expected.dy).toFixed(2)} metres ${expected.dy < 0 ? 'below' : 'above'} centre. Aim against the wind and adjust elevation or speed.`;
 }
+function progressSaved() {
+  try {
+    const stored = JSON.parse(globalThis.localStorage.getItem('adigun.campaign.v1.bible-valley-of-elah') || 'null');
+    return stored?.version === 1 && Number.isInteger(stored.completed) && stored.completed >= progress.completed;
+  } catch { return false; }
+}
+function saveFeedback() {
+  return progressSaved() ? 'Campaign progress is saved on this device.' : 'Progress is available for this session only. Browser storage could not save it; keep this page open.';
+}
 function updateUI() {
   const target = currentTarget(game);
   $('level-readout').textContent = `${game.config.level.toLocaleString()} / 10,000`;
@@ -64,13 +73,13 @@ function updateUI() {
     if (!recorded) { progress.complete(game.config.level); recorded = true; }
     $('overlay-kicker').textContent = 'Encounter complete';
     $('overlay-title').textContent = 'The valley falls quiet.';
-    $('overlay-copy').textContent = `All three targets struck in ${game.throws} throws. Your challenge result is saved on this device.`;
+    $('overlay-copy').textContent = `All three targets struck in ${game.throws} throws. ${saveFeedback()}`;
   } else if (game.phase === 'lost') {
     $('overlay-kicker').textContent = 'Five stones spent';
     $('overlay-title').textContent = 'Try a different aim.';
     $('overlay-copy').textContent = `${game.hits} of 3 targets struck. Retry this challenge; your earlier progress is safe.`;
   }
-  $('campaign-status').textContent = progress.mastered ? 'All 10,000 challenges cleared. Every level can be replayed.' : `${progress.completed.toLocaleString()} cleared · challenge ${progress.unlocked.toLocaleString()} unlocked. Progress is saved on this device when browser storage is available.`;
+  $('campaign-status').textContent = (progress.mastered ? 'All 10,000 challenges cleared. Every level can be replayed.' : `${progress.completed.toLocaleString()} cleared · challenge ${progress.unlocked.toLocaleString()} unlocked.`) + (progress.completed > 0 ? ` ${saveFeedback()}` : ' Completed levels save here when browser storage is available.');
   $('level').max = String(progress.unlocked); $('level').value = String(game.config.level);
   $('next').hidden = !(game.phase === 'won' && game.config.level < progress.unlocked);
   if (lastEvent !== game.event) { message(game.message); lastEvent = game.event; }
