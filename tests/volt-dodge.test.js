@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { describeMapCell } from '../game4/map.js';
 import assert from 'node:assert/strict';
 import { levelConfig, createCampaign, CAMPAIGN_ID, LEVEL_COUNT } from '../game4/campaign.js';
 import { createGame, startGame, stepGame, commandMove, commandWait, pauseGame, resumeGame, hazardPosition, sweepCircle, sweepBox, moveAlongWalls, distance } from '../game4/engine.js';
@@ -185,4 +186,23 @@ test('Volt Dodge campaign validates sequential completion, corrupt storage, sess
   assert.equal(final.complete(10000),true); assert.equal(final.mastered,true); assert.equal(final.complete(10001),false);
   const unavailable=createCampaign({getItem(){throw Error('disabled');},setItem(){throw Error('disabled');}});
   assert.equal(unavailable.complete(1),true); assert.equal(unavailable.unlocked,2);
+});
+
+
+test('The highest-tier command map distinguishes all seven cores from extraction without relying on colour', () => {
+  const state = createGame(10000);
+  assert.equal(state.config.cores.length, 7);
+  const symbols = state.config.cores.map(core => {
+    const view = describeMapCell(state, core.x, core.z);
+    assert.ok(view.classes.includes('core')); assert.match(view.description, new RegExp(core.name));
+    return view.symbol;
+  });
+  assert.deepEqual(symbols, ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+  const exit = describeMapCell(state, state.config.exit.x, state.config.exit.z);
+  assert.equal(exit.symbol, 'X'); assert.equal(new Set([...symbols, exit.symbol, 'R', '!']).size, 10);
+  assert.match(exit.description, /Locked exit/);
+  state.collected.fill(true);
+  const open = describeMapCell(state, state.config.exit.x, state.config.exit.z);
+  assert.equal(open.symbol, 'X'); assert.match(open.description, /Open exit/);
+  for (const core of state.config.cores) assert.ok(!describeMapCell(state, core.x, core.z).classes.includes('core'));
 });

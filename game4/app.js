@@ -1,5 +1,6 @@
 import { createCampaign, CAMPAIGN_ID, LEVEL_COUNT } from './campaign.js';
 import { validCampaignSave } from '../shared/progression.js';
+import { describeMapCell } from './map.js';
 import { createGame, startGame, stepGame, commandMove, commandWait, pauseGame, resumeGame, hazardPosition, nearby } from './engine.js';
 
 const $ = id => document.getElementById(id), canvas = $('volt-canvas'), progress = createCampaign(), reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -60,14 +61,8 @@ function telemetry() {
 function updateMap() {
   const sparks=state.config.hazards.map(hazard=>hazardPosition(hazard,state.time));
   for(const cell of mapCells) {
-    const descriptions=[],classes=[],core=state.config.cores.find(core=>!state.collected[core.id]&&core.x===cell.x&&core.z===cell.z);
-    let icon='';
-    if(state.config.blocked[cell.z][cell.x]){descriptions.push('Wall');classes.push('wall');}else descriptions.push('Open floor');
-    if(core){descriptions.push(core.name);classes.push('core');icon=String.fromCharCode(65+core.id);}
-    if(state.config.exit.x===cell.x&&state.config.exit.z===cell.z){descriptions.push(state.collected.every(Boolean)?'Open exit':'Locked exit');classes.push('exit');icon='E';}
-    if(sparks.some(spark=>Math.round(spark.x)===cell.x&&Math.round(spark.z)===cell.z)){descriptions.push('Spark hazard');classes.push('spark');icon='!';}
-    if(Math.round(state.player.x)===cell.x&&Math.round(state.player.z)===cell.z){descriptions.push('Rover');classes.push('rover');icon='R';}
-    cell.td.className=classes.join(' ');text(cell.icon,icon);text(cell.description,descriptions.join(', '));
+    const view=describeMapCell(state,cell.x,cell.z,sparks);
+    cell.td.className=view.classes.join(' ');text(cell.icon,view.symbol);text(cell.description,view.description);
   }
   text($('spark-positions'),sparks.map((spark,index)=>`Spark ${index+1}: column ${spark.x.toFixed(2)}, row ${spark.z.toFixed(2)}`).join(' · '));
 }

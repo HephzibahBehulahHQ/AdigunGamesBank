@@ -164,7 +164,7 @@ test('Binary Flash contains a sixteen-bit saved-layout fixture at 390 and 320 pi
   await page.goto('/game7/');
   await expect(page.locator('.bit-button')).toHaveCount(16);
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Skip to input switches', exact: true })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Skip to register controls', exact: true })).toBeFocused();
   expect(await page.locator(':focus').evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe('none');
   await page.locator('#start').click();
   for (const width of [390, 320]) {
