@@ -97,6 +97,11 @@ updated at **2026-11-04T05:01:28+01:00**. Current candidate and deployment
 receipts belong in the authoritative
 [project status](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md).
 
+The later [successful run 41771833545](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545)
+at `1002ca420bd76b10e94f29fd916374dfb13ed5f7` passed all **11 browser tests**
+across the expanded suite. Its inspected football full-time frame showed a
+**3–0 win**; the earlier **4–0** receipt above applies to commit `484141c50acfebe5526085fd983b7964a2b02e44`.
+
 | Evidence | Procedure | Outcome at this checkpoint |
 | --- | --- | --- |
 | Unit and logic integration | `node --test --test-reporter=tap tests/football.test.js` | **16 tests passed**: all 10,000 configs; 11v11 roster; selection without teleport; pass possession; whole-ball goals; missed shots; frame collisions; saves; throw-ins; delta-time equivalence; pause; full-time targets; finite unattended match; input-only complete win; own goals; corners. |

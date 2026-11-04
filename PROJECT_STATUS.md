@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T05:17:27+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T05:20:55+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
@@ -39,10 +39,13 @@ Main currently contains the saved requirements. Implementation is checkpointed o
 | CI run 41770210966 at `484141c` | All 9 browser checks passed. Actual 3840 × 2160 WebGL2 buffers / zero GL error verified for Electronicer and football; screenshots inspected |
 | Football complete match | Real UI keyboard movement, passes/shots/tackle/pause; inspected 4–0 full-time win and level 2 unlock screenshot. Match used adaptive resolution; this is not a 4K FPS benchmark |
 | CI run 41770823345 at `33e63d8` | 88 JS and 49 API tests passed; 10 of 11 browser checks passed. Bible 4K buffer and 390px frame passed and were inspected. Chapter test tried to alter a disabled feedback-state slider; repaired test waits for enabled controls |
-| CI run 41771833545 at `1002ca4` | In progress: verifies corrected Bible control sequencing and stricter unconfigured AI assertions |
+| CI run 41771833545 at `1002ca4` | PASSED: 88 JS, 49 API and all 11 browser tests, no skips/flaky cases. Bible used real aiming keys to hit all 3 targets, unlock level 2 and retain it after reload. Inspected victory and 4K/mobile frames. Football won 3–0 in this run |
+| CI run 41772308261 at `9ac8f12` | In progress: includes five additional history/storage regressions (93 JS tests total), truthful manifest and catalog controls copy |
 | 390px responsive / reduced motion | Catalog, circuit, football, AI and Bible passed no-horizontal-overflow and visible first-focus checks. This does not establish full screen-reader or physical touch conformance |
 | Physical mobile/controller/GPU performance, full screen-reader parity | NOT TESTED |
 | Live AI providers / deployed API | NOT TESTED; configuration dependencies remain |
+
+[Retained verification receipt and original screenshots](docs/evidence/2026-11-04/README.md) record the successful `1002ca4` browser run, exact test timings, SHA-256 image hashes and clean build fingerprint. Hardware performance and broader qualification remain untested as listed above.
 
 ## Verified checkpoints
 
@@ -58,6 +61,7 @@ Every SHA below was read back from GitHub. Times are the actual commit times in 
 | `484141c50acfebe5526085fd983b7964a2b02e44` | 04:57:03 | Bounded API integer validation and match timing; nine browser tests passed |
 | `33e63d8e24e988aabf6af5d608476d4c6ab46471` | 05:03:10 | Bible chapter, 23-title manifest and browser checks |
 | `1002ca420bd76b10e94f29fd916374dfb13ed5f7` | 05:12:55 | Wait for enabled Bible controls; explicit disconnected AI assertions |
+| `9ac8f12450ccb5d819521c32c44ddb35697091e5` | 05:17:29 | Cached history/storage reliability; five new regressions and evidence metadata |
 
 The five-minute checkpoint target was missed across several implementation and verification intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Current uncommitted changes remain pending until the next verified receipt. Main has not yet been advanced to unqualified game code.
 
@@ -77,4 +81,4 @@ The five-minute checkpoint target was missed across several implementation and v
 
 ## Unfinished work that remains actionable
 
-Finish the corrected Bible browser test, history/storage regression fixes and this priority milestone’s verified deployment, then convert remaining legacy titles individually. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).
+Finish the final candidate CI and verified Pages deployment, then convert remaining legacy titles individually. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).

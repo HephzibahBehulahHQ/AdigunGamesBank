@@ -1,0 +1,179 @@
+{
+  "commit": "1002ca420bd76b10e94f29fd916374dfb13ed5f7",
+  "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545",
+  "completedAt": "2026-11-04T04:17:33Z",
+  "environment": "Ubuntu 24.04, Node 24, Python 3.12, Playwright 1.56.1 Chromium with SwiftShader software WebGL",
+  "unitTests": {
+    "javascriptPassed": 88,
+    "apiPassed": 49,
+    "apiCalls": "Transport doubles only; no live model calls"
+  },
+  "browserStats": {
+    "startTime": "2026-11-04T04:13:48.663Z",
+    "duration": 218962.25,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "browserTests": [
+    {
+      "title": "catalog filters, search, empty results and persistent accessible theme",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2525
+        }
+      ]
+    },
+    {
+      "title": "Electronicer renders actual 4K and completes a real circuit through controls",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9888
+        }
+      ]
+    },
+    {
+      "title": "Electronicer fuse trips, stays open and can be repaired without a false level award",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 3960
+        }
+      ]
+    },
+    {
+      "title": "football renders 4K, accepts movement/shot input, pauses and reaches a full-time result",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 163750
+        }
+      ]
+    },
+    {
+      "title": "AI Arena discloses missing live configuration and does not invent model answers",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 2509
+        }
+      ]
+    },
+    {
+      "title": "David chapter renders 4K and completes all targets using real aiming controls",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 26353
+        }
+      ]
+    },
+    {
+      "title": "390px responsive layout and visible focus: /",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1019
+        }
+      ]
+    },
+    {
+      "title": "390px responsive layout and visible focus: /game3/",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 818
+        }
+      ]
+    },
+    {
+      "title": "390px responsive layout and visible focus: /game11/",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4106
+        }
+      ]
+    },
+    {
+      "title": "390px responsive layout and visible focus: /game22/",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1952
+        }
+      ]
+    },
+    {
+      "title": "390px responsive layout and visible focus: /game23/",
+      "expectedStatus": "passed",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 969
+        }
+      ]
+    }
+  ],
+  "rendering": {
+    "games": [
+      "game3",
+      "game11",
+      "game23"
+    ],
+    "actualWebGL2DrawingBuffer": [
+      3840,
+      2160
+    ],
+    "glError": 0,
+    "checks": "Measured by each browser test, not inferred from labels or CSS",
+    "limitation": "Screenshots are full-page CSS viewport captures of the verified renderer; this is not a hardware FPS, production-art or assistive-technology certification"
+  },
+  "build": {
+    "baseCommit": "1002ca420bd76b10e94f29fd916374dfb13ed5f7",
+    "modified": false,
+    "fingerprintSha256": "5743768b35875b88123eb486fb34ef62aadf205d5397ebe633a6036c9b1056f5"
+  },
+  "screenshots": {
+    "electronicer-4k.png": {
+      "bytes": 373340,
+      "sha256": "c32f6acb8635d05555276a07fbdf8856175dc2e3ea142bd0605e314c9e4b4459"
+    },
+    "football-4k.png": {
+      "bytes": 429700,
+      "sha256": "b989fde1017530f1c58db6952d01118ce89a3bda16fe5e0c1a630a524f675a48"
+    },
+    "bible-4k.png": {
+      "bytes": 773965,
+      "sha256": "9ebb4361773d473f8b88a843fe8a3f2c72530a97212b818d3f7852ed5c6671db"
+    },
+    "bible-win.png": {
+      "bytes": 770562,
+      "sha256": "bc0ffa46ad57c52ef104445aee132fe7bc02f0adc7575ce9156dc27af36509b5"
+    }
+  }
+}

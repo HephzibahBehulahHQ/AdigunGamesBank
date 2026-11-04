@@ -26,7 +26,7 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game20/ | MARKET DUEL | Legacy 2D | In progress |
 | game22/ | AI ARENA | Live API client; configuration required | Blocked |
 | game21/ | LAST SIGNAL | Legacy 2D | In progress |
-| game23/ | VALLEY OF ELAH | First Bible chapter, 3D ballistic game | In progress |
+| game23/ | VALLEY OF ELAH | First Bible chapter; verified 4K, first-level UI completion and reload | In progress |
 
 Electronicer and football milestones are supported by
 [successful CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966)
@@ -35,6 +35,12 @@ actual 3840 × 2160 WebGL 2 buffers and rendered screenshots were inspected.
 This is software-rendering and browser-flow evidence. Hardware FPS, physical
 touch, full assistive-technology play and final deployment verification remain
 open. See the per-game records for the exact tested scope.
+
+The David chapter's first-level milestone is supported by
+[CI run 41771833545](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545)
+at `1002ca420bd76b10e94f29fd916374dfb13ed5f7`: **88 JavaScript, 49 API and 11
+browser tests passed with no skips** across the repository. This does not claim
+all Bible chapters, 10,000 human playtests or production completion.
 
 The ten Godot couch-suite source games remain separate Node2D implementations. Their previous headless checks have not been rerun here; hardware controller validation and 3D conversion remain unfinished.
 

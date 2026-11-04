@@ -1299,7 +1299,7 @@
       "testing": {
         "unit": "5 frontend + 49 backend tests; all API transport tests are explicit doubles",
         "integration": "49 backend tests cover provider transports, bounds, evaluation, concurrency admission and failures using explicit test doubles; real provider calls NOT TESTED",
-        "browser": "CI 41770210966 verified the unconfigured client and 390px layout; stricter zero-results/eight-disabled-provider assertions await CI 41771833545"
+        "browser": "CI 41771833545 passed: zero configured providers, empty results, eight disabled provider controls and 390px layout. Live API/microphone permission tests remain unperformed."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
@@ -1403,8 +1403,8 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "33e63d8e24e988aabf6af5d608476d4c6ab46471",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770823345",
+          "commit": "1002ca420bd76b10e94f29fd916374dfb13ed5f7",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545",
           "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
         }
       },
@@ -1433,7 +1433,7 @@
       "testing": {
         "unit": "7 tests, including 10,000 complete wins and all 30,000 target shots",
         "integration": "All 30,000 target shots across 10,000 distinct levels pass at 0.1-unit input precision",
-        "browser": "CI 41770823345: 4K framebuffer and responsive layout passed; chapter completion test failed by adjusting a disabled feedback-state slider. Corrected test awaits rerun."
+        "browser": "CI 41771833545 passed: actual 4K framebuffer, three hits through keyboard aiming controls, level 2 unlock and reload persistence; inspected 4K, win and 390px frames"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game23/",
