@@ -18,7 +18,7 @@ function render() {
     const heading = element('h3'), link = element('a', game.title); link.href = game.path; heading.append(link);
     body.append(meta, heading, element('p', game.description));
     const bottom = element('div', '', 'card-bottom');
-    bottom.append(element('span', game.status === 'Blocked' ? 'Setup required' : 'Development edition'), element('span', 'Play ↗'));
+    bottom.append(element('span', game.status === 'Blocked' ? 'Setup required' : 'Development edition'), element('span', game.status === 'Blocked' ? 'Configure ↗' : 'Play ↗'));
     body.append(bottom); card.append(top, body); return card;
   });
   grid.replaceChildren(...nodes);

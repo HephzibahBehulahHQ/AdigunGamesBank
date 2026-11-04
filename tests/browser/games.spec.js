@@ -93,8 +93,12 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
 
 test('AI Arena discloses missing live configuration and does not invent model answers', async ({ page }) => {
   await page.goto('/game22/');
-  await expect(page.locator('body')).toContainText(/API|gateway|configured/i);
-  expect(await page.locator('body').innerText()).not.toContain('sandboxed_tests');
+  await expect(page.locator('#configured-count')).toContainText('0');
+  await expect(page.locator('#results')).toBeEmpty();
+  await expect(page.locator('#lineup input[type="checkbox"]')).toHaveCount(8);
+  for (const provider of ['openai','anthropic','gemini','deepseek','grok','kimi','adigun','ollama']) {
+    await expect(page.locator(`#provider-${provider}`)).toBeDisabled();
+  }
   await page.screenshot({ path: 'test-results/ai-arena-unconfigured.png', fullPage: true });
 });
 
@@ -108,7 +112,9 @@ test('David chapter renders 4K and completes all targets using real aiming contr
   await page.screenshot({path:'test-results/bible-4k.png',fullPage:true});
   await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
   async function aimControl(id,value) {
-    const slider=page.locator(`#${id}`), current=Number(await slider.inputValue());
+    const slider=page.locator(`#${id}`);
+    await expect(slider).toBeEnabled({timeout:15000});
+    const current=Number(await slider.inputValue());
     const steps=Math.round((value-current)/Number(await slider.getAttribute('step')));
     await slider.focus();
     for(let i=0;i<Math.abs(steps);i++) await slider.press(steps>0?'ArrowRight':'ArrowLeft');
