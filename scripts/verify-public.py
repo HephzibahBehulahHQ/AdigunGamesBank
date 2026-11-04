@@ -56,7 +56,7 @@ def main():
              "vendor/three/three.module.js"}
     catalog = json.loads(git("show", f"{args.commit}:data/games.json"))
     paths.update(game["path"] + "index.html" for game in catalog["games"])
-    runtime_dirs = ("game3/", "game11/", "game15/", "game22/", "game23/")
+    runtime_dirs = tuple(game["path"] for game in catalog["games"] if game["rendering"]["is3D"])
     tree = git("ls-tree", "-r", "--name-only", args.commit).decode().splitlines()
     paths.update(path for path in tree if path.startswith(runtime_dirs) and Path(path).suffix in (".js", ".css"))
     if args.changed_since:
