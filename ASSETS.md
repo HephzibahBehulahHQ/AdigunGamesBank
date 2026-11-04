@@ -26,3 +26,9 @@
 
 - AI Arena: original procedural 3D stage, podiums, status columns and materials; model/provider names are text identifiers only. No provider logos, avatar likenesses or simulated answer assets.
 - Accessibility test tooling: `@axe-core/playwright` and `axe-core` 4.14.0, MPL-2.0; development-only dependencies, not included in the browser game bundle. Package license files are retained in installed dependencies.
+
+## Engineering conversions — November 2026
+
+- Circuit Rush: original procedural copper conductors, terminal sockets, source terminals, lamps, board and materials. No third-party component images, brands, audio or font assets.
+- Resistor Match: original four-band axial resistor meshes, leads, opaque hinged trays, labels and bench. Numerical band references do not introduce manufacturer graphics or product likenesses.
+- Capacitor Charge: original electrolytic capacitor, resistor, selector, meters, copper traces and perforated lab bench; original text and materials. The circuit is an ideal educational model, not a component safety certification.

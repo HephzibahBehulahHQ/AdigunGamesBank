@@ -11,6 +11,7 @@ export function createScene(canvas, qualitySelect, status, onSelect) {
   function rebuild(size) {
     for (const child of [...board.children]) { child.geometry?.dispose(); child.material?.dispose(); board.remove(child); }
     activeSize=size; cells=[]; highlights=[];
+    camera.position.set(size * .9, size * 1.5, size * 1.8); camera.lookAt(0, 0, 0);
     const span=size*1.48;
     box(board,[span+1,.48,span+1],[0,-.47,0],'#1e2b3c',{metalness:.7,roughness:.35});
     box(board,[span+.65,.14,span+.65],[0,-.16,0],'#15342f');

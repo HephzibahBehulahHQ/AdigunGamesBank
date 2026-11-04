@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+const catalog = JSON.parse(readFileSync(new URL('../../data/games.json', import.meta.url), 'utf8'));
+const routes = ['/', ...catalog.games.filter(game => game.rendering.is3D).map(game => `/${game.path}`)];
 
 // Automated checks are partial accessibility evidence, not a claim of complete
 // screen-reader or physical touch-device conformance.
@@ -15,7 +18,7 @@ async function audit(page, testInfo) {
   expect(issues).toEqual([]);
 }
 
-for (const route of ['/', '/game1/', '/game8/', '/game10/', '/game17/', '/game3/', '/game11/', '/game15/', '/game22/', '/game23/', '/game24/']) {
+for (const route of routes) {
   test(`320px reflow, keyboard focus and automated accessibility: ${route}`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.emulateMedia({ reducedMotion: 'reduce' });

@@ -72,7 +72,7 @@
     {
       "id": "game2",
       "title": "CIRCUIT RUSH",
-      "description": "Rotate wire pieces to connect the source and load without creating a short.",
+      "description": "Rotate real conductors, wire every load and commission a 3D circuit without shorts or overloads.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game2/",
@@ -81,43 +81,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 unique reciprocal-terminal topologies solved through actual rotation and commissioning commands",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game2/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -275,7 +277,7 @@
     {
       "id": "game5",
       "title": "RESISTOR MATCH",
-      "description": "Flip cards, find matching resistor values, and beat your previous move count.",
+      "description": "Open 3D component trays, read resistance and tolerance bands, and match pairs within a finite move budget.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game5/",
@@ -284,43 +286,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 unique decks completed through 160,000 reveals and 80,000 actual comparisons",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game5/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -340,7 +344,7 @@
     {
       "id": "game6",
       "title": "CAPACITOR CHARGE",
-      "description": "Hold to charge, release at the right time, and keep the meter under control.",
+      "description": "Choose RC components, capture stored energy, hold charge and discharge safely on a 3D commissioning bench.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game6/",
@@ -349,43 +353,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 distinct physical RC procedures completed through the numerical engine and independently checked against KCL",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game6/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {

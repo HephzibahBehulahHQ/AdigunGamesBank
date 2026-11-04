@@ -4,7 +4,7 @@ Updated **2026-11-04T23:22:00+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Acceptance
 
-**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The four-game candidate keeps **24 existing titles** and converts four of them individually: **14 legacy 2D, nine local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
+**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The current integration keeps **24 existing titles** and individually converts seven of them: **11 legacy 2D, twelve local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
 
 This continuation does not add renamed templates or count procedural levels as separate games. Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished.
 
@@ -34,6 +34,14 @@ The preceding documentation-only Pages run [41891598230](https://github.com/Heph
 Each conversion includes its own game-template README, original-asset record, numerical tests, real-control browser tests and equivalent commands when WebGL is unavailable. Existing legacy assets/styles needed by other routes are retained. In particular, games 18–21 still depend on `game17/style.css`.
 
 The catalog and asset inventory reflect these implementations without prematurely claiming new 4K or deployment evidence. `GAMES_STATUS.md` now includes Ark and correctly identifies the previously released Tactics Grid as 3D. Release syntax checks derive routes from the complete catalog. A concrete racing input defect was fixed: a second touch/focus change no longer releases an already held throttle or steering control.
+
+## Engineering integration
+
+Engineering checkpoint `c01f283658335f16f4be9badda959220b1dc3aec` was read back at **2026-11-04T22:22:26Z** and is merged as a second parent, preserving both work histories. Circuit Rush, Resistor Match and Capacitor Charge include complete 3D scenes, genuine state transitions, local saves, documentation and browser suites. Their combined **42 new numerical tests pass**; legacy Circuit Rush adds seven existing regressions. Volt Dodge and Binary Flash remain WIP in the isolated engineering branch; their partial engine files in this checkpoint do not establish finished conversions.
+
+Browser discovery now includes every game spec automatically, and accessibility route discovery follows the catalog’s implemented 3D routes. Neon camera framing is adjusted to the active board size and requires a fresh inspected frame. Resistor’s graphics selector test receives the same role/name correction as Penalty.
+
+Engineering remote receipts: `7db0840`21:59:16Z, `6fb58d8`22:04:20Z, `e32afcd`22:09:28Z, `4019851`22:13:13Z, `5a466b5`22:19:31Z, `c01f283`22:22:26Z. Intervals of **5m4s, 5m8s and 6m18s** missed the five-minute requirement and are recorded as failures of cadence, not compliance. All snapshots were nevertheless read back exactly and remain recoverable. Preparation targets three-minute intervals.
 
 ## Verification so far
 
