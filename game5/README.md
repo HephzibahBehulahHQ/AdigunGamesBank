@@ -1,5 +1,12 @@
 # RESISTOR MATCH
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and scope
 
 | Field | Record |
@@ -77,7 +84,7 @@ models, with no implied physical body size, power rating or safe circuit use.
 | Correct band order | First/second digits and multiplier run left to right; the tolerance band is separated at the right. DOM labels show the same component data |
 | Hidden components | Opaque depth-tested covers conceal resistors; no transparent lid effect. The camera is fixed, and a stored cover is removed only after a real matching comparison |
 | Pointer input | Raycasting selects the actual numbered 3D tray; native DOM tray controls execute the same `reveal` command |
-| 4K | Adaptive, 1080p and actual 3840 × 2160 renderer options. **Browser/frame evidence pending root/CI**, not confirmed merely by the selector |
+| 4K | Adaptive, 1080p and actual 3840 × 2160 renderer options. **Browser/frame evidence confirmed in integration CI above**, not confirmed merely by the selector |
 | Hardware performance | **NOT TESTED**. Software-renderer checks are not gaming-GPU or physical-device qualification |
 | Level count | 10,000 deterministic component arrangements, generator version 1 |
 | Distinctness | Verified from ordered component-code arrangements, excluding level names/IDs: 10,000 unique decks |
@@ -179,8 +186,8 @@ it does not assign a winning score directly.
 | --- | --- |
 | New engine tests | Local working-tree 11/11 pass above |
 | Syntax | `node --check` passed for `engine.js`, `app.js`, `scene.js` and the new browser spec during implementation |
-| Browser / actual 4K | **NOT RUN by this author**; `tests/browser/resistor-match.spec.js` prepares opened-cover 4K capture, true UI memory win and reload |
-| Responsive / accessible / failure paths | **NOT RUN by this author**; specs cover 320 px compared parts, axe without exclusions, 390 px keyboard loss/retry/fallback win and silently rejected storage |
+| Browser / actual 4K | **Executed in integration CI above**; `tests/browser/resistor-match.spec.js` prepares opened-cover 4K capture, true UI memory win and reload |
+| Responsive / accessible / failure paths | **Executed in integration CI above**; specs cover 320 px compared parts, axe without exclusions, 390 px keyboard loss/retry/fallback win and silently rejected storage |
 | Touch hardware / screen reader / GPU | **NOT TESTED** |
 | Immutable revision / production | Root integration owner records exact candidate, CI and deployment receipts in `PROJECT_STATUS.md` |
 

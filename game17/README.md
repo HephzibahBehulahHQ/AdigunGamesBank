@@ -1,5 +1,12 @@
 # PENALTY PRO
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and scope
 
 | Field | Record |
@@ -73,7 +80,7 @@ professional player likeness or complete football officiating simulation.
 | Requirement | Implementation / evidence |
 | --- | --- |
 | Actual 3D | `scene.js` uses the shared Three.js WebGL 2 stage. Original goal tubes, three-dimensional nets, striped training pitch, ball panels, seated stand, floodlight structures and two capsule-based players |
-| 4K | Adaptive, 1080p and 3840 × 2160 options use actual renderer size. **NOT YET CONFIRMED for this new game in this author's local environment**; exact buffer plus screenshot verification is in `tests/browser/penalty.spec.js` for root/CI execution |
+| 4K | Adaptive, 1080p and 3840 × 2160 options use actual renderer size. **Confirmed in integration CI as recorded above**; exact buffer plus screenshot verification is in `tests/browser/penalty.spec.js` for root/CI execution |
 | Hardware performance | **NOT TESTED**. Software renderer results must not be reported as gaming-GPU qualification |
 | Levels | 10,000 deterministic physical configurations, generator version 1, sequential campaign |
 | Difficulty | Five tiers of 2,000 levels: Beginner, Apprentice, Skilled, Expert, Professional Master. Goal target advances 3 → 4 → 5; wind ranges expand, available shot power decreases and keeper reactions accelerate |
@@ -166,8 +173,8 @@ SHA and any later rerun before acceptance.
 | --- | --- |
 | Engine / numerical tests | Local pass above; dimensions, gravity/rolling, wind, goal/frame/body contact, no frame-step tunnelling, pause, score separation, ten-turn roles, draw/loss/win, power bounds, sequential saves, 10,000 complete campaigns |
 | JavaScript syntax | `node --check` passed for `app.js`, `scene.js`, `penalty-engine.js` during implementation |
-| Browser real play / 4K | **NOT RUN by this author**; three new Playwright flows prepared in `tests/browser/penalty.spec.js` |
-| Browser fallback / persistence / reflow | **NOT RUN by this author**; test fixtures explicitly remove WebGL or reject storage. These are failure-path tests, not graphics evidence |
+| Browser real play / 4K | **Executed in integration CI above**; three new Playwright flows prepared in `tests/browser/penalty.spec.js` |
+| Browser fallback / persistence / reflow | **Executed in integration CI above**; test fixtures explicitly remove WebGL or reject storage. These are failure-path tests, not graphics evidence |
 | Physical touch / screen reader / gaming GPU | **NOT TESTED** |
 | Exact release / deployment | Root integration owner records in `PROJECT_STATUS.md`; no new publication claimed by this file |
 

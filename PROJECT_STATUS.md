@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-04T23:33:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-04T23:52:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
@@ -13,8 +13,8 @@ This continuation does not add renamed templates or count procedural levels as s
 | State | Verified revision / evidence |
 | --- | --- |
 | Integration branch | `work/finish-games-2026-11-04` |
-| Latest verified work checkpoint | `748fb20fa12e64dc625d068056f815955fd5a4cf`, exact remote head read back **2026-11-04T22:24:36Z** |
-| Current local changes | Complete engineering integration, reviewed control/label fixes and accurate catalog/inventory. New exact-candidate release gate pending. |
+| Latest verified work checkpoint | `10e3b16af8c314379e540da65b8aa7da0f536775`, exact remote head read back **2026-11-04T22:33:21Z** |
+| Current local changes | Two advanced-layout CSS corrections; first-completion wording; retained original frames and measured evidence. New exact-candidate release gate pending. |
 | Remote main at recovery | `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` |
 | Last verified public gameplay source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file exact-byte receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
 | Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
@@ -57,6 +57,14 @@ Intermediate merge `748fb20` passed **251 JavaScript + 52 API checks** and **15/
 
 ## Verification so far
 
+### Complete candidate result and bounded corrections
+
+Exact source **`10e3b16af8c314379e540da65b8aa7da0f536775`** completed [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553): **269 JavaScript + 52 API checks passed; 18 accessibility + 15 contract/fallback + 34/36 rendered/gameplay checks passed**, with zero skips/flaky results. Every new actual-4K and full-control completion/save test passed. The only failures were **advanced Circuit Rush (426px) and Binary Flash (519px) page widths at a 390px viewport**. The local grid tracks now use `minmax(0,1fr)` and their children may shrink, preserving full-size internally scrolling controls. Long binary weight labels wrap within their cells. No test or assertion was weakened.
+
+[Exact measurements, failures and manual-control record](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json) · [All nine original inspected PNG frames](docs/evidence/2026-11-04-nine-games/README.md). Local and CI clean builds matched **188 runtime files**, SHA-256 **`d64fc5cb1ef64a8c25457cfb4533d682a9df8545cf5ae4782bce540fdfa342e5`**. Original PNG bytes and SHA-256 hashes are retained; no generated substitute is used as rendering evidence. The catalog’s 4K field now names this observed source, while release/deployment remains pending. First changed correction work began **22:48:01Z**; CSS correction began **22:48:15Z**.
+
+Root-controlled cloud UI verification also completed Binary’s two-frame packet in nine operations, Volt’s 18-command full-shield extraction, and Capacitor’s real charge/hold/discharge procedure to **0.500 V**, with genuine unlock/save feedback. The resistor arrow correction visibly skipped a matched tray. This browser explicitly disables WebGL; these are command-flow checks, not its rendering evidence. Singular first-completion wording was corrected in four interfaces.
+
 The frozen combined working tree passed **269/269 JavaScript tests**, with zero failures/skips, in **23.066 seconds** using `npm test` on 2026-11-04. `npm run check` passed all 24 routes, links, pinned policy, exact corporate artwork and syntax checks. Dynamic browser discovery includes **36 rendered/gameplay scenarios** plus separate contract/fallback and accessibility gates; discovery alone is not execution. The final remote candidate still requires its full CI gate.
 
 Exact candidate `8a9ff73d1de2184f4b9abe5b646012892830b81e` failed [CI 41921885769](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41921885769): **197 JavaScript + 52 API tests passed**, **13 accessibility + 8 contract/fallback + 22/23 rendered gameplay checks passed**. The sole failure was the Penalty Pro test’s exact `getByLabel` locator on a wrapping select label; the captured accessibility tree correctly exposes a Graphics combobox. The test now addresses that actual accessible role/name. No gameplay assertion was removed and no timeout was increased. A new exact-candidate gate remains required. The inspected Neon and Apex frames show actual original 3D; Neon’s first-board camera framing will be improved in the engineering integration.
@@ -70,7 +78,8 @@ Exact candidate `8a9ff73d1de2184f4b9abe5b646012892830b81e` failed [CI 4192188576
 | Preliminary CI at `3b94403` | Node, API, build, accessibility/reflow and gateway/graphics-fallback stages passed; final rendered stage was still running when the next required recovery checkpoint was pushed. This preliminary run is not the final release gate. |
 | Manual cloud-browser play | Neon first-board completion/save; Fuse Box valid 5/7/11 A branch plan, all three stages, 100% completion, 0.920 Wh, board 2 unlock and save feedback observed through the actual controls |
 | Cloud-browser graphics | Explicit WebGL-disabled environment. Command play works; no 3D/4K claim comes from that browser. |
-| Actual 4K, final accessibility and all affected browser flows | **PENDING** on the final exact candidate in Chromium/Ubuntu CI; inspect captured frames as well as real WebGL drawing-buffer measurements |
+| Inspected actual 4K at `10e3b16` | All **nine conversions** measured **3840 × 2160 WebGL2**, zero GL error, with original captured scenes inspected by the integration owner. Software rendering is not hardware FPS qualification. |
+| Corrected exact-candidate release gate | **PENDING**; the prior complete run passed 67/69 browser checks and exposed the two advanced-layout failures described below. |
 | Physical hardware/touch/gamepad/full screen-reader play | **NOT TESTED**; automated checks do not substitute for these |
 
 The release workflow runs `npm run check`, `npm test`, the pinned Python API tests, a clean build and the browser suite. Tests assert true controls, failure/retry, save/reload, actual 3840 × 2160 buffers and narrow layouts; transport fixtures remain explicitly test-only. No live AI result is claimed.

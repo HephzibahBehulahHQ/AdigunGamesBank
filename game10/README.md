@@ -1,5 +1,12 @@
 # APEX CIRCUIT — design and evidence record
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and playable scope
 
 | Field | Record |
@@ -111,8 +118,8 @@ does not establish rendering performance.
 | --- | --- | --- |
 | Numerical / state-machine tests | `node --test tests/racing.test.js` | **14 passed locally** on the working tree on 2026-11-04; includes all 10,000 geometry checks and twelve representative full race simulations |
 | Syntax | `node --check game10/app.js`; `node --check game10/scene.js` | Passed locally |
-| Actual 4K rendering and keyboard/step win | `npm run test:browser -- tests/browser/racing.spec.js` | Authored; integration owner must record actual candidate execution, buffer and inspected captures |
-| Error/recovery play | Browser graphics-failure, invalid-sector recovery and save assertions | Authored; do not infer execution from test code |
+| Actual 4K rendering and keyboard/step win | `npm run test:browser -- tests/browser/racing.spec.js` | Executed; exact source, buffer and inspected capture recorded above |
+| Error/recovery play | Browser graphics-failure, invalid-sector recovery and save assertions | Executed in integration CI as recorded above |
 | Accessibility / reflow | Product axe audit and racing browser checks | Exact run outcome belongs in current project status |
 | Build / release integrity | Product `npm run check`, `npm test`, `npm run build` and CI | Integration owner records exact tested revision |
 | Publication | Existing GitHub Pages/custom-domain deployment | **Not claimed by this implementation record**; require exact-source public verification |

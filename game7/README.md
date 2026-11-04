@@ -1,5 +1,12 @@
 # BINARY FLASH — design and evidence record
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and scope
 
 | Field | Record |
@@ -10,7 +17,7 @@
 | Target platform | Browser; actual Three.js scene through WebGL 2, with the same complete register mission available through labelled controls when graphics fail |
 | Source / route | `game7/` / `/AdigunGamesBank/game7/` |
 | Status | **In progress**: implementation and exhaustive command-based mathematical checks completed; actual candidate browser/rendering/deployment receipts remain in `PROJECT_STATUS.md` |
-| Remaining qualification | Candidate browser/4K verification, physical GPU/touch devices, full screen-reader review, performance measurements, localization and production publication |
+| Remaining qualification | Final corrected release gate, physical GPU/touch devices, full screen-reader review, performance measurements, localization and production publication |
 
 The original binary-to-decimal purpose is preserved in a stateful digital
 bench. The player builds and transmits words instead of answering a sequence
@@ -172,7 +179,7 @@ remain unmeasured for the candidate.
 | Failure / progression | Wrong value, wrong parity, operation/fault exhaustion, exact-last-operation completion, pause, retry, corrupt/blocked storage, duplicate clear | Passed within the 16 tests |
 | Syntax | `node --check game7/app.js`; `node --check game7/scene.js` | Passed locally; final integration repeats affected checks |
 | Actual controls / graphics | `npm run test:browser -- tests/browser/binary-flash.spec.js` | Four scenarios authored; candidate browser execution, rendered frames and inspected artifacts remain the integration owner’s gate |
-| Browser error recovery | Real failed transmissions, retry, parity correction, WebGL unavailable, storage silently rejects writes | Authored coverage is not an execution receipt |
+| Browser error recovery | Real failed transmissions, retry, parity correction, WebGL unavailable, storage silently rejects writes | Executed integration coverage is recorded above |
 | Accessibility / mobile | Product axe route audit; visible keyboard focus; 390 px and 320 px 16-bit layout | Actual candidate outcomes belong in `PROJECT_STATUS.md` |
 | Build / CI / performance | Exact-candidate product checks and device measurements | Integration records observed results and limitations; 4K performance is not inferred from engine tests |
 | Deployment / public flow | Existing `/AdigunGamesBank/game7/` publication | **Not claimed here**; require exact-source deployment and real public-flow verification |

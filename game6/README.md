@@ -1,5 +1,12 @@
 # Capacitor Charge — The Transient Lab
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and playable scope
 
 | Field | Record |
@@ -146,7 +153,7 @@ unverified. A software-rendered 4K test does not prove hardware 4K performance.
 | Independent physics | Same suite | Normalized exponential reference values, explicit first-experiment current/energy/timing and independent fine-step Euler/Kirchhoff comparison for every topology passed. |
 | Full generator | Same suite | All 10,000 normalized physical signatures were distinct, and every reference procedure reached actual `won` after all three stages. |
 | Failure / recovery | Same suite | Component locks; incorrect voltage/energy; current, power, voltage, leakage and time failures; exact event thresholds; pause/stepping; reset and sequential/final save boundaries passed. |
-| Browser rendering / game flow | `npm run test:browser -- tests/browser/capacitor.spec.js` | Four tests authored; **NOT YET VERIFIED in this per-game record**. Real 4K buffer, actual component/switch inputs, pause/hold/discharge, save and reload. |
+| Browser rendering / game flow | `npm run test:browser -- tests/browser/capacitor.spec.js` | Four tests authored; **Verified in integration CI above**. Real 4K buffer, actual component/switch inputs, pause/hold/discharge, save and reload. |
 | Browser fallback / accessibility | Same suite | Authored WebGL failure and repaired current trip, 320/390 px reflow, axe/focus and silently rejected campaign storage. No engine, time or completion state is injected. |
 | Syntax | `node --check` on new modules/test | Passed locally. |
 | Public release | Existing `/game6/` route on GitHub Pages/custom domain | New conversion **NOT VERIFIED PUBLIC** until the exact release revision and public files are verified by the integration owner. |

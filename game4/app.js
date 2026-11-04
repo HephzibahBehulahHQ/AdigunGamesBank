@@ -49,7 +49,7 @@ function sync() {
   const remaining=state.collected.filter(value=>!value).length;
   text($('exit-status'),state.phase==='won'?'Exit reached. Sector complete.':remaining?`Locked · ${remaining} core${remaining===1?'':'s'} remaining`:'Open · bring the rover to the gate.'); $('exit-status').classList.toggle('open',remaining===0);
   text($('message'),state.message); $('message').className=`message${state.phase==='lost'?' error':state.phase==='won'?' success':''}`;
-  text($('save-status'),!progress.completed?'Cleared sectors save on this device.':`${progress.completed.toLocaleString()} sectors cleared. ${confirmedSave()?'Progress saved on this device.':'Progress is available for this session only; browser storage could not confirm a save.'}`);
+  text($('save-status'),!progress.completed?'Cleared sectors save on this device.':`${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'sector' : 'sectors'} cleared. ${confirmedSave()?'Progress saved on this device.':'Progress is available for this session only; browser storage could not confirm a save.'}`);
   if(state.phase!=='running')clearInput(); telemetry(); updateMap(); dirty=true;
 }
 function telemetry() {

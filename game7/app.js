@@ -15,7 +15,7 @@ function savedText() {
   if (!campaign.completed) return 'Progress saves on this device after the complete packet arrives.';
   let durable = false;
   try { const value = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null'); durable = validCampaignSave(value) && value.completed >= campaign.completed; } catch {}
-  return `${campaign.completed.toLocaleString()} packets commissioned. ` + (durable ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
+  return `${campaign.completed.toLocaleString()} ${campaign.completed === 1 ? 'packet' : 'packets'} commissioned. ` + (durable ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
 function selectBit(bit, focus = false) {
   if (!Number.isInteger(bit) || bit < 0 || bit >= state.config.width) return;

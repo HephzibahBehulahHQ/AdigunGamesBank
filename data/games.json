@@ -16,8 +16,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -32,7 +32,7 @@
         "Touch; equivalent labelled signal controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -43,9 +43,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game1/",
@@ -83,8 +83,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -99,7 +99,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -110,9 +110,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game2/",
@@ -223,8 +223,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -239,7 +239,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -250,9 +250,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game4/",
@@ -290,8 +290,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -306,7 +306,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -317,9 +317,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game5/",
@@ -357,8 +357,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -373,7 +373,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -384,9 +384,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game6/",
@@ -424,8 +424,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -440,7 +440,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -451,9 +451,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game7/",
@@ -491,8 +491,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -507,7 +507,7 @@
         "Touch; equivalent labelled cabinet controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -518,9 +518,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game8/",
@@ -623,8 +623,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -639,7 +639,7 @@
         "Touch controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -650,9 +650,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game10/",
@@ -1097,8 +1097,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
       },
       "levels": {
         "target": 10000,
@@ -1113,7 +1113,7 @@
         "Touch; labelled shot controls"
       ],
       "accessibility": {
-        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
+        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1124,9 +1124,9 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
-        "integration": "Release gate pending for this candidate",
-        "browser": "New browser controls/4K/reflow coverage included; results pending"
+        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
+        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
+        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game17/",

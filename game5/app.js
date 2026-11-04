@@ -15,7 +15,7 @@ function confirmSaved() {
 }
 function saveText() {
   if (!progress.completed) return 'Completed challenges save on this device.';
-  return `${progress.completed.toLocaleString()} challenges completed. ` + (confirmSaved() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
+  return `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'challenge' : 'challenges'} completed. ` + (confirmSaved() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
 function message(text, kind = '') { $('message').textContent = text; $('message').className = `message ${kind}`; }
 function bandDiagram(component) {

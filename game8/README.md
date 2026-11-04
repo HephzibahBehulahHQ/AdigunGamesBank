@@ -1,5 +1,12 @@
 # Fuse Box — The Commissioning Room
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and playable scope
 
 | Field | Record |
@@ -115,7 +122,7 @@ not establish smooth hardware 4K gameplay.
 | --- | --- | --- |
 | Numerical / campaign tests | `node --test tests/fusebox.test.js` | **10 passed, zero failed/skipped** in the local working tree on 2026-11-04. Includes all 10,000 solved boards, independent current/energy reference, overload/isolation/reset, inventory/budget, timestep boundaries and persistence. Exact release revision belongs to the integration receipt. |
 | Syntax | `node --check` for new game modules and browser test | Passed locally. |
-| 4K / actual input completion | `npm run test:browser -- tests/browser/fusebox.spec.js` | Authored; **NOT YET VERIFIED in this per-game record**. Measures actual buffer; commissions, pauses/resumes, saves and reloads through player controls. |
+| 4K / actual input completion | `npm run test:browser -- tests/browser/fusebox.spec.js` | Authored; **Verified in integration CI above**. Measures actual buffer; commissions, pauses/resumes, saves and reloads through player controls. |
 | Failure / keyboard / storage | Same browser suite | Authored; graphics-capability failure, real overload/recovery and silently rejected storage are isolated test cases. No game-engine or campaign completion is injected. |
 | Accessibility / reflow | Same browser suite and shared accessibility route | Authored; all applicable WCAG 2.1 A/AA axe tags, keyboard focus and 320/390 px layouts. Await integration result. |
 | Public release | `/game8/` on the existing GitHub Pages/custom domain | New conversion **NOT VERIFIED PUBLIC** until the exact deployed bytes and release flows are recorded by [PROJECT_STATUS.md](../PROJECT_STATUS.md). |

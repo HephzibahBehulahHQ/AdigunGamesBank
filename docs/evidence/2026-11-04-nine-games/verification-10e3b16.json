@@ -1,0 +1,273 @@
+{
+  "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+  "ciRun": 41926291553,
+  "ciJob": 126911446867,
+  "conclusion": "failure; advanced-layout reflow corrections require a new exact-candidate gate",
+  "node": {
+    "passed": 269,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api": {
+    "passed": 52,
+    "warnings": 1
+  },
+  "browser": {
+    "accessibility-results": {
+      "startTime": "2026-11-04T22:34:45.825Z",
+      "duration": 44788.756,
+      "expected": 18,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "browser-results": {
+      "startTime": "2026-11-04T22:37:35.332Z",
+      "duration": 487620.903,
+      "expected": 34,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "contract-results": {
+      "startTime": "2026-11-04T22:35:31.476Z",
+      "duration": 123032.286,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "rendering": [
+    {
+      "game": "game1",
+      "drawingBuffer": {
+        "name": "neon-render-buffer",
+        "file": "neon.spec.js",
+        "title": "Neon Pulse renders actual 4K, commissions a board through controls and resumes progress",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "neon-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/neon-4k.png",
+      "captureSha256": "b0c2370b8e4cee56b0d4a04c7179773383c304b6a679ddf07efdb87e6c7e1c7b",
+      "capturePixels": [
+        1440,
+        1838
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game2",
+      "drawingBuffer": {
+        "name": "circuit-rush-4k-drawing-buffer",
+        "file": "circuit-rush.spec.js",
+        "title": "Circuit Rush renders a real 4K frame and commissions a saved job through actual terminal controls",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "circuit-rush-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/circuit-rush-Circuit-Rush--9b7d7-gh-actual-terminal-controls/circuit-rush-4k.png",
+      "captureSha256": "e59db72abad0e49836a0f1c4141aba3f104c170226ed5a760c5fc2264041f153",
+      "capturePixels": [
+        1042,
+        587
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game4",
+      "drawingBuffer": {
+        "name": "volt-dodge-4k-buffer",
+        "file": "volt-dodge.spec.js",
+        "title": "Volt Dodge renders an actual 4K arena, moves with keyboard, requires every core and saves a control-driven exit",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "volt-dodge-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/volt-dodge-Volt-Dodge-rend-cc431-saves-a-control-driven-exit/volt-dodge-4k.png",
+      "captureSha256": "03cb85ca1dc318a7bccb878b41751ef4a1e6073cd638a74aa985fca448f4e982",
+      "capturePixels": [
+        1052,
+        593
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game5",
+      "drawingBuffer": {
+        "name": "resistor-match-drawing-buffer",
+        "file": "resistor-match.spec.js",
+        "title": "Resistor Match renders actual 4K components, compares visible codes and clears a real memory game with reload",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "resistor-match-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/resistor-match-Resistor-Ma-365e1-eal-memory-game-with-reload/resistor-match-4k.png",
+      "captureSha256": "4879253c5efdb3e28d8867685c3b0d032d695e61493de480fec999e3971d02c8",
+      "capturePixels": [
+        1030,
+        581
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game6",
+      "drawingBuffer": {
+        "name": "capacitor-4k-drawing-buffer",
+        "file": "capacitor.spec.js",
+        "title": "Capacitor Charge renders a real 4K RC bench and completes a saved experiment using physical switch controls",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "capacitor-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/capacitor-Capacitor-Charge-59402-ng-physical-switch-controls/capacitor-4k.png",
+      "captureSha256": "340edc592b95cb6cb86629d142e9b7fd3949fe1762879620263bcb143def9417",
+      "capturePixels": [
+        1042,
+        587
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game7",
+      "drawingBuffer": {
+        "name": "binary-flash-4k-drawing-buffer",
+        "file": "binary-flash.spec.js",
+        "title": "Binary Flash renders a real 4K register and saves an ordered packet through parallel and serial controls",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "binary-flash-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/binary-flash-Binary-Flash--5df1a-arallel-and-serial-controls/binary-flash-4k.png",
+      "captureSha256": "58707bce452a49bd3855432f697db8d98b76f1aba5a3a9b04b572167edb2b857",
+      "capturePixels": [
+        1042,
+        587
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game8",
+      "drawingBuffer": {
+        "name": "fusebox-4k-drawing-buffer",
+        "file": "fusebox.spec.js",
+        "title": "Fuse Box renders an actual 4K cabinet and commissions, saves and reloads a board through player inputs",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "fusebox-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/fusebox-Fuse-Box-renders-a-1ba73-board-through-player-inputs/fusebox-4k.png",
+      "captureSha256": "d3817d6f0b0c2ba468328aaae9c48d01b697b55504cd58b5e13b5daf697fff38",
+      "capturePixels": [
+        1042,
+        587
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game10",
+      "drawingBuffer": {
+        "name": "apex-4k-drawing-buffer",
+        "file": "racing.spec.js",
+        "title": "APEX renders a real 4K frame and qualifies through keyboard and step driving",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "apex-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/racing-APEX-renders-a-real-26417-h-keyboard-and-step-driving/apex-4k.png",
+      "captureSha256": "94ed9f4fe3f8fa574471812d014e9a68e5f3104e3dd9473948e0cf91d8c761fa",
+      "capturePixels": [
+        1042,
+        587
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    },
+    {
+      "game": "game17",
+      "drawingBuffer": {
+        "name": "penalty-4k-drawing-buffer",
+        "file": "penalty.spec.js",
+        "title": "Penalty Pro renders actual 4K and wins through five shots and five goalkeeper turns, then resumes",
+        "width": 3840,
+        "height": 2160,
+        "error": 0
+      },
+      "capture": "penalty-4k-10e3b16.png",
+      "originalArtifactPath": "test-results/browser/penalty-Penalty-Pro-render-26e94-alkeeper-turns-then-resumes/penalty-4k.png",
+      "captureSha256": "a9e418cb9bc6c6d9dcace70d21cbed56240c494cabfd31677ea0b4ead04ff496",
+      "capturePixels": [
+        1020,
+        574
+      ],
+      "inspection": "Original captured frame inspected by integration owner; distinct real3D scene visible."
+    }
+  ],
+  "failedScenarios": [
+    {
+      "title": "Binary Flash contains a sixteen-bit saved-layout fixture at 390 and 320 pixel widths",
+      "file": "binary-flash.spec.js",
+      "status": "failed",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m391\u001b[39m\nReceived:    \u001b[31m519\u001b[39m\n\n  171 |     await page.setViewportSize({ width, height: 844 });\n  172 |     const bounds = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));\n> 173 |     expect(bounds.content).toBeLessThanOrEqual(bounds.viewport + 1);\n      |                            ^\n  174 |     const target = await page.locator('#bit-15').boundingBox();\n  175 |     expect(target.width).toBeGreaterThanOrEqual(44); expect(target.height).toBeGreaterThanOrEqual(44);\n  176 |   }\n    at /home/runner/work/AdigunGamesBank/AdigunGamesBank/tests/browser/binary-flash.spec.js:173:28"
+      ]
+    },
+    {
+      "title": "Circuit Rush keeps a seven-column saved-layout fixture inside 390 and 320 pixel screens",
+      "file": "circuit-rush.spec.js",
+      "status": "failed",
+      "errors": [
+        "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m391\u001b[39m\nReceived:    \u001b[31m426\u001b[39m\n\n  137 |     await page.setViewportSize({ width, height: 844 });\n  138 |     const bounds = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));\n> 139 |     expect(bounds.content).toBeLessThanOrEqual(bounds.viewport + 1);\n      |                            ^\n  140 |     const target = await page.locator('#cell-0').boundingBox();\n  141 |     expect(target.width).toBeGreaterThanOrEqual(44); expect(target.height).toBeGreaterThanOrEqual(44);\n  142 |   }\n    at /home/runner/work/AdigunGamesBank/AdigunGamesBank/tests/browser/circuit-rush.spec.js:139:28"
+      ]
+    }
+  ],
+  "manualCloudControls": [
+    {
+      "game": "Circuit Rush",
+      "source": "748fb20fa12e64dc625d068056f815955fd5a4cf",
+      "result": "First job commissioned using seven clockwise conductor rotations and Test circuit; 100.0 mA, 1/1 required load, 5 turns left; Job 2 persisted after Next job and reload."
+    },
+    {
+      "game": "Binary Flash",
+      "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+      "result": "Actual staging switches and latch transmitted 1001 (9); two serial clocks and parity transmitted 0111 (7); 2/2 frames, 9 operations, 0 rejected frames, Mission 2 unlocked and save feedback."
+    },
+    {
+      "game": "Resistor Match",
+      "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+      "result": "Trays 2 and 5 revealed actual 100 ohm ±5% components and were stored; ArrowRight from focused Tray 1 skipped disabled Tray 2 and visibly focused Tray 3."
+    },
+    {
+      "game": "Volt Dodge",
+      "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+      "result": "Start mission then six east, six south and six west movement commands: all 3 cores, full 3 shields, exit reached, 18.0 seconds remaining, Sector 2 unlocked with save feedback."
+    },
+    {
+      "game": "Capacitor Charge",
+      "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+      "result": "Fitted 2200 µF/1 kΩ/680 Ω. Charged with actual 0.1-second controls, captured at 7.811 V/67.105 mJ, passed three-second leakage hold, then discharged through actual controls to 0.500 V/0.275 mJ; all 3 stages passed in 9.40 simulated seconds, Experiment 2 unlocked and save feedback."
+    }
+  ],
+  "limitations": [
+    "Ubuntu 24.04 CI Chromium/SwiftShader rendering; no hardware GPU frame-rate qualification.",
+    "Cloud UI checks used the WebGL-disabled command interface.",
+    "All rendering and full-control completion scenarios passed; advanced Circuit Rush and Binary Flash layouts overflowed at390px.",
+    "The full2000-title, complete Bible, live provider setup and native-console requirements remain unfinished."
+  ],
+  "build": {
+    "runtimeFiles": 188,
+    "fingerprintSha256": "d64fc5cb1ef64a8c25457cfb4533d682a9df8545cf5ae4782bce540fdfa342e5"
+  },
+  "artifact": {
+    "id": 13370101971,
+    "originalPngsRetained": true
+  }
+}

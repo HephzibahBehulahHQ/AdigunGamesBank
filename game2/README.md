@@ -1,5 +1,12 @@
 # CIRCUIT RUSH — design and evidence record
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and scope
 
 | Field | Record |
@@ -126,8 +133,8 @@ open. Fast graph tests do not prove graphics performance.
 | Numerical reference case | 12 V supply; 120 Ω and 240 Ω parallel loads | Exactly 150 mA within numerical tolerance; missing, extra, open, short and overload variants tested |
 | Integrity regressions | Reciprocal ports, row boundaries, fixed modules, finite budget, last-move success, pause, retry, duplicate save | Passed within the 17-test suite |
 | Syntax | `node --check game2/app.js`; `node --check game2/scene.js` | Passed locally |
-| 4K/browser play | `npm run test:browser -- tests/browser/circuit-rush.spec.js` | Authored; actual candidate execution, buffers and inspected screenshots must be recorded by the integration owner |
-| Error paths | Browser short/retry, WebGL failure and silently rejected storage writes | Authored; tests are not execution receipts |
+| 4K/browser play | `npm run test:browser -- tests/browser/circuit-rush.spec.js` | Executed; actual buffer and inspected frame recorded in the integration evidence above |
+| Error paths | Browser short/retry, WebGL failure and silently rejected storage writes | Executed in integration CI; see the exact-source receipt above |
 | Accessibility / mobile | Product axe audit, focus checks, 390 px/320 px seven-column fixture | Candidate outcomes belong in `PROJECT_STATUS.md`; the save fixture proves layout only |
 | Build / CI | Product release checks and exact-candidate CI | Integration owner records the executed revision and outcomes |
 | Public URL / deployment | Existing GitHub Pages/custom-domain flow | **Not claimed here**; require an exact-source public receipt |

@@ -1,10 +1,17 @@
 # Neon Pulse — signal commissioning
 
+## Integration evidence — 4 November 2026
+
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+
+The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+
+
 ## Identity and scope
 
 - **ID / route:** `game1`, `/game1/`. **Genre:** signal-routing logic puzzle.
 - **Owner:** Hephzibah Behulah, Elektroniker. **Platform:** web browser.
-- **Status:** In progress. The runtime is implemented; this continuation's browser, 4K and publication checks are pending until the release receipt in `PROJECT_STATUS.md` records their result.
+- **Status:** In progress. The runtime is implemented; executed development browser/4K evidence is above; the corrected release gate and publication remain pending.
 - **Distinct mechanics:** an abstract LED matrix has three logical states. Pulsing one LED advances it and its orthogonal neighbours modulo three. Match a separate target pattern within a finite pulse budget. The board has explicit win/loss, undo, pause, restart and sequential unlock states. It has no timer or reaction requirement.
 
 This replaces the legacy RGB-slider challenge, not a separate title. It does not model real voltages, AC phases or a physical installation.

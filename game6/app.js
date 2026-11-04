@@ -52,7 +52,7 @@ function sync() {
   $('pause').disabled = !ACTIVE.includes(phase); text($('pause'), state.phase === 'paused' ? 'Resume experiment' : 'Pause experiment');
   $('advance').disabled = state.phase !== 'paused'; $('next-level').hidden = state.phase !== 'won' || state.config.level >= LEVEL_COUNT;
   text($('message'), state.message); $('message').className = `message${state.phase === 'lost' ? ' error' : state.phase === 'won' ? ' success' : ''}`;
-  text($('save-status'), !progress.completed ? 'Completed experiments save on this device.' : `${progress.completed.toLocaleString()} experiments completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
+  text($('save-status'), !progress.completed ? 'Completed experiments save on this device.' : `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'experiment' : 'experiments'} completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
   const plan = inspectPlan(state);
   text($('plan-tau'), plan.ready ? `${display(plan.circuit.chargeTau, 3)} s` : '—'); text($('plan-time'), plan.ready ? `${display(plan.chargeTime, 3)} s` : '—');
   text($('plan-energy'), plan.ready ? `${display(plan.targetEnergy * 1000, 2)} mJ` : '—'); text($('plan-held'), plan.ready ? `${display(plan.heldVoltage, 3)} V` : '—');
