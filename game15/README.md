@@ -94,7 +94,7 @@ Local verification capture: **2026-11-04, Europe/Berlin**. `PROJECT_STATUS.md` r
 | Performance | Frame timing / initial interaction on the named physical device and network | **NOT TESTED** on physical hardware; source byte count and bounded generation are not frame-rate proof. |
 | Asset rights | Source inventory above and pinned corporate provenance | Original geometry and licensed renderer recorded; no external commercial character/player content added. |
 | Pages path | `/AdigunGamesBank/game15/` | Candidate deployment owned by the integration workflow; not inferred from local files. |
-| Public URL | `https://hephzibahbehulahhq.github.io/AdigunGamesBank/game15/` | **Current rewritten version not yet publicly verified in this local authoring record.** See exact release receipt in `PROJECT_STATUS.md`. |
+| Public URL | `https://hephzibahbehulahhq.github.io/AdigunGamesBank/game15/` | **Verified** at `88c3035`: HTTP 200 and exact source bytes at https://adigungamesbank.hephzibahbehulah.com/game15/. See the published receipt below. |
 
 To run from the repository root, serve the repository with `python3 -m http.server 4173` and open `/game15/`. Direct `file://` access cannot reliably load browser ES modules.
 
@@ -120,3 +120,7 @@ This sequence uses ordinary legal controls and the real local opponent; units ma
 - Tokens used: Midnight Navy `#0B1220`, Royal Blue `#2563EB`, Metallic Gold `#D4AF37`, Ivory White `#F8FAFC`, Slate Grey `#64748B`, with AI Violet `#A78BFA` as the division accent. Accessible text uses brighter supporting tints; opposing pieces use copper/orange with textual team labels.
 - Shared consuming components: `shared/game.css` corporate shell and focus treatment; `shared/three-stage.js` rendering/quality/lifecycle; `shared/progression.js` bounded campaign persistence. Their use is exercised by product unit and browser checks.
 - Acceptance remains **In progress** until the applicable browser, graphics, accessibility, performance and deployment evidence is recorded for the exact release candidate. The project-wide 2,000-game target remains unfinished; this rewrite contributes one title.
+
+## Published second-wave source
+
+Source `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks** across the consuming product in [CI 41791946076](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076). The game entry page and its current runtime bytes were verified publicly on **2026-11-04 at 08:35:24 CET**. [Deployment receipt](../docs/evidence/2026-11-04-wave2/deployment-88c3035.json); [rendering and gameplay receipt](../docs/evidence/2026-11-04-wave2/verification-88c3035.json). Full production, physical-device and assistive-technology qualification remain open. AI gateway test doubles are not live model evidence.

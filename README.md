@@ -51,3 +51,7 @@ The product explicitly adopts **HB-AI-ENGINEERING-001 v2.0**, pinned in [AGENTS.
 The catalog and new games use the official unmodified corporate artwork, Midnight Navy, Royal Blue, Metallic Gold, Ivory, and approved division accents. The catalog includes working search, filters and a persistent light/dark theme. The interface is currently English; a language selector will be exposed only when translations are complete.
 
 GitHub Pages publishes the existing main/root site and retains its CNAME. Work is checkpointed on a scoped branch, tested, integrated and verified against the actual public deployment. Repository status records exact commits and times. The existing Godot couch suite remains a separate development target; its Node2D scenes are not native console releases or 3D-certified games.
+
+### Second-wave public milestone
+
+The current source milestone `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks**, including actual 4K on all five rebuilt routes, full-game completion, automated accessibility and explicit test-only AI contract regressions. **61 public files matched the deployed source exactly.** [Retained test/deployment evidence](docs/evidence/2026-11-04-wave2/README.md). Live AI configuration, full production/device qualification, the remaining 18 legacy rewrites and the wider 2,000-game/Bible/console scope are still unfinished.

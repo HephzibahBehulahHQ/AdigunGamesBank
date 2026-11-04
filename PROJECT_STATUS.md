@@ -1,21 +1,21 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T08:20:34+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T08:37:49+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
 **In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (18 legacy 2D titles, four rebuilt local 3D games and one 3D API-dependent competition client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
-The verified development milestone **`b9db74c1406b44d47afb48c219548f2bdc7d4434`** was integrated into **main** and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
+The second-wave development source milestone **`88c3035320044b254ed719ef840f527aa5520e2c`** passed all release checks, was integrated into **main**, and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
 
-## Active continuation — second implementation wave
+## Delivered second implementation wave
 
 Work resumed from verified main `a19b184c6ba7a475ae0a44a3860fab52fbcf0204` on the existing scoped work branch. The source is not being marked production-complete.
 
 - `game22/`: real 3D competition presentation and 10,000 substantive challenge levels; provider hosting/credentials remain separate live-play dependencies.
 - `game11/`: offside, fouls/restarts and player discipline, with the current real match kept playable.
 - `game15/`: individual 3D tactical-game rewrite with meaningful mission progression and accessible command controls.
-- `tests/browser/accessibility.spec.js`: new 320px reflow, visible keyboard focus, WCAG 2.1 A/AA automated checks and catalog light-theme checks. CI found and fixed catalog naming, circuit 320px overflow, AI landmark and tactical visible-name defects. All seven initial audits passed at `2bfd8bf`; expanded campaign checks are now running.
+- `tests/browser/accessibility.spec.js`: new 320px reflow, visible keyboard focus, WCAG 2.1 A/AA automated checks and catalog light-theme checks. CI found and fixed catalog naming, circuit 320px overflow, AI landmark and tactical visible-name defects. All eight audits, including expanded AI campaign specifications, passed at `88c3035`. No axe rules were excluded.
 - Build output now removes obsolete files while preserving its preview directory; release syntax validation includes game15.
 
 The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 browser tests in [run 41773986655](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41773986655), then passed Pages [run 41774461710](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41774461710). Its last 12 changed public documentation/metadata files matched exact source bytes at **2026-11-04T05:41:27+01:00**. New-wave results must be recorded separately.
@@ -25,11 +25,26 @@ The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 brow
 - Latest local combined suite: **142 JavaScript tests passed**, zero failures/skips. Integrity and static build passed. New shared-save, tactical pointer/core and AI response-binding checks are included.
 - API CI at `8304cd89e3e13abdc388407bafa1104fffec4aff`: **50 tests passed**, including all **10,000 AI curriculum reference solutions** executed by the real restricted Python evaluator. No live providers were called. One existing Starlette/httpx deprecation warning remains.
 - CI `41787647555`: four browser failures exposed a catalog label mismatch, Electronicer 320px overflow and AI invalid ARIA; 14 other browser checks passed. CI `41788890701`: five of seven accessibility audits passed, with new tactical labels and AI's not-yet-checkpointed landmark remaining. CI `41789483842`: six of seven passed; only tactical visible-label names remained. These failures are retained as failures.
-- New real-input browser coverage checks the tactical 17-command first-mission win, actual 4K AI/tactical buffers, AI preview without invented outputs, and queued/cancelled/applied football substitution. All these checks passed in CI `41789834075` at `2bfd8bf`: 137 JavaScript, 50 API and 20 browser checks. The 4K AI/tactics frames, tactical victory and football 4–0/one-substitution frames were inspected and retained in `docs/evidence/2026-11-04-wave2/`. Later test-only gateway/fallback checks remain pending.
+- New real-input browser coverage checks the tactical 17-command first-mission win, actual 4K AI/tactical buffers, AI preview without invented outputs, and queued/cancelled/applied football substitution. All these checks passed in CI `41789834075` at `2bfd8bf`: 137 JavaScript, 50 API and 20 browser checks. The 4K AI/tactics frames, tactical victory and football 4–0/one-substitution frames were inspected and retained in `docs/evidence/2026-11-04-wave2/`. The final `88c3035` candidate also passed the explicit test-only gateway contract and the corrected keyboard fallback check.
 
-- Independent cross-review reproduced wrong-request AI awards, stale result displays and stale-tab progress rollback. Fixes bind prompt plus ordered test cases, clear old results, validate readback schema and refresh higher saved progress. **52 API tests** now pass locally, including additive migration and owned-history request evidence. The new gateway browser regression uses explicitly labelled test doubles; it is never live-provider evidence.
+- Independent cross-review reproduced wrong-request AI awards, stale result displays and stale-tab progress rollback. Fixes bind prompt plus ordered test cases, clear old results, validate readback schema and refresh higher saved progress. **52 API tests** now pass locally, including additive migration and owned-history request evidence. The new gateway browser regression passed using explicitly labelled test doubles; it is never live-provider evidence.
 
 - CI `41790908775` at `30202bb`: 142 JavaScript and 52 API tests passed, seven accessibility checks and 13 gameplay/reflow checks passed. The new unavailable-graphics test failed because it issued Guard before selecting a drone; the corrected test uses the actual Select 1 shortcut before Guard. Visible fallback focus itself passed. The short contract/fallback checks now run before the complete-match suite to surface errors sooner.
+
+## Final second-wave release evidence
+
+- **Candidate:** `88c3035320044b254ed719ef840f527aa5520e2c`.
+- **CI:** [41791946076](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076), success: **142 JavaScript + 52 API + 23 browser checks**, zero failed/skipped/flaky browser cases. Browser totals comprise eight accessibility, two isolated gateway/fallback, and thirteen actual-gameplay/reflow checks. One existing Starlette/httpx deprecation warning remains.
+- **Actual rendering:** all five rebuilt routes (`game3`, `game11`, `game15`, `game22`, `game23`) obtained **3840 × 2160 WebGL2 buffers with zero GL error**. Inspected images/immutable receipts are retained in [second-wave evidence](docs/evidence/2026-11-04-wave2/README.md). Current AI/tactical frames were byte-identical to the inspected prior frames. This verifies software rendering, not hardware FPS or production art acceptance.
+- **Playable outcomes:** tactics mission cleared at round 8 through 17 real inputs, next mission unlocked and retained after reload; current football full-time frame shows **3–0**, one substitution applied and level 2 unlocked; circuit commissioning/fuse recovery and David's three-target chapter completion still pass.
+- **AI boundary:** actual live calls remain blocked. An explicitly labelled test-only gateway regression verifies request binding, stale-result clearing, account isolation and no award for mismatched prompt/tests. It is not evidence of live model output.
+- **Build reproducibility:** local and CI clean builds matched **131 runtime files**, SHA-256 `f12939e10ff338b787f4b693af6a8ee2fca82da9472a6019dc96c044c34baf75`.
+- **Main integration/readback:** exact SHA above verified at **2026-11-04T08:32:55+01:00**. No force push or unrelated change.
+- **Pages:** [41793027036](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41793027036), success for that exact SHA; completion recorded at **2026-11-04T08:34:02+01:00**.
+- **Public verification:** completed **2026-11-04T08:35:24+01:00**. All **61 checked files** returned HTTP 200 and matched source SHA-256, including all 23 entry pages, rebuilt JavaScript/styles, catalog, shared runtime, vendor module and official artwork. Pages resolves to **https://adigungamesbank.hephzibahbehulah.com/**. [Per-file deployment receipt](docs/evidence/2026-11-04-wave2/deployment-88c3035.json).
+- **Public verifier:** `scripts/verify-public.py` reproduces the immutable revision/URL/hash checks, bounds each response to expected bytes plus one, and records failures rather than treating availability as gameplay proof. It was exercised against this deployed candidate.
+
+This receipt records the source revision actually tested and published. Subsequent documentation checkpoints preserve these facts; their own remote SHA is recorded after readback, never invented inside a self-referential receipt.
 
 ## Changed implementation
 
@@ -89,9 +104,9 @@ Every SHA below was read back from GitHub. Times are the actual commit times in 
 | `9ac8f12450ccb5d819521c32c44ddb35697091e5` | 05:17:29 | Cached history/storage reliability; five new regressions and evidence metadata |
 | `b9db74c1406b44d47afb48c219548f2bdc7d4434` | 05:21:29 | Retained screenshot/CI evidence; complete chapter acceptance; subsequently passed all release checks and deployed |
 
-### Second-wave work-branch checkpoints
+### Second-wave verified checkpoints
 
-All following revisions were read back from the remote work branch. None alone is production approval.
+Every revision below was read back from the remote work branch. Source `88c3035` was subsequently integrated and publicly verified as recorded above.
 
 | Revision | Commit time (2026-11-04, CET) | Scope |
 |---|---|---|
@@ -104,6 +119,9 @@ All following revisions were read back from the remote work branch. None alone i
 | `6c37ea042e10f549973c3a5671f114c15a6002ce` | 08:11:52 | WIP: bind AI awards to submitted evidence and prevent stale-tab progress rollback |
 | `30202bb07616cfe20918b781ee55260e274d4e9b` | 08:14:37 | WIP: verify visible command fallback and preserve campaign request evidence |
 | `90ef5eb61b22b95779e74299a18b54b50bd71b8a` | 08:18:15 | WIP: retain inspected 4K evidence and exercise AI request binding in browser |
+| `79d081fea4099d18043cce845842ae5abb3ea36b` | 08:21:11 | docs: record verified 3D tactics and AI milestones with current template evidence |
+| `88c3035320044b254ed719ef840f527aa5520e2c` | 08:23:31 | test: select a tactical unit before guarding and run short contracts first |
+| `570012672de504ed7da1c6e16f59cabb39343c20` | 08:34:55 | chore: preserve bounded public source-verification command |
 
 The five-minute checkpoint target was missed across several implementation and verification intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Each receipt identifies its verified revision rather than claiming that an unwritten future checkpoint is already synchronized. Main was advanced only after the milestone candidate passed its applicable checks.
 
@@ -127,4 +145,4 @@ The five-minute checkpoint target was missed across several implementation and v
 
 ## Unfinished work that remains actionable
 
-Convert the 18 remaining legacy browser titles individually. Verify and deploy the new AI Arena and TACTICS GRID 3D implementations; live AI still needs its configured gateway. Continue physical-device and accessibility qualification of all rebuilt games. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).
+Convert the 18 remaining legacy browser titles individually. AI Arena and TACTICS GRID 3D client/game implementations are verified and public; live AI still needs its configured gateway. Continue physical-device and accessibility qualification of all rebuilt games. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).

@@ -160,3 +160,7 @@ API/providers/judge and observed real responses.
 ### Confirmed offline browser milestone
 
 [CI 41789834075](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075) at `2bfd8bfa6c676a3caaa763f332fadb3fb78b1362` verified the actual WebGL2 buffer as **3840 × 2160**, zero GL error, and the inspected original arena scene. Eight unconfigured providers remain disabled; challenge preview produces no model answers or campaign award. 320px accessibility and 390px reflow checks passed. [Original frame and receipt](../docs/evidence/2026-11-04-wave2/README.md). This is offline client evidence; real live-provider verification remains blocked by the documented gateway dependencies. Later lifecycle and test-only gateway contract checks have separate exact revision records in PROJECT_STATUS.md.
+
+## Published second-wave source
+
+Source `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks** across the consuming product in [CI 41791946076](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076). The game entry page and its current runtime bytes were verified publicly on **2026-11-04 at 08:35:24 CET**. [Deployment receipt](../docs/evidence/2026-11-04-wave2/deployment-88c3035.json); [rendering and gameplay receipt](../docs/evidence/2026-11-04-wave2/verification-88c3035.json). Full production, physical-device and assistive-technology qualification remain open. AI gateway test doubles are not live model evidence.

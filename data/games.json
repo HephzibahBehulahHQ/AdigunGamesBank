@@ -145,9 +145,9 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
-          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+          "commit": "88c3035320044b254ed719ef840f527aa5520e2c",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076",
+          "scope": "Actual framebuffer dimensions, zero WebGL error and inspected original scene evidence; not hardware performance, full production acceptance or live AI availability."
         }
       },
       "levels": {
@@ -162,7 +162,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
+        "status": "CI 41791946076: 320px reflow, visible keyboard entry focus, reduced-motion preference and WCAG 2.1 A/AA automated checks passed; 390px layouts passed. Full screen-reader and physical touch/device qualification remain unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -180,8 +180,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game3/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game3/",
-        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
+        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
+        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
+        "verifiedAt": "2026-11-04T07:35:24+00:00"
       },
       "blockers": [],
       "policy": {
@@ -651,9 +652,9 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
-          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+          "commit": "88c3035320044b254ed719ef840f527aa5520e2c",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076",
+          "scope": "Actual framebuffer dimensions, zero WebGL error and inspected original scene evidence; not hardware performance, full production acceptance or live AI availability."
         }
       },
       "levels": {
@@ -668,7 +669,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
+        "status": "CI 41791946076: 320px reflow, visible keyboard entry focus, reduced-motion preference and WCAG 2.1 A/AA automated checks passed; 390px layouts passed. Full screen-reader and physical touch/device qualification remain unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -681,13 +682,14 @@
       "testing": {
         "unit": "37 football engine/rules tests passed locally, including 10,000 distinct match configurations",
         "integration": "Input-only winning match; offside touch/save/rebound, restart exemptions, penalties, cards, send-offs and five-substitute/three-window limits.",
-        "browser": "CI 41789834075 passed: actual 4K buffer, real-input full 4–0 match, queued/cancelled/applied substitution, visible roster replacement and 320px/390px layout."
+        "browser": "CI 41791946076 passed: actual 4K buffer, real-input full 3–0 match, queued/cancelled/applied substitution, visible roster replacement and responsive/automated accessibility checks."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game11/",
-        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
+        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
+        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
+        "verifiedAt": "2026-11-04T07:35:24+00:00"
       },
       "blockers": [],
       "policy": {
@@ -909,9 +911,9 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075",
-          "scope": "Actual framebuffer dimensions, zero GL error and inspected original scene screenshot. Not live AI availability, hardware performance or production acceptance."
+          "commit": "88c3035320044b254ed719ef840f527aa5520e2c",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076",
+          "scope": "Actual framebuffer dimensions, zero WebGL error and inspected original scene evidence; not hardware performance, full production acceptance or live AI availability."
         }
       },
       "levels": {
@@ -927,7 +929,7 @@
         "3D pointer picking"
       ],
       "accessibility": {
-        "status": "320px reflow, visible keyboard focus and WCAG 2.1 A/AA automated scan passed in CI 41789834075; 390px reflow passed. Full assistive-technology and physical-device qualification remains open."
+        "status": "CI 41791946076: 320px reflow, visible keyboard entry focus, reduced-motion preference and WCAG 2.1 A/AA automated checks passed; 390px layouts passed. Full screen-reader and physical touch/device qualification remain unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -940,11 +942,14 @@
       "testing": {
         "unit": "25 tactical engine/campaign/save/interaction tests passed locally",
         "integration": "All 10,000 maps unique/connected/reachable; complete elimination, uplink, retrieval and master-level sequences; losses and storage failures",
-        "browser": "CI 41789834075 passed: actual 4K, 17 real commands to mission victory, level 2 unlock/reload, 320px/390px layouts. Latest fallback regression awaits final CI."
+        "browser": "CI 41791946076 passed: actual 4K buffer, 17 real command inputs to mission victory, level 2 unlock/reload, visible keyboard command fallback without WebGL, and responsive/automated accessibility checks."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game15/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game15/",
+        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
+        "verifiedAt": "2026-11-04T07:35:24+00:00",
+        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json"
       },
       "blockers": [],
       "policy": {
@@ -1290,9 +1295,9 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075",
-          "scope": "Actual framebuffer dimensions, zero GL error and inspected original scene screenshot. Not live AI availability, hardware performance or production acceptance."
+          "commit": "88c3035320044b254ed719ef840f527aa5520e2c",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076",
+          "scope": "Actual framebuffer dimensions, zero WebGL error and inspected original scene evidence; not hardware performance, full production acceptance or live AI availability."
         }
       },
       "levels": {
@@ -1308,7 +1313,7 @@
         "Optional supported-browser voice input"
       ],
       "accessibility": {
-        "status": "320px reflow, visible keyboard focus and WCAG 2.1 A/AA automated scan passed in CI 41789834075; 390px reflow passed. Full assistive-technology and physical-device qualification remains open."
+        "status": "CI 41791946076: 320px reflow, visible keyboard entry focus, reduced-motion preference and WCAG 2.1 A/AA automated checks passed; 390px layouts passed. Full screen-reader and physical touch/device qualification remain unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1321,13 +1326,14 @@
       "testing": {
         "unit": "14 frontend/curriculum tests plus 52 backend tests; all 10,000 reference solutions executed by the actual restricted evaluator",
         "integration": "Deterministic challenge uniqueness, real restricted-evaluator oracle contract and adversarial live-result grading. Provider transport doubles are explicit tests; real provider calls NOT TESTED.",
-        "browser": "CI 41789834075 passed: actual 4K stage, eight disabled unconfigured providers, 10,000-level preview with no invented answers/progress. Test-only configured gateway contract and expanded accessibility await final CI; live API/microphone checks remain unperformed."
+        "browser": "CI 41791946076 passed: actual 4K, unconfigured/preview states, expanded 320px accessibility, and an explicitly TEST-ONLY gateway contract for bound awards, stale-result clearing and account isolation. No real provider or microphone-permission test."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game22/",
-        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
+        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
+        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
+        "verifiedAt": "2026-11-04T07:35:24+00:00"
       },
       "blockers": [
         "Configured API host, provider keys/model IDs and judge"
@@ -1427,9 +1433,9 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
-          "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
+          "commit": "88c3035320044b254ed719ef840f527aa5520e2c",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076",
+          "scope": "Actual framebuffer dimensions, zero WebGL error and inspected original scene evidence; not hardware performance, full production acceptance or live AI availability."
         }
       },
       "levels": {
@@ -1444,7 +1450,7 @@
         "Mouse / touch where implemented"
       ],
       "accessibility": {
-        "status": "Keyboard actions, visible first focus, reduced-motion layout and 390px width checked in Chromium; full assistive-technology and physical touch audit unfinished"
+        "status": "CI 41791946076: 320px reflow, visible keyboard entry focus, reduced-motion preference and WCAG 2.1 A/AA automated checks passed; 390px layouts passed. Full screen-reader and physical touch/device qualification remain unfinished."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1462,8 +1468,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game23/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game23/",
-        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
-        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
+        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
+        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
+        "verifiedAt": "2026-11-04T07:35:24+00:00"
       },
       "blockers": [],
       "policy": {

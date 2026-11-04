@@ -191,3 +191,7 @@ across the expanded suite. Its inspected football full-time frame showed a
 - Shared components: `shared/game.css`, `shared/tokens.css`, `shared/three-stage.js`, `shared/progression.js`.
 - Tokens used: Midnight Navy `#0B1220`, Royal Blue `#2563EB`, Metallic Gold `#D4AF37`, Ivory White `#F8FAFC`, Electric Cyan `#22D3EE`, Copper Orange `#F97316`; accessible muted text uses the explicitly adopted brighter secondary token.
 - Full production acceptance: **In progress**. The recorded 4K frame and browser match are verified milestones. Sustained hardware performance, exhaustive level playtesting, complete accessibility, fuller football rules, multiplayer and native PlayStation release are not established by those checks.
+
+## Published second-wave source
+
+Source `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks** across the consuming product in [CI 41791946076](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41791946076). The game entry page and its current runtime bytes were verified publicly on **2026-11-04 at 08:35:24 CET**. [Deployment receipt](../docs/evidence/2026-11-04-wave2/deployment-88c3035.json); [rendering and gameplay receipt](../docs/evidence/2026-11-04-wave2/verification-88c3035.json). Full production, physical-device and assistive-technology qualification remain open. AI gateway test doubles are not live model evidence.
