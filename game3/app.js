@@ -1,4 +1,4 @@
-import { campaign, validLevel } from '../shared/progression.js';
+import { campaign, validLevel, validCampaignSave } from '../shared/progression.js';
 import { RESISTORS, VOLTAGES, FUSES, TOPOLOGIES, initialSetup, challengeFor, checkChallenge, simulateCircuit } from './circuit.js';
 import { createBench } from './bench.js';
 
@@ -29,8 +29,14 @@ function measurement(value, unit) { return unit === 'A' ? `${(value * 1000).toFi
 function announce(text, success = false) { $('message').textContent = text; $('message').className = `message${success ? ' success' : ''}`; }
 
 function save() {
-  try { storage.setItem(SAVE_KEY, JSON.stringify({ version: 1, level, setup })); persistent = true; } catch { persistent = false; }
-  $('save-status').textContent = persistent ? `${progress.completed.toLocaleString()} levels completed · ${progress.unlocked.toLocaleString()} unlocked. Saved on this browser.` : `${progress.completed.toLocaleString()} levels completed this session. Browser storage is unavailable.`;
+  try {
+    const benchRecord = JSON.stringify({ version: 1, level, setup });
+    storage.setItem(SAVE_KEY, benchRecord);
+    const savedCampaign = JSON.parse(storage.getItem('adigun.campaign.v1.electronicer') || 'null');
+    persistent = storage.getItem(SAVE_KEY) === benchRecord && (progress.completed === 0 ||
+      (validCampaignSave(savedCampaign) && savedCampaign.completed >= progress.completed));
+  } catch { persistent = false; }
+  $('save-status').textContent = persistent ? `${progress.completed.toLocaleString()} levels completed · ${progress.unlocked.toLocaleString()} unlocked. Saved on this browser.` : `${progress.completed.toLocaleString()} levels completed this session. Browser storage could not confirm saved progress. Keep this page open.`;
 }
 
 function restore() {
@@ -130,7 +136,8 @@ $('verify').addEventListener('click', () => {
   const checked = update();
   if (checked.passed) {
     solved = true; progress.complete(level); syncInputs(); save();
-    announce(level === 10000 ? 'Professional Master campaign complete. All 10,000 commissioning tasks are recorded as cleared on this browser.' : `Level ${level.toLocaleString()} commissioned: wiring, logic, meter targets and fuse margin all passed. The next level is unlocked.`, true);
+    const feedback = persistent ? 'Completed levels are saved on this browser.' : 'Progress lasts for this session only; browser storage could not confirm a save.';
+    announce(level === 10000 ? `Professional Master campaign complete. All 10,000 commissioning tasks cleared. ${feedback}` : `Level ${level.toLocaleString()} commissioned: wiring, logic, meter targets and fuse margin all passed. The next level is unlocked.${persistent ? '' : ` ${feedback}`}`, true);
   } else {
     const failed = checked.checks.filter(check => !check.passed).map(check => check.target === undefined ? check.label : labelFor(check.label));
     announce(`${checked.result.tripped ? 'Fuse is open. Turn the supply off and replace it after correcting the circuit. ' : ''}Still to resolve: ${failed.join('; ')}.`);
@@ -151,6 +158,6 @@ try {
 }
 const restored = restore();
 brief(); update();
-if (restored) announce('Bench settings restored with the supply off. Your completed levels are saved.');
+if (restored) announce('Bench settings restored with the supply off.');
 window.addEventListener('pagehide', event => { if (!event.persisted) bench?.dispose(); });
 window.addEventListener('pageshow', event => { if (event.persisted) bench?.render(setup, simulateCircuit(setup)); });

@@ -1,5 +1,5 @@
 import { createStage } from '../shared/three-stage.js';
-import { campaign } from '../shared/progression.js';
+import { campaign, validCampaignSave } from '../shared/progression.js';
 import { createGame, currentTarget, normalizeAim, pauseGame, predict, resumeGame, startGame, stepGame, throwStone } from './engine.js';
 import { buildValleyScene } from './scene.js';
 
@@ -35,7 +35,7 @@ function aimTelemetry() {
 function progressSaved() {
   try {
     const stored = JSON.parse(globalThis.localStorage.getItem('adigun.campaign.v1.bible-valley-of-elah') || 'null');
-    return stored?.version === 1 && Number.isInteger(stored.completed) && stored.completed >= progress.completed;
+    return validCampaignSave(stored) && stored.completed >= progress.completed;
   } catch { return false; }
 }
 function saveFeedback() {

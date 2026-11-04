@@ -1,5 +1,5 @@
 import { THREE, createStage } from '../shared/three-stage.js';
-import { campaign } from '../shared/progression.js';
+import { campaign, validCampaignSave } from '../shared/progression.js';
 import { createMatch, startMatch, stepMatch, pauseMatch, resumeMatch, selectPlayer, queueSubstitution, cancelSubstitutions } from './engine.js';
 import { buildFootballScene } from './scene.js';
 
@@ -18,7 +18,7 @@ function message(text) { $('message').textContent = text; }
 function progressSaved() {
   try {
     const stored = JSON.parse(globalThis.localStorage.getItem('adigun.campaign.v1.football') || 'null');
-    return stored?.version === 1 && Number.isInteger(stored.completed) && stored.completed >= save.completed;
+    return validCampaignSave(stored) && stored.completed >= save.completed;
   } catch { return false; }
 }
 function saveFeedback() {

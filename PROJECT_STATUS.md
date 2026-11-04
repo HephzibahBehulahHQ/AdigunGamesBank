@@ -12,6 +12,8 @@ The second-wave development source milestone **`88c3035320044b254ed719ef840f527a
 
 The owner requested continuation. Verified source `88c3035` remains deployed. Later documentation checkpoint `a2225a3` did not pass its complete gate: [CI 41793634835](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41793634835) passed 142 JavaScript, 52 API, eight accessibility, two contract/fallback and twelve gameplay checks; the football bot finished its match but never took a shot. The test now explicitly exercises a real kickoff shot before the full opponent-driven match. No game state is injected, and the failure is retained as a failure. Superseded CI runs on the same work branch now cancel to avoid unnecessary duplicate execution.
 
+Save-feedback review also reproduced four failures against the prior app source: inconsistent campaign records could be reported as saved, and Electronicer could confuse a saved bench with saved level progression. All four new regressions now pass; the combined local suite is **146 passing**. The circuit, football and David clients now require valid readback evidence before claiming durable progress. The new kickoff-shot browser attempt still failed in CI `41876398316`; failure trace inspection is ongoing. No passing release is inferred.
+
 A separate recoverable worktree/branch `work/genesis-ark-2026-11-04` develops a distinct Genesis ark cargo/buoyancy chapter. Engine/campaign, original 3D controls and passage/rights documentation have separate owners. It is unfinished and is not added to the published catalog until its own checks pass. This continues the Bible scope; it does not complete Genesis–Revelation or the 2,000-title target.
 
 ## Delivered second implementation wave
