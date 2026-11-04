@@ -91,6 +91,7 @@ test('Ark renders a real 4K frame and commissions a saved voyage through player 
   await expect(phase).toHaveAttribute('data-phase', 'paused');
   await page.getByRole('button', { name: 'Resume trial', exact: true }).press('Enter');
   await expect(phase).toHaveAttribute('data-phase', 'won', { timeout: 70000 });
+  await expect(page.locator('#trial-value')).toHaveText('100%');
   await expect(page.locator('#message')).toContainText('Commission complete');
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
@@ -156,6 +157,7 @@ test('Ark keeps visible keyboard focus without WebGL and completes the same voya
   }
   await page.getByRole('button', { name: 'Launch trial', exact: true }).press('Enter');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'won', { timeout: 25000 });
+  await expect(page.locator('#trial-value')).toHaveText('100%');
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');
   await expect(page.locator('#next-level')).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('ark-command-fallback.png'), fullPage: true });

@@ -126,7 +126,7 @@ function telemetry() {
   $('freeboard-value').textContent = `${number(m.edgeFreeboard)} m`;
   $('freeboard-value').className = m.edgeFreeboard >= c.limits.freeboard ? 'inside' : 'outside';
   $('freeboard-limit').textContent = `Minimum ${number(c.limits.freeboard)} m · draft ${number(m.draft)} m`;
-  $('trial-value').textContent = `${Math.floor(m.progress * 100)}%`;
+  $('trial-value').textContent = `${state.phase === 'won' ? 100 : Math.floor(m.progress * 100)}%`;
   $('trial-condition').textContent = `${number(state.time, 1)} / ${c.limits.launchDuration} s · stability alert ${Math.round(state.damage * 100)}%`;
 }
 function loadLevel(requested) {
