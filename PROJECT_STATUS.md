@@ -10,6 +10,8 @@ First useful changed work **2026-11-04T21:56:34Z**: `game6/campaign.js` and `gam
 
 ### Engineering recovery update
 
+`4019851eb04c05d79096c1734eeae3f1b5eab9d8` was verified remotely at **2026-11-04T22:13:13Z**. The following changed-work checkpoint exceeded five minutes during context recovery and CI diagnosis; that interval is a missed cadence, not compliant. Circuit Rush and Resistor Match are now complete locally with 24 and 11 passing numerical tests respectively; their exact-candidate browser release gate is pending. Volt Dodge and Binary Flash have their first actual engines saved and remain WIP.
+
 `e32afcd439f0fc01ee77f10ccf3e8f9ce483cc26` was verified remotely at **2026-11-04T22:09:28Z**. This interval was **5 minutes 8 seconds**, another recorded missed cadence. Checkpoint preparation now targets three-minute intervals to leave transfer/readback margin.
 
 `7db0840741f7ea29508bedf5dcaf88cc86f75cb8` was verified remotely at 2026-11-04T21:59:16Z. `6fb58d88f3db5245a8949878d3c1c51d6c00f2c1` was verified at **2026-11-04T22:04:20Z**. The latter interval was **5 minutes 4 seconds**, exceeding the required cadence by four seconds; it is recorded as a missed interval, not compliant. Both snapshots remain recoverable.
