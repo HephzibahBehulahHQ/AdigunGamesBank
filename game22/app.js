@@ -1,4 +1,7 @@
 import { providers, parseApiOrigin, isLiveAnswer, formatLatency, formatMetric, parseCodingTests } from './arena-utils.js';
+import { createChallenge, prepareAttempt, gradeAttempt, progressScope, CAMPAIGN_LEVELS } from './campaign.js';
+import { campaign } from '../shared/progression.js';
+import { stageRows } from './stage-data.js';
 
 const $ = id => document.getElementById(id);
 const providerByKey = Object.fromEntries(providers.map(provider => [provider.key, provider]));
@@ -15,6 +18,9 @@ let api = '';
 try { const saved = stored('local', 'hb-arena-api'); if (saved) api = parseApiOrigin(saved); } catch { stored('local', 'hb-arena-api', null); }
 let token = '', user = null, gateway = null, running = false, epoch = 0, authMode = 'login';
 let selectionInitialized = false, currentMatch = null, recognition = null;
+let stage = null, historicalMatch = false, activeScope = null, progress = null, sessionOnly = false;
+let challenge = createChallenge(1), customDraft = { prompt: '', type: 'factual', tests: '' };
+const awardedMatches = new Set();
 const requests = new Set();
 stored('session', 'hb-arena-token', null); // Retire the old token without an API-origin binding.
 try {
@@ -76,15 +82,108 @@ async function request(path, options = {}) {
 function selectedProviders() {
   return [...$('lineup').querySelectorAll('input:checked')].map(input => input.value);
 }
+const campaignMode = () => $('play-mode').value === 'campaign';
+function syncStage() {
+  const snapshot = { gateway, selected: selectedProviders(), running, match: currentMatch, historical: historicalMatch };
+  const rows = stageRows(snapshot);
+  $('stage-ledger').replaceChildren(...rows.map(row => {
+    const tr = node('tr');
+    for (const value of [row.label, row.state, row.score === null ? 'Unknown' : row.score.toFixed(2), row.latency]) tr.append(node('td', value));
+    tr.children[2].dataset.leader = String(row.leader);
+    return tr;
+  }));
+  const returned = rows.filter(row => row.returned).length;
+  $('stage-state').textContent = running ? 'Requests in progress' : currentMatch ? `${historicalMatch ? 'Saved match' : 'Returned'} · ${returned} verified responses` : gateway ? `${rows.filter(row => row.configured).length} configured · no responses yet` : 'Awaiting connection';
+  stage?.update(snapshot);
+}
+function syncProgress() {
+  const scope = progressScope(api, user?.id);
+  if (scope === activeScope) return;
+  activeScope = scope; progress = scope ? campaign(scope) : null; sessionOnly = false; awardedMatches.clear();
+  challenge = createChallenge(progress?.unlocked || 1);
+  $('campaign-hint').value = ''; $('campaign-verdict').hidden = true; $('next-challenge').hidden = true;
+  showChallenge();
+}
+function showChallenge() {
+  $('campaign-level').value = challenge.level;
+  $('campaign-level-readout').textContent = `Level ${challenge.level.toLocaleString()} / ${CAMPAIGN_LEVELS.toLocaleString()}`;
+  $('campaign-tier').textContent = challenge.tier;
+  $('challenge-title').textContent = challenge.title;
+  $('challenge-skill').textContent = `${challenge.skill} · ${challenge.tests.length} reference cases · ${challenge.signature}`;
+  $('challenge-brief').textContent = challenge.brief;
+  $('challenge-prompt').textContent = challenge.prompt;
+  $('challenge-tests').textContent = JSON.stringify(challenge.tests, null, 2);
+  if (campaignMode()) {
+    $('task-type').value = 'coding'; $('coding-fields').hidden = false;
+    $('prompt').value = challenge.prompt; $('coding-tests').value = JSON.stringify(challenge.tests, null, 2);
+    $('char-count').textContent = challenge.prompt.length.toLocaleString() + ' / 8,000';
+  }
+  $('campaign-progress').textContent = !progress ? 'Sign in to a configured gateway to earn progress. All levels are available to preview.' : `${progress.completed.toLocaleString()} completed · ${progress.mastered ? 'Professional Master campaign complete' : `next unlocked level ${progress.unlocked.toLocaleString()}`}${sessionOnly ? ' · Session only: browser storage could not save your progress.' : ' · Browser-local progress for this gateway account.'}${challenge.level > progress.unlocked ? ' This preview is locked for competition; complete earlier levels first.' : ''}`;
+}
+function campaignBlock() {
+  if (!progress) return 'Sign in before starting the campaign.';
+  if (challenge.level > progress.unlocked) return 'Complete earlier levels before competing on this preview.';
+  if (!gateway?.judge?.configured) return 'Configure an independent model judge on the gateway first.';
+  if (selectedProviders().includes(gateway.judge.provider)) return 'Remove the judge from the contender lineup; it cannot score itself.';
+  if (!$('prediction').value) return 'Forecast a selected contender or a tie before competing.';
+  return '';
+}
+function syncPrediction() {
+  const saved = $('prediction').value, selected = selectedProviders();
+  $('prediction').replaceChildren(new Option('Choose a contender or a tie', ''), ...selected.map(key => new Option(providerByKey[key].label, key)), new Option('Tie between leading contenders', 'tie'));
+  if (saved === 'tie' || selected.includes(saved)) $('prediction').value = saved;
+}
+function switchMode() {
+  if (recognition) recognition.abort();
+  if (campaignMode()) {
+    customDraft = { prompt: $('prompt').value, type: $('task-type').value, tests: $('coding-tests').value };
+    showChallenge();
+  } else {
+    $('prompt').value = customDraft.prompt; $('task-type').value = customDraft.type; $('coding-tests').value = customDraft.tests;
+    $('coding-fields').hidden = customDraft.type !== 'coding'; $('char-count').textContent = customDraft.prompt.length.toLocaleString() + ' / 8,000';
+  }
+  $('campaign-panel').hidden = !campaignMode();
+  $('voice').textContent = campaignMode() ? 'Speak strategy hint' : 'Speak prompt';
+  syncSubmit();
+}
+function loadChallenge(level) {
+  if (running) return;
+  const value = Number(level);
+  if (!Number.isInteger(value) || value < 1 || value > CAMPAIGN_LEVELS) {
+    $('campaign-verdict').hidden = false; $('campaign-verdict').textContent = 'Choose a whole-number level from 1 to 10,000.'; return;
+  }
+  challenge = createChallenge(value); $('prediction').value = ''; $('campaign-hint').value = '';
+  $('campaign-verdict').hidden = true; $('next-challenge').hidden = true;
+  showChallenge(); syncSubmit();
+}
+function evaluateChallenge(attempt, match, scope) {
+  if (!progress || scope !== activeScope || awardedMatches.has(match.id)) return;
+  const result = gradeAttempt(attempt, match);
+  $('campaign-verdict').hidden = false;
+  $('campaign-verdict').textContent = result.reason;
+  if (result.cleared) {
+    awardedMatches.add(match.id);
+    if (progress.complete(attempt.level)) {
+      try { sessionOnly = JSON.parse(stored('local', `adigun.campaign.v1.${scope}`) || 'null')?.completed !== progress.completed; } catch { sessionOnly = true; }
+      $('campaign-verdict').textContent += sessionOnly ? ' Progress is available for this session, but browser storage could not save it.' : ' Progress saved on this browser for your gateway account.';
+    } else $('campaign-verdict').textContent += ' This level was already completed; progress stays unchanged.';
+    $('next-challenge').hidden = progress.mastered;
+  }
+  showChallenge();
+}
 function syncSubmit() {
   const selected = selectedProviders();
   const configured = selected.filter(key => gateway?.providers?.[key]).length;
-  $('submit-match').disabled = running || configured < 2;
-  $('submit-match').textContent = running ? 'Comparing live answers…' : `Compare ${configured} selected models`;
-  $('task-type').disabled = running;
-  $('prompt').readOnly = running;
-  $('coding-tests').readOnly = running;
+  syncPrediction();
+  $('campaign-ready').textContent = campaignMode() ? campaignBlock() || (configured < 2 ? 'Choose at least two configured contenders.' : gateway?.ai_mode !== 'live' ? 'Enable live mode on the gateway.' : 'Ready: review your forecast, then start the live competition below.') : '';
+  $('submit-match').disabled = running || configured < 2 || gateway?.ai_mode !== 'live' || (campaignMode() && Boolean(campaignBlock()));
+  $('submit-match').textContent = running ? 'Comparing live answers…' : campaignMode() ? `Compete · level ${challenge.level.toLocaleString()}` : `Compare ${configured} selected models`;
+  $('task-type').disabled = running || campaignMode();
+  $('prompt').readOnly = running || campaignMode();
+  $('coding-tests').readOnly = running || campaignMode();
+  for (const id of ['play-mode', 'prediction', 'campaign-hint', 'campaign-level', 'load-challenge', 'resume-challenge', 'next-challenge']) $(id).disabled = running;
   $('lineup').querySelectorAll('input').forEach(input => { input.disabled = running || !gateway?.providers?.[input.value]; });
+  syncStage();
 }
 function buildLineup() {
   for (const provider of providers) {
@@ -140,6 +239,7 @@ async function health() {
   syncSubmit();
 }
 function updateAccount() {
+  syncProgress();
   $('connection-needed').hidden = Boolean(api);
   $('auth-gate').hidden = !api || Boolean(user);
   $('prompt-form').hidden = !user;
@@ -148,17 +248,19 @@ function updateAccount() {
   $('register-inline').hidden = !canRegister;
   $('registration-state').hidden = canRegister;
   $('history-refresh').disabled = !user;
+  syncSubmit();
 }
 function logout() {
   epoch += 1;
   requests.forEach(controller => controller.abort());
-  token = ''; user = null; running = false; currentMatch = null;
+  token = ''; user = null; running = false; currentMatch = null; historicalMatch = false;
   stored('session', 'hb-arena-session', null);
   if (recognition) recognition.abort();
   $('results').replaceChildren(); $('result-summary').hidden = true; $('results').setAttribute('aria-busy', 'false');
   $('record-matches').textContent = '—'; $('record-strong').textContent = '—';
   $('history').replaceChildren(node('p', 'Sign in to view your match history.', 'note'));
-  $('prompt-form').reset(); $('char-count').textContent = '0 / 8,000'; $('coding-fields').hidden = true;
+  $('prompt-form').reset(); customDraft = { prompt: '', type: 'factual', tests: '' };
+  $('char-count').textContent = '0 / 8,000'; $('coding-fields').hidden = true;
   note(''); updateAccount(); syncSubmit();
 }
 function openSettings() {
@@ -224,14 +326,14 @@ async function rateAnswer(matchId, key, rating, group) {
   } catch (error) { if (version === epoch) note('Your rating was not saved: ' + error.message, true); }
   finally { group.querySelectorAll('button').forEach(button => { button.disabled = false; }); }
 }
-function renderAnswer(answer, matchId) {
+function renderAnswer(answer, matchId, fromHistory = false) {
   const key = answer.key || answer.model_key;
   const name = providerByKey[key]?.label || answer.label || key;
   const live = isLiveAnswer(answer);
   const article = node('article', '', 'answer' + (live ? ' live' : ''));
   const header = node('div', '', 'answer-header');
   header.append(node('h3', name), node('p', answer.model || 'Model identifier not recorded'));
-  header.append(node('p', `${live ? 'LIVE RESPONSE' : 'NO VERIFIED LIVE RESPONSE'} · ${formatLatency(answer.latency_ms)}`, live ? 'live-label' : ''));
+  header.append(node('p', `${live ? (fromHistory ? 'RECORDED LIVE RESPONSE' : 'LIVE RESPONSE') : 'NO VERIFIED LIVE RESPONSE'} · ${formatLatency(answer.latency_ms)}`, live ? 'live-label' : ''));
   const content = node('pre', live ? answer.body : (answer.error || 'No live response is available for this entry.'), 'answer-text');
   content.tabIndex = 0; content.setAttribute('aria-label', name + ' answer');
   article.append(header, content);
@@ -267,12 +369,12 @@ function renderAnswer(answer, matchId) {
   return article;
 }
 function renderMatch(match, fromHistory = false) {
-  currentMatch = match;
+  currentMatch = match; historicalMatch = fromHistory;
   $('results').replaceChildren();
   const answers = match.responses || [];
   const live = answers.filter(isLiveAnswer).length;
-  for (const answer of answers) $('results').append(renderAnswer(answer, match.id));
-  $('match-state').textContent = `${live}/${answers.length} live responses`;
+  for (const answer of answers) $('results').append(renderAnswer(answer, match.id, fromHistory));
+  $('match-state').textContent = `${live}/${answers.length} ${fromHistory ? 'recorded' : 'live'} responses`;
   $('result-summary').hidden = false;
   $('history-prompt').hidden = !fromHistory;
   $('history-prompt').textContent = fromHistory ? 'Saved prompt: ' + match.prompt : '';
@@ -281,19 +383,28 @@ function renderMatch(match, fromHistory = false) {
   note(live ? `${live} actual provider response${live === 1 ? '' : 's'} ${fromHistory ? 'in this saved match' : 'received'}. Failed providers are shown separately.` : 'No live provider answered. Demonstration text is never substituted.', live === 0);
   $('result-title').tabIndex = -1;
   $('result-title').focus({ preventScroll: true });
+  syncStage();
 }
 async function run(event) {
   event.preventDefault();
-  const prompt = $('prompt').value.trim();
-  if (prompt.length < 12) return note('Write at least 12 non-padding characters.', true);
+  if (running) return;
   const selected = selectedProviders();
   if (selected.filter(key => gateway?.providers?.[key]).length < 2) return note('Select at least two configured providers.', true);
-  const taskType = $('task-type').value;
-  let tests = [];
-  try { if (taskType === 'coding') tests = parseCodingTests($('coding-tests').value); } catch (error) { return note(error.message, true); }
+  if (gateway?.ai_mode !== 'live') return note('Live mode must be enabled on the gateway before dispatch.', true);
+  let prompt = $('prompt').value.trim(), taskType = $('task-type').value, tests = [], attempt = null;
+  const scope = activeScope;
+  try {
+    if (campaignMode()) {
+      const blocked = campaignBlock(); if (blocked) throw Error(blocked);
+      attempt = prepareAttempt(challenge.level, selected, $('prediction').value, $('campaign-hint').value);
+      prompt = attempt.prompt; taskType = attempt.task_type; tests = attempt.tests;
+      $('campaign-verdict').hidden = true; $('next-challenge').hidden = true;
+    } else if (taskType === 'coding') tests = parseCodingTests($('coding-tests').value);
+    if (prompt.length < 12) throw Error('Write at least 12 non-padding characters.');
+  } catch (error) { return note(error.message, true); }
   const version = epoch;
   if (recognition) recognition.stop();
-  running = true; syncSubmit();
+  currentMatch = null; historicalMatch = false; running = true; syncSubmit();
   $('result-summary').hidden = true; $('results').replaceChildren(); $('results').setAttribute('aria-busy', 'true');
   $('match-state').textContent = 'Running';
   note('Sending your prompt concurrently. Responses have a 50-second deadline; optional judging follows.');
@@ -301,6 +412,7 @@ async function run(event) {
     const match = await request('/api/arena/matches', { method: 'POST', match: true, body: JSON.stringify({ prompt, task_type: taskType, tests, providers: selected }) });
     if (version !== epoch) return;
     renderMatch(match);
+    if (attempt) evaluateChallenge(attempt, match, scope);
     await refreshRecord();
   } catch (error) { if (version === epoch) { $('match-state').textContent = 'Request failed'; note(error.message, true); } }
   finally { if (version === epoch) { running = false; $('results').setAttribute('aria-busy', 'false'); syncSubmit(); } }
@@ -327,6 +439,12 @@ $('prompt-form').addEventListener('submit', run);
 $('history-refresh').addEventListener('click', refreshRecord);
 $('task-type').addEventListener('change', () => { $('coding-fields').hidden = $('task-type').value !== 'coding'; });
 $('prompt').addEventListener('input', () => { $('char-count').textContent = $('prompt').value.length.toLocaleString() + ' / 8,000'; });
+$('play-mode').addEventListener('change', switchMode);
+$('prediction').addEventListener('change', syncSubmit);
+$('load-challenge').addEventListener('click', () => loadChallenge($('campaign-level').value));
+$('campaign-level').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); loadChallenge($('campaign-level').value); } });
+$('resume-challenge').addEventListener('click', () => loadChallenge(progress?.unlocked || 1));
+$('next-challenge').addEventListener('click', () => loadChallenge(progress?.unlocked || 1));
 $('year').textContent = new Date().getFullYear();
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -338,16 +456,29 @@ if (!SpeechRecognition) {
     if (running) return;
     if (recognition) { recognition.stop(); return; }
     const speech = new SpeechRecognition(); recognition = speech;
+    const voiceEpoch = epoch, voiceMode = campaignMode(), target = voiceMode ? $('campaign-hint') : $('prompt');
     speech.lang = navigator.language || 'en-US'; speech.interimResults = true;
     speech.onstart = () => { $('voice').textContent = 'Stop listening'; $('voice-state').textContent = 'Listening. Your browser handles speech transcription.'; };
     speech.onerror = event => { $('voice-state').textContent = event.error === 'not-allowed' ? 'Microphone permission was denied. Type your prompt.' : 'Voice capture could not complete. Type your prompt.'; };
-    speech.onend = () => { recognition = null; $('voice').textContent = 'Speak prompt'; if ($('voice-state').textContent.startsWith('Listening')) $('voice-state').textContent = 'Transcript ready. Review it before sending.'; };
-    speech.onresult = event => { if (running) return; $('prompt').value = Array.from(event.results).map(result => result[0].transcript).join(' ').slice(0, 8000); $('prompt').dispatchEvent(new Event('input')); };
+    speech.onend = () => { recognition = null; $('voice').textContent = campaignMode() ? 'Speak strategy hint' : 'Speak prompt'; if ($('voice-state').textContent.startsWith('Listening')) $('voice-state').textContent = 'Transcript ready. Review it before sending.'; };
+    speech.onresult = event => { if (running || epoch !== voiceEpoch || campaignMode() !== voiceMode) return; target.value = Array.from(event.results).map(result => result[0].transcript).join(' ').slice(0, voiceMode ? 600 : 8000); target.dispatchEvent(new Event('input')); };
     try { speech.start(); } catch { recognition = null; $('voice-state').textContent = 'Voice could not start. Type your prompt.'; }
   });
 }
 
-buildLineup(); updateAccount(); syncSubmit();
+buildLineup(); showChallenge(); updateAccount(); syncSubmit();
+import('./scene.js').then(({ createArenaStage }) => {
+  stage = createArenaStage({
+    canvas: $('arena-stage'), qualitySelect: $('arena-quality'), status: $('render-status'), viewSelect: $('arena-view'),
+    onSelect(key) { const input = $('provider-' + key); if (input && !input.disabled) { input.checked = !input.checked; input.dispatchEvent(new Event('change')); } },
+  });
+  syncStage();
+}).catch(() => {
+  $('render-status').textContent = '3D is unavailable. Enable WebGL 2 and reload. The accessible comparison controls remain available.';
+  $('arena-quality').disabled = true; $('arena-view').disabled = true;
+});
+window.addEventListener('pagehide', event => { if (!event.persisted) { stage?.dispose(); stage = null; requests.forEach(controller => controller.abort()); recognition?.abort(); } });
+window.addEventListener('pageshow', event => { if (event.persisted) stage?.render(); });
 if (api) {
   await health();
   if (token) {

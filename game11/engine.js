@@ -281,6 +281,9 @@ function restart(s, team, x, y, type, reason = '') {
     .sort((a, b) => distance(a, { x, y }) - distance(b, { x, y }))[0] || available[0];
   x = type === 'Penalty' ? sign * (HALF - 11) : clamp(x, -HALF + 0.3, HALF - 0.3);
   y = type === 'Penalty' ? 0 : type === 'Throw-in' ? Math.sign(y || 1) * SIDE : clamp(y, -SIDE + 0.3, SIDE - 0.3);
+  if (type === 'Goal kick') { x = -sign * (HALF - 4.5); y = clamp(y, -8.5, 8.5); }
+  if (type === 'Corner') { x = Math.sign(x) * (HALF - 0.4); y = Math.sign(y) * (SIDE - 0.4); }
+  if (type === 'Indirect free kick' && x * sign > HALF - 5.5 && Math.abs(y) < 9.16) x = sign * (HALF - 5.5);
   for (const p of s.players.filter(activePlayer)) {
     p.vx = p.vy = 0; p.cooldown = 0;
     if (p.id === taker.id) continue;
@@ -290,10 +293,11 @@ function restart(s, team, x, y, type, reason = '') {
     } else if (p.team !== team) {
       const minimum = type === 'Throw-in' ? 2 : 9.15;
       if (distance(p, { x, y }) < minimum) {
-        const direction = unit(p.x - x || -sign, p.y - y);
-        p.x = clamp(x + direction.x * (minimum + 0.3), -HALF + 0.65, HALF - 0.65);
-        p.y = clamp(y + direction.y * (minimum + 0.3), -SIDE + 0.65, SIDE - 0.65);
-        if (distance(p, { x, y }) < minimum) p.x = clamp(x - sign * (minimum + 0.3), -HALF + 0.65, HALF - 0.65);
+        const positions = Array.from({ length: 16 }, (_, i) => ({
+          x: clamp(x + Math.cos(i * Math.PI / 8) * (minimum + 0.3), -HALF + 0.65, HALF - 0.65),
+          y: clamp(y + Math.sin(i * Math.PI / 8) * (minimum + 0.3), -SIDE + 0.65, SIDE - 0.65)
+        })).filter(q => distance(q, { x, y }) >= minimum).sort((a, b) => distance(p, a) - distance(p, b));
+        p.x = positions[0].x; p.y = positions[0].y;
       }
       if (type === 'Goal kick' && p.x * sign < -HALF + 16.5 && Math.abs(p.y) < 20.16) p.x = sign * (-HALF + 17);
     }
@@ -336,6 +340,9 @@ function ballStep(s, dt) {
       if (contact.distance < (hands ? 1.03 : 0.62) && height < (hands ? 2.05 : 0.82) && p.cooldown <= 0) {
         claim(s, p, hands && Math.hypot(b.vx, b.vy) > 12);
         if (s.phase !== 'live') return;
+        b.x = previous.x + (b.x - previous.x) * contact.t;
+        b.y = previous.y + (b.y - previous.y) * contact.t;
+        b.z = Math.max(FIELD.ballRadius, height);
         break;
       }
     }
@@ -429,6 +436,7 @@ function tick(s, input, dt) {
     if (activePlayer(a) && activePlayer(b) && d > 0 && d < 0.62) { const push = (0.62 - d) * 0.5, nx = (a.x - b.x) / d, ny = (a.y - b.y) / d; a.x += nx * push; a.y += ny * push; b.x -= nx * push; b.y -= ny * push; }
   }
   ballStep(s, dt);
+  if (s.phase === 'fulltime') return;
   s.elapsed += dt;
   if (s.elapsed + 1e-7 >= s.config.matchSeconds) finish(s);
 }

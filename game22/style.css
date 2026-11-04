@@ -6,3 +6,22 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 .brand img{width:160px;height:auto;max-width:34vw}.brand-copy{display:flex;flex-direction:column}.brand .brand-name{letter-spacing:.05em}
+
+.stage-panel{padding-bottom:16px;background:linear-gradient(135deg,#15213A,#0D1729 65%);overflow:hidden}
+.stage-toolbar{display:grid;grid-template-columns:minmax(145px,220px) minmax(120px,180px) minmax(0,1fr);gap:16px;align-items:end;margin:0 0 18px}
+.stage-toolbar label{margin-top:0}.stage-toolbar .note{padding-bottom:10px}
+.stage-viewport{aspect-ratio:16/9;background:#080F1D;border:1px solid #586985;border-radius:10px;overflow:hidden}
+#arena-stage{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}#arena-stage:active{cursor:grabbing}
+#arena-stage:focus-visible{outline:3px solid var(--gold);outline-offset:-5px}
+.stage-evidence{margin-top:14px;border-top:1px solid var(--line)}
+.stage-evidence summary,.campaign-panel summary{cursor:pointer;color:#D5C7FF;min-height:44px;padding:10px 0;font-size:.82rem}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.76rem;table-layout:fixed}
+caption{text-align:left;color:var(--muted);padding:8px 0}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;overflow-wrap:anywhere}th{color:var(--ivory)}td{color:var(--muted)}td[data-leader="true"]{color:#F1D676}
+.campaign-panel{border:1px solid #A78BFA70;border-radius:10px;padding:20px;margin:18px 0;background:#0B1424}
+.campaign-panel h3{font-size:1.35rem}.campaign-panel p{overflow-wrap:anywhere}.campaign-panel h4{font-size:.85rem}
+.campaign-panel pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:340px;overflow:auto;font:.78rem/1.65 ui-monospace,monospace;background:#080F1D;border:1px solid var(--line);border-radius:7px;padding:12px}
+.campaign-panel pre:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.campaign-panel textarea{min-height:96px}.level-picker{display:flex;align-items:flex-end;flex-wrap:wrap;gap:10px;margin:14px 0}.level-picker>div{flex:1 1 160px}.level-picker button{flex:1 1 100px}#campaign-level-readout{color:#D5C7FF;font-size:.85rem;font-weight:600}
+#play-mode{margin-bottom:18px}#campaign-panel #next-challenge{margin-bottom:5px}
+@media(max-width:780px){.stage-toolbar{grid-template-columns:1fr 1fr}.stage-toolbar .note{grid-column:1/-1;margin:0;padding:0}.campaign-panel{padding:16px}}
+@media(max-width:540px){.stage-panel{padding:14px}.stage-toolbar{gap:12px}.stage-toolbar>div{min-width:0}.stage-toolbar select{padding:10px 6px;font-size:.78rem}.stage-panel .section-head{flex-direction:column}.stage-panel .badge{max-width:100%}.campaign-panel{padding:12px}.campaign-panel .level-picker{display:grid;grid-template-columns:1fr}.campaign-panel pre{font-size:.72rem}th,td{padding:8px 3px;font-size:.67rem}}

@@ -11,7 +11,7 @@ export function stageRows({ gateway = null, selected = [], running = false, matc
   return providers.map(provider => {
     const configured = Boolean(gateway?.providers?.[provider.key]);
     const active = selected.includes(provider.key);
-    const response = answers.find(answer => (answer.key || answer.model_key) === provider.key);
+    const response = answers.find(answer => (answer?.key || answer?.model_key) === provider.key);
     const verified = match?.mode === 'live' && isLiveAnswer(response);
     const score = verified && validScore(response.final_score) ? response.final_score : null;
     let state = configured ? (active ? 'Selected' : 'Configured') : 'Not configured';
