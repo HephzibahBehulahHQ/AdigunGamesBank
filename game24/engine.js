@@ -175,7 +175,7 @@ export function stepGame(state, seconds) {
     state.breachTime = problems.length ? state.breachTime + FIXED_STEP : Math.max(0, state.breachTime - FIXED_STEP * 0.6);
     state.damage = clamp(state.breachTime / c.limits.breachDuration, 0, 1);
     if (state.breachTime >= c.limits.breachDuration) { finish(state, false, `${problems[0]} Return to the quay and rebalance.`); break; }
-    if (state.time + 1e-9 >= c.limits.launchDuration) { finish(state, true, 'Commission complete: all stores remained within the launch stability envelope.'); break; }
+    if (state.time + 1e-9 >= c.limits.launchDuration) { finish(state, true, 'Commission complete: the load completed its launch trial without a sustained stability breach.'); break; }
   }
   return state;
 }

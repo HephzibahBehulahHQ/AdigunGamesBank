@@ -200,5 +200,5 @@ test('all 10,000 ark challenges have distinct physical constraints and complete 
     near(state.metrics.wave, c.environment.waveHeight * Math.sin(state.time * 2 * Math.PI / c.environment.wavePeriod + c.environment.phase), 1e-8);
   }
   assert.equal(fingerprints.size, LEVEL_COUNT);
-  console.info(`ARK AUTOMATED: ${LEVEL_COUNT} distinct configurations, ${LEVEL_COUNT} complete launches, ${frames} rendered-frame advances; max |heel| ${greatestHeel.toFixed(3)}°, max |trim| ${greatestTrim.toFixed(3)}°, minimum sampled freeboard reserve ${leastReserve.toFixed(4)} m. This is automated numerical coverage, not manual playtesting.`);
+  console.info(`ARK AUTOMATED: ${LEVEL_COUNT} distinct configurations, ${LEVEL_COUNT} complete launches, ${frames} simulation-frame advances; max |heel| ${greatestHeel.toFixed(3)}°, max |trim| ${greatestTrim.toFixed(3)}°, minimum sampled freeboard reserve ${leastReserve.toFixed(4)} m. This is automated numerical coverage, not manual playtesting.`);
 });
