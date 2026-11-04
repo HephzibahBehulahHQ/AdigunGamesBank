@@ -1,12 +1,24 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T05:34:01+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T07:45:19+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
 **In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (22 local implementations and one API-dependent comparison client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
 The verified development milestone **`b9db74c1406b44d47afb48c219548f2bdc7d4434`** was integrated into **main** and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
+
+## Active continuation — second implementation wave
+
+Work resumed from verified main `a19b184c6ba7a475ae0a44a3860fab52fbcf0204` on the existing scoped work branch. The source is not being marked production-complete.
+
+- `game22/`: real 3D competition presentation and 10,000 substantive challenge levels; provider hosting/credentials remain separate live-play dependencies.
+- `game11/`: offside, fouls/restarts and player discipline, with the current real match kept playable.
+- `game15/`: individual 3D tactical-game rewrite with meaningful mission progression and accessible command controls.
+- `tests/browser/accessibility.spec.js`: new 320px reflow, visible keyboard focus, WCAG 2.1 A/AA automated checks and catalog light-theme checks. These checks are newly authored, not yet recorded as passing.
+- Build output now removes obsolete files while preserving its preview directory; release syntax validation includes game15.
+
+The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 browser tests in [run 41773986655](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41773986655), then passed Pages [run 41774461710](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41774461710). Its last 12 changed public documentation/metadata files matched exact source bytes at **2026-11-04T05:41:27+01:00**. New-wave results must be recorded separately.
 
 ## Changed implementation
 

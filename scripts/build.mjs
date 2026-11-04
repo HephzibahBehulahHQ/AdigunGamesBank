@@ -1,10 +1,12 @@
-import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, writeFile, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..'), output = path.join(root, 'dist');
 // Preserve the directory inode: the managed preview serves this directory continuously.
 await mkdir(output, { recursive: true });
+// Remove obsolete output while keeping the directory used by the preview server.
+for (const name of await readdir(output)) await rm(path.join(output, name), { recursive: true, force: true });
 const files = ['index.html', 'style.css', 'script.js', 'CNAME', '.nojekyll'];
 const folders = ['assets', 'shared', 'vendor', 'data', ...(await readdir(root)).filter(name => /^game\d+$/.test(name))];
 for (const name of [...files, ...folders]) {
