@@ -125,7 +125,7 @@
     }
   ],
   "advancedLayoutRegressions": {
-    "conclusion": "both passed unchanged 390px and 320px assertions; all controls retain minimum44px targets",
+    "conclusion": "Both passed unchanged 390px and 320px page-width assertions; sampled bit/grid controls met 44px width and height targets.",
     "scenarios": [
       {
         "title": "Binary Flash contains a sixteen-bit saved-layout fixture at 390 and 320 pixel widths",

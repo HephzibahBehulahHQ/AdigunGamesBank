@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-05T00:15:18+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-05T00:24:32+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
@@ -16,12 +16,16 @@ Full Genesis–Revelation coverage, production art/device qualification, complet
 | Completed gameplay checkpoint | `09385bd8105e235f90493390fccbbe133083bd72`, exact remote head read back **2026-11-04T22:54:03Z** |
 | Exact-candidate release gate | [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609) **SUCCESS**, completed **2026-11-04T23:05:14Z** |
 | Main gameplay integration | Normal fast-forward from `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` to `09385bd8105e235f90493390fccbbe133083bd72`, exact head read back **2026-11-04T23:11:23Z** |
-| Pages publication | [New run 41931693983](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41931693983) on exact source `09385bd8105e235f90493390fccbbe133083bd72`; build succeeded, publication still being observed |
+| Last recorded Pages attempt | [Run 41931693983](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41931693983) on `09385bd8105e235f90493390fccbbe133083bd72`: **FAILED**, completed **2026-11-04T23:22:20Z** after a successful build |
+| Exact public comparison | **115 files checked; 54 mismatched**, completed **2026-11-04T23:22:46Z**. New source not verified live. [Full comparison](docs/evidence/2026-11-04-nine-games/deployment-09385bd.json) |
+| Verified evidence checkpoint | `81826a4a1babfee41dfd118e70e5b081e9e765ea`, exact remote head read back **2026-11-04T23:17:00Z** |
 | Last recorded public source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
 | Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
-| This evidence follow-up | Records the completed gate and recovery facts; its synchronization and public delivery must be verified separately |
+| This evidence follow-up | Records the completed gate, exact public mismatch and failed Pages publication; its own revision and checks are tracked by Git history and the branch workflow |
 
-Publication is not yet claimed for the new source. A spot check while Pages was publishing still returned older catalog/Circuit bytes and no new Binary stylesheet. The preceding documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out twice after a successful build/upload. A fresh tested source triggered the existing Pages flow. No host, audience, access-control or action-version change was made. [Earlier publication failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
+The **09385bd publication failed**. GitHub found the 9,029,786-byte Pages artifact and accepted the deployment at 23:11:47Z, then repeatedly returned `updating_pages` through 23:21:45Z. The publishing action reached its 600,000 ms timeout at 23:22:16Z and confirmed cancellation at 23:22:17Z. Build/upload success does not establish delivery. [Exact failed-run receipt](docs/evidence/2026-11-04-nine-games/publication-09385bd.json).
+
+The earlier documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) also timed out twice after build/upload. The fresh tested gameplay source reproduced the post-creation stall. GitHub's [official status](https://www.githubstatus.com/) reported Actions and Pages operational when checked; the earlier resolved incidents do not establish this failure's cause. No concrete source, permission, DNS, host or action-version correction is established, so none was fabricated. The code remains recoverable. All 73 fetched paths that exist at the preceding b3844bf source exactly match that source; the 42 other paths are new to this batch. The last verified public release remains available. [Earlier failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
 
 ## Nine individual conversions
 
@@ -77,7 +81,7 @@ Verified primary checkpoints on 2026-11-04 UTC: `f9a6a982` 21:44:17, `a14c4f5` 2
 
 Engineering receipts: `7db0840` 21:59:16, `6fb58d8` 22:04:20, `e32afcd` 22:09:28, `4019851` 22:13:13, `5a466b5` 22:19:31, `c01f283` 22:22:26, `54a9797` 22:25:56, `ba62a45` 22:29:28 and `c230318` 22:32:05. Three changed-work intervals of **5m4s, 5m8s and 6m18s missed the five-minute cadence**; they are not compliant intervals. All snapshots were exactly read back and recovered.
 
-For `09385bd`, first correction work began **22:48:01Z** (CSS 22:48:15Z); exact remote verification at **22:54:03Z** took **6m2s**, another cadence miss. An initial unbounded parallel chunk-read transfer failed at chunk 24 before any ref mutation. Reducing transfer chunks to 8,000 characters and concurrency to 8 allowed exact binary blobs/tree/commit synchronization; all 1,474,601 original PNG bytes were recovered. Recovery stayed below ten minutes. Future preparation targets three minutes to leave transfer time. This evidence follow-up began **23:13:21Z** and needs its own exact remote receipt.
+For `09385bd`, first correction work began **22:48:01Z** (CSS 22:48:15Z); exact remote verification at **22:54:03Z** took **6m2s**, another cadence miss. An initial unbounded parallel chunk-read transfer failed at chunk 24 before any ref mutation. Reducing transfer chunks to 8,000 characters and concurrency to 8 allowed exact binary blobs/tree/commit synchronization; all 1,474,601 original PNG bytes were recovered. Recovery stayed below ten minutes. Future preparation targets three minutes to leave transfer time. The first evidence follow-up began **23:13:21Z** and was exactly read back as **81826a4a1babfee41dfd118e70e5b081e9e765ea at 23:17:00Z**, a compliant **3m39s** interval. This later failure-receipt update requires its own checkpoint; no claim is made that a locally written receipt is already synchronized.
 
 Unexercised concurrent-writer/interrupted-push and other policy recovery scenarios remain **NOT TESTED**. A later evidence-only commit does not retroactively change the immutable candidate receipts above.
 
@@ -93,4 +97,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Observe the fresh Pages run, verify exact public source bytes, synchronize the final evidence/catalog update and pass its applicable gate before integration. Then continue an individually scoped remaining legacy conversion; provider/native-release dependencies remain explicit. Full-project finish time is **unknown**; ETA **pending**.
+Synchronize and verify this final evidence/catalog update before integration. Existing-host publication still requires Pages to complete; use concrete publishing diagnostics and verify exact public bytes after any successful attempt. Repeated `updating_pages` timeouts are preserved for a GitHub Pages support investigation if the final recorded source also stalls. After this batch, the next product task is one individually scoped remaining legacy conversion; provider/native-release dependencies remain explicit. Full-project finish time is **unknown**; ETA **pending**.

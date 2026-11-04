@@ -29,7 +29,7 @@ The verified development build is live at **https://adigungamesbank.hephzibahbeh
 
 ## Nine-game release gate
 
-Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro passed the exact `09385bd` release gate: **269 JavaScript, 52 API and 69 browser checks**. Both advanced mobile-layout regressions pass at 320px and 390px. [Current measured evidence and publication state](docs/evidence/2026-11-04-nine-games/README.md). The catalog now implements fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles.
+Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro passed the exact `09385bd` release gate: **269 JavaScript, 52 API and 69 browser checks**. Both advanced mobile-layout regressions pass at 320px and 390px. [Current measured evidence and publication state](docs/evidence/2026-11-04-nine-games/README.md). The catalog now implements fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles. The 09385bd Pages publishing attempt timed out after its build succeeded; its exact public comparison did not match. The new conversions are not claimed as published by that failed attempt.
 
 ## Play and develop
 

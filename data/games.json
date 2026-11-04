@@ -52,7 +52,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -119,7 +121,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -259,7 +263,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -326,7 +332,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -393,7 +401,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -460,7 +470,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -527,7 +539,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -659,7 +673,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
@@ -1133,7 +1149,9 @@
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
+        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
+        "checkedAt": "2026-11-04T23:22:46Z",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
       },
       "blockers": [],
       "policy": {
