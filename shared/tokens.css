@@ -1,0 +1,3 @@
+/* Explicit adoption: hb-design-system @ 52f01f9986d97088413ca9785bc7a2d3f2967123.
+   Slate is from the supplied brief/corporate reference; muted text is brighter for contrast. */
+:root{--navy:#0B1220;--royal-blue:#2563EB;--gold:#D4AF37;--ivory:#F8FAFC;--slate:#64748B;--muted:#B4C1D4;--cyan:#22D3EE;--green:#22C55E;--violet:#A78BFA;--copper:#F97316}

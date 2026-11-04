@@ -1,4 +1,9 @@
 .local-tools/
+node_modules/
+dist/
+test-results/
+.playwright/
+*.log
 couch-suite/.godot/
 
 platform/.env
