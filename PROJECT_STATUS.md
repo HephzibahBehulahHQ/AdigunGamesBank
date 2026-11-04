@@ -8,6 +8,12 @@ Branch **`work/finish-engineering-2026-11-04`**, based on `148954a88d43f84dd5a38
 
 First useful changed work **2026-11-04T21:56:34Z**: `game6/campaign.js` and `game6/engine.js` implement an original RC charge/hold/discharge commissioning model. Syntax and a numerical introductory procedure pass; full engine, browser, 4K and publication verification are pending. Circuit Rush is assigned exclusive `game2/` paths. Remote checkpoint verification is pending for this snapshot; the source below records the preceding recovery baseline.
 
+### Engineering recovery update
+
+`7db0840741f7ea29508bedf5dcaf88cc86f75cb8` was verified remotely at 2026-11-04T21:59:16Z. `6fb58d88f3db5245a8949878d3c1c51d6c00f2c1` was verified at **2026-11-04T22:04:20Z**. The latter interval was **5 minutes 4 seconds**, exceeding the required cadence by four seconds; it is recorded as a missed interval, not compliant. Both snapshots remain recoverable.
+
+Capacitor Charge now passes **14/14** numerical/campaign checks, including all 10,000 physical configurations, independent fine-step Euler/KCL validation and correct failure thresholds. Its browser tests and game guide are present, pending integration/CI. Circuit Rush and Resistor Match are WIP. Volt Dodge is next under its own file ownership. Visual inspection of the preceding Neon mobile frame showed a small board; this branch now frames its 3D matrix by actual board size. That camera improvement still needs its own inspected rendering evidence.
+
 ## Active continuation — 4 November 2026
 
 **In progress, work branch `work/finish-games-2026-11-04`.** Recovered from `37bf36fa317537d535cf8e6f1ec36e464764c451`. Remote main remains `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`; the last publicly verified runtime remains `b3844bff8775b509ddda6f9002726bf4ec1dc89b`.

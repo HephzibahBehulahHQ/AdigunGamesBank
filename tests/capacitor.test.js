@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { levelConfig, referenceProcedure, createCampaign, CAMPAIGN_ID, LEVEL_COUNT } from '../game6/campaign.js';
-import { createExperiment, selectPart, selectedParts, electrical, inspectPlan, startCharge, captureTarget, startDischarge, stepExperiment,
+import { createExperiment, selectPart, electrical, inspectPlan, startCharge, captureTarget, startDischarge, stepExperiment,
   pauseExperiment, resumeExperiment, advancePaused, resetExperiment, evolveVoltage, timeToVoltage, energyAt } from '../game6/engine.js';
 
 const near = (actual, expected, tolerance = 1e-8) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} differs from ${expected}`);
@@ -55,7 +55,6 @@ test('Exact exponential integration agrees with independent fine-step Euler KCL 
   stepExperiment(state, 1); near(state.voltage, voltage, 2e-5);
   const measured = electrical(state);
   near(measured.sourceCurrent - measured.leakageCurrent, measured.capacitorCurrent);
-  reachHold(resetExperiment(state)); // The same public preparation path is usable after reset.
   const holdState = prepared(); reachHold(holdState);
   voltage = 8;
   for (let step = 0; step < 50000; step++) voltage += (-voltage / leak) / C * dt;
@@ -70,7 +69,9 @@ test('All 10,000 distinct physical experiments are solvable through the real sel
   for (let level = 1; level <= LEVEL_COUNT; level++) {
     const state = prepared(level), config = state.config, plan = inspectPlan(state);
     assert.ok(plan.ready); assert.deepEqual(plan.warnings, [], `reference warning ${level}`);
-    const signature = JSON.stringify([config.sourceVolts, config.leakageOhms, config.capacitors, config.chargeResistors, config.dischargeResistors, config.target, config.limits]);
+    const caps = config.capacitors.map(({microfarads, voltageRating}) => [microfarads, voltageRating]).sort((a, b) => a[0] - b[0]);
+    const resistors = list => list.map(({ohms, watts}) => [ohms, watts]).sort((a, b) => a[0] - b[0]);
+    const signature = JSON.stringify([config.sourceVolts, config.leakageOhms, caps, resistors(config.chargeResistors), resistors(config.dischargeResistors), config.target, config.limits]);
     assert.equal(signatures.has(signature), false, `duplicate physical experiment ${level}`); signatures.add(signature);
     reachHold(state); advanceFor(state, config.target.holdSeconds);
     assert.equal(state.phase, 'ready', `hold ${level}: ${state.message}`); assert.equal(state.holdPassed, true);

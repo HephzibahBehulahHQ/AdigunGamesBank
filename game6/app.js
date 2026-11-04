@@ -25,7 +25,7 @@ function fitControls() {
     const select = $(id); while (select.options.length > 1) select.remove(1);
     list.forEach(part => select.add(new Option(label(part), part.id)));
   }
-  text($('brief'), config.brief); text($('target-window'), `${config.target.minVolts.toFixed(2)}–${config.target.maxVolts.toFixed(2)} V`);
+  text($('brief'), config.brief); text($('target-window'), `${config.target.minVolts.toFixed(3)}–${config.target.maxVolts.toFixed(3)} V`);
   text($('target-energy'), `${(config.target.minEnergy * 1000).toFixed(1)}–${(config.target.maxEnergy * 1000).toFixed(1)} mJ`);
   text($('target-hold'), `${config.target.holdSeconds} s hold`); text($('target-floor'), `Stay above ${config.target.holdFloor.toFixed(3)} V`);
   text($('target-release'), `≤ ${config.target.safeVolts} V`); text($('target-deadline'), `Within ${config.limits.dischargeSeconds.toFixed(2)} s of discharge`);

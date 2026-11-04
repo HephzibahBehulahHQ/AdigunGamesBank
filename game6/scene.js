@@ -15,7 +15,7 @@ function replaceLabel(sprite, text, color) {
   parent.remove(sprite); sprite.material.map.dispose(); sprite.material.dispose(); return label(parent, text, position, width, color);
 }
 function release(group) {
-  group.traverse(object => { object.geometry?.dispose(); for (const mat of object.material ? (Array.isArray(object.material) ? object.material : [object.material]) : []) { mat.map?.dispose(); mat.dispose(); } });
+  group.traverse(object => { object.geometry?.dispose(); for (const mat of object.material ? (Array.isArray(object.material) ? object.material : [object.material]) : []) { mat.map?.dispose(); mat.dispose(); } object.dispose?.(); });
   group.clear();
 }
 function wire(parent, points, color, radius = .065) {
@@ -66,9 +66,12 @@ export function createScene({ canvas, qualitySelect, status, onAction }) {
     box(root, [15, .5, 9], [0, -.3, .25], '#3d5267', { metalness: .7, roughness: .45 });
     box(root, [14.55, .13, 8.5], [0, .02, .25], '#1c3448', { metalness: .45, roughness: .7 });
     for (const x of [-6.9, 6.9]) for (const z of [-3.65, 4.15]) cylinder(root, .11, .06, [x, .13, z], '#9baebb', { metalness: .9 });
-    for (let x = -6; x <= 6; x += .6) for (let z = -3; z <= 3.6; z += .6) {
-      const hole = cylinder(root, .025, .015, [x, .099, z], '#344b5f'); hole.castShadow = false;
-    }
+    const perforations = [];
+    for (let x = -6; x <= 6; x += .6) for (let z = -3; z <= 3.6; z += .6) perforations.push([x, .099, z]);
+    const holes = new THREE.InstancedMesh(new THREE.CylinderGeometry(.025, .025, .015, 6), material('#344b5f'), perforations.length);
+    const matrix = new THREE.Matrix4();
+    perforations.forEach((position, index) => { matrix.makeTranslation(...position); holes.setMatrixAt(index, matrix); });
+    holes.instanceMatrix.needsUpdate = true; root.add(holes);
     label(root, 'THE TRANSIENT LAB · RC / 06', [0, .8, -3.8], 6.5, '#98ebf8');
     // Bench source and terminals.
     box(root, [2.6, 1.4, 2.7], [-5.25, .85, -1.25], '#8b9daa', { metalness: .65 });

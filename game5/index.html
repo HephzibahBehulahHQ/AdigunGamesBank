@@ -1,25 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RESISTOR MATCH</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0f1a;color:#0ff;font-family:Orbitron;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:1rem}
-h1{margin:1rem;text-shadow:0 0 12px #0ff}
-.grid{display:grid;grid-template-columns:repeat(4,80px);gap:8px;margin:1rem}
-.card{width:80px;height:80px;background:#112;border:2px solid #0ff5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;transition:.2s}
-.card.flipped,.card.matched{background:#0a2a2a;border-color:#0f8}
-.card.matched{opacity:.6}
-.hud{font-family:'Share Tech Mono';margin:.5rem}
-</style>
-<style>.hb-brand{display:flex;align-items:center;gap:9px;width:min(100%,520px);margin:10px auto 4px;padding:8px 12px;border:1px solid #55f5e533;border-radius:10px;background:#071522aa;text-decoration:none;color:#eafaff;font:800 11px/1.3 system-ui,Segoe UI,sans-serif;letter-spacing:.12em}.hb-brand img{width:170px;height:auto;max-height:50px;object-fit:contain}.hb-brand span{display:block}.hb-brand small{display:block;color:#a6becd;font-size:9px;letter-spacing:.18em}</style>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0B1220">
+  <meta name="description" content="Resistor Match: a 3D electrical component memory game. Reveal four-band resistors, read their values and find every pair within your move budget.">
+  <title>Resistor Match · Adigun Game Bank</title><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script>
 </head>
 <body>
-<a class="hb-brand" href="../" aria-label="Hephzibah Behulah Game Bank home"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a>
-<h1>RESISTOR MATCH</h1>
-<div class="hud">Moves: <span id="m">0</span> | Matches: <span id="mt">0</span>/8</div>
-<div class="grid" id="g"></div>
-<script src="../assets/game-levels.js"></script><script src="../assets/game5.js"></script>
-</body></html>
+  <a class="skip-link" href="#component-grid">Skip to component trays</a>
+  <header class="game-header"><a class="identity" href="https://hephzibahbehulah.com/"><img src="../assets/corporate/hephzibah-behulah-official.jpg" width="150" height="54" alt="Hephzibah Behulah. One Company. Five Brands."><span>ADIGUN GAME BANK<small>ELEKTRONIKER · MEMORY · IDENTIFICATION</small></span></a><a class="back-link" href="../">← All games</a></header>
+  <main>
+    <section class="hero" aria-labelledby="title"><div><p class="eyebrow">THE COMPONENT BENCH / 05</p><h1 id="title">RESISTOR<br><span>MATCH.</span></h1><p class="intro">Lift a cover. Read the bands. Remember the value. Find every matching pair before your move budget runs out.</p></div><div class="bench-stamp"><b>4 BANDS</b><span>TWO DIGITS · MULTIPLIER · TOLERANCE</span></div></section>
+    <div class="campaign-bar"><label for="level">Challenge <input id="level" type="number" min="1" max="1" value="1" step="1" inputmode="numeric"></label><button id="load-level" type="button">Load challenge</button><span id="unlock-status">Challenge 1 of 10,000 unlocked</span><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive 3D</option><option value="1080">1080p</option><option value="4k">4K UHD</option></select></label></div>
+    <section class="layout" aria-label="Component matching game"><div class="board-column">
+      <div class="bench-top"><p>PRECISION BENCH · <span id="tier">Beginner</span></p><span id="phase" class="phase-badge" data-phase="ready">LIFT A COVER</span></div>
+      <div class="viewport"><canvas id="resistor-canvas" tabindex="0" aria-label="Resistor tray. Arrow keys select a tray. Enter or Space reveals it. C resolves the comparison. R retries the challenge."></canvas><div class="scene-caption" aria-hidden="true">ADIGUN ELECTRICAL LAB · COMPONENT STORE</div><div id="graphics-fallback" class="graphics-fallback" hidden><strong>Your component bench is ready.</strong><p>3D graphics are unavailable. Use the numbered trays below; the same components, moves and matching rules remain active.</p></div></div>
+      <p id="graphics-status" class="graphics-status" role="status">Loading the 3D component bench…</p>
+      <div class="scoreboard" aria-label="Challenge score"><div><span>PAIRS STORED</span><strong id="pairs">0 / 4</strong><small id="components-count">8 covered components</small></div><div><span>MOVES USED</span><strong id="moves">0 / 14</strong><small>Two reveals make one move</small></div><div><span>REMAINING</span><strong id="remaining">14</strong><small id="minimum-moves">At least 4 matches needed</small></div></div>
+      <p id="message" class="message" role="status">Choose any two covered trays. Match the nominal resistance and tolerance.</p>
+      <div class="board-title"><h2>Component trays</h2><p>Click a 3D cover or use these buttons.</p></div><div id="component-grid" class="component-grid" role="group" aria-label="Numbered component trays"></div>
+    </div><section class="panel inspector" aria-labelledby="inspection-title">
+      <p class="eyebrow">READ · COMPARE · REMEMBER</p><h2 id="inspection-title">Inspection bench</h2><p class="inspector-intro">A matching pair has the same nominal resistance and tolerance. The band names and numbered pattern accompany every revealed component.</p>
+      <article id="inspection-a" class="inspection-slot"><h3>FIRST COMPONENT</h3><p class="muted">Lift a tray cover to inspect its resistor.</p></article><article id="inspection-b" class="inspection-slot"><h3>SECOND COMPONENT</h3><p class="muted">Choose a second covered tray to compare.</p></article>
+      <p id="comparison" class="comparison-text">No timer. Read the values at your own pace.</p><button id="resolve" class="primary" type="button" hidden>Compare pair</button><button id="next-level" class="primary" type="button" hidden>Next challenge →</button><button id="retry" type="button">Retry challenge</button><p id="save-status" class="save-status" role="status">Completed challenges save on this device.</p><a class="reference-link" href="#band-reference">Open the four-band reference ↓</a>
+    </section></section>
+    <section class="help-grid" aria-label="Instructions and component reference"><article class="panel"><h2>One bench. A sharper memory.</h2><ol><li>Reveal two different covered trays. The first two bands give digits, the third gives a multiplier and the separated fourth band gives tolerance.</li><li>Read the value and pattern. A successful comparison uses matching nominal resistance <strong>and</strong> tolerance.</li><li>Select <strong>Store matched pair</strong> or <strong>Cover mismatched pair</strong>. Both components remain visible until you choose.</li><li>Store every pair within the move budget to unlock the next challenge. A retry keeps the same layout so you can learn it.</li></ol><p class="keyboard-help">Tab reaches each tray and command. Within the trays or focused 3D bench, use <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> to select a tray, <kbd>Enter</kbd> or <kbd>Space</kbd> to reveal, <kbd>C</kbd> to store/cover and <kbd>R</kbd> to retry. All commands also work with visible buttons.</p><p class="hint">There is no countdown. Cover movement respects reduced-motion settings. Revealed values, text patterns and colour names make colour recognition optional.</p><details><summary>Campaign and rendering limits</summary><p>10,000 deterministic layouts progress from four pairs to twelve, with wider nominal-value ranges and smaller mistake allowances. These are procedural identification exercises, not 10,000 separately authored games.</p><p>Adaptive, 1080p and 4K select the actual WebGL drawing buffer when available. This development build does not claim gaming-GPU qualification, physical touch certification, console support or complete screen-reader testing. English is implemented; full German, Yoruba and Nigerian Pidgin translations remain in progress.</p></details></article><article id="band-reference" class="panel"><h2>The four-band reference</h2><p class="formula">(10 × digit 1 + digit 2)<br>× multiplier = resistance in Ω</p><div id="band-legend" class="legend" aria-label="Digit colour reference"></div><p class="small-note">Multiplier: black ×1, brown ×10, red ×100, then one extra power of ten per colour. Gold ×0.1; silver ×0.01. This game uses red ±2%, gold ±5% and silver ±10% tolerance bands.</p><p class="small-note">Example: yellow · violet · red · gold = <strong>4.7 kΩ ±5%</strong>. The nominal tolerance interval is 4.465–4.935 kΩ. That interval describes the code, not a measured component.</p><p class="small-note">Modelled parts are original unbranded axial resistors. The game does not infer wattage, voltage rating or safe circuit use from body size or colour.</p><a class="reference-link" href="https://www.vishay.com/docs/20143/colorcod.pdf">Vishay: colour code and resistance series ↗</a></article></section>
+  </main><footer><p>© 2026 Hephzibah Behulah · Adigun Game Bank · Elektroniker</p><a href="../">Game library</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/game5/README.md">Design and verification record</a><a href="https://hephzibahbehulah.com/">One Company. Five Brands.</a></footer>
+</body>
+</html>
