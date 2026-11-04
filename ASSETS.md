@@ -1,12 +1,16 @@
 # Asset record
 
+- `game1` (NEON PULSE): original procedural LED matrix, enclosure, circuit traces, target rings, fixings and materials. Original abstract signal-routing puzzles; no external fonts, models, texture images, audio or electrical-installation claims.
+- `game8` (FUSE BOX): original procedural DC cabinet, copper bus, breakers, cables and lamp/fan/motor load geometry. Original extra-low-voltage teaching challenges with explicitly simplified current/protection assumptions.
+- `game10` (APEX CIRCUIT): original procedural closed circuit, timing gates, fictional vehicle, track surroundings and materials. No real car manufacturer, sponsor, circuit likeness, external model, logo or motorsport data.
+
 - `game24` (Ark: The Waterline Commission): original procedural timber hull, cutaway deck, six cargo models, ballast gauges, pier, water and materials in `scene.js`. Original commissioning exercises inspired by Genesis 6–9; no copied translation, audio, human likeness or third-party model. The simulation is a simplified rectangular-hull teaching model; it is not a historical reconstruction. Three.js MIT terms apply as below.
 
 - `game15` (TACTICS GRID): original procedural 3D drones, industrial barriers, uplink, data core, grid and materials in `scene.js`. No third-party character art, images, fonts, sounds or faction marks. Three.js is MIT licensed as recorded below.
 - Root brand asset `assets/hb-logo.svg` is the repository's supplied Hephzibah Behulah logo.
 - `game16` (APEX STRATEGY): circuit visualization and timing chart are drawn in Canvas. No third-party images, fonts, sound, logos, or external race data are included.
 
-- game17 (PENALTY PRO): pitch, goal, goalkeeper, ball and shot-path visuals are drawn using Canvas; no external images, fonts, logos or licensed sports assets.
+- `game17` (PENALTY PRO): original procedural 3D pitch, goal/net, goalkeeper, ball, stands and materials. Original fictional goalkeeper/kit with no external likeness, club marks, images, fonts, audio or sports data. The old Canvas engine/style are retained only for legacy test/dependency compatibility.
 - game18 (DEBATE ARENA): all visuals use native HTML/CSS; responses are authored local fixtures; no external images, fonts or licensed assets.
 - game19 (CASEFILE): all interface visuals are native HTML/CSS; no external images, fonts or licensed assets.
 - game20 (MARKET DUEL): price chart drawn in Canvas; no external images, data feeds, logos or licensed assets.

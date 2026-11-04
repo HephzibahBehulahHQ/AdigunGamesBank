@@ -5,7 +5,7 @@
     {
       "id": "game1",
       "title": "NEON PULSE",
-      "description": "Mix LED colors, build animated light patterns, and save your favorite presets.",
+      "description": "Route coupled pulses through a 3D LED matrix. Match the target, manage your pulse budget and undo mistakes.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game1/",
@@ -14,43 +14,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 unique deterministic matrices; every board solved through the actual engine within budget",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled signal controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game1/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -106,7 +108,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -244,7 +246,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -309,7 +311,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -374,7 +376,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -439,7 +441,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -468,7 +470,7 @@
     {
       "id": "game8",
       "title": "FUSE BOX",
-      "description": "Switch every circuit on and solve the board's electrical logic puzzle.",
+      "description": "Commission a DC distribution cabinet: assign loads, choose protective devices and clear three real operating trials.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game8/",
@@ -477,43 +479,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 deterministic cabinet configurations; solvability and trial verification recorded in the release receipt",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled cabinet controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game8/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -569,7 +573,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -598,7 +602,7 @@
     {
       "id": "game10",
       "title": "APEX CIRCUIT",
-      "description": "Drive a neon time trial, dodge traffic and chase a personal best across rising levels.",
+      "description": "Drive a closed 3D circuit, brake for changing bends and cross every timing gate to complete a clean time trial.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game10/",
@@ -607,43 +611,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 deterministic circuit and vehicle configurations; ordered gates and clean-sector validation",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
-        "Keyboard",
-        "Mouse / touch where implemented"
+        "Keyboard steering/throttle/brake",
+        "Mouse controls",
+        "Touch controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game10/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -709,7 +715,7 @@
       "testing": {
         "unit": "37 football engine/rules tests passed locally, including 10,000 distinct match configurations",
         "integration": "Input-only winning match; offside touch/save/rebound, restart exemptions, penalties, cards, send-offs and five-substitute/three-window limits.",
-        "browser": "CI 41791946076 passed: actual 4K buffer, real-input full 3\u20130 match, queued/cancelled/applied substitution, visible roster replacement and responsive/automated accessibility checks."
+        "browser": "CI 41791946076 passed: actual 4K buffer, real-input full 3–0 match, queued/cancelled/applied substitution, visible roster replacement and responsive/automated accessibility checks."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
@@ -772,7 +778,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -837,7 +843,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -902,7 +908,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1041,7 +1047,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1070,7 +1076,7 @@
     {
       "id": "game17",
       "title": "PENALTY PRO",
-      "description": "Play five penalties and five goalkeeper rounds against an opponent that adapts to your shot and dive tendencies.",
+      "description": "Place ballistic shots past an anticipating goalkeeper. Control aim, height and power across five-kick challenges.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game17/",
@@ -1079,43 +1085,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 deterministic five-kick challenges; ball/keeper/frame collision and reachability validation",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; labelled shot controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game17/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -1171,7 +1179,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1236,7 +1244,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1301,7 +1309,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1354,7 +1362,7 @@
       "levels": {
         "target": 10000,
         "implemented": 10000,
-        "method": "20 original restricted-Python problem families \u00d7 500 substantive parameterizations, five tiers; live scoring required for completion. Authored references are tests, never model output.",
+        "method": "20 original restricted-Python problem families × 500 substantive parameterizations, five tiers; live scoring required for completion. Authored references are tests, never model output.",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
@@ -1442,7 +1450,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1586,7 +1594,7 @@
         "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Original procedural ark, cargo, pier, water and materials; original gameplay adaptation of Genesis 6\u20139; no copied Bible translation or third-party likenesses; Three.js MIT"
+        "status": "Original procedural ark, cargo, pier, water and materials; original gameplay adaptation of Genesis 6–9; no copied Bible translation or third-party likenesses; Three.js MIT"
       },
       "testing": {
         "unit": "7 domain tests passed, including all 10,000 complete numerical launch trials; not manual playtesting",

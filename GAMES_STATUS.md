@@ -4,29 +4,30 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 
 | Route | Title | Current implementation | Acceptance |
 |---|---|---|---|
-| game1/ | NEON PULSE | Legacy 2D | In progress |
+| game1/ | NEON PULSE | New 3D signal-puzzle conversion; release gate pending | In progress |
 | game2/ | CIRCUIT RUSH | Legacy 2D | In progress |
 | game3/ | ELECTRONICER | Playable 3D DC bench; verified 4K/circuit/fuse/reload milestone | In progress |
 | game4/ | VOLT DODGE | Legacy 2D | In progress |
 | game5/ | RESISTOR MATCH | Legacy 2D | In progress |
 | game6/ | CAPACITOR CHARGE | Legacy 2D | In progress |
 | game7/ | BINARY FLASH | Legacy 2D | In progress |
-| game8/ | FUSE BOX | Legacy 2D | In progress |
+| game8/ | FUSE BOX | New 3D DC-cabinet conversion; release gate pending | In progress |
 | game9/ | GOAL LINE | Legacy 2D | In progress |
-| game10/ | APEX CIRCUIT | Legacy 2D | In progress |
+| game10/ | APEX CIRCUIT | New 3D driving conversion; release gate pending | In progress |
 | game11/ | WORLD FOOTBALL | Playable 3D 11-a-side match; verified 4K and full-time UI win | In progress |
 | game12/ | CORTEX PRIME | Legacy 2D | In progress |
 | game13/ | SYNAPSE SPRINT | Legacy 2D | In progress |
 | game14/ | BILLIONAIRE CHALLENGE | Legacy 2D | In progress |
-| game15/ | TACTICS GRID | Legacy 2D | In progress |
+| game15/ | TACTICS GRID | Playable 3D tactical campaign; verified 4K and mission win | In progress |
 | game16/ | APEX STRATEGY | Legacy 2D | In progress |
-| game17/ | PENALTY PRO | Legacy 2D | In progress |
+| game17/ | PENALTY PRO | New 3D penalty conversion; release gate pending | In progress |
 | game18/ | DEBATE ARENA | Legacy 2D | In progress |
 | game19/ | CASEFILE | Legacy 2D | In progress |
 | game20/ | MARKET DUEL | Legacy 2D | In progress |
 | game22/ | AI ARENA | Live API client; configuration required | Blocked |
 | game21/ | LAST SIGNAL | Legacy 2D | In progress |
 | game23/ | VALLEY OF ELAH | First Bible chapter; verified 4K, first-level UI completion and reload | In progress |
+| game24/ | ARK: THE WATERLINE COMMISSION | Playable 3D cargo/buoyancy chapter; verified water trial and 4K | In progress |
 
 Electronicer and football milestones are supported by
 [successful CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966)

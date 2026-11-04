@@ -14,6 +14,12 @@ First checkpoint **`f9a6a982947e8530b30ec195f8a6d83ea14e6b4e`** was verified rem
 
 The next WIP adds Neon browser tests/documentation, release-check coverage for every catalog route, and the initial racing/fuse/penalty engines. Root cloud-browser play completed the first Neon board and observed persisted progression; this browser explicitly disables WebGL. Actual rendered 4K, full accessibility and new gameplay release checks remain pending in CI. No new integration or deployment is claimed.
 
+### Current integration checkpoint
+
+Second WIP **`a14c4f5b54a74a40cbc66d940d90e01cd11ef516`** was verified remotely at **2026-11-04T21:46:36Z**. Local Node regression run passed **158/158** checks with no failures/skips before the new agent test suites were finished. Four new 3D entries are represented in the candidate catalog; their `verified4K` flag remains false and new deployment is explicitly pending. The stale inventory now includes Ark and correctly identifies Tactics Grid as 3D. Original asset provenance and root descriptions were reconciled.
+
+WIP CI is not a release gate. The first Neon-only checkpoint failed while its newly linked game README was not yet present; the subsequent checkpoint contains it. A local release check briefly encountered a file mid-replacement during coordinated agent work; run the final check only after all writers finish. Current modified work is not integrated or deployed. Next: finish all four scenes/UI/tests, run the exact candidate gate and inspect actual 4K frames before publication.
+
 ## Acceptance and published revision
 
 **In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.

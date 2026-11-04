@@ -1,27 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FUSE BOX</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0f1a;color:#0ff;font-family:Orbitron;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:1rem}
-h1{margin:1rem;text-shadow:0 0 12px #0ff}
-.box{display:grid;grid-template-columns:repeat(3,70px);gap:10px;margin:1.5rem}
-.sw{width:70px;height:70px;background:#222;border:2px solid #0ff5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer}
-.sw.on{background:#0a3a2a;border-color:#0f8;box-shadow:0 0 12px #0f8}
-.hud{margin:0.5rem}
-button{margin:0.5rem;padding:0.6rem 1.3rem;background:transparent;border:1px solid #0ff;color:#0ff;font-family:Orbitron;cursor:pointer;border-radius:6px}
-</style>
-<style>.hb-brand{display:flex;align-items:center;gap:9px;width:min(100%,520px);margin:10px auto 4px;padding:8px 12px;border:1px solid #55f5e533;border-radius:10px;background:#071522aa;text-decoration:none;color:#eafaff;font:800 11px/1.3 system-ui,Segoe UI,sans-serif;letter-spacing:.12em}.hb-brand img{width:170px;height:auto;max-height:50px;object-fit:contain}.hb-brand span{display:block}.hb-brand small{display:block;color:#a6becd;font-size:9px;letter-spacing:.18em}</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0B1220">
+  <meta name="description" content="Commission a real 3D DC distribution board. Balance loads, choose protection and diagnose overload trips across 10,000 original workshop challenges.">
+  <title>Fuse Box · Adigun Game Bank</title>
+  <link rel="stylesheet" href="../shared/game.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
 </head>
 <body>
-<a class="hb-brand" href="../" aria-label="Hephzibah Behulah Game Bank home"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a>
-<h1>FUSE BOX</h1>
-<div class="hud" id="level-puzzle">Loading level…</div>
-<div class="box" id="box"></div>
-<button id="check">CHECK</button>
-<div id="msg"></div>
-<script src="../assets/game-levels.js"></script><script src="../assets/game8.js"></script>
-</body></html>
+  <a class="skip-link" href="#game">Skip to game controls</a>
+  <header class="game-header">
+    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>ELEKTRONIKER · THE COMMISSIONING ROOM</small></span></a>
+    <a class="back-link" href="../">← Game library</a>
+  </header>
+  <main id="game">
+    <div class="title-row"><div><p class="eyebrow">Workshop 08 · DC distribution</p><h1>Fuse Box</h1><p class="subtitle">Every load has a place. Every circuit has a limit.</p></div><div class="workshop-mark" aria-hidden="true">DC<br><b>08</b></div></div>
+    <p class="model-note">An extra-low-voltage teaching simulation with ideal resettable breakers. All currents and cable limits are game parameters.</p>
+    <div class="toolbar">
+      <label for="level">Board <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label>
+      <button id="load-level" type="button">Load board</button><span id="tier" class="badge">Beginner</span><span id="unlock-status">Board 1 of 10,000 unlocked</span>
+      <label class="quality-label" for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label>
+    </div>
+    <section class="briefing panel" aria-labelledby="briefing-title">
+      <div><p class="eyebrow">Commissioning order</p><h2 id="briefing-title">Protect the workshop. Prove the plan.</h2><p id="brief">Distribute the loads and fit protection before energizing.</p></div>
+      <details open><summary>How to commission this board</summary><ol><li>Select a load and a branch, then <strong>Connect selected load</strong>.</li><li>Fit a breaker on every branch. Its rating must cover the planned current and stay within the cable limit. Stock and credits are finite.</li><li>Run all three operating profiles. A trip must be isolated, reset and corrected before trying again.</li></ol><p class="hint">Use Tab, Enter and the labelled controls throughout. On the 3D cabinet, left/right selects a branch and Enter connects the selected load. No time limit applies while planning.</p></details>
+    </section>
+    <div class="layout">
+      <section class="board-column" aria-labelledby="cabinet-title">
+        <div class="section-heading"><h2 id="cabinet-title">Distribution cabinet</h2><span id="phase" class="phase-tag" data-phase="isolated">ISOLATED</span></div>
+        <div class="viewport">
+          <canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas>
+          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div>
+        </div>
+        <p id="scene-description" class="sr-only">An open metal distribution enclosure with a DC supply, copper bus, individual resettable breakers and connected workshop loads. The branch controls provide the same selection as the 3D cabinet.</p>
+        <p id="graphics-status" class="graphics-status" role="status">Starting the 3D cabinet…</p>
+        <div class="telemetry" aria-label="Board measurements">
+          <div><span>Supply</span><strong id="voltage">24 V</strong><small>DC nominal</small></div>
+          <div><span>Connected loads</span><strong id="connected">0 / 6</strong><small id="supply-status">Supply isolated</small></div>
+          <div><span>Trial progress</span><strong id="trial-progress">0%</strong><small id="stage-name">Awaiting trial</small></div>
+          <div><span>Energy in trial</span><strong id="energy">0.000 Wh</strong><small>Ideal load consumption</small></div>
+        </div>
+        <div class="message" id="message" role="status" aria-live="polite">Supply isolated. Start with the load list.</div>
+        <section class="panel branch-panel" aria-labelledby="branches-title"><div class="section-heading"><h2 id="branches-title">Protected branches</h2><span class="hint">Current ≤ breaker ≤ cable</span></div><div id="branches" class="branch-grid"></div></section>
+        <section class="panel loads-panel" aria-labelledby="loads-title"><div class="section-heading"><h2 id="loads-title">Workshop loads</h2><span class="hint">L / D / F = the three trial stages</span></div><div id="loads" class="load-grid"></div><div class="patch-summary"><span id="selected-load">Select a load</span><span aria-hidden="true">→</span><strong id="selected-branch">Branch A</strong></div><div class="controls"><button id="connect-load" class="primary" type="button">Connect selected load</button><button id="disconnect-load" type="button">Disconnect selected load</button></div></section>
+      </section>
+      <aside class="command-column" aria-label="Commissioning controls">
+        <section class="panel" aria-labelledby="stock-title"><p class="eyebrow">Workshop stock</p><h2 id="stock-title">Protection inventory</h2><ul id="inventory" class="inventory"></ul><p id="budget" class="budget">0 credits used</p><p class="hint">A removed breaker returns to stock. Credits are a puzzle constraint, not real prices.</p></section>
+        <section class="panel" aria-labelledby="inspection-title"><h2 id="inspection-title">Plan inspection</h2><div id="inspection" class="inspection"></div><p id="main-limit" class="hint"></p></section>
+        <section class="panel trial-panel" aria-labelledby="trial-title"><h2 id="trial-title">Commissioning trial</h2><ol id="trial-stages" class="trial-stages"></ol><button id="start-trial" class="primary" type="button">Energize and test</button><button id="pause-trial" type="button" disabled>Pause trial</button><button id="isolate" type="button" disabled>Isolate supply</button><button id="reset-trip" type="button" hidden disabled>Reset trip</button><button id="clear-board" type="button">Clear board</button><button id="next-level" class="primary" type="button" hidden>Next board →</button><p id="save-status" class="hint" role="status">Completed boards save on this device.</p></section>
+      </aside>
+    </div>
+    <details class="model-notes"><summary>What the electrical model includes</summary><p>Each load draws I = P ÷ V at the stated DC voltage. Branch currents are added for each operating profile. A breaker above the branch cable limit fails inspection; current above a fitted breaker's rating trips the test immediately. Real breakers have time-current curves: this game uses an ideal instantaneous threshold.</p><p>The model omits cable resistance, voltage drop, temperature, short-circuit capacity, earthing and shock protection. Its 12–48 V scenarios are original puzzles, not wiring instructions or a compliance assessment for a real installation.</p><p><a href="https://openstax.org/books/physics/pages/19-4-electric-power">OpenStax: electric power</a> · <a href="https://www.se.com/hk/en/faqs/FAQ000283711/">Schneider Electric: load, breaker and cable current</a> · <a href="README.md">Game guide and evidence</a></p></details>
+  </main>
+  <footer><p>10,000 DC commissioning challenges · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · Elektroniker</p><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a></footer>
+</body>
+</html>
