@@ -87,7 +87,8 @@ function makeCargo(item) {
  */
 export function createScene(canvas, { onSelectBay = () => {}, onSelectCargo = () => {} } = {}) {
   const status = canvas.ownerDocument?.getElementById('graphics-status');
-  const stage = createStage({ canvas, status, position: [-27, 32, 40], target: [0, 1, 0] });
+  const qualitySelect = canvas.ownerDocument?.getElementById('quality');
+  const stage = createStage({ canvas, status, qualitySelect, position: [-27, 32, 40], target: [0, 1, 0] });
   const { scene, camera } = stage;
   scene.background = new THREE.Color('#0B1220');
   scene.fog = new THREE.Fog('#0B1220', 80, 180);

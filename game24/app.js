@@ -146,7 +146,8 @@ $('pause').addEventListener('click', togglePause);
 $('retry').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); retryGame(state); previousTime = 0; sync(); });
 $('load-level').addEventListener('click', () => loadLevel($('level').value));
 $('next-level').addEventListener('click', () => loadLevel(state.config.level + 1));
-$('quality').addEventListener('change', () => { scene?.setQuality($('quality').value); dirty = true; });
+// The shared stage owns resizing and reflects hardware limits in this selector.
+$('quality').addEventListener('change', () => { dirty = true; });
 canvas.addEventListener('keydown', event => {
   const index = deckOrder.indexOf(selectedBay);
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Backspace',' '].includes(event.key)) event.preventDefault(); else return;
@@ -162,7 +163,7 @@ window.addEventListener('blur', automaticPause);
 document.addEventListener('visibilitychange', () => { if (document.hidden) automaticPause(); });
 window.addEventListener('storage', () => sync());
 window.addEventListener('resize', () => { dirty = true; });
-canvas.addEventListener('stage-lost', () => { automaticPause(); $('graphics-fallback').hidden = false; $('graphics-status').textContent = 'Graphics connection lost. Deck controls remain available; resume the trial when ready.'; });
+canvas.addEventListener('stage-lost', () => { automaticPause(); $('quality').disabled = true; $('graphics-fallback').hidden = false; $('graphics-status').textContent = 'Graphics connection lost. Deck controls remain available; resume the trial when ready.'; });
 function frame(now) {
   if (stopped) return;
   const dt = previousTime ? Math.min((now - previousTime) / 1000, .25) : 0; previousTime = now;
@@ -181,6 +182,7 @@ import('./scene.js').then(({ createScene }) => {
   scene = createScene(canvas, { onSelectBay: selectBay, onSelectCargo: selectCargo });
   scene.setQuality($('quality').value); dirty = true;
 }).catch(() => {
+  $('quality').disabled = true;
   $('graphics-fallback').hidden = false;
   $('graphics-status').textContent = 'WebGL 2 unavailable. Deck controls and the numerical water trial remain playable.';
 });
