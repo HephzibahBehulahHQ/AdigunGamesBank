@@ -61,7 +61,7 @@ function buildControls() {
     const row = document.createElement('div'); row.className = 'ballast-row';
     const label = document.createElement('label'); label.htmlFor = `ballast-${index}`; label.textContent = `${state.config.slots[index].name} (t)`;
     const input = document.createElement('input'); input.id = `ballast-${index}`; input.type = 'number'; input.min = '0'; input.max = String(state.config.ballast.capacity); input.step = '1'; input.inputMode = 'numeric';
-    input.addEventListener('change', () => fillBallast(index, input.value));
+    input.addEventListener('change', () => { fillBallast(index, input.value); input.value = String(state.ballast[index]); });
     const buttons = [-1, 1].map(delta => {
       const control = document.createElement('button'); control.type = 'button'; control.textContent = delta < 0 ? '−' : '+';
       control.setAttribute('aria-label', `${delta < 0 ? 'Remove' : 'Add'} one tonne of ballast: ${state.config.slots[index].name}`);

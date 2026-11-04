@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0B1220">
   <meta name="description" content="Commission an ark with balanced cargo and ballast, then test its buoyancy through a changing flood. An original Genesis 6–9 strategy simulation.">
-  <title>Ark of the Covenant Waters · Adigun Game Bank</title>
+  <title>Ark: The Waterline Commission · Adigun Game Bank</title>
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
@@ -21,8 +21,8 @@
   </header>
   <main id="game">
     <div class="title-row">
-      <div><p class="eyebrow">Chapter 24 · Genesis 6–9</p><h1>Ark of the Covenant Waters</h1><p class="subtitle">Build a balanced refuge. Prove it on the water.</p></div>
-      <span class="chapter-mark" aria-hidden="true">ARK<br><b>24</b></span>
+      <div><p class="eyebrow">Genesis 6–9 · Commissioning voyage</p><h1>Ark: The Waterline Commission</h1><p class="subtitle">Build a balanced refuge. Prove it on the water.</p></div>
+      <span class="chapter-mark" aria-hidden="true">GENESIS<br><b>6–9</b></span>
     </div>
     <p class="source-note">An original strategy adaptation inspired by Genesis 6–9. Cargo systems, conditions, and commissioning challenges are fictional gameplay.</p>
     <div class="toolbar campaign-toolbar">
@@ -55,7 +55,7 @@
         <div id="message" class="message" role="status" aria-live="polite">Load the manifest to prepare for launch.</div>
         <section class="panel deck-panel" aria-labelledby="deck-title">
           <div class="section-heading"><h2 id="deck-title">Deck command grid</h2><span id="selected-bay-label">Select a bay</span></div>
-          <div class="deck-directions" aria-hidden="true"><span>PORT</span><span>CENTRE</span><span>STARBOARD</span></div>
+          <div class="deck-directions" aria-hidden="true"><span>PORT</span><span>STARBOARD</span></div>
           <div id="bay-grid" class="bay-grid" aria-label="Cargo deck bays"></div>
           <div class="controls"><button id="load-cargo" type="button" class="primary">Load selected cargo</button><button id="unload-cargo" type="button">Unload selected bay</button></div>
           <p class="hint" id="bay-help">Choose cargo from the manifest, then a deck bay. A filled bay can be unloaded and rearranged before launch.</p>
@@ -67,6 +67,7 @@
         <section class="panel voyage-controls" aria-labelledby="trial-title"><h2 id="trial-title">Water trial</h2><div id="launch-checks" class="launch-checks"></div><button id="launch" type="button" class="primary">Launch trial</button><button id="pause" type="button" disabled>Pause trial</button><button id="retry" type="button">Restart voyage</button><button id="next-level" type="button" hidden>Next voyage →</button><p id="save-status" class="save-status" role="status">Progress saves on this device after a successful trial.</p></section>
       </aside>
     </div>
+    <details class="model-notes"><summary>About the water trial</summary><p>This simplified rectangular-hull model uses tonnes, metres and seconds. Sealed ballast tanks, cargo height, water density, wind, waves and fore/aft moments affect stability. It omits structural flex, leaks, free-surface slosh and moving cargo. It is an original teaching game inspired by Genesis 6–9, not a reconstruction of the biblical vessel or a seaworthiness tool.</p></details>
     <footer class="chapter-footer"><p>10,000 commissioning challenges · Beginner to Professional Master</p><p>Original geometry, materials, and game systems · Hephzibah Behulah</p></footer>
   </main>
 </body>

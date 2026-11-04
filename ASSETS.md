@@ -1,5 +1,7 @@
 # Asset record
 
+- `game24` (Ark: The Waterline Commission): original procedural timber hull, cutaway deck, six cargo models, ballast gauges, pier, water and materials in `scene.js`. Original commissioning exercises inspired by Genesis 6–9; no copied translation, audio, human likeness or third-party model. The simulation is a simplified rectangular-hull teaching model; it is not a historical reconstruction. Three.js MIT terms apply as below.
+
 - `game15` (TACTICS GRID): original procedural 3D drones, industrial barriers, uplink, data core, grid and materials in `scene.js`. No third-party character art, images, fonts, sounds or faction marks. Three.js is MIT licensed as recorded below.
 - Root brand asset `assets/hb-logo.svg` is the repository's supplied Hephzibah Behulah logo.
 - `game16` (APEX STRATEGY): circuit visualization and timing chart are drawn in Canvas. No third-party images, fonts, sound, logos, or external race data are included.

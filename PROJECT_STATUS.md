@@ -1,10 +1,10 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T18:18:53+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T18:51:00+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
-**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (18 legacy 2D titles, four rebuilt local 3D games and one 3D API-dependent competition client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
+**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current published catalog contains 23 browser titles (18 legacy 2D titles, four rebuilt local 3D games and one 3D API-dependent competition client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
 The second-wave development source milestone **`88c3035320044b254ed719ef840f527aa5520e2c`** passed all release checks, was integrated into **main**, and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
 
@@ -15,6 +15,14 @@ The owner requested continuation. Verified source `88c3035` remains deployed. La
 Save-feedback review also reproduced four failures against the prior app source: inconsistent campaign records could be reported as saved, and Electronicer could confuse a saved bench with saved level progression. All four new regressions now pass; the combined local suite is **146 passing**. The circuit, football and David clients now require valid readback evidence before claiming durable progress. The first kickoff-shot browser attempt failed in CI `41876398316`. Its trace showed the click action taking several seconds under software rendering, with the opponent gaining possession before the shot. The test now starts through the actual Enter-key kickoff control and immediately presses Space, avoiding click actionability waits while keeping real game inputs. Replacement browser verification is pending. No passing release is inferred.
 
 A separate recoverable worktree/branch `work/genesis-ark-2026-11-04` develops a distinct Genesis ark cargo/buoyancy chapter. Engine/campaign, original 3D controls and passage/rights documentation have separate owners. The engine, deterministic campaign, initial accessible shell and source/rights template are written; actual gameplay/4K evidence remains pending. Release syntax checks now include game24 and public source verification selects every 3D route from the catalog. It is unfinished and is not added to the published catalog until its own checks pass. This continues the Bible scope; it does not complete Genesis–Revelation or the 2,000-title target.
+
+### Ark integration checkpoint and current gate
+
+- **Verified work checkpoint:** `d09e4b24e52a79881a1053bcaade5109737a209f`, remote readback **2026-11-04T17:48:20Z**, branch `work/genesis-ark-2026-11-04`.
+- **Changed:** `game24/` now contains the original cargo/buoyancy engine, 10,000-level campaign, real deck/ballast controls, saved progression and deferred original 3D renderer. The candidate catalog contains 24 titles, including this unfinished chapter; the published catalog remains 23.
+- **Verified locally:** seven domain tests pass, including complete numerical launch trials through normal engine controls for all 10,000 physically distinct configurations. This is automated coverage, not manual playtesting or rendered-frame evidence. UI and actual 4K verification are pending.
+- **Latest inherited gate:** [CI 41877585283](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41877585283), source `5a446aa156b762901ed10d1e8d03c8b165dbee41`, passed 146 JavaScript, 52 API, eight accessibility, two contract/fallback and twelve gameplay checks. The football shot assertion failed its five-second wait; the final failure snapshot shows one actual shot. Timing is being investigated, and the failure has not been waived.
+- **Unfinished acceptance:** ark actual rendering, UI completion/reload/fallback and automated accessibility; the inherited football gate; device performance, screen-reader and physical touch qualification. Live AI and native-console dependencies remain unchanged.
 
 ## Delivered second implementation wave
 

@@ -57,7 +57,9 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   // Exercise a real shot while the kickoff taker has possession. The later
   // opponent-driven match is not a deterministic strategy benchmark.
   await page.keyboard.press('Space');
-  await expect(page.locator('#home-shots')).not.toHaveText('0');
+  // The software-rendered trace recorded the shot after the default five-second
+  // HUD wait. Keep the input assertion, allowing a bounded renderer update.
+  await expect(page.locator('#home-shots')).not.toHaveText('0', { timeout: 15000 });
   await page.locator('#pause').click(); const paused = await page.locator('#clock').innerText();
   await page.waitForTimeout(1200); await expect(page.locator('#clock')).toHaveText(paused);
   await page.locator('#sub-out').selectOption('h11'); await page.locator('#sub-in').selectOption('h12');

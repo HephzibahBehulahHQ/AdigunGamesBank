@@ -41,7 +41,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -103,7 +103,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -238,7 +238,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -300,7 +300,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -362,7 +362,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -424,7 +424,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -486,7 +486,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -548,7 +548,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -610,7 +610,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -682,7 +682,7 @@
       "testing": {
         "unit": "37 football engine/rules tests passed locally, including 10,000 distinct match configurations",
         "integration": "Input-only winning match; offside touch/save/rebound, restart exemptions, penalties, cards, send-offs and five-substitute/three-window limits.",
-        "browser": "CI 41791946076 passed: actual 4K buffer, real-input full 3–0 match, queued/cancelled/applied substitution, visible roster replacement and responsive/automated accessibility checks."
+        "browser": "CI 41791946076 passed: actual 4K buffer, real-input full 3\u20130 match, queued/cancelled/applied substitution, visible roster replacement and responsive/automated accessibility checks."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
@@ -745,7 +745,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -807,7 +807,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -869,7 +869,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1005,7 +1005,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1067,7 +1067,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1129,7 +1129,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1191,7 +1191,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1253,7 +1253,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1303,7 +1303,7 @@
       "levels": {
         "target": 10000,
         "implemented": 10000,
-        "method": "20 original restricted-Python problem families × 500 substantive parameterizations, five tiers; live scoring required for completion. Authored references are tests, never model output.",
+        "method": "20 original restricted-Python problem families \u00d7 500 substantive parameterizations, five tiers; live scoring required for completion. Authored references are tests, never model output.",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
@@ -1391,7 +1391,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
+        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1471,6 +1471,69 @@
         "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
         "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
         "verifiedAt": "2026-11-04T07:35:24+00:00"
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game24",
+      "title": "ARK: THE WATERLINE COMMISSION",
+      "description": "Load and balance an original timber ark, manage ballast and prove its stability through a numerical water trial.",
+      "genre": "bible",
+      "division": "Evangelism",
+      "path": "game24/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": 10000,
+        "method": "Distinct deterministic cargo, hull, ballast, wind and wave configurations; all 10,000 complete launches verified through public engine controls",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse",
+        "Touch controls"
+      ],
+      "accessibility": {
+        "status": "Equivalent labelled deck commands, live telemetry, keyboard scene controls and reduced decorative motion implemented; browser audit pending"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": true
+      },
+      "assetRights": {
+        "status": "Original procedural ark, cargo, pier, water and materials; original gameplay adaptation of Genesis 6\u20139; no copied Bible translation or third-party likenesses; Three.js MIT"
+      },
+      "testing": {
+        "unit": "7 domain tests passed, including all 10,000 complete numerical launch trials; not manual playtesting",
+        "integration": "Engine completion, invalid loads, ballast limits, loss, retry and fixed-step pause/resume passed; UI integration pending",
+        "browser": "NOT YET VERIFIED"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game24/",
+        "verifiedUrl": null
       },
       "blockers": [],
       "policy": {

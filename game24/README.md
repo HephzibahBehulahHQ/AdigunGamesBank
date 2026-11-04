@@ -1,163 +1,194 @@
-# Genesis Ark Commissioning
+# Ark: The Waterline Commission
 
-**Status: In progress. Acceptance: NOT ACCEPTED.** Stable game ID: `game24`.
+**Game ID:** `game24` · **Status: In progress — NOT ACCEPTED.**
 
-This game is being built as an ark cargo, ballast, and launch simulation inspired by Genesis 6–9. Players prepare a load plan, inspect its buoyancy and balance, make corrections, and attempt a controlled launch. Cargo position, total load, and ballast must affect the result. The intended challenge is physical commissioning through experimentation; the Scripture references provide the narrative setting.
+A distinct browser cargo and ballast commissioning simulation inspired by Genesis 6–9. The player arranges six loads in suitable stations, adjusts low ballast tanks, and launches a simplified floating hull through a timed wave trial. Draft, freeboard, heel, trim, and stability reserve respond to the actual loading plan. The narrative introduces the setting; successful commissioning depends on the physical model.
 
-This is an implementation checkpoint. The final displayed title, control mappings, campaign factorization, equations, and save schema will be reconciled with the implementation. **No gameplay, browser, 4K, performance, or public deployment acceptance is claimed by this document.**
+The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. Browser integration, the finished 3D scene, accessibility, actual 4K rendering, measured performance, and public deployment remain pending. Passing numerical tests does not close those acceptance gates.
 
 ## 1. Identity and scope
 
-| Field | Specification / current evidence |
+| Field | Adopted scope |
 | --- | --- |
-| Product / title | AdigunGamesBank / Genesis Ark Commissioning (working title) |
-| Stable ID / source | `game24` / `game24/` |
-| Owner | Hephzibah Behulah |
-| Relevant divisions | HB Evangelism: Scripture context; HB Elektroniker: engineering learning; HB Artificial Intelligence: deterministic challenge generation |
-| Genre | Cargo planning, hydrostatics, and launch simulation |
-| Distinct mechanics | Place and redistribute cargo; adjust ballast; interpret displacement, freeboard, heel, and trim; satisfy commissioning constraints before launch. Implementation verification pending. |
-| Platforms | Browser delivery is intended. Desktop, keyboard, pointer, touch, and mobile support require verification. Console distribution or platform approval is not claimed. |
-| Delivery state | In progress; implementation, independent review, candidate CI evidence, and public verification remain open. |
+| Title / stable ID | Ark: The Waterline Commission / `game24` |
+| Genre | Cargo planning, ballast management, and launch simulation |
+| Distinct mechanics | Cargo destination and station capacity constraints; mass distribution; finite ballast budgets; calculated draft, freeboard, heel and trim; a dynamic launch trial with recoverable brief excursions and explicit failure limits |
+| Platform | Web browser using keyboard, pointer, and touch; no native console certification claim |
+| Intended browsers | Current desktop Chrome, Edge, Firefox and Safari, plus current Android Chrome and iOS Safari; compatibility is pending browser evidence |
+| Product divisions | Hephzibah Behulah Elektroniker, AI and Evangelism |
+| Ownership | Core: campaign, engine and numerical tests. Scene: 3D rendering. Integration owner: application, repository checkpoints, CI, catalogue and release. Independent review: this README and bounded defect review |
+| Implementation | `game24/campaign.js`, `game24/engine.js`; HTML/CSS integration and scene work are in progress |
+| Acceptance blocker | Browser and visual evidence, rights inventory for the finished scene, measured load/performance results, and exact public release verification are outstanding |
 
-### Objective, choices, and outcomes
+This is one game in the wider bank. The requested bank-wide target of 2,000 distinct games does not establish delivery or acceptance of other entries.
 
-The intended loop is to inspect a challenge manifest and hull limits, place the required cargo, adjust the load or ballast, and inspect the resulting vessel condition. The player chooses how to distribute weight and how much ballast to carry. A successful launch must depend on the challenge's physical limits, including adequate freeboard and acceptable balance. A failed check should identify an actionable reason, let the player revise the plan, and support a clear restart. Exact thresholds, scoring, stage boundaries, and unlock behavior are pending reconciliation with the code.
+## 2. Play rules and lifecycle
 
-The campaign must offer 10,000 materially different, reproducible challenges. Repeated question wording, a relabeled counter, or cosmetic changes alone do not establish a distinct physical challenge. The scope is commissioning and launch; any flood journey or covenant epilogue is an original narrative adaptation and must remain distinguishable from the simulated engineering rules.
+Start a commission, select a cargo load and place it in a compatible bay. Every load must be aboard, its destination group must match its station, and its mass must fit the bay capacity. Moving a load to an occupied bay swaps the loads when the incoming load already has a position; otherwise the displaced load returns to the quay. Loading and ballast changes are accepted only in the loading phase.
 
-## 2. Rendering, campaign, and persistence
+Each bay has a low ballast tank. Add or remove integer tonnes within the individual tank capacity and the commission's total ballast budget. The loading inspection checks complete stowage, station compatibility, cargo capacity, minimum metacentric height and maximum draft. Passing that inspection permits a launch; it is not itself a successful launch.
 
-| Requirement | Target / current verification |
+During the trial, waves and environmental moments affect roll and pitch. The hull must finish the prescribed duration without exhausting the permitted continuous breach time or crossing an immediate failure limit. Brief excursions below a target freeboard reserve or above a target heel/trim limit can recover. Failure occurs immediately at zero edge freeboard, 40° absolute heel, or 20° absolute trim, or after 1.25 seconds of accumulated envelope breach. Breach recovers at 0.6 seconds per safe second. The on-screen damage fraction derives from that breach timer.
+
+The implemented phases are `ready`, `loading`, `sailing`, `paused`, `won`, and `lost`. Pause preserves the preceding loading/sailing phase. Retry returns a sailing or finished run to loading, resets dynamics and the result, and preserves the cargo and ballast plan, move count and attempt history. Completion records success/reason, simulated time, moves and attempts. Browser controls and focus transitions still require integration verification.
+
+## 3. The 10,000-challenge campaign
+
+The deterministic generator uses `randomFor(level * 7919 + 240609)`, campaign ID `genesis-ark`, and generator version 1. Six cargo objects and six bays form three port/starboard station pairs. Challenge parameters change hull geometry, water density, load mass and height, station order, capacities, ballast allowance, environmental moments, wave height/period/phase and launch limits.
+
+| Tier / levels | Mechanical progression | Heel / trim targets | Trial | Ballast budget above the generated solution |
+| --- | --- | --- | --- | --- |
+| I: 1–2,000 | Suitable stations and opposing paired loads | 5.5° / 1.8° | 14 s | 40 t |
+| II: 2,001–4,000 | Unequal pairs and wind require ballast correction | 4.5° / 1.5° | 16 s | 24 t |
+| III: 4,001–6,000 | Tighter capacities and ballast allowance | 3.6° / 1.2° | 18 s | 16 t |
+| IV: 6,001–8,000 | Higher centres of mass and stronger waves | 2.8° / 1.0° | 20 s | 10 t |
+| V: 8,001–10,000 | Narrower trim/freeboard envelope | 2.2° / 0.8° | 22 s | 6 t |
+
+For normalized difficulty `d = (level - 1) / 9999`, target edge freeboard is `depth - solutionDraft - 0.40 - 0.10*d` metres. Maximum draft is `solutionDraft + 0.20 - 0.08*d` metres; minimum transverse GM is 0.35 m. Tank capacity is `max(20, ...solutionBallast) + 8 + 2*tierIndex` tonnes. A level-dependent cargo-mass term distinguishes the physical configurations; other seeded values also vary their constraints.
+
+Each configuration includes a generated feasible loading/ballast witness. `solutionFor` returns copies for hints and tests. The witness is exercised through the public loading, ballast and launch controls; it does not bypass the simulation or force a win. Automated testing has verified 10,000 distinct physical configurations and 10,000 completed launches. These are procedurally generated challenges, not 10,000 separately authored stories or 10,000 manual playtests. Meaningful player difficulty and representative full browser playthroughs remain acceptance work.
+
+### Progress and saves
+
+The shared progression store uses `adigun.campaign.v1.genesis-ark` and schema `{version: 1, unlocked: 1, completed: 0}`. Completion advances sequentially; `completed` is bounded to 0–10,000 and the next unlocked level is capped at 10,000. Completing a locked later level is rejected. Refresh merges higher completed progress monotonically. Storage and parsing errors fall back to usable session progress.
+
+The saved payload contains campaign progress only. Current cargo positions, ballast and a partially completed launch are not persisted. Data resides in the browser profile's local storage; this store does not transmit the payload to a server. A Map-backed storage check verified sequential completion and refresh between two progression instances. Actual reload, corrupt-storage recovery, blocked storage and multiple browser tabs still need browser-level evidence.
+
+## 4. Physical model, units and limits
+
+The model treats the vessel as a rigid rectangular hull. The coordinate convention is positive x toward the fore station, positive y toward starboard, and positive z upward from the keel. Mass is in **tonnes**, distances in **metres**, time in **seconds**, displayed angles in **degrees**, force in **kilonewtons**, and moment in **kilonewton-metres**. Water density is in t/m³; gravitational acceleration is 9.81 m/s².
+
+For total loaded mass `M`, density `rho`, length `L`, beam `B`, depth `D`, and draft `T`:
+
+```text
+Displaced volume V = M / rho
+Draft T = V / (L * B)
+Upright freeboard = D - T
+KB = T / 2
+Transverse BM = B² / (12 * T)
+Longitudinal BM = L² / (12 * T)
+GM = KB + BM - KG
+Buoyancy = M * g  [kN]
+```
+
+`KG` is the mass-weighted vertical centre: lightship mass at its configured centre; each cargo at bay height plus half cargo height; ballast at 0.35 m above the keel. Roll and pitch moments combine `g * sum(mass * lateral/longitudinal offset)` with their configured environmental moment. Reported equilibrium angle uses `atan2(moment, max(0.01, M*g*GM))`, converted to degrees.
+
+At instantaneous heel, trim and wave elevation, edge freeboard is approximated by:
+
+```text
+D - T - abs(sin(heel))*B/2 - abs(sin(trim))*L/2 - max(0, wave)
+```
+
+The dynamic simulation advances with semi-implicit Euler steps of **1/120 s**. One external frame advance accepts at most **0.25 s**; excess elapsed time is capped rather than simulated as an arbitrarily large step. Roll/pitch radii of gyration are approximated by `(B²+D²)/12` and `(L²+D²)/12`. Restoring and damping terms use the calculated GM, with sinusoidal wave forcing. Roll and pitch rates are capped at 35°/s and 20°/s, and internal angles at 60° and 35°. Nonfinite or invalid time inputs are rejected. The numerical tests cover fixed-step equivalence, oversized inputs, pause and retry behavior.
+
+Generated hull length is approximately 30–36 m, beam 9.5–11 m and depth 6–6.7 m. These dimensions are game parameters, **not a conversion of biblical cubits**. Ballast, engineering criteria and the trials are invented game systems. The model omits free-surface effects, sloshing, flooding, hull flexibility, moving animals, propulsion, detailed hydrodynamics and many other real-vessel effects. It supplies gameplay feedback and makes no claim of historical reconstruction, vessel certification or engineering suitability.
+
+Conceptual reference: the [NSW Government vessel guide](https://www.nsw.gov.au/employment/dogging-and-rigging/guide/part-2-dogging-and-rigging-activities/cranes-barges/vessel) discusses buoyancy, freeboard, centres of gravity/buoyancy and stability in an operational crane-barge context. Its safety guidance does not validate this game's equations or margins. All implemented approximations above are stated explicitly.
+
+## 5. Rendering and actual 4K proof
+
+| Requirement | Current evidence / remaining work |
 | --- | --- |
-| Actual 3D | A rendered hull, cargo, water, and camera view are intended. Renderer, geometry, lighting, camera behavior, and inspected frame: **NOT CONFIRMED**. |
-| Actual 4K | A real `3840 × 2160` drawing buffer and inspected rendered frame are required. Browser/device, exact command, candidate SHA, drawing-buffer measurement, and frame receipt: **NOT CONFIRMED**. CSS size, an upscale, or a resolution menu do not prove this. |
-| Campaign count | 10,000 challenge variants required; implemented count and validated count: **NOT CONFIRMED**. |
-| Progression | Beginner through Professional Master. Exact tier boundaries, parameter ranges, and milestones await the implemented generator. |
-| Authored / procedural structure | Original narrative and commissioning rules with deterministic physical variants are intended. Exact factorization, seed mapping, generator version, and uniqueness check: **NOT CONFIRMED**. |
-| Solvability | Every generated challenge must have a valid reachable plan. Constructive witnesses, boundary cases, automated campaign checks, and sampled complete playthroughs: **NOT TESTED**. |
-| Numerical behavior | Bounded inputs, finite outputs, stable time stepping, and meaningful failure limits: **NOT TESTED**. |
-| Save behavior | Storage location, key, schema/version, migrations, challenge identity, resume behavior, and corrupted-save recovery: **NOT CONFIRMED**. |
-| Privacy | Local-only progress is intended; actual storage/network behavior must be inspected before making a privacy claim. |
-| Performance evidence | Named hardware, browser version, resolution/settings, scene, frame-time distribution, and memory behavior: **NOT TESTED**. |
+| Genuine 3D scene | Scene implementation is in progress; renderer, geometry, camera, lighting, materials and interactive synchronization need a finished-code inventory and browser inspection |
+| Visual causality | Cargo placement, ballast and hull motion must visibly agree with the numerical state; browser verification pending |
+| Render modes | HTML declares Adaptive, 1080p and 4K choices; integrated behavior pending |
+| Actual 4K | **PENDING.** Required proof is a 3840×2160 drawing buffer, the selected mode, device/browser details, screenshot and CI receipt. A menu label or screenshot resized to 4K is not evidence |
+| Responsive layout | Planned checks at 390×844, 768×1024, 1920×1080 and 3840×2160; overflow, focus visibility and telemetry readability pending |
+| Degraded graphics | Accessible loading controls and telemetry must remain usable if rendering fails; retry and failure-state behavior pending |
 
-A generator count does not establish that all 10,000 challenges have been played by people, are enjoyable, or are well balanced. Automated uniqueness and solvability evidence must be reported separately from human playtesting.
+The engine suite uses simulated frame advances. It does not create a WebGL context or prove a rendered frame, GPU performance, accessibility or visual quality.
 
-## 3. Controls and accessibility
+## 6. Controls, accessibility and localization
 
-| Input / requirement | Target / current verification |
-| --- | --- |
-| Keyboard | Complete challenge selection, cargo/ballast editing, launch, pause, resume, and restart with visible focus. Exact key mappings and focus order: **NOT TESTED**. |
-| Pointer | Clear cargo selection/placement and commissioning controls; camera interaction must not prevent controls from working. **NOT TESTED**. |
-| Touch | Reachable controls, clear selection state, and targets of at least `44 × 44` CSS pixels where practical. Gestures, scrolling, and small-screen layouts: **NOT TESTED**. |
-| Gamepad | No support claim; mapping and tested devices: **NOT CONFIRMED**. |
-| Screen readers | Named controls, instructions, readable manifests/results, and status announcements are required. The 3D scene needs a useful textual account of the physical state. Actual coverage and limitations: **NOT TESTED**. |
-| Contrast and focus | WCAG 2.2 AA contrast targets; no color-only pass/fail information; visible focus on all interactive controls. Measurements: **NOT TESTED**. |
-| Reduced motion | Respect `prefers-reduced-motion` for decorative camera/water motion and transitions without hiding necessary physical-state information. **NOT TESTED**. |
-| Responsive layout | Planned checks at `360 × 800`, `768 × 1024`, `1366 × 768`, and `1920 × 1080`, including landscape where appropriate. Overflow, orientation, zoom, and touch coverage: **NOT TESTED**. |
-| Pause and lifecycle | Pause/restart, tab visibility, held input, repeated initialization, and completion/failure transitions: **NOT TESTED**. |
-| English / German / Yoruba / Nigerian Pidgin | Supported languages, translated string coverage, correct language metadata, fallback behavior, and native-speaker review: **NOT CONFIRMED**. |
-
-Controls listed here are requirements, not evidence that a particular key or gesture is already implemented. The final controls table must match the shipped controls and their help text.
-
-## 4. Loading and performance targets
-
-These are proposed engineering targets, **not measurements**. They may be revised with the delivery owner when the implementation and measurement environment are known.
-
-| Target | Measurement conditions / status |
-| --- | --- |
-| First playable ≤ 5 seconds | Cold cache; 20 Mbps downlink; 50 ms round-trip latency; four-core laptop with 8 GB RAM and integrated GPU; current stable Chromium. **NOT TESTED**. |
-| Normal play frame times | At `1920 × 1080`, median ≤ 16.7 ms and 95th percentile ≤ 33.3 ms over a representative 60-second active scene on the named laptop. **NOT TESTED**. |
-| 4K play frame times | At actual `3840 × 2160`, 95th percentile ≤ 33.3 ms on a named supported device, with actual quality settings reported. **NOT TESTED**. |
-| Loading boundary | Load the selected game's 3D engine and assets only when needed; report compressed transfer sizes and first-playable timing. Actual import graph and sizes: **NOT CONFIRMED**. |
-| Failure and recovery | Readable load-error state with a working retry, and graceful behavior when WebGL or storage is unavailable. **NOT TESTED**. |
-| Sustained lifecycle | No unbounded animation loops, event listeners, geometry/material allocations, or save writes across repeated rounds. **NOT TESTED**. |
-
-## 5. Assets and rights
-
-| Material | Author / source | Rights / attribution | Verification |
-| --- | --- | --- | --- |
-| Game narrative and instructions | Original project-authored adaptation | Project rights; passage references identify inspiration. Do not present invented rules as translated Scripture. | Final text review pending. |
-| Hull, cargo, water, textures, and interface art | Original procedural/project-authored assets intended | No external model or image license is assumed. Record any imported asset here before release. | Final asset inventory pending. |
-| Music and sound | No asset inventory yet | Authorship, license, attribution, and source required for every added sound. | **NOT CONFIRMED**. |
-| Fonts | System-font stack intended | No bundled commercial font is assumed. Any included font file requires its actual license. | Final inventory pending. |
-| Three.js | Repository's vendored Three.js, if used | MIT; retain the applicable software license/notice. | Actual import and version/license inventory pending. |
-| Corporate logo | Existing approved project corporate asset: `assets/corporate/hephzibah-behulah-official.jpg` | Existing corporate identity asset; authorization derives from the project adoption, not an invented public-domain claim. | Adopted asset blob `f7b0e4a650d861fb9d52ed91ea894edec030e03b`; use in game pending. |
-| Scripture reference text | [World English Bible official site](https://worldenglish.bible/) and linked eBible Classic edition | The translation is public domain. The World English Bible name and logo are trademarks; do not label modified game prose as that translation. | Official rights statement checked 2026-11-04; this README uses original summaries. |
-| People, marks, or third-party likenesses | None needed for the proposed game | Any addition requires an identified source and authorization where applicable. | Final inventory pending. |
-
-No large Scripture excerpts or copied web pages are included. No universal public-domain claim is made for the King James Version: its United Kingdom publication rights require separate consideration. The World English Bible's published permission is the chosen rights reference if a short direct quotation is introduced later.
-
-## 6. Scripture and engineering integrity
-
-### Passage map
-
-The following are original narrative summaries. References link to the primary translation text; they do not turn game parameters into claims about the historical vessel.
-
-| Passage | Narrative basis | Boundary of the adaptation |
+| Input / feature | Declared or intended behavior | Verification |
 | --- | --- | --- |
-| [Genesis 6:9–12](https://ebible.org/eng-web/GEN06.htm) | Noah, his family, and the setting of violence and corruption | Characterization and context; no invented engineering assignment is attributed to these verses. |
-| [Genesis 6:14–16](https://ebible.org/eng-web/GEN06.htm) | Ark construction instructions, compartments, pitch, three decks, and dimensions of 300 × 50 × 30 cubits | These are the textual dimensions. A modern cubit-to-meter conversion or engineering interpretation is an explicit game assumption. |
-| [Genesis 6:19–22](https://ebible.org/eng-web/GEN06.htm) | Living creatures, provisions, and carrying out the instructions | Cargo masses, positions, capacity limits, and menus are invented for play. |
-| [Genesis 7:2–3](https://ebible.org/eng-web/GEN07.htm) | Different instructions for clean animals, unclean animals, and birds | A generic two-of-every-animal manifest must not be presented as an exhaustive summary of these instructions. |
-| [Genesis 7:11–12, 17–20](https://ebible.org/eng-web/GEN07.htm) | The flood and rising water that lifts the ark | Wave models, rain rates, timers, and launch trials are game mechanics. |
-| [Genesis 8:4, 6–12](https://ebible.org/eng-web/GEN08.htm) | Resting on the mountains of Ararat, followed by the raven and dove episodes | Use the passage's plural “mountains of Ararat”; the game does not establish a particular modern landing location. |
-| [Genesis 8:13–19](https://ebible.org/eng-web/GEN08.htm) | Dry ground and departure from the ark | Any completion sequence or scoring is an original adaptation. |
-| [Genesis 9:8–17](https://ebible.org/eng-web/GEN09.htm) | Covenant and rainbow | Narrative context; no engineering or scoring rule is implied by the covenant. |
+| Keyboard | Tab between controls; Enter/Space activate buttons; canvas arrows select a bay; Enter loads; Backspace unloads; Space pauses/resumes | HTML instructions inspected; actual handlers and focus behavior pending |
+| Pointer / touch | Cargo/bay selection and labeled ballast, launch, pause, retry and next controls | Browser integration pending |
+| Gamepad | No implemented support claimed | Pending scope decision; no console claim |
+| Screen reader | Named controls, readable telemetry, a focusable scene description, and polite live status | Markup inspected; name/state announcements and screen-reader testing pending |
+| Focus / contrast | Visible focus, no keyboard trap, readable non-color status, target WCAG 2.2 AA contrast | Measured and manual evidence pending |
+| Target sizes | Minimum intended touch target 44×44 CSS px | Measurement pending |
+| Reduced motion | Respect `prefers-reduced-motion` and retain necessary state feedback | Integrated implementation and testing pending |
+| Languages | EN, DE, YO and PCM are the bank's required locales | Complete gameplay strings, layout, language tags and human review pending; coverage is not claimed |
 
-Primary text and rights were consulted on 2026-11-04. The game is not a replacement for reading Genesis 6–9 in its full context, and it does not settle historical, archaeological, or theological interpretations.
+No personal names, religious knowledge test or memorized Scripture answer is required to operate the simulation. Narrative summaries are separate from the commissioning controls.
 
-### Simplified engineering model
+## 7. Loading and performance targets
 
-The game is intended to teach relationships among loading, displaced water, waterline clearance, and balance. **It is not a real vessel design, certification, loading instrument, or safety assessment.**
+These are targets, not measurements. Reference profiles must be recorded with CI/browser evidence before acceptance: desktop Chromium at 1920×1080 on a four-core CPU with integrated graphics; mobile Chromium at 390×844 on a documented midrange Android device; 4K on a specifically named GPU/device.
 
-| Quantity | Meaning / required units |
+| Target | Acceptance measurement |
 | --- | --- |
-| Mass / displacement | Total modeled vessel, cargo, and ballast mass. Report kilograms (`kg`) or metric tonnes (`t`) consistently; `1 t = 1,000 kg`. |
-| Buoyancy | Support from displaced water; density in `kg/m³`, displaced volume in `m³`, force in newtons (`N`) when force is modeled. |
-| Draft | Vertical distance from the modeled keel/bottom to the waterline, in meters (`m`). |
-| Freeboard | Modeled vertical clearance from the waterline to the relevant deck/edge, in meters (`m`); specify the actual measurement location in the implementation. |
-| Heel | Transverse inclination to port or starboard, reported in degrees (`°`); define the sign convention. |
-| Trim | Longitudinal bow/stern inclination or draft difference; specify degrees (`°`) or meters (`m`) and the sign convention. |
-| Stability | If metacentric height or a restoring moment is used, document its units, geometry, assumptions, and limits. Do not equate a single game metric with complete vessel safety. |
+| Usable loading controls within 3 s | Cold cache, 10 Mbit/s down, 100 ms round-trip latency; record transferred bytes and timing |
+| 3D scene interactive within 5 s | Same cold-cache network profile; record dependency and asset requests |
+| Desktop frame performance | Target 60 fps at 1080p, with median and p95 frame time reported over a complete launch |
+| Mobile / 4K performance | Target 30 fps on the documented profiles; measure separately for each quality mode |
+| Lifecycle | Pause on relevant loss of visibility/focus as designed; no runaway elapsed-time catch-up; repeated retry/start cycles retain bounded resources |
 
-A primary government reference for buoyancy, freeboard, metacentric height, and vessel motion is the [NSW Government Dogging and Rigging guide: The vessel](https://www.nsw.gov.au/employment/dogging-and-rigging/guide/part-2-dogging-and-rigging-activities/cranes-barges/vessel). It describes real operating concerns; this game uses a deliberately reduced model. It is not a source for historical ark performance.
+Measured load time, download size, frame rate, memory use, lazy-loading behavior and render-failure retry are **NOT TESTED**. Numerical speed in Node is not a browser performance result. Root CI owns the browser and visual receipts.
 
-The final documentation must identify the implemented hull geometry, water density, gravitational acceleration, cubit conversion (if used), cargo centers, ballast treatment, free-surface treatment or omission, waterline clipping, force/moment equations, time step, numerical clamps, and failure thresholds. **Those implementation details and their validation are currently pending.** Any rectangular-hull, small-angle, fixed-density, rigid-body, or idealized-weather assumption must be explicit rather than silently treated as a real-world conclusion.
+## 8. Scripture, original narrative and rights
 
-## 7. Validation and deployment evidence
+Narrative text is original summary prose. No Bible translation is bundled and no long passage is reproduced. Sources were consulted on **2026-11-04**.
 
-Checkpoint authored: **2026-11-04T18:29:07+01:00** (`Europe/Berlin`).
-
-Root reported branch base `870b93b`; this is context only, not a game24 acceptance candidate. The final evidence must identify the complete candidate SHA and exact environment. Evidence from other games is not substituted for game24 evidence.
-
-| Evidence | Exact command / procedure | Candidate and result |
-| --- | --- | --- |
-| Scripture / rights research | Read the primary Genesis 6–9 pages and official World English Bible rights statement linked above. | Research checked 2026-11-04. No gameplay acceptance implied. |
-| README template review | Inspect this document against `docs/GAME_TEMPLATE.md`, `AGENTS.md`, and `docs/STANDARDS.md`. | Initial document checkpoint; final reconciliation pending. |
-| Unit / campaign tests | Run the final game24 test files by exact path; record their names, counts, and output. | **NOT TESTED**. |
-| Integration / full repository | `npm test`; `npm run check`; `npm run build` on the actual candidate. | **NOT TESTED** for this game/candidate. |
-| Browser play and errors | Root-owned Playwright workflow: complete setup → loading → play → fail/retry → win → progression → reload; check console and network errors. | **NOT TESTED**. |
-| Solvability / uniqueness | Enumerate all 10,000 generated challenges, validate witnesses and physical signatures, and check tier boundaries. | **NOT TESTED**. |
-| Independent review | Bounded code and executable-model review of solvability, numerical edge cases, input, save recovery, and lifecycle. | **NOT TESTED**; implementation is awaited. |
-| Accessibility / responsive | Keyboard-only completion; accessible names/status; focus; contrast measurement; reduced motion; required viewport/orientation checks. | **NOT TESTED**. |
-| Actual 3D / actual 4K | Measure drawing buffer `3840 × 2160`, inspect the rendered scene, record browser/device/settings and frame receipt. | **NOT CONFIRMED**; root CI evidence pending. |
-| Load / frame performance | Measure under the named conditions in section 4; report median and tail frame times and first-playable timing. | **NOT TESTED**. |
-| Asset rights | Reconcile every shipped asset/dependency with section 5 and its license/notice. | Final inventory **NOT CONFIRMED**. |
-| Pages deployment | Expected project path `/AdigunGamesBank/game24/`; root owns deployment and receipt. | **NOT DEPLOYED** for this candidate. |
-| Public production flow | Expected public route `https://adigungamesbank.hephzibahbehulah.com/game24/`; verify the deployed SHA and essential user flow at that exact route. | **NOT VERIFIED**. |
-
-Expected project Pages route: [game24](https://hephzibahbehulahhq.github.io/AdigunGamesBank/game24/). Expected custom-domain route: [game24](https://adigungamesbank.hephzibahbehulah.com/game24/). These are intended destinations, not proof of deployment, availability, or successful play. The final receipt must state which public route was actually verified.
-
-## 8. Adopted standards and acceptance
-
-| Standard | Exact adopted pin / application |
+| Narrative reference | Passage / distinction |
 | --- | --- |
-| AI engineering policy | **HB-AI-ENGINEERING-001 v2.0**, SHA `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; [pinned source](https://github.com/HephzibahBehulahHQ/hb-AI-policy/tree/d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e). |
-| Design system | SHA `52f01f9986d97088413ca9785bc7a2d3f2967123`; adopted sources `tokens/corporate.json`, `tokens/brands.json`, `docs/brand-and-product-naming.md`, and `templates/universal-product/`, as recorded in [STANDARDS](../docs/STANDARDS.md). |
-| Corporate identity | SHA `bd116504412b37105166805018f64a6e7bbe3cde`; preserve the approved corporate identity and single corporate-logo treatment. |
-| Trading policy | SHA `65b28cfc20925494b056321d57955e304eb09ac7`; not applicable to this game's mechanics. |
-| Product requirements | [GAME_TEMPLATE](../docs/GAME_TEMPLATE.md), [STANDARDS](../docs/STANDARDS.md), [AGENTS](../AGENTS.md), and the adopted “Adigun Game bank pursuing goals and template.md” specification. |
+| Noah and the construction setting | [Genesis 6:9–22](https://ebible.org/eng-web/GEN06.htm): family, corruption, ark construction, rooms/pitch/decks, living creatures and provisions |
+| Entry and rising waters | [Genesis 7:1–24](https://ebible.org/eng-web/GEN07.htm): distinctions in numbers of clean/unclean creatures and birds, entry, rain and rising waters; the six gameplay cargo loads are invented abstractions |
+| Recession and departure | [Genesis 8:1–19](https://ebible.org/eng-web/GEN08.htm): the mountains of Ararat, raven and dove, recession and departure; no single modern peak or archaeology claim is made |
+| Covenant and rainbow | [Genesis 9:8–17](https://ebible.org/eng-web/GEN09.htm): covenant and its sign; this narrative context does not supply the game's launch criteria |
 
-Adopted corporate colors are Navy `#0B1220`, Blue `#2563EB`, Gold `#D4AF37`, Ivory `#F8FAFC`, and Slate `#64748B`. Relevant division accents are Evangelism `#D4AF37`, Elektroniker `#22D3EE`, and Artificial Intelligence `#A78BFA`. These are source tokens; actual component usage and measured contrast must be recorded after implementation. Intended system-font fallback is `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`; it does not imply a font-file license or successful font loading.
+The [World English Bible publisher](https://worldenglish.bible/) states that the translation text is public domain and may be copied and quoted without royalties. Its name and logo have separate trademark considerations; this game's original summaries are not presented as a World English Bible edition. If short quotes are later introduced, record the exact text, verses, translation and publisher rights source before release. Do not assume every English translation is public domain worldwide: [Cambridge's KJV copyright notice](https://assets.cambridge.org/97805211/63347/copyright/9780521163347_copyright_info.pdf) identifies rights in the United Kingdom. No KJV quotation is used here.
 
-**Current acceptance state: NOT ACCEPTED.** Work remains in progress until the implemented mechanics and all 10,000 challenges have appropriate evidence, the actual 4K claim is demonstrated, accessibility and lifecycle checks pass, asset rights are reconciled, and the exact deployed public candidate has been verified. The delivery owner records the release decision and checkpoints in the repository's project status and evidence records.
+| Asset / material | Source and rights status |
+| --- | --- |
+| Game code and original summary prose | Created for this repository by the development team; release under the repository's adopted license and ownership policy. Final file inventory pending integration |
+| Hull, cargo, water and other scene geometry/materials | Intended original procedural assets. Finished scene must be inspected for imported models, textures, external images or generated assets and each recorded before acceptance |
+| Corporate logo | Repository asset `assets/corporate/hephzibah-behulah-official.jpg`; adopted corporate asset blob `f7b0e4a650d861fb9d52ed91ea894edec030e03b`, 54,461 bytes; corporate use under the adopted identity policy, not a public-domain asset |
+| Third-party rendering/software | Exact dependency version, license, bundled notices and CDN/download behavior must be reconciled with the finished implementation; no unverified license inventory is claimed |
+| Fonts | Intended Inter/system sans stack with Georgia editorial text; any downloaded or bundled font requires its own license inventory |
+| Audio | No reviewed audio asset inventory yet; do not imply cleared music or sound effects |
+| Bible text | Original summaries with linked passages; no bundled translation or copied illustration |
+| Persons, clubs, trading or financial content | Not applicable to this game's adopted scope; no likeness, sports licence or financial-performance claim |
+
+## 9. Test and release evidence
+
+| Check | Result and scope |
+| --- | --- |
+| Independent numerical suite | `node --test tests/ark.test.js` completed on 2026-11-04, exit 0: **7 tests passed, 0 failed, 18.885 s**. Includes determinism, unit consistency, loading/swaps/invalid inputs, station/cargo/ballast constraints, fixed stepping/pause, failure/retry and all 10,000 launches |
+| All-level numerical trial | **10,000 distinct configurations; 10,000 complete launches; 720,000 simulated frame advances.** Maximum sampled absolute heel 1.617°, trim 0.237°. Minimum sampled reserve relative to the target was −0.0189 m, permitted by the transient-breach rule; this is not a claim that every frame remained above its target |
+| Root's independent receipt | At parent-reported candidate `beae935`, seven tests passed in **30.38 s**, including all 10,000 launches. Root also reported levels 1/2000/4000/6000/8000/10000 finishing in 14/14/16/18/20/22 simulated seconds |
+| Save-store check | Map-backed sequential completion rejected level 2 before level 1; two store instances refreshed to completed 2 / unlocked 3. Browser persistence and corrupt-data coverage pending |
+| Candidate binding | Shared files can change during integration. Root must bind final receipts to the exact committed candidate and rerun affected checks after subsequent engine changes; the earlier passing runs do not certify later edits |
+| Browser controls and complete playthroughs | **NOT TESTED** by this review; root CI pending |
+| 3D, screenshots and actual 4K | **NOT TESTED**; drawing-buffer evidence and inspected frames pending |
+| Accessibility and language review | **NOT TESTED**; automated and manual evidence pending |
+| Load/GPU/frame-time/memory metrics | **NOT TESTED**; reference-device measurements pending |
+| Final asset/license audit | **PENDING** finished scene and dependency inventory |
+| Build/deploy/public route | **NOT VERIFIED**; root owns release and public verification |
+
+Numerical evidence covers implemented equations and a feasible solution for each generated challenge. It does not establish that every possible loading is safe, every player strategy works, or the finished browser product meets its acceptance requirements.
+
+### Deployment target
+
+The exact repository deployment path is **`/AdigunGamesBank/game24/`**. Expected public routes, pending root verification, are:
+
+- `https://adigungamesbank.hephzibahbehulah.com/game24/`
+- `https://hephzibahbehulahhq.github.io/AdigunGamesBank/game24/`
+
+These are intended routes, not a statement that this candidate is publicly deployed. Acceptance requires the deployed commit/build identifier, successful response and asset loading at the exact route, representative controls and a completed launch, recorded browser/device details, and dated public receipts. No deployment or repository ref was changed by this reviewer.
+
+## 10. Adopted policy and design pins
+
+Adopted for Hephzibah Behulah's `HephzibahBehulahHQ/AdigunGamesBank` work on **2026-11-04, Europe/Berlin**, under the user specification “Adigun Game bank pursuing goals and template.md”, repository `AGENTS.md`, `docs/GAME_TEMPLATE.md` and `docs/STANDARDS.md`.
+
+| Policy / design source | Exact adopted pin |
+| --- | --- |
+| HB-AI-ENGINEERING-001 v2.0 | [`d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`](https://github.com/HephzibahBehulahHQ/hb-AI-policy/tree/d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e) |
+| Design source | `52f01f9986d97088413ca9785bc7a2d3f2967123`; `tokens/corporate.json`, `tokens/brands.json`, `docs/brand-and-product-naming.md`, `templates/universal-product/` |
+| Corporate identity source | `bd116504412b37105166805018f64a6e7bbe3cde` |
+| Trading policy reference | `65b28cfc20925494b056321d57955e304eb09ac7`; not applicable to the present mechanics |
+
+The adopted corporate palette is Navy `#0B1220`, Blue `#2563EB`, Gold `#D4AF37`, Ivory `#F8FAFC` and Slate `#64748B`; relevant division accents are Elektroniker `#22D3EE`, AI `#A78BFA` and Evangelism `#D4AF37`. The intended sans stack is Inter, ui-sans-serif, system-ui, Apple/Blink system fonts, Segoe UI and sans-serif, with Georgia for editorial text. Final rendered token use, logo treatment, contrast and typography must be checked against these pins; documentation alone is not proof of conformance.
+
+**Acceptance remains In progress.** Final release requires the outstanding template evidence above and root's exact-candidate review. This README's initial checkpoint was written at `2026-11-04T18:29:07+01:00`; reconciliation with the implemented engine and numerical receipts was completed during this review on 2026-11-04. Root owns checkpoint and publication timestamps.

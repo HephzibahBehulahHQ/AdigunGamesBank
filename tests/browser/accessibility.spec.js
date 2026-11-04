@@ -15,7 +15,7 @@ async function audit(page, testInfo) {
   expect(issues).toEqual([]);
 }
 
-for (const route of ['/', '/game3/', '/game11/', '/game15/', '/game22/', '/game23/']) {
+for (const route of ['/', '/game3/', '/game11/', '/game15/', '/game22/', '/game23/', '/game24/']) {
   test(`320px reflow, keyboard focus and automated accessibility: ${route}`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
