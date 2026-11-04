@@ -2,6 +2,16 @@
 
 Updated: **2026-11-04T20:16:31+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
+## Active continuation — 4 November 2026
+
+**In progress, work branch `work/finish-games-2026-11-04`.** Recovered from `37bf36fa317537d535cf8e6f1ec36e464764c451`. Remote main remains `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`; the last publicly verified runtime remains `b3844bff8775b509ddda6f9002726bf4ec1dc89b`.
+
+First useful changed work: **2026-11-04T21:41:59Z**. This first WIP includes the Neon Pulse 3D signal-puzzle engine, interface, scene and five passing Node tests. All 10,000 unique deterministic boards were solved through the actual engine within their budgets. Browser/4K/accessibility/publication are **NOT TESTED** for this work. Fuse Box, Apex Circuit and Penalty Pro are assigned exclusive paths to parallel writers; unintegrated files remain WIP.
+
+Read-only deployment diagnosis found both prior attempts failed after successful build/upload while Pages publishing stalled. A prior successful release used the same action revision and runner. Do not change hosting or rerun the unchanged deployment a third time. The next fully verified source will use the existing Pages flow and exact-byte public verification.
+
+Checkpoint prepared at **2026-11-04T21:43:30+00:00**; remote verification is pending until recorded by a subsequent checkpoint. No integration or new public release is claimed.
+
 ## Acceptance and published revision
 
 **In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.
