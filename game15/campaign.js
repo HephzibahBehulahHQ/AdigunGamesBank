@@ -3,33 +3,34 @@ import { randomFor, tierFor, validLevel } from '../shared/progression.js';
 export const SIZE = 8;
 export const FIRST_COVER = [[3,3],[3,4],[4,3],[4,4],[2,6],[5,1]];
 const fixedCover = [[1,2],[1,5],[6,2],[6,5]];
-const directions = [[1,0],[-1,0],[0,1],[0,-1]];
 const coordinate = (x,y) => `${x},${y}`;
+const cellKeys=Array.from({length:64},(_,i)=>coordinate(i%8,Math.floor(i/8)));
+const neighbours=Array.from({length:64},(_,i)=>[i%8>0?i-1:-1,i%8<7?i+1:-1,i>=8?i-8:-1,i<56?i+8:-1].filter(n=>n>=0));
+const centralCells=[];for(let x=2;x<=5;x++)for(let y=1;y<=6;y++)centralCells.push([x,y]);
 let layouts;
-
+function flood(terrain,start={x:0,y:0}) {
+  const blocked=new Uint8Array(64),seen=new Uint8Array(64),queue=new Uint8Array(64);
+  for(const [x,y]of terrain)blocked[x+y*8]=1;
+  const first=start.x+start.y*8;
+  if(first<0||first>=64||blocked[first])return {seen,count:0};
+  let head=0,count=1;queue[0]=first;seen[first]=1;
+  while(head<count)for(const next of neighbours[queue[head++]])if(!blocked[next]&&!seen[next]){seen[next]=1;queue[count++]=next;}
+  return {seen,count};
+}
 /** Cardinal connectivity is stricter than the game's corner-safe eight-way movement. */
-export function reachableCells(terrain, start = {x:0,y:0}) {
-  const blocked = new Set(terrain.map(([x,y]) => coordinate(x,y)));
-  if (blocked.has(coordinate(start.x,start.y))) return new Set();
-  const seen = new Set([coordinate(start.x,start.y)]), queue = [start];
-  for (let i=0;i<queue.length;i++) for (const [dx,dy] of directions) {
-    const x=queue[i].x+dx,y=queue[i].y+dy,k=coordinate(x,y);
-    if(x<0||y<0||x>=SIZE||y>=SIZE||blocked.has(k)||seen.has(k)) continue;
-    seen.add(k);queue.push({x,y});
-  }
-  return seen;
+export function reachableCells(terrain,start={x:0,y:0}) {
+  const {seen}=flood(terrain,start);return new Set(cellKeys.filter((_,i)=>seen[i]));
 }
 
 // Four independently placed central barriers encode the mission, not its displayed number.
 // These combinations are filtered once, on demand; no map leaves an isolated open sector.
 function coverLayouts() {
   if(layouts) return layouts;
-  const candidates=[];
-  for(let x=2;x<=5;x++) for(let y=1;y<=6;y++) candidates.push([x,y]);
+  const candidates=centralCells;
   layouts=[];
   outer: for(let a=0;a<21;a++) for(let b=a+1;b<22;b++) for(let c=b+1;c<23;c++) for(let d=c+1;d<24;d++) {
     const cover=[...fixedCover,candidates[a],candidates[b],candidates[c],candidates[d]];
-    if(reachableCells(cover).size!==SIZE*SIZE-cover.length) continue;
+    if(flood(cover).count!==SIZE*SIZE-cover.length) continue;
     layouts.push([a,b,c,d]);
     if(layouts.length===9999) break outer;
   }
@@ -52,8 +53,7 @@ export function missionFor(value = 1) {
   let terrain;
   if(level===1) terrain=FIRST_COVER.map(p=>[...p]);
   else {
-    const candidates=[];
-    for(let x=2;x<=5;x++) for(let y=1;y<=6;y++) candidates.push([x,y]);
+    const candidates=centralCells;
     const indices=coverLayouts()[((level-2)*7919)%9999]; // 7919 is coprime to 9999.
     terrain=[...fixedCover,...indices.map(i=>candidates[i])].map(p=>[...p]);
   }

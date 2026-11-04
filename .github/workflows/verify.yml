@@ -26,7 +26,13 @@ jobs:
       - run: python -m pytest platform/backend/tests -q
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
+      - name: Check accessibility and reflow first
+        run: npm run test:browser -- tests/browser/accessibility.spec.js
+        env:
+          ADIGUN_BROWSER_REPORT: test-results/accessibility-results.json
+          ADIGUN_BROWSER_OUTPUT: test-results/accessibility
+      - name: Verify actual rendering and playable game flows
+        run: npm run test:browser -- tests/browser/games.spec.js
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

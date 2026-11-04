@@ -59,11 +59,20 @@ export function buildFootballScene(stage) {
   const ballMarker = new THREE.Mesh(new THREE.RingGeometry(0.28, 0.34, 32), new THREE.MeshBasicMaterial({ color: '#f8fafc', transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
   ballMarker.rotation.x = -Math.PI / 2; scene.add(ballMarker);
 
+  const playerRoots = [...models.values()].map(model => model.root);
   return {
-    playerRoots: [...models.values()].map(model => model.root),
+    playerRoots,
     update(state, dt, reducedMotion = false) {
+      for (const model of models.values()) model.root.visible = false;
       for (const p of state.players) {
+        if (p.active === false || p.redCard) continue;
+        if (!models.has(p.id)) {
+          const model = makePlayer(p.team, p.number, p.keeper);
+          model.root.userData.playerId = p.id; scene.add(model.root); models.set(p.id, model); playerRoots.push(model.root);
+        }
         const m = models.get(p.id), speed = Math.hypot(p.vx, p.vy);
+        m.root.visible = true;
+        m.kit.color.set(p.keeper ? (p.team === 0 ? '#D4AF37' : '#22D3EE') : (p.team === 0 ? '#2563EB' : '#ef7022'));
         const moving = state.phase === 'live' ? Math.min(1, speed / 4.8) : 0;
         const gait = p.running * 3.1, swing = Math.sin(gait) * 0.65 * moving;
         m.root.position.set(p.x, reducedMotion ? 0 : Math.abs(Math.sin(gait)) * 0.025 * moving, p.y);
@@ -72,7 +81,10 @@ export function buildFootballScene(stage) {
         m.leftKnee.rotation.x = Math.max(0, -Math.sin(gait)) * 0.85 * moving;
         m.rightKnee.rotation.x = Math.max(0, Math.sin(gait)) * 0.85 * moving;
         m.leftArm.rotation.x = -swing * 0.8; m.rightArm.rotation.x = swing * 0.8;
-        if (p.keeper && Math.hypot(state.ball.x - p.x, state.ball.y - p.y) < 12 && !state.ball.owner) {
+        if (p.throwTime > 0 || (state.restartKick?.type === 'Throw-in' && state.restartKick.takerId === p.id)) {
+          m.leftArm.rotation.x = m.rightArm.rotation.x = -2.8;
+          m.leftArm.rotation.z = 0.15; m.rightArm.rotation.z = -0.15;
+        } else if (p.keeper && Math.hypot(state.ball.x - p.x, state.ball.y - p.y) < 12 && !state.ball.owner) {
           m.leftArm.rotation.z = 0.65; m.rightArm.rotation.z = -0.65;
         } else { m.leftArm.rotation.z = 0.12; m.rightArm.rotation.z = -0.12; }
       }
@@ -141,8 +153,8 @@ function buildStands(scene) {
   }
   for(const {items,options} of groups.values()) instancedBoxes(scene,items,options);
 }
-function makePlayer(team, number) {
-  const root = new THREE.Group(), keeper = number === 1;
+function makePlayer(team, number, keeper = number === 1) {
+  const root = new THREE.Group();
   const kit = material(keeper ? (team===0?'#D4AF37':'#22D3EE') : (team===0?'#2563EB':'#ef7022'), {roughness:0.92,metalness:0});
   const shorts = material(team===0?'#13223c':'#172334',{roughness:1,metalness:0});
   const sock = material(team===0?'#eaf0ef':'#ef7022',{roughness:1,metalness:0});
@@ -168,7 +180,7 @@ function makePlayer(team, number) {
     mesh(arm,new THREE.CylinderGeometry(0.047,0.037,0.22,10),skin,[0,-0.48,0.04]);
     mesh(arm,new THREE.SphereGeometry(0.05,8,6),skin,[0,-0.61,0.04]);
   }
-  return { root,leftHip:hips[0],rightHip:hips[1],leftKnee:knees[0],rightKnee:knees[1],leftArm:arms[0],rightArm:arms[1] };
+  return { root,kit,leftHip:hips[0],rightHip:hips[1],leftKnee:knees[0],rightKnee:knees[1],leftArm:arms[0],rightArm:arms[1] };
 }
 
 // Batch repeated static boxes without changing their geometry or material design.
