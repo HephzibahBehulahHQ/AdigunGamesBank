@@ -59,7 +59,7 @@ function renderHistory() {
   if (!state.log.length) { const empty = document.createElement('li'); empty.textContent = 'Ten attempts. Your first kick is waiting.'; list.append(empty); }
   for (const result of state.log) {
     const item = document.createElement('li'), heading = document.createElement('strong');
-    heading.textContent = `${result.role === 'shoot' ? 'Your shot' : 'Your save'} ${(result.kick - 1) % 5 + 1} · ${label[result.outcome]}`;
+    heading.textContent = `${result.role === 'shoot' ? 'Your shot' : 'Goalkeeper turn'} ${(result.kick - 1) % 5 + 1} · ${label[result.outcome]}`;
     item.append(heading, document.createTextNode(` — ${result.detail}. ${Math.abs(result.position.x).toFixed(2)} m ${result.position.x < 0 ? 'left' : 'right'}, ${result.position.y.toFixed(2)} m high.`));
     list.append(item);
   }
@@ -69,7 +69,7 @@ function renderHistory() {
     const success = result && (result.role === 'shoot' ? result.outcome === 'goal' : result.outcome !== 'goal');
     dot.className = result ? success ? 'goal' : 'miss' : i === state.kickIndex ? 'current' : '';
     dot.textContent = result ? `${i + 1} ${success ? '✓' : '×'}` : String(i + 1);
-    dot.setAttribute('aria-label', `Penalty ${i + 1}: ${result ? label[result.outcome].toLowerCase() : i === state.kickIndex ? 'current kick' : 'not taken'}`);
+    dot.setAttribute('aria-label', `${i < 5 ? 'Your shot' : 'Opposition shot'} ${i % 5 + 1}: ${result ? label[result.outcome].toLowerCase() : i === state.kickIndex ? 'current kick' : 'not taken'}`);
     dots.append(dot);
   }
 }

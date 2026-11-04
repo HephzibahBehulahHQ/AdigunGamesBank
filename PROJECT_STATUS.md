@@ -1,87 +1,86 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T20:16:31+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-04T23:01:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
-## Active continuation — 4 November 2026
+## Acceptance
 
-**In progress, work branch `work/finish-games-2026-11-04`.** Recovered from `37bf36fa317537d535cf8e6f1ec36e464764c451`. Remote main remains `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`; the last publicly verified runtime remains `b3844bff8775b509ddda6f9002726bf4ec1dc89b`.
+**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The four-game candidate keeps **24 existing titles** and converts four of them individually: **14 legacy 2D, nine local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
 
-First useful changed work: **2026-11-04T21:41:59Z**. This first WIP includes the Neon Pulse 3D signal-puzzle engine, interface, scene and five passing Node tests. All 10,000 unique deterministic boards were solved through the actual engine within their budgets. Browser/4K/accessibility/publication are **NOT TESTED** for this work. Fuse Box, Apex Circuit and Penalty Pro are assigned exclusive paths to parallel writers; unintegrated files remain WIP.
+This continuation does not add renamed templates or count procedural levels as separate games. Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished.
 
-Read-only deployment diagnosis found both prior attempts failed after successful build/upload while Pages publishing stalled. A prior successful release used the same action revision and runner. Do not change hosting or rerun the unchanged deployment a third time. The next fully verified source will use the existing Pages flow and exact-byte public verification.
+## Source and public state
 
-First checkpoint **`f9a6a982947e8530b30ec195f8a6d83ea14e6b4e`** was verified remotely at **2026-11-04T21:44:17Z**, within five minutes. Plain Git push had no credential in this environment; the authorized GitHub connector created the same exact tree, fast-forwarded the work branch with an expected-SHA check, and its head was read back. The local worktree was reconciled to that identical-tree connector commit, preserving uncommitted work.
+| State | Verified revision / evidence |
+| --- | --- |
+| Integration branch | `work/finish-games-2026-11-04` |
+| Latest verified work checkpoint | `24819e438121c52f2e47cbcb638934b735ca7c9a`, exact remote head read back **2026-11-04T22:00:05Z** |
+| Current local changes | Final Penalty Pro game guide and reviewed wording/focus fixes; this status. New exact-candidate release gate pending. |
+| Remote main at recovery | `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` |
+| Last verified public gameplay source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file exact-byte receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
+| Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
+| New publication | **NOT DEPLOYED** until the final candidate passes its gate and exact public-byte verification |
 
-The next WIP adds Neon browser tests/documentation, release-check coverage for every catalog route, and the initial racing/fuse/penalty engines. Root cloud-browser play completed the first Neon board and observed persisted progression; this browser explicitly disables WebGL. Actual rendered 4K, full accessibility and new gameplay release checks remain pending in CI. No new integration or deployment is claimed.
+The preceding documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out twice. Read-only diagnosis confirmed build/upload succeeded while publishing stalled; the preceding successful release used the same action revision and runner. Live catalog/status bytes still matched `b3844bf` when recovery began. No host, audience, permissions or action-version change was justified. The next tested source will use the existing Pages flow; an unchanged third retry is not the plan. [Previous failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
 
-### Current integration checkpoint
+## Implemented in the four-game candidate
 
-Second WIP **`a14c4f5b54a74a40cbc66d940d90e01cd11ef516`** was verified remotely at **2026-11-04T21:46:36Z**. Local Node regression run passed **158/158** checks with no failures/skips before the new agent test suites were finished. Four new 3D entries are represented in the candidate catalog; their `verified4K` flag remains false and new deployment is explicitly pending. The stale inventory now includes Ark and correctly identifies Tactics Grid as 3D. Original asset provenance and root descriptions were reconciled.
+| Existing title | Distinct playable work |
+| --- | --- |
+| **Neon Pulse — game1** | Original 3D LED matrix and coupled three-state signal puzzle. Target patterns, finite pulse budget, undo, hints, pause, loss/retry, keyboard/scene/DOM controls and sequential saves. All 10,000 distinct boards are solved through the actual engine within budget. |
+| **Fuse Box — game8** | Original 3D DC distribution cabinet. Assign loads, fit finite breaker stock, respect budget/cable/supply current limits, run three operating profiles, isolate/reset real trips and repair the retained plan. All 10,000 distinct reference configurations complete through the numerical engine. |
+| **Apex Circuit — game10** | Original closed-course 3D vehicle/track. Steering, throttle, brake, grip, ordered lap gates, invalid-sector latch, recovery/time penalties, finite qualification/loss, step driving and saves. All 10,000 physical configurations are distinct and geometrically checked; 12 representative complete races cover every tier boundary and the final level. |
+| **Penalty Pro — game17** | Original 3D training ground and ten-turn shootout: five physical kicks followed by five player-controlled goalkeeper dives. Aim/elevation/power/wind, frame and goalkeeper collision, separate opponent-goal/save counters, explicit win/draw/loss, pause/retry and saves. All 10,000 campaigns complete through 50,000 physical shots and 50,000 physical saves. |
 
-WIP CI is not a release gate. The first Neon-only checkpoint failed while its newly linked game README was not yet present; the subsequent checkpoint contains it. A local release check briefly encountered a file mid-replacement during coordinated agent work; run the final check only after all writers finish. Current modified work is not integrated or deployed. Next: finish all four scenes/UI/tests, run the exact candidate gate and inspect actual 4K frames before publication.
+Each conversion includes its own game-template README, original-asset record, numerical tests, real-control browser tests and equivalent commands when WebGL is unavailable. Existing legacy assets/styles needed by other routes are retained. In particular, games 18–21 still depend on `game17/style.css`.
 
-Third WIP **`148954a88d43f84dd5a382c2ff4ce9769de16087`** was verified remotely at **2026-11-04T21:50:55Z**. Subsequent local release integrity passed and **182 Node checks passed** with no failures/skips. Cabinet/racing completed numerical tests are included. A reviewed multi-touch defect in racing was corrected with source-aware held inputs; two regression checks cover simultaneous throttle/steering, focus changes, cancellation, keyboard overlap and reset. New README links now resolve. The earlier accessibility failure identified Neon accessible-name mismatch; redundant names were removed so the visible signal labels are the accessible names.
+The catalog and asset inventory reflect these implementations without prematurely claiming new 4K or deployment evidence. `GAMES_STATUS.md` now includes Ark and correctly identifies the previously released Tactics Grid as 3D. Release syntax checks derive routes from the complete catalog. A concrete racing input defect was fixed: a second touch/focus change no longer releases an already held throttle or steering control.
 
-The next engineering conversions are isolated on `work/finish-engineering-2026-11-04` at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering` (base `148954a`). They cannot be treated as part of this release before integration and verification. Penalty Pro's goalkeeper half is being preserved before final acceptance.
+## Verification so far
 
-## Acceptance and published revision
+| Check | Actual outcome / limit |
+| --- | --- |
+| Existing regressions + Neon, Fuse Box and racing tests | **182 passed**, zero failed/skipped in the local combined run before final penalty tests were added |
+| Simultaneous racing input | **2 passed**: independent touches, focus blur, cancellation, lost capture, keyboard overlap and reset |
+| Penalty numerical + legacy compatibility | **20 passed**, zero failed/skipped; includes the 10,000 complete campaigns described above |
+| Release integrity | Passed for 24 unique catalog routes, local links, official artwork blob, policy pin and JavaScript syntax |
+| Preliminary CI at `3b94403` | Node, API, build, accessibility/reflow and gateway/graphics-fallback stages passed; final rendered stage was still running when the next required recovery checkpoint was pushed. This preliminary run is not the final release gate. |
+| Manual cloud-browser play | Neon first-board completion/save; Fuse Box valid 5/7/11 A branch plan, all three stages, 100% completion, 0.920 Wh, board 2 unlock and save feedback observed through the actual controls |
+| Cloud-browser graphics | Explicit WebGL-disabled environment. Command play works; no 3D/4K claim comes from that browser. |
+| Actual 4K, final accessibility and all affected browser flows | **PENDING** on the final exact candidate in Chromium/Ubuntu CI; inspect captured frames as well as real WebGL drawing-buffer measurements |
+| Physical hardware/touch/gamepad/full screen-reader play | **NOT TESTED**; automated checks do not substitute for these |
 
-**In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.
+The release workflow runs `npm run check`, `npm test`, the pinned Python API tests, a clean build and the browser suite. Tests assert true controls, failure/retry, save/reload, actual 3840 × 2160 buffers and narrow layouts; transport fixtures remain explicitly test-only. No live AI result is claimed.
 
-**The verified gameplay release source is `b3844bff8775b509ddda6f9002726bf4ec1dc89b`**, integrated into main and read back exactly at **2026-11-04T18:36:31Z** after its release gate passed. Subsequent evidence/documentation checkpoints retain that tested gameplay implementation; receipts identify the immutable revision actually verified. GitHub Pages [run 41888830443](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41888830443) succeeded for that exact source at **2026-11-04T18:36:58Z**. Public verification completed at **2026-11-04T18:41:10Z**: **all 67 checked files returned HTTP 200 and matched exact source bytes**. [Per-file deployment receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json). The custom domain remains **https://adigungamesbank.hephzibahbehulah.com/**; the new game is live at **https://adigungamesbank.hephzibahbehulah.com/game24/**. The preceding verified public source was `88c3035320044b254ed719ef840f527aa5520e2c`.
+Initial WIP failures were retained rather than published: the first Neon checkpoint lacked its newly linked README; the early accessibility run found redundant Neon accessible labels and legacy-route name mismatches before their conversions were included. The current Neon buttons derive accessible names from their visible text. A later intermediate WIP lacked the new racing README; all game guides now exist. Final release checks must verify these repairs.
 
-## Final source checkpoint and publication blocker
+## Recovery receipts
 
-**Main is `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`**, verified by exact remote readback at **2026-11-04T18:53:41Z**. That exact commit passed [CI 41890099819](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41890099819), updated **2026-11-04T18:52:56Z**: **153 JavaScript + 52 API + 27 browser checks**, with 138 runtime build files and fingerprint `1f316a27a65d82a600f5e3379f07b79eceb7d3f89e49c9d762766e96f575570f`. It retains the verified gameplay implementation and adds final evidence/documentation.
+Plain Git write authentication was unavailable. The existing authorized GitHub connector created **identical Git trees**, used expected-head checks and normal fast-forward ref updates, then read back each exact head. Public Git fetch reconciled the local work branch to the identical-tree connector commit while preserving unstaged work. No credentials were exposed, force pushes performed or repository access changed.
 
-**Final documentation publication is blocked.** GitHub Pages [run 41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out in its deployment step on both attempts, recorded at **2026-11-04T19:04:10Z** and **2026-11-04T19:15:19Z**. The failed-job retry was requested at **2026-11-04T19:04:45Z**. Public checks completed at **2026-11-04T19:00:21Z** and **2026-11-04T19:13:19Z**; each found all 11 changed evidence/documentation/catalog files stale or unavailable. The preceding 67-file gameplay deployment remains the last verified public release. These failures do not establish an application defect or a service-wide outage.
+| Useful work checkpoint | Exact remote verification |
+| --- | --- |
+| `f9a6a982947e8530b30ec195f8a6d83ea14e6b4e` | 21:44:17Z; first changed work was 21:41:59Z |
+| `a14c4f5b54a74a40cbc66d940d90e01cd11ef516` | 21:46:36Z |
+| `148954a88d43f84dd5a382c2ff4ce9769de16087` | 21:50:55Z |
+| `3b94403ae1f62834a46854e4980109d61a96e71b` | 21:55:06Z |
+| `24819e438121c52f2e47cbcb638934b735ca7c9a` | 22:00:05Z |
 
-[Exact application, deployment-attempt and per-file receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json). This failure record is preserved on the work branch; no release gate or publication is claimed for this subsequent recovery checkpoint. No additional source changes or third deployment retry were made.
+All above dates are 2026-11-04 UTC; add one hour for Europe/Berlin. First/subsequent changed checkpoints met the five-minute cadence. WIP status does not waive release gates. Simulated concurrent writers/interrupted-push recovery and the remaining policy recovery scenarios are **NOT TESTED** unless separately recorded. This receipt text is locally pending until its next checkpoint.
 
-## Changed implementation in this continuation
+## Parallel engineering work
 
-- **`game24/` — Ark: The Waterline Commission:** individually designed Genesis 6–9 cargo/buoyancy game, original timber/cargo/pier/water geometry, six real cargo stations, sealed ballast tanks, numerical stability trials, failure/retry, pause, 10,000 physical configurations and saved progression. Keyboard, mouse and touch controls share the real engine. Equivalent command play remains available when WebGL is unavailable.
-- **`game3/app.js`, `game11/app.js`, `game23/app.js`:** durable-progress feedback validates the stored campaign record. A successful bench save cannot hide a failed or silently rejected campaign save. Four regressions failed on the preceding source and pass with the correction.
-- **`tests/browser/ark.spec.js`, accessibility checks and workflow:** actual 4K buffer, controls, keyboard bounds, invalid launch, loss/retry/rebalance, 100% completion, save/reload, graphics failure and 320px/390px layouts. Nine axe audits run without excluded WCAG 2.1 A/AA rules.
-- **Football browser test:** keeps real kickoff/shot input and full-match/substitution assertions. The early HUD wait accommodates an observed delayed software frame. The substitution check proves the exact #11→#12 request, applied count, outgoing-player absence and either active #12 or an explicit lawful dismissal record.
-- **Catalog, rights, game template and evidence:** the new title has its own metadata and original asset inventory; actual rendering evidence and honest acceptance limits are retained. The public verifier derives runtime paths from the catalog's 3D entries.
+`work/finish-engineering-2026-11-04` is isolated at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering`. Its first RC engine checkpoint **`7db0840741f7ea29508bedf5dcaf88cc86f75cb8`** was remotely verified at **2026-11-04T21:59:16Z**, following first changed work at 21:56:34Z. Capacitor Charge, Circuit Rush and Resistor Match have exclusive writers. These conversions must be integrated and independently verified before their counts are included in a release.
 
-## Verified release gate
+## Remaining acceptance and external dependencies
 
-| Evidence | Observed result |
-|---|---|
-| Exact tested source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b` |
-| CI | [41887296841](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41887296841), **success**, completed 2026-11-04T18:34:24Z |
-| JavaScript / numerical checks | **153 passed**, zero failed/skipped; includes seven ark tests and complete numerical launch trials for all 10,000 ark configurations |
-| AI API checks | **52 passed**, one existing Starlette/httpx deprecation warning; transport doubles are tests, not live AI output |
-| Browser checks | **27 passed**, zero failed/skipped/flaky: 9 accessibility, 3 isolated gateway/fallback and 15 gameplay/reflow checks |
-| Ark 4K | Actual **3840 × 2160 WebGL2**, zero GL error; original scene inspected; Chromium/Ubuntu 24.04/SwiftShader |
-| Ark play | Six cargo placements and ballast controls, paused/resumed launch, **100% completion**, voyage 2 unlock and reload; keyboard-only unbalanced loss, retained-plan retry, rebalance and win |
-| Football play | Inspected **2–0** full-time result, one #11→#12 replacement and level 2 unlocked; #12 remained active with a yellow card in this run |
-| Clean build | Local and CI matched **138 runtime files**, SHA-256 `6ff28afbe0015550c853cedc9c87e5e73bc0e16f83d99ca0e2bfd6e4b522dc1e` |
-| Release integrity | Unique catalog entries, local links, exact official-logo blob, pinned policy and JavaScript syntax passed |
+- **Catalog:** the original 2,000-title target and remaining individual legacy conversions are open. Automated level generators are not separate titles or 10,000 manual playtests.
+- **Bible:** the released David and Genesis ark chapters do not complete the full Genesis–Revelation campaign or requested Moses/Samson/Abimelech coverage.
+- **Live AI:** an API host, server-side provider credentials, active model IDs and independent judge configuration are required. Adigun AI needs a real endpoint. No client key exposure or replay-as-live substitution is permitted.
+- **Native consoles:** platform-holder developer access, approved tooling/SDKs, licensing and certification are required. Browser games and the separate Godot Node2D suite are not native PlayStation releases; future console availability is not assumed.
+- **Production qualification:** hardware frame-time/initial-load measurements, physical device controls, complete language review, screen-reader play and production-art work remain open. The 3,000 ms load target is not a measured result.
 
-[Immutable gate/build/frame receipt](docs/evidence/2026-11-04-ark/verification-b3844bf.json). [Chapter evidence and original captures](docs/evidence/2026-11-04-ark/README.md). The workflow records exact commands for the repository's declared Node/Python checks, build and affected browser flows. Automated coverage is not 10,000 manual playtests, hardware performance certification or complete accessibility conformance.
-
-## Failure correction and recoverability
-
-- `05a4704` failed the new bay buttons' accessible-name audit. Removing redundant names made visible and accessible labels agree; later audits passed.
-- Source review corrected vertical arrow movement at the grid's top/bottom boundaries and aligned scene deck/cargo heights with the physical configuration.
-- `d3797b95d20c3ef22e925a83d718e944bb765b74` passed 153/52/27 checks in [CI 41883610973](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41883610973). Visual review found successful trials displaying 99% because of rounding; the display and two browser assertions were corrected in `f5378f5`.
-- `f5378f561bb7a8ef9c3a725d7ef6425f371c4234`, verified remotely **2026-11-04T18:14:03Z**, passed every ark check and 26/27 browser checks. Its football failure snapshot showed a legal later dismissal of #12. The corrected assertion preserves identity, applied-substitution and roster checks. The failed run is retained in [its receipt](docs/evidence/2026-11-04-ark/verification-f5378f5.json); it was not published.
-- **`b3844bff8775b509ddda6f9002726bf4ec1dc89b`** was verified on `work/genesis-ark-2026-11-04` at **2026-11-04T18:27:26Z**, passed CI, then fast-forwarded to main without a force push. Later documentation checkpoints must record their own observed outcomes, not inherit unperformed checks.
-- Previous recovery/timing exceptions and historical results remain in the [earlier status snapshot](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/b3844bff8775b509ddda6f9002726bf4ec1dc89b/PROJECT_STATUS.md) and [second-wave evidence](docs/evidence/2026-11-04-wave2/README.md). A policy declaration does not prove unexercised recovery scenarios.
-
-- Documentation/evidence checkpoint **`463e913a771a0612d9ee2c1c8f60c56880575149`** was read back at **2026-11-04T18:39:37Z**. This exceeded the five-minute interval after the documentation change was first observed at 18:34:01Z; the missed interval is recorded, not treated as compliant. The tested gameplay source and earlier evidence remained recoverable in verified commits.
-
-## Remaining dependencies and acceptance work
-
-- **Full catalog and Bible scope:** 18 legacy 2D titles still need individual redesign; 2,000 individually designed production games and the complete Genesis–Revelation story remain unfinished. Levels and renamed templates never count as titles.
-- **Live AI competition:** a separately hosted API, server-side provider credentials, active model IDs and an independent judge are required. No live model request or result is claimed by offline transport tests. Adigun AI needs a real configured endpoint.
-- **Native consoles:** platform-holder developer access, approved tooling/SDKs, asset rights and certification are required. Browser titles and the separate Node2D Godot suite are not native PlayStation releases; PS6/PS8 availability is not assumed.
-- **Production qualification:** hardware GPU/frame-time and initial-load measurements, physical touch testing, complete screen-reader play, voice-device checks and full English/German/Yoruba/Nigerian Pidgin localization remain open. The 3,000 ms initial-load figure is a target, not a measurement. Football retains documented rule/art limitations.
-- **Standards:** HB-AI-ENGINEERING-001 v2.0 remains pinned to `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; design tokens to `52f01f9986d97088413ca9785bc7a2d3f2967123`. Corporate/trading pins, official artwork, five-division inheritance and financial-data rules remain in [docs/STANDARDS.md](docs/STANDARDS.md). Original/source rights are recorded in [ASSETS.md](ASSETS.md).
+Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; design system remains `52f01f9986d97088413ca9785bc7a2d3f2967123`. [Standards](docs/STANDARDS.md), [asset rights](ASSETS.md) and [prior release evidence](docs/evidence/2026-11-04-ark/README.md) remain in force.
 
 ## Next bounded action
 
-Resolve/retry GitHub Pages publication for the already tested main revision, verify the 11 changed public files, and reconcile this work-branch failure record before continuing the next individual title/Bible chapter. Two deployment timeouts are recorded; further retries must be bounded and evidence-led. Final documentation publication and the whole 2,000-game program have no defensible completion ETA.
+Run the complete exact-candidate release gate, inspect actual 4K captures, correct observed failures, fast-forward main only after it passes, then publish and verify source bytes at the existing public URL. Continue the isolated engineering conversions without representing them as released. Full-project finish time is **unknown**; ETA **pending**.
