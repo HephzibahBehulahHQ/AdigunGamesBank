@@ -681,7 +681,7 @@
       "testing": {
         "unit": "37 football engine/rules tests passed locally, including 10,000 distinct match configurations",
         "integration": "Input-only winning match; offside touch/save/rebound, restart exemptions, penalties, cards, send-offs and five-substitute/three-window limits.",
-        "browser": "Prior b9db74c 4K/full-match evidence retained; new rules/substitution browser flow pending CI."
+        "browser": "CI 41789834075 passed: actual 4K buffer, real-input full 4–0 match, queued/cancelled/applied substitution, visible roster replacement and 320px/390px layout."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
@@ -904,7 +904,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075",
+          "scope": "Actual framebuffer dimensions, zero GL error and inspected original scene screenshot. Not live AI availability, hardware performance or production acceptance."
+        }
       },
       "levels": {
         "target": 10000,
@@ -919,7 +927,7 @@
         "3D pointer picking"
       ],
       "accessibility": {
-        "status": "Equivalent text board and commands, visible focus and reduced motion implemented; new 320px automated and gameplay checks pending."
+        "status": "320px reflow, visible keyboard focus and WCAG 2.1 A/AA automated scan passed in CI 41789834075; 390px reflow passed. Full assistive-technology and physical-device qualification remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -930,9 +938,9 @@
         "status": "Original procedural drones, industrial terrain and materials; Three.js MIT. No external character, photo, music or faction assets."
       },
       "testing": {
-        "unit": "23 tactical engine, campaign and save tests passed locally",
+        "unit": "25 tactical engine/campaign/save/interaction tests passed locally",
         "integration": "All 10,000 maps unique/connected/reachable; complete elimination, uplink, retrieval and master-level sequences; losses and storage failures",
-        "browser": "New actual 4K, first-mission win, next-level/reload and responsive checks pending CI."
+        "browser": "CI 41789834075 passed: actual 4K, 17 real commands to mission victory, level 2 unlock/reload, 320px/390px layouts. Latest fallback regression awaits final CI."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game15/",
@@ -1277,7 +1285,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075",
+          "scope": "Actual framebuffer dimensions, zero GL error and inspected original scene screenshot. Not live AI availability, hardware performance or production acceptance."
+        }
       },
       "levels": {
         "target": 10000,
@@ -1292,7 +1308,7 @@
         "Optional supported-browser voice input"
       ],
       "accessibility": {
-        "status": "320px reflow, visible focus, reduced motion and WCAG 2.1 A/AA automated scan passed in CI 41789483842. Full assistive-technology and microphone-permission testing unfinished."
+        "status": "320px reflow, visible keyboard focus and WCAG 2.1 A/AA automated scan passed in CI 41789834075; 390px reflow passed. Full assistive-technology and physical-device qualification remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1303,9 +1319,9 @@
         "status": "Original procedural arena, podiums and materials; text-only platform identifiers; Three.js MIT. No provider logos or likenesses."
       },
       "testing": {
-        "unit": "13 frontend/curriculum tests; 50 backend tests including every one of the 10,000 reference solutions in the real evaluator",
+        "unit": "14 frontend/curriculum tests plus 52 backend tests; all 10,000 reference solutions executed by the actual restricted evaluator",
         "integration": "Deterministic challenge uniqueness, real restricted-evaluator oracle contract and adversarial live-result grading. Provider transport doubles are explicit tests; real provider calls NOT TESTED.",
-        "browser": "New actual 4K and campaign-preview checks pending CI; live API and microphone permission checks remain unperformed."
+        "browser": "CI 41789834075 passed: actual 4K stage, eight disabled unconfigured providers, 10,000-level preview with no invented answers/progress. Test-only configured gateway contract and expanded accessibility await final CI; live API/microphone checks remain unperformed."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",

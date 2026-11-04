@@ -1,10 +1,10 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T08:07:45+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T08:20:34+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
-**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (22 local implementations and one API-dependent comparison client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
+**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (18 legacy 2D titles, four rebuilt local 3D games and one 3D API-dependent competition client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
 The verified development milestone **`b9db74c1406b44d47afb48c219548f2bdc7d4434`** was integrated into **main** and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
 
@@ -15,17 +15,19 @@ Work resumed from verified main `a19b184c6ba7a475ae0a44a3860fab52fbcf0204` on th
 - `game22/`: real 3D competition presentation and 10,000 substantive challenge levels; provider hosting/credentials remain separate live-play dependencies.
 - `game11/`: offside, fouls/restarts and player discipline, with the current real match kept playable.
 - `game15/`: individual 3D tactical-game rewrite with meaningful mission progression and accessible command controls.
-- `tests/browser/accessibility.spec.js`: new 320px reflow, visible keyboard focus, WCAG 2.1 A/AA automated checks and catalog light-theme checks. CI found and fixed catalog naming, circuit 320px overflow and AI landmark defects. Run 41789483842 passed six of seven audits; the tactical visible-name correction is awaiting its new CI result.
+- `tests/browser/accessibility.spec.js`: new 320px reflow, visible keyboard focus, WCAG 2.1 A/AA automated checks and catalog light-theme checks. CI found and fixed catalog naming, circuit 320px overflow, AI landmark and tactical visible-name defects. All seven initial audits passed at `2bfd8bf`; expanded campaign checks are now running.
 - Build output now removes obsolete files while preserving its preview directory; release syntax validation includes game15.
 
 The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 browser tests in [run 41773986655](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41773986655), then passed Pages [run 41774461710](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41774461710). Its last 12 changed public documentation/metadata files matched exact source bytes at **2026-11-04T05:41:27+01:00**. New-wave results must be recorded separately.
 
 ## Second-wave verification record
 
-- Local combined suite at `2bfd8bf` plus the recorded working corrections: **137 JavaScript tests passed**, zero failures/skips. Integrity and static build passed; this is not a claim that uncommitted work is remotely verified.
+- Latest local combined suite: **142 JavaScript tests passed**, zero failures/skips. Integrity and static build passed. New shared-save, tactical pointer/core and AI response-binding checks are included.
 - API CI at `8304cd89e3e13abdc388407bafa1104fffec4aff`: **50 tests passed**, including all **10,000 AI curriculum reference solutions** executed by the real restricted Python evaluator. No live providers were called. One existing Starlette/httpx deprecation warning remains.
 - CI `41787647555`: four browser failures exposed a catalog label mismatch, Electronicer 320px overflow and AI invalid ARIA; 14 other browser checks passed. CI `41788890701`: five of seven accessibility audits passed, with new tactical labels and AI's not-yet-checkpointed landmark remaining. CI `41789483842`: six of seven passed; only tactical visible-label names remained. These failures are retained as failures.
-- New real-input browser coverage checks the tactical 17-command first-mission win, actual 4K AI/tactical buffers, AI preview without invented outputs, and queued/cancelled/applied football substitution. Results are pending; no success is inferred from test authorship.
+- New real-input browser coverage checks the tactical 17-command first-mission win, actual 4K AI/tactical buffers, AI preview without invented outputs, and queued/cancelled/applied football substitution. All these checks passed in CI `41789834075` at `2bfd8bf`: 137 JavaScript, 50 API and 20 browser checks. The 4K AI/tactics frames, tactical victory and football 4–0/one-substitution frames were inspected and retained in `docs/evidence/2026-11-04-wave2/`. Later test-only gateway/fallback checks remain pending.
+
+- Independent cross-review reproduced wrong-request AI awards, stale result displays and stale-tab progress rollback. Fixes bind prompt plus ordered test cases, clear old results, validate readback schema and refresh higher saved progress. **52 API tests** now pass locally, including additive migration and owned-history request evidence. The new gateway browser regression uses explicitly labelled test doubles; it is never live-provider evidence.
 
 ## Changed implementation
 
@@ -33,7 +35,8 @@ The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 brow
 - `AGENTS.md`, `docs/STANDARDS.md`, `docs/GAME_TEMPLATE.md`: explicit policy v2.0 adoption at `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; exact corporate/design/trading pins, evidence requirements and product ownership.
 - `index.html`, `assets/catalog.*`, `data/games.json`, `shared/tokens.css`: official corporate artwork/tokens, searchable genre filters, persisted light/dark theme and honest per-title rendering/acceptance metadata.
 - `game3/`: Electronicer circuit game with five DC topologies, real nodal calculations, meters, patch leads, contact logic, fuse failures, original 3D bench and generated challenge progression.
-- `game11/`: World Football original 11v11 match, real ball/contact/goal/restart physics, original 3D pitch/players/stadium, input controls, full-time outcomes and game-specific challenge progression.
+- `game11/`: World Football original 11v11 match, ball physics, offside involvement, fouls/free kicks/penalties, cards/send-offs, five substitutions across three stoppage windows, original 3D scene and complete match outcomes.
+- `game15/`: individual TACTICS GRID rewrite: original industrial 3D drones/terrain, three objective types, 10,000 distinct connected missions, real opponent turns and equivalent keyboard/text command controls.
 - `game22/`, `platform/`: eight explicit provider adapters, concurrent calls, bounded admission and evaluator, transparent judge metrics, server-only credentials, provider failure handling, voice/text UI and honest unavailable states.
 - `game23/`: first playable David chapter, with original valley/sling/targets, gravity and wind ballistics, finite stones, feedback, failure/retry, completion and saved chapter progression. It is one chapter/game, not the full Bible or thousands of titles.
 - Browser resilience: cached-history return retains the circuit renderer; football/Bible campaign-save confirmations require successful readback, with explicit session-only feedback on storage failure. Five DOM-adapter regressions cover these paths.
@@ -45,8 +48,8 @@ The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 brow
 | Check | Observed result |
 |---|---|
 | Baseline Node suites | 39 passing before changes; audit also reproduced defects these missed |
-| Current Node suites | 93 passing locally, including all 10,000 Electronicer solutions, all 10,000 football configurations and all 30,000 target shots across 10,000 Bible levels |
-| AI API tests | 49 passing in existing Python 3.12 venv; transport doubles are tests only, with no live provider calls |
+| Current Node suites | 142 passing locally, including all 10,000 Electronicer solutions, all 10,000 football configurations and all 30,000 target shots across 10,000 Bible levels |
+| AI API tests | 52 passing in existing Python 3.12 venv; transport doubles are tests only, with no live provider calls |
 | Independent API review | Oversized integer caused HTTP 500; repaired and regression-tested as 422 with zero provider calls/admission records |
 | Static integrity | Unique catalog routes, local links, pinned policy, JS syntax and exact official-logo blob verified |
 | Native browser catalog | Filter/search/empty state and light/dark theme persistence passed; dark/light layouts visually inspected |
@@ -86,7 +89,7 @@ Every SHA below was read back from GitHub. Times are the actual commit times in 
 
 ### Second-wave work-branch checkpoints
 
-All following revisions were read back from the remote work branch. None is a new production approval.
+All following revisions were read back from the remote work branch. None alone is production approval.
 
 | Revision | Commit time (2026-11-04, CET) | Scope |
 |---|---|---|
@@ -95,6 +98,10 @@ All following revisions were read back from the remote work branch. None is a ne
 | `feefa50a016cdbe086278e0405f750ddb6621f68` | 07:56:54 | WIP: checkpoint playable 3D tactics and fix observed accessibility defects |
 | `8304cd89e3e13abdc388407bafa1104fffec4aff` | 08:02:13 | WIP: checkpoint football discipline and substitutions with AI campaign interface |
 | `2bfd8bfa6c676a3caaa763f332fadb3fb78b1362` | 08:05:20 | WIP: verify 4K tactical and AI stages with real gameplay controls |
+| `e3034dd7be15f2f693e4ff6bfaf870539762cefa` | 08:08:06 | WIP: document new game capabilities and tighten live result and contact handling |
+| `6c37ea042e10f549973c3a5671f114c15a6002ce` | 08:11:52 | WIP: bind AI awards to submitted evidence and prevent stale-tab progress rollback |
+| `30202bb07616cfe20918b781ee55260e274d4e9b` | 08:14:37 | WIP: verify visible command fallback and preserve campaign request evidence |
+| `90ef5eb61b22b95779e74299a18b54b50bd71b8a` | 08:18:15 | WIP: retain inspected 4K evidence and exercise AI request binding in browser |
 
 The five-minute checkpoint target was missed across several implementation and verification intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Each receipt identifies its verified revision rather than claiming that an unwritten future checkpoint is already synchronized. Main was advanced only after the milestone candidate passed its applicable checks.
 

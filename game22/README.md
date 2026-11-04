@@ -156,3 +156,7 @@ API/providers/judge and observed real responses.
 - Synthetic workload tasks use abstract work units, not financial prices/returns.
 - Full release: **NOT ACCEPTED** while real model play and device evidence are missing.
   This is one designed title, never a multiplier toward 2,000 separate games.
+
+### Confirmed offline browser milestone
+
+[CI 41789834075](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075) at `2bfd8bfa6c676a3caaa763f332fadb3fb78b1362` verified the actual WebGL2 buffer as **3840 × 2160**, zero GL error, and the inspected original arena scene. Eight unconfigured providers remain disabled; challenge preview produces no model answers or campaign award. 320px accessibility and 390px reflow checks passed. [Original frame and receipt](../docs/evidence/2026-11-04-wave2/README.md). This is offline client evidence; real live-provider verification remains blocked by the documented gateway dependencies. Later lifecycle and test-only gateway contract checks have separate exact revision records in PROJECT_STATUS.md.

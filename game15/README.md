@@ -10,7 +10,7 @@
 | Target platform | Browser with WebGL 2 for the 3D view; the equivalent labelled command map also works when graphics initialization fails |
 | Source | `game15/` |
 | Status | **In progress**: implemented playable browser game; full release qualification remains open |
-| Exact remaining dependencies | Candidate browser/4K/accessibility results must be recorded by the integration owner; representative physical-device performance and assistive-technology review remain unverified |
+| Exact remaining dependencies | Representative physical-device performance, assistive-technology review and production acceptance remain unverified; exact browser evidence is recorded below |
 
 This is one existing title with its own rules and campaign. Three original industrial drones face three heuristic-controlled opposing drones on an 8 × 8 sector board. It does not use a live AI provider. The opponent evaluates legal movement, firing opportunities, exposure, hull strength, cover and objectives after each friendly phase.
 
@@ -88,9 +88,9 @@ Local verification capture: **2026-11-04, Europe/Berlin**. `PROJECT_STATUS.md` r
 | Historical rules | `node --test game15/test.js` | All **8 existing tests pass unchanged**, preserving activation, movement, attack, AI-phase and finished/dead-state protections. |
 | Campaign / integration / saves | `node --test tests/tactics-campaign.test.js game15/test.js` | **25/25 pass** in local Node v24.22.1. Includes all 10,000 layouts, three complete objective wins, real enemy turns, representative higher-level wins/losses, passive defeat/retry, guard/cover/carrier rules, safe persistence, actual objective markers and cancelled/multi-pointer/drag input regressions. |
 | Syntax | `node --check` on `game15/app.js`, `game15/scene.js`, `game15/save.js`, `game15/interaction.js` | Passed locally. |
-| Browser playthrough | Repository Playwright suite; real UI selection/move/attack sequence, next-level unlock and reload | Integration owner is running this against the current candidate. Do not substitute engine tests for browser evidence. |
-| Accessibility / reflow | Axe WCAG 2.1 A/AA at 320 px, visible first-link focus, overflow checks; keyboard/touch flow | An earlier candidate exposed visible-label/name mismatches. Source corrected; candidate CI result must verify the fix. Manual screen-reader/device review remains unverified. |
-| Actual 4K / visual quality | Inspect a rendered frame and actual WebGL drawing buffer `3840 × 2160`, record browser/device and graphics errors | **NOT YET CONFIRMED in this local authoring record.** Use current candidate artifacts and `PROJECT_STATUS.md` for subsequently verified results. |
+| Browser playthrough | Real UI selection/move/attack, next-level unlock and reload | **Passed** in CI 41789834075 at `2bfd8bf`: 17 input commands completed mission 1 at round 8, then unlocked/persisted mission 2. |
+| Accessibility / reflow | Axe WCAG 2.1 A/AA at 320px, focus and overflow; 390px layout | **Passed** in CI 41789834075 after correcting the observed visible-label defects. Manual screen-reader/device review remains unverified. |
+| Actual 4K / visual quality | Actual buffer and inspected frame | **Confirmed** at `2bfd8bf`: WebGL2 `[3840, 2160, 0]`; original 3D scene inspected. [Receipt and images](../docs/evidence/2026-11-04-wave2/README.md). This does not establish production art quality or hardware FPS. |
 | Performance | Frame timing / initial interaction on the named physical device and network | **NOT TESTED** on physical hardware; source byte count and bounded generation are not frame-rate proof. |
 | Asset rights | Source inventory above and pinned corporate provenance | Original geometry and licensed renderer recorded; no external commercial character/player content added. |
 | Pages path | `/AdigunGamesBank/game15/` | Candidate deployment owned by the integration workflow; not inferred from local files. |
