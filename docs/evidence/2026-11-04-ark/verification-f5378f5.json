@@ -194,7 +194,6 @@
     "ark-win.png": "42d7fcd12ac77e4ce1603521d37a9546bf965c67ad9f305581a584f1b20e1f79",
     "ark-mobile-320.png": "52ed9b1a530c6dfd35e7e635d8680b4e82a4c08a3e3cb92067fea822c2279431"
   },
-  "inspectedAt": "2026-11-04T18:26:00Z",
   "previousCompleteGate": {
     "commit": "d3797b95d20c3ef22e925a83d718e944bb765b74",
     "workflowId": 41883610973,
@@ -202,5 +201,7 @@
     "javascript": 153,
     "api": 52,
     "browser": 27
-  }
+  },
+  "inspectedOn": "2026-11-04",
+  "inspectionTimeNote": "Image review is recorded to date precision; the earlier second-precision value was not a measured timestamp."
 }

@@ -1,0 +1,617 @@
+{
+  "commit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+  "requestedUrl": "https://hephzibahbehulahhq.github.io/AdigunGamesBank/",
+  "resolvedUrl": "https://adigungamesbank.hephzibahbehulah.com/",
+  "startedAt": "2026-11-04T18:40:10+00:00",
+  "completedAt": "2026-11-04T18:41:10+00:00",
+  "transientRetries": [],
+  "verifiedFiles": 67,
+  "allMatch": true,
+  "files": [
+    {
+      "path": "assets/catalog.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/assets/catalog.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 13107,
+      "sha256": "e8efc6b2a30e4831931920ccb11efa99e10c977a62601b0bfcd73b012ad0d648",
+      "expectedSha256": "e8efc6b2a30e4831931920ccb11efa99e10c977a62601b0bfcd73b012ad0d648",
+      "matches": true
+    },
+    {
+      "path": "assets/catalog.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/assets/catalog.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3699,
+      "sha256": "614d5a1860f776c972d08221904bd475aff8b35548808df431682829e5f32cd9",
+      "expectedSha256": "614d5a1860f776c972d08221904bd475aff8b35548808df431682829e5f32cd9",
+      "matches": true
+    },
+    {
+      "path": "assets/corporate/hephzibah-behulah-official.jpg",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/assets/corporate/hephzibah-behulah-official.jpg?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 54461,
+      "sha256": "409c401be5189b80593797cbaf00a3a42a91ab8c0645e3648ff91205b47d4c95",
+      "expectedSha256": "409c401be5189b80593797cbaf00a3a42a91ab8c0645e3648ff91205b47d4c95",
+      "matches": true
+    },
+    {
+      "path": "data/games.json",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/data/games.json?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 50545,
+      "sha256": "e11071d6035ad605bec40043295ccaa23ec1c083d41d23a39c84b5aded3ed66d",
+      "expectedSha256": "e11071d6035ad605bec40043295ccaa23ec1c083d41d23a39c84b5aded3ed66d",
+      "matches": true
+    },
+    {
+      "path": "game1/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game1/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4568,
+      "sha256": "981a6f8cf06bda699d771d1c5b020ea2882466cc81cb02ce998876f57fc85819",
+      "expectedSha256": "981a6f8cf06bda699d771d1c5b020ea2882466cc81cb02ce998876f57fc85819",
+      "matches": true
+    },
+    {
+      "path": "game10/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game10/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3292,
+      "sha256": "91e3f2eff6cda9bde4c250c3d84b972d6befb5e39fccc282f622070bd72e46b2",
+      "expectedSha256": "91e3f2eff6cda9bde4c250c3d84b972d6befb5e39fccc282f622070bd72e46b2",
+      "matches": true
+    },
+    {
+      "path": "game11/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 14337,
+      "sha256": "80b94f1bf4eae13a2784bfc676c7de0954ad08dcd25c5b6b72725cd4e979e89e",
+      "expectedSha256": "80b94f1bf4eae13a2784bfc676c7de0954ad08dcd25c5b6b72725cd4e979e89e",
+      "matches": true
+    },
+    {
+      "path": "game11/engine.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/engine.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 27418,
+      "sha256": "c35681d7e743300c397683b65b2e73a09571964a3f6a932941e0f331706f85d3",
+      "expectedSha256": "c35681d7e743300c397683b65b2e73a09571964a3f6a932941e0f331706f85d3",
+      "matches": true
+    },
+    {
+      "path": "game11/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 10735,
+      "sha256": "a4a21eb680d67cbed1715739b2431e84911b47748f206107f417b7132c08e54b",
+      "expectedSha256": "a4a21eb680d67cbed1715739b2431e84911b47748f206107f417b7132c08e54b",
+      "matches": true
+    },
+    {
+      "path": "game11/rules.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/rules.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3700,
+      "sha256": "29c09da6ca765304a414242adbaaf1a4722930887a9bdb50e64c1b71189ecef1",
+      "expectedSha256": "29c09da6ca765304a414242adbaaf1a4722930887a9bdb50e64c1b71189ecef1",
+      "matches": true
+    },
+    {
+      "path": "game11/scene.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/scene.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 12471,
+      "sha256": "97adafa86eead2916d4bc4f18b41a0d28ba96294098d514dbc1b04416621e092",
+      "expectedSha256": "97adafa86eead2916d4bc4f18b41a0d28ba96294098d514dbc1b04416621e092",
+      "matches": true
+    },
+    {
+      "path": "game11/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game11/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3953,
+      "sha256": "97d8bb92caae982149c65fbc184780db669f3fe575afe8dd3148d00b66fb0233",
+      "expectedSha256": "97d8bb92caae982149c65fbc184780db669f3fe575afe8dd3148d00b66fb0233",
+      "matches": true
+    },
+    {
+      "path": "game12/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game12/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3922,
+      "sha256": "b21fed8e9a91e30a60b058a1447b4338470df033e1e1cbddded387741b350b96",
+      "expectedSha256": "b21fed8e9a91e30a60b058a1447b4338470df033e1e1cbddded387741b350b96",
+      "matches": true
+    },
+    {
+      "path": "game13/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game13/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3774,
+      "sha256": "b67626353c9196ada32f3bbe0416d5296feea63088e201e51ef1e82a4eec0214",
+      "expectedSha256": "b67626353c9196ada32f3bbe0416d5296feea63088e201e51ef1e82a4eec0214",
+      "matches": true
+    },
+    {
+      "path": "game14/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game14/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4429,
+      "sha256": "ffa728623e829469eb89cec5c5e73f0fb91b08783dd938ca07ba4b0478c4e19a",
+      "expectedSha256": "ffa728623e829469eb89cec5c5e73f0fb91b08783dd938ca07ba4b0478c4e19a",
+      "matches": true
+    },
+    {
+      "path": "game15/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 16609,
+      "sha256": "8d5405e4b40d1f71638b7bcd9f3a66d348d454e02bfdd2afeda8726e8e12a559",
+      "expectedSha256": "8d5405e4b40d1f71638b7bcd9f3a66d348d454e02bfdd2afeda8726e8e12a559",
+      "matches": true
+    },
+    {
+      "path": "game15/campaign.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/campaign.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 5282,
+      "sha256": "926ca4e3919d0734019b6b7f8e5d8964508df1eaee0c2c217c5f90e8a8fb7976",
+      "expectedSha256": "926ca4e3919d0734019b6b7f8e5d8964508df1eaee0c2c217c5f90e8a8fb7976",
+      "matches": true
+    },
+    {
+      "path": "game15/engine.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/engine.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 8676,
+      "sha256": "a44829afc1b5a85b568c3ff0c32a96ede7d79986f232b519ceecc5f346f1aa41",
+      "expectedSha256": "a44829afc1b5a85b568c3ff0c32a96ede7d79986f232b519ceecc5f346f1aa41",
+      "matches": true
+    },
+    {
+      "path": "game15/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 7043,
+      "sha256": "894af3d8a5f570d8ae76388887467886c0ff1e3750ff8fdd2fa2a4edbceef7bd",
+      "expectedSha256": "894af3d8a5f570d8ae76388887467886c0ff1e3750ff8fdd2fa2a4edbceef7bd",
+      "matches": true
+    },
+    {
+      "path": "game15/interaction.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/interaction.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 969,
+      "sha256": "f2df111932334f6f7c481d9b433c9a6a1271e015592fd34db6d6753c74aa6a7d",
+      "expectedSha256": "f2df111932334f6f7c481d9b433c9a6a1271e015592fd34db6d6753c74aa6a7d",
+      "matches": true
+    },
+    {
+      "path": "game15/save.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/save.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1924,
+      "sha256": "9fb046840e27c7943ab3237950acb85356859b3dedf5dd4ff822f98705767277",
+      "expectedSha256": "9fb046840e27c7943ab3237950acb85356859b3dedf5dd4ff822f98705767277",
+      "matches": true
+    },
+    {
+      "path": "game15/scene.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/scene.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 10236,
+      "sha256": "5ea69a96720e9675d65c18378dccfb45a89d061ce247f0ad047cfa78ff6ef744",
+      "expectedSha256": "5ea69a96720e9675d65c18378dccfb45a89d061ce247f0ad047cfa78ff6ef744",
+      "matches": true
+    },
+    {
+      "path": "game15/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4398,
+      "sha256": "5e6997f80b3c91c230339c1d1af32103de972dd65db45e0932a2e5ac2e741bb4",
+      "expectedSha256": "5e6997f80b3c91c230339c1d1af32103de972dd65db45e0932a2e5ac2e741bb4",
+      "matches": true
+    },
+    {
+      "path": "game15/test.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game15/test.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2356,
+      "sha256": "aa5d52053596538ae74d6eed53f1ba2ceb4ec0392fcec0139d97dee50fd7875c",
+      "expectedSha256": "aa5d52053596538ae74d6eed53f1ba2ceb4ec0392fcec0139d97dee50fd7875c",
+      "matches": true
+    },
+    {
+      "path": "game16/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game16/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3410,
+      "sha256": "a9627939ab4b1e318b947878c01036e0e4b3bdfedc67c5b8845da6f0b4695057",
+      "expectedSha256": "a9627939ab4b1e318b947878c01036e0e4b3bdfedc67c5b8845da6f0b4695057",
+      "matches": true
+    },
+    {
+      "path": "game17/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game17/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2818,
+      "sha256": "f582a84e88ae4e270c4fcad36f87b330eacf9ab8dac95d5a0c3431b3da6be225",
+      "expectedSha256": "f582a84e88ae4e270c4fcad36f87b330eacf9ab8dac95d5a0c3431b3da6be225",
+      "matches": true
+    },
+    {
+      "path": "game18/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game18/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3255,
+      "sha256": "6a2cf0206d7d43d731492600250a1c50073c8f8e86b65dfdae5ae41375df0338",
+      "expectedSha256": "6a2cf0206d7d43d731492600250a1c50073c8f8e86b65dfdae5ae41375df0338",
+      "matches": true
+    },
+    {
+      "path": "game19/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game19/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2908,
+      "sha256": "cef52c7e92e768da9c02fd363cf1e32f4f843e204ddd3c2dbf107c5db646ca8a",
+      "expectedSha256": "cef52c7e92e768da9c02fd363cf1e32f4f843e204ddd3c2dbf107c5db646ca8a",
+      "matches": true
+    },
+    {
+      "path": "game2/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game2/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1833,
+      "sha256": "ca81478616c72a84b77bccc18e485bc9be6967a385b7c3828000da17a47839d9",
+      "expectedSha256": "ca81478616c72a84b77bccc18e485bc9be6967a385b7c3828000da17a47839d9",
+      "matches": true
+    },
+    {
+      "path": "game20/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game20/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3216,
+      "sha256": "3d5fb5503b690f36a790018ad49b87823235e8c224f774db347e12504964573e",
+      "expectedSha256": "3d5fb5503b690f36a790018ad49b87823235e8c224f774db347e12504964573e",
+      "matches": true
+    },
+    {
+      "path": "game21/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game21/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2972,
+      "sha256": "816a86aa1f36ba8a4f23ac5397c3c45ad73b89a5f4e27b7b2771e9080df872da",
+      "expectedSha256": "816a86aa1f36ba8a4f23ac5397c3c45ad73b89a5f4e27b7b2771e9080df872da",
+      "matches": true
+    },
+    {
+      "path": "game22/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 31575,
+      "sha256": "646539b77c5d68e0487c14171e96c603306c87ea9ec4420966e53a44bd27f3f7",
+      "expectedSha256": "646539b77c5d68e0487c14171e96c603306c87ea9ec4420966e53a44bd27f3f7",
+      "matches": true
+    },
+    {
+      "path": "game22/arena-utils.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/arena-utils.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2464,
+      "sha256": "20382b57d0878437c7e5c88e9772acc379e74ae87ad31b05a427a82841edf91e",
+      "expectedSha256": "20382b57d0878437c7e5c88e9772acc379e74ae87ad31b05a427a82841edf91e",
+      "matches": true
+    },
+    {
+      "path": "game22/campaign.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/campaign.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 20411,
+      "sha256": "c1eac704ea46133a0c576c8dc48a2c7f3bc984e4f05bd5ce503c235f87fd1bb1",
+      "expectedSha256": "c1eac704ea46133a0c576c8dc48a2c7f3bc984e4f05bd5ce503c235f87fd1bb1",
+      "matches": true
+    },
+    {
+      "path": "game22/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 13710,
+      "sha256": "1341673850ef019ce3491d05260f74c88afb9748f33990efb40f1129ce13c9b6",
+      "expectedSha256": "1341673850ef019ce3491d05260f74c88afb9748f33990efb40f1129ce13c9b6",
+      "matches": true
+    },
+    {
+      "path": "game22/scene.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/scene.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 12095,
+      "sha256": "f2f94d8ac4a53bc1d8b033cf82742c335a852f8c282bfe3c245b63c1cea8ddd7",
+      "expectedSha256": "f2f94d8ac4a53bc1d8b033cf82742c335a852f8c282bfe3c245b63c1cea8ddd7",
+      "matches": true
+    },
+    {
+      "path": "game22/stage-data.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/stage-data.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1923,
+      "sha256": "c880879b935bf62c4c4b7aac4a35cfed874abd5ad51270719c65cccb8c31741b",
+      "expectedSha256": "c880879b935bf62c4c4b7aac4a35cfed874abd5ad51270719c65cccb8c31741b",
+      "matches": true
+    },
+    {
+      "path": "game22/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 13306,
+      "sha256": "0dde5b57eb7e2482543ee7dba1c0c81435cddc24d4fa773a9c45a91f9ebd7e1b",
+      "expectedSha256": "0dde5b57eb7e2482543ee7dba1c0c81435cddc24d4fa773a9c45a91f9ebd7e1b",
+      "matches": true
+    },
+    {
+      "path": "game22/test.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game22/test.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2360,
+      "sha256": "f56a01f101a1164027b4b8dfbbcfd9048f1f000c21de32497e23fa0dc34e06e9",
+      "expectedSha256": "f56a01f101a1164027b4b8dfbbcfd9048f1f000c21de32497e23fa0dc34e06e9",
+      "matches": true
+    },
+    {
+      "path": "game23/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game23/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 11675,
+      "sha256": "b055e988c46c4a923bb8fa85586c026330e77588c9ce36d7d00e25230e7a9e72",
+      "expectedSha256": "b055e988c46c4a923bb8fa85586c026330e77588c9ce36d7d00e25230e7a9e72",
+      "matches": true
+    },
+    {
+      "path": "game23/engine.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game23/engine.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 7766,
+      "sha256": "1d8233293d70cec7662dc3778df9e2f0a2afea08f0379095babcf3c6200bd71e",
+      "expectedSha256": "1d8233293d70cec7662dc3778df9e2f0a2afea08f0379095babcf3c6200bd71e",
+      "matches": true
+    },
+    {
+      "path": "game23/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game23/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 8474,
+      "sha256": "7d8a1b68e2a288ccae5a5a2622c2caef234f772327ad84b46628cd73879ad2fa",
+      "expectedSha256": "7d8a1b68e2a288ccae5a5a2622c2caef234f772327ad84b46628cd73879ad2fa",
+      "matches": true
+    },
+    {
+      "path": "game23/scene.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game23/scene.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 15766,
+      "sha256": "08cdafc2a4dc9c1ea9c3476c73d65e80c50e77c632f8492ec8c883c9d1e64637",
+      "expectedSha256": "08cdafc2a4dc9c1ea9c3476c73d65e80c50e77c632f8492ec8c883c9d1e64637",
+      "matches": true
+    },
+    {
+      "path": "game23/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game23/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4879,
+      "sha256": "f6b7256e737e24b97547d2e0973d2bd40b071e601f9399b89390a97347a4c1f4",
+      "expectedSha256": "f6b7256e737e24b97547d2e0973d2bd40b071e601f9399b89390a97347a4c1f4",
+      "matches": true
+    },
+    {
+      "path": "game24/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 13521,
+      "sha256": "17b12b14ab0643aecda511e05eb7420e120d5eb2106a8816935c17889f26aa93",
+      "expectedSha256": "17b12b14ab0643aecda511e05eb7420e120d5eb2106a8816935c17889f26aa93",
+      "matches": true
+    },
+    {
+      "path": "game24/campaign.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/campaign.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 7966,
+      "sha256": "aa139d2c888a0cd162b5de2957e0837a89d0e5f2a9616407ac124517eb189a4d",
+      "expectedSha256": "aa139d2c888a0cd162b5de2957e0837a89d0e5f2a9616407ac124517eb189a4d",
+      "matches": true
+    },
+    {
+      "path": "game24/engine.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/engine.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 12709,
+      "sha256": "0a5da2e95f460d2183405c9d4bc33c5ed4e6d532ec608b8e8b6aa71c0a270de6",
+      "expectedSha256": "0a5da2e95f460d2183405c9d4bc33c5ed4e6d532ec608b8e8b6aa71c0a270de6",
+      "matches": true
+    },
+    {
+      "path": "game24/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 7892,
+      "sha256": "5530299a3eecf2c59f4d3402569afd310bd400a596220268c6844f26dfec746d",
+      "expectedSha256": "5530299a3eecf2c59f4d3402569afd310bd400a596220268c6844f26dfec746d",
+      "matches": true
+    },
+    {
+      "path": "game24/scene.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/scene.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 14097,
+      "sha256": "b5f00cacc045d9b71a2a23963b68ac20a23f993a633e8bf68f5560af4f8d200c",
+      "expectedSha256": "b5f00cacc045d9b71a2a23963b68ac20a23f993a633e8bf68f5560af4f8d200c",
+      "matches": true
+    },
+    {
+      "path": "game24/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game24/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 9430,
+      "sha256": "365099713e9e87cb9f4bb5e0f4a50c30771c78e055bff599ba7261a369577c98",
+      "expectedSha256": "365099713e9e87cb9f4bb5e0f4a50c30771c78e055bff599ba7261a369577c98",
+      "matches": true
+    },
+    {
+      "path": "game3/app.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game3/app.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 13671,
+      "sha256": "7dc3b3b96a611767ff151022497830a06f24ce25b45abc5847a59769061fe3a4",
+      "expectedSha256": "7dc3b3b96a611767ff151022497830a06f24ce25b45abc5847a59769061fe3a4",
+      "matches": true
+    },
+    {
+      "path": "game3/bench.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game3/bench.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 11625,
+      "sha256": "932df60554309ce872cd47e5711a210c05b90b9284dd155e7bee8f35a973e9ae",
+      "expectedSha256": "932df60554309ce872cd47e5711a210c05b90b9284dd155e7bee8f35a973e9ae",
+      "matches": true
+    },
+    {
+      "path": "game3/circuit.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game3/circuit.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 9707,
+      "sha256": "06ae4c6fe2eca92d7bf580e4b453ab981064d86f084fd720e37aa545248dc652",
+      "expectedSha256": "06ae4c6fe2eca92d7bf580e4b453ab981064d86f084fd720e37aa545248dc652",
+      "matches": true
+    },
+    {
+      "path": "game3/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game3/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 7423,
+      "sha256": "23ba9cfdca0108b96fa51b9623e1ab0cfbca3745c521aec48c83ee4d1bb09f77",
+      "expectedSha256": "23ba9cfdca0108b96fa51b9623e1ab0cfbca3745c521aec48c83ee4d1bb09f77",
+      "matches": true
+    },
+    {
+      "path": "game3/style.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game3/style.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 3269,
+      "sha256": "e5555d88e40702d5a7302e15b8a8d4de90cec7c4af413753d26717d292c8400a",
+      "expectedSha256": "e5555d88e40702d5a7302e15b8a8d4de90cec7c4af413753d26717d292c8400a",
+      "matches": true
+    },
+    {
+      "path": "game4/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game4/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1553,
+      "sha256": "e593fefb51ae69b76be34ca735630be0b519aa673489139e065a0c4579d5ba18",
+      "expectedSha256": "e593fefb51ae69b76be34ca735630be0b519aa673489139e065a0c4579d5ba18",
+      "matches": true
+    },
+    {
+      "path": "game5/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game5/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1897,
+      "sha256": "d8ee9f7dad600d76fd00caab496200b777c2b023e38ff35a9858fbbca4727ed1",
+      "expectedSha256": "d8ee9f7dad600d76fd00caab496200b777c2b023e38ff35a9858fbbca4727ed1",
+      "matches": true
+    },
+    {
+      "path": "game6/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game6/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2091,
+      "sha256": "53459f1488f66f5b2bedd7eb31ceadb59a569a96f541d4897eaffb46701dc66d",
+      "expectedSha256": "53459f1488f66f5b2bedd7eb31ceadb59a569a96f541d4897eaffb46701dc66d",
+      "matches": true
+    },
+    {
+      "path": "game7/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game7/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2077,
+      "sha256": "d5fadf3f3e1c3f72ab54c6a965cbc9abef71449620908d85ff3ab704dde573f2",
+      "expectedSha256": "d5fadf3f3e1c3f72ab54c6a965cbc9abef71449620908d85ff3ab704dde573f2",
+      "matches": true
+    },
+    {
+      "path": "game8/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game8/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 1976,
+      "sha256": "7030ba4938306ecd7976fa4a822e71dec710cc0ae5e9a8fc2240d8bc251f277e",
+      "expectedSha256": "7030ba4938306ecd7976fa4a822e71dec710cc0ae5e9a8fc2240d8bc251f277e",
+      "matches": true
+    },
+    {
+      "path": "game9/index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/game9/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4044,
+      "sha256": "d531ebc4d3062826613bc5edf8c68d730e6a8a95648f1fd38843f96410763301",
+      "expectedSha256": "d531ebc4d3062826613bc5edf8c68d730e6a8a95648f1fd38843f96410763301",
+      "matches": true
+    },
+    {
+      "path": "index.html",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/index.html?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 6710,
+      "sha256": "d1e9b7f300e6373a59c884b2787e1ab53d6ec053e13e1e7f4ee42f9fbb12b6e5",
+      "expectedSha256": "d1e9b7f300e6373a59c884b2787e1ab53d6ec053e13e1e7f4ee42f9fbb12b6e5",
+      "matches": true
+    },
+    {
+      "path": "shared/game.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/shared/game.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4207,
+      "sha256": "a2b869c1ea8e21821c6643b92c35272d613341d2104b72040c4b650d36e0cee1",
+      "expectedSha256": "a2b869c1ea8e21821c6643b92c35272d613341d2104b72040c4b650d36e0cee1",
+      "matches": true
+    },
+    {
+      "path": "shared/progression.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/shared/progression.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 2194,
+      "sha256": "18d06b92522e4aaf6fd5a4c41c25f3c6d84e90a77ad509c7b8075bb0c45385b0",
+      "expectedSha256": "18d06b92522e4aaf6fd5a4c41c25f3c6d84e90a77ad509c7b8075bb0c45385b0",
+      "matches": true
+    },
+    {
+      "path": "shared/three-stage.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/shared/three-stage.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 4902,
+      "sha256": "4734a1b32dcf1c7540c5e2ef83a969fbf78e1a7cd3020517c1ffed16a4311f58",
+      "expectedSha256": "4734a1b32dcf1c7540c5e2ef83a969fbf78e1a7cd3020517c1ffed16a4311f58",
+      "matches": true
+    },
+    {
+      "path": "shared/tokens.css",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/shared/tokens.css?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 351,
+      "sha256": "4e20de78071b08efecddfb35f350ed6f230044055eadce192f4e1484afe4452c",
+      "expectedSha256": "4e20de78071b08efecddfb35f350ed6f230044055eadce192f4e1484afe4452c",
+      "matches": true
+    },
+    {
+      "path": "vendor/three/three.module.js",
+      "url": "https://adigungamesbank.hephzibahbehulah.com/vendor/three/three.module.js?verified_commit=b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+      "status": 200,
+      "bytes": 748863,
+      "sha256": "b025879456a18f92a0c22782af9aa88d1627f15a7f1ec71a5ffbaf20b584fbac",
+      "expectedSha256": "b025879456a18f92a0c22782af9aa88d1627f15a7f1ec71a5ffbaf20b584fbac",
+      "matches": true
+    }
+  ],
+  "priorVerifiedCommit": null,
+  "scope": "Public HTTP availability and exact candidate bytes; no gameplay, hardware or live-AI claim."
+}

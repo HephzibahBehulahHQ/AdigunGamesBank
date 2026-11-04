@@ -4,7 +4,7 @@
 
 A distinct browser cargo and ballast commissioning simulation inspired by Genesis 6–9. The player arranges six loads in suitable stations, adjusts low ballast tanks, and launches a simplified floating hull through a timed wave trial. Draft, freeboard, heel, trim, and stability reserve respond to the actual loading plan. The narrative introduces the setting; successful commissioning depends on the physical model.
 
-The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. The accessible command interface and original 3D scene are implemented. All three ark browser checks and actual 4K rendering are verified at `f5378f5`; the aggregate release gate and public deployment remain pending. Hardware performance, localization and full accessibility qualification remain open. Passing numerical tests does not close those acceptance gates.
+The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. The accessible command interface and original 3D scene are implemented. All three ark browser checks and actual 4K rendering are verified; the aggregate release gate passed at `b3844bf`, and its public files match the tested source. Hardware performance, localization and full accessibility qualification remain open. Passing numerical tests does not close those acceptance gates.
 
 ## 1. Identity and scope
 
@@ -153,31 +153,28 @@ The [World English Bible publisher](https://worldenglish.bible/) states that the
 
 ## 9. Test and release evidence
 
-**Latest verified chapter:** [CI 41885055957](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957), candidate `f5378f561bb7a8ef9c3a725d7ef6425f371c4234`, passed **all three ark browser tests and all nine axe WCAG 2.1 A/AA audits**. Screenshots, checks and inspected frames are recorded in [the chapter evidence](../docs/evidence/2026-11-04-ark/README.md). These results replace the earlier pending browser entries; they do not establish full accessibility conformance or hardware performance.
+**Verified release source:** `b3844bff8775b509ddda6f9002726bf4ec1dc89b`. [CI 41887296841](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41887296841) passed **153 JavaScript, 52 API and 27 browser checks** with zero failed/skipped/flaky browser cases. One existing API dependency deprecation warning remains.
 
-| Check | Verified result / remaining scope |
-| --- | --- |
-| Actual 4K and original scene | Real **3840×2160 WebGL2 drawing buffer**, zero GL error and inspected original rendered scene in Chromium/SwiftShader; no physical gaming-GPU performance claim |
-| Browser gameplay | Cargo and ballast controls, numerical launch reaching **100% completion**, pause/resume and campaign save/reload passed |
-| Keyboard and graphics fallback | Keyboard-only WebGL fallback passed an unbalanced loss, no progress award on failure, preserved-plan retry, rebalance and completion; corrected vertical grid boundaries are covered |
-| Responsive layout | **320 px and 390 px reflow passed**; broader tablet/device and physical touch testing remain open |
-| Automated accessibility | **9/9 axe WCAG 2.1 A/AA audits passed**; full screen-reader operation, manual accessibility qualification and localization remain unperformed |
-| Numerical campaign | Independent `node --test tests/ark.test.js`: **7/7 passed**, 18.885 s on 2026-11-04; **10,000 distinct configurations and 10,000 completed launches** through public controls, with 720,000 simulated frame advances. Maximum sampled absolute heel 1.617°, trim 0.237°; minimum reserve relative to its target −0.0189 m, permitted by the transient-breach rule |
-| Performance | Hardware FPS, cold initial-load timing, download/memory measurements and extended resource-lifecycle checks remain unperformed |
-| Asset inventory | Original code and procedural scene inventory recorded in `ASSETS.md`; final dependency-license/notice reconciliation remains open |
-| Aggregate release gate | The `f5378f5` aggregate failed **only** a football test's incorrect assumption that substitute #12 must remain active after being sent off. The corrected expectation is under validation in [CI 41887296841](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41887296841), candidate `b384`, **running at this documentation update**; no passing result is claimed yet |
-| Public deployment | **Pending** exact game24 route, deployed candidate and public interaction verification |
+| Scope | Observed evidence |
+|---|---|
+| Unit and integration | Seven ark domain tests, including complete numerical launch trials for all 10,000 distinct configurations through normal engine controls; independent units, constraints, pause/fixed-step and failure/retry checks |
+| Actual rendering | 3840×2160 WebGL2 drawing buffer, zero GL error, inspected original timber/cargo scene; Chromium/Ubuntu 24.04/SwiftShader |
+| Browser play | Three ark tests: real cargo/ballast controls, incomplete-manifest rejection, keyboard-grid boundaries, pause/resume, 100% completion, voyage 2 unlock and reload |
+| Graphics failure | Explicitly unavailable WebGL: keyboard-only unbalanced loss, retained-plan retry, rebalance and complete win. This is fallback command-play evidence, not 3D evidence |
+| Accessibility | 320px/390px reflow, visible keyboard focus and nine project-wide axe WCAG 2.1 A/AA audits; no rule exclusions. Full screen-reader and physical touch testing remain open |
+| Clean build | Local and CI: 138 runtime files; fingerprint `6ff28afbe0015550c853cedc9c87e5e73bc0e16f83d99ca0e2bfd6e4b522dc1e` |
+| Not yet qualified | Hardware FPS/frame-time, measured initial-load target, complete assistive-technology play, physical touch/voice devices and full EN/DE/YO/PCM localization |
 
-Numerical evidence establishes a feasible simulated solution for every generated challenge; it does not establish that every possible loading is safe or every player strategy succeeds. Browser and audit receipts apply to their recorded candidate. Later changes require the affected checks to pass again before release.
+[Retained test/build/source receipts and original frames](../docs/evidence/2026-11-04-ark/README.md). Numerical coverage does not mean 10,000 manual playtests. Earlier failed aggregate runs and their corrections remain in those receipts; no failed candidate was published.
 
-### Deployment target
+### Deployment
 
-The exact repository deployment path is **`/AdigunGamesBank/game24/`**. Expected public routes, pending root verification, are:
+- **GitHub Pages path:** `/AdigunGamesBank/game24/`.
+- **Verified public URL:** https://adigungamesbank.hephzibahbehulah.com/game24/.
+- **Pages run:** [41888830443](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41888830443), successful for `b3844bf`, completed 2026-11-04T18:36:58Z.
+- **Public verification:** all 67 checked runtime/entry files returned HTTP 200 and matched the exact candidate bytes by 2026-11-04T18:41:10Z. [Per-file receipt](../docs/evidence/2026-11-04-ark/deployment-b3844bf.json).
 
-- `https://adigungamesbank.hephzibahbehulah.com/game24/`
-- `https://hephzibahbehulahhq.github.io/AdigunGamesBank/game24/`
-
-These are intended routes, not a statement that this candidate is publicly deployed. Acceptance requires the deployed commit/build identifier, successful response and asset loading at the exact route, representative controls and a completed launch, recorded browser/device details, and dated public receipts. No deployment or repository ref was changed by this reviewer.
+This is a published playable development milestone. Status remains **In progress** against the full production brief; no console build, hardware qualification or whole-Bible completion is claimed.
 
 ## 10. Adopted policy and design pins
 

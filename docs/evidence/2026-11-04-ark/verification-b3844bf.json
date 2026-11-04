@@ -206,5 +206,11 @@
     "sha": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
     "verifiedAt": "2026-11-04T18:36:31Z"
   },
-  "publicVerification": "Pending separate deployment receipt"
+  "publicVerification": {
+    "receipt": "deployment-b3844bf.json",
+    "verifiedFiles": 67,
+    "allMatch": true,
+    "completedAt": "2026-11-04T18:41:10+00:00",
+    "resolvedUrl": "https://adigungamesbank.hephzibahbehulah.com/"
+  }
 }

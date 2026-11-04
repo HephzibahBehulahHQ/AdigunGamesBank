@@ -1,12 +1,12 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T19:36:53+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated: **2026-11-04T19:44:17+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance and published revision
 
-**In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The candidate catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.
+**In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.
 
-**Main is `b3844bff8775b509ddda6f9002726bf4ec1dc89b`**, verified by exact remote readback at **2026-11-04T18:36:31Z** after the candidate passed its release gate. GitHub Pages [run 41888830443](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41888830443) succeeded for that exact source at **2026-11-04T18:36:58Z**. Public byte verification is pending. The custom domain remains **https://adigungamesbank.hephzibahbehulah.com/**; the new route is `/game24/`. The preceding verified public source was `88c3035320044b254ed719ef840f527aa5520e2c`.
+**The verified gameplay release source is `b3844bff8775b509ddda6f9002726bf4ec1dc89b`**, integrated into main and read back exactly at **2026-11-04T18:36:31Z** after its release gate passed. Subsequent evidence/documentation checkpoints retain that tested gameplay implementation; receipts identify the immutable revision actually verified. GitHub Pages [run 41888830443](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41888830443) succeeded for that exact source at **2026-11-04T18:36:58Z**. Public verification completed at **2026-11-04T18:41:10Z**: **all 67 checked files returned HTTP 200 and matched exact source bytes**. [Per-file deployment receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json). The custom domain remains **https://adigungamesbank.hephzibahbehulah.com/**; the new game is live at **https://adigungamesbank.hephzibahbehulah.com/game24/**. The preceding verified public source was `88c3035320044b254ed719ef840f527aa5520e2c`.
 
 ## Changed implementation in this continuation
 
@@ -42,6 +42,8 @@ Updated: **2026-11-04T19:36:53+01:00 (Europe/Berlin)**. This is the current acce
 - **`b3844bff8775b509ddda6f9002726bf4ec1dc89b`** was verified on `work/genesis-ark-2026-11-04` at **2026-11-04T18:27:26Z**, passed CI, then fast-forwarded to main without a force push. Later documentation checkpoints must record their own observed outcomes, not inherit unperformed checks.
 - Previous recovery/timing exceptions and historical results remain in the [earlier status snapshot](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/b3844bff8775b509ddda6f9002726bf4ec1dc89b/PROJECT_STATUS.md) and [second-wave evidence](docs/evidence/2026-11-04-wave2/README.md). A policy declaration does not prove unexercised recovery scenarios.
 
+- Documentation/evidence checkpoint **`463e913a771a0612d9ee2c1c8f60c56880575149`** was read back at **2026-11-04T18:39:37Z**. This exceeded the five-minute interval after the documentation change was first observed at 18:34:01Z; the missed interval is recorded, not treated as compliant. The tested gameplay source and earlier evidence remained recoverable in verified commits.
+
 ## Remaining dependencies and acceptance work
 
 - **Full catalog and Bible scope:** 18 legacy 2D titles still need individual redesign; 2,000 individually designed production games and the complete Genesis–Revelation story remain unfinished. Levels and renamed templates never count as titles.
@@ -52,4 +54,4 @@ Updated: **2026-11-04T19:36:53+01:00 (Europe/Berlin)**. This is the current acce
 
 ## Next bounded action
 
-Verify the Pages deployment and immutable public files for the passing chapter, record the receipt, then continue the next individual title/Bible chapter under the same template. The whole 2,000-game program has no defensible completion ETA.
+Publish and verify the final evidence-only checkpoint, then continue the next individual title/Bible chapter under the same template. The whole 2,000-game program has no defensible completion ETA.

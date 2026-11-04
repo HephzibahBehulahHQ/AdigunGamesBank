@@ -47,7 +47,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game1/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -109,7 +112,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game2/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -180,9 +186,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game3/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game3/",
-        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
-        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
-        "verifiedAt": "2026-11-04T07:35:24+00:00"
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -244,7 +250,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game4/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -306,7 +315,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game5/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -368,7 +380,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game6/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -430,7 +445,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game7/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -492,7 +510,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game8/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -554,7 +575,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game9/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game9/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -616,7 +640,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game10/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -687,9 +714,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game11/",
-        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
-        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
-        "verifiedAt": "2026-11-04T07:35:24+00:00"
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -751,7 +778,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game12/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game12/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -813,7 +843,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game13/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game13/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -875,7 +908,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game14/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game14/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -947,9 +983,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game15/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game15/",
-        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
-        "verifiedAt": "2026-11-04T07:35:24+00:00",
-        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json"
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedAt": "2026-11-04T18:41:10+00:00",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json"
       },
       "blockers": [],
       "policy": {
@@ -1011,7 +1047,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game16/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game16/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1073,7 +1112,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game17/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1135,7 +1177,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game18/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game18/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1197,7 +1242,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game19/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game19/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1259,7 +1307,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game20/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game20/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1331,9 +1382,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game22/",
-        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
-        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
-        "verifiedAt": "2026-11-04T07:35:24+00:00"
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [
         "Configured API host, provider keys/model IDs and judge"
@@ -1397,7 +1448,10 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game21/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game21/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1468,9 +1522,9 @@
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game23/",
         "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game23/",
-        "verifiedCommit": "88c3035320044b254ed719ef840f527aa5520e2c",
-        "evidence": "docs/evidence/2026-11-04-wave2/deployment-88c3035.json",
-        "verifiedAt": "2026-11-04T07:35:24+00:00"
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
@@ -1506,8 +1560,8 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "f5378f561bb7a8ef9c3a725d7ef6425f371c4234",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957",
+          "commit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41887296841",
           "scope": "Actual drawing buffer plus inspected scene. No gaming-GPU performance or manual device qualification claimed."
         }
       },
@@ -1537,11 +1591,14 @@
       "testing": {
         "unit": "7 domain tests passed, including all 10,000 complete numerical launch trials; not manual playtesting",
         "integration": "All 10,000 complete engine trials; browser controls prove failure/retry, successful completion and persisted progression.",
-        "browser": "All three ark checks passed in CI 41885055957: actual 4K, real cargo/ballast commands, 100% completion, save/reload, loss/retry/rebalance, keyboard fallback and 320/390px reflow. Aggregate release gate pending corrected football assertion."
+        "browser": "CI 41887296841 passed all three ark checks: actual 4K, cargo/ballast commands, 100% completion, save/reload, loss/retry/rebalance, keyboard fallback and 320/390px reflow. Aggregate gate: 27 browser checks passed with zero failed/skipped/flaky."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game24/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game24/",
+        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
+        "verifiedAt": "2026-11-04T18:41:10+00:00"
       },
       "blockers": [],
       "policy": {
