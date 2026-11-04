@@ -5,7 +5,7 @@ const CARGO = ['Grain stores', 'Fresh-water casks', 'Fodder bundles', 'Animal sh
 const FIRST_PLACEMENT = [0, 1, 3, 2, 5, 4];
 
 // Every change below is a player input. No campaign or engine state is injected.
-async function loadFirstVoyage(page, keyboardOnly = false) {
+async function loadFirstVoyage(page, keyboardOnly = false, ballasted = true) {
   for (const [index, bayIndex] of FIRST_PLACEMENT.entries()) {
     const cargo = page.locator(`#cargo-${index}`), bay = page.locator(`#bay-${bayIndex}`);
     if (keyboardOnly) {
@@ -33,14 +33,14 @@ async function loadFirstVoyage(page, keyboardOnly = false) {
   }
   for (const name of ['Aft port (t)', 'Aft starboard (t)']) {
     const tank = page.getByLabel(name, { exact: true });
-    await tank.fill('25');
+    await tank.fill(ballasted ? '25' : '0');
     await tank.press('Tab'); // Commit the numeric field through its real change event.
-    await expect(tank).toHaveValue('25');
+    await expect(tank).toHaveValue(ballasted ? '25' : '0');
   }
   for (const name of ['Mid port (t)', 'Mid starboard (t)', 'Fore port (t)', 'Fore starboard (t)']) {
     await expect(page.getByLabel(name, { exact: true })).toHaveValue('0');
   }
-  await expect(page.locator('#ballast-total')).toContainText('Total: 50 /');
+  await expect(page.locator('#ballast-total')).toContainText(`Total: ${ballasted ? 50 : 0} /`);
   await expect(page.locator('#launch-checks')).toContainText('Manifest and loading checks passed');
 }
 
@@ -128,7 +128,26 @@ test('Ark keeps visible keyboard focus without WebGL and completes the same voya
   expect(focus.outline).not.toBe('none');
   expect(focus.width).toBeGreaterThanOrEqual(2);
   expect(focus.opacity).toBe('1');
-  await loadFirstVoyage(page, true);
+  await loadFirstVoyage(page, true, false);
+  // A legal but unbalanced load must fail on the water, retain the plan on
+  // return, and award no progress. Rebalancing then permits a genuine clear.
+  for (const name of ['Aft port (t)', 'Mid port (t)']) {
+    await page.getByLabel(name, { exact: true }).fill('33');
+    await page.getByLabel(name, { exact: true }).press('Tab');
+  }
+  await page.getByRole('button', { name: 'Launch trial', exact: true }).press('Enter');
+  await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'lost', { timeout: 10000 });
+  await expect(page.locator('#message')).toContainText('freeboard');
+  await expect(page.locator('#next-level')).toBeHidden();
+  expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
+  await page.getByRole('button', { name: 'Return to quay', exact: true }).press('Enter');
+  await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'loading');
+  await expect(page.locator('#manifest-count')).toHaveText('6 / 6 loaded');
+  await expect(page.locator('#ballast-total')).toContainText('Total: 66 /');
+  for (const [name, value] of [['Aft port (t)','25'], ['Mid port (t)','0'], ['Aft starboard (t)','25']]) {
+    await page.getByLabel(name, { exact: true }).fill(value);
+    await page.getByLabel(name, { exact: true }).press('Tab');
+  }
   await page.getByRole('button', { name: 'Launch trial', exact: true }).press('Enter');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'won', { timeout: 25000 });
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');

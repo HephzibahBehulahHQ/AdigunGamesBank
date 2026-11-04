@@ -91,7 +91,6 @@ function sync() {
     button.classList.toggle('filled', occupant >= 0);
     button.children[1].textContent = occupant < 0 ? 'Empty bay' : c.cargo[occupant].name;
     button.children[2].textContent = `${slot.stationLabel} · max ${number(slot.capacity, 1)} t`;
-    button.setAttribute('aria-label', `${slot.name}: ${occupant < 0 ? 'empty' : c.cargo[occupant].name}; ${slot.stationLabel}; cargo capacity ${number(slot.capacity, 1)} tonnes`);
     const cargoButton = cargoButtons[i], assigned = state.placement[i];
     cargoButton.setAttribute('aria-pressed', String(i === selectedCargo));
     cargoButton.classList.toggle('loaded', assigned >= 0);
