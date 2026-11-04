@@ -5,10 +5,11 @@
   "type": "module",
   "description": "Hephzibah Behulah Game Bank: verified browser game development",
   "scripts": {
-    "test": "node --test tests/*.test.* game15/test.js game16/test.js game17/test.js game18/test.js game19/test.js game20/test.js game21/test.js",
-    "test:browser": "node tests/browser.mjs",
+    "test": "node --test tests/*.test.* game15/test.js game16/test.js game17/test.js game18/test.js game19/test.js game20/test.js game21/test.js game22/test.js",
+    "test:browser": "playwright test --config=playwright.config.js",
     "check": "node scripts/check-release.mjs",
     "build": "node scripts/build.mjs",
+    "vendor": "esbuild node_modules/three/build/three.module.js --bundle --minify --format=esm --legal-comments=eof --outfile=vendor/three/three.module.js",
     "serve": "python3 -m http.server 4173 --bind 0.0.0.0"
   },
   "devDependencies": {

@@ -35,7 +35,10 @@ test('real contact AND / OR truth tables control source current', () => {
   assert.deepEqual(truthTable('or'), [0, 1, 1, 1]);
   for (const mode of ['and', 'or']) for (const a of [false, true]) for (const b of [false, true]) {
     const setup = { ...initialSetup(), links: [true, true], fuse: 0.1, power: true, contactMode: mode, contactA: a, contactB: b };
-    assert.equal(simulateCircuit(setup).current > 0, contactClosed(mode, a, b));
+    const result = simulateCircuit(setup);
+    assert.equal(result.current > 0, contactClosed(mode, a, b));
+    near(result.sourceVoltage, 3);
+    near(result.supplyVoltage, contactClosed(mode, a, b) ? 3 : 0);
   }
 });
 

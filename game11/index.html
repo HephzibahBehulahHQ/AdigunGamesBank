@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0B1220">
-  <title>Adigun Football · Game Bank</title>
+  <title>WORLD FOOTBALL · Game Bank</title>
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <a class="skip-link" href="#pitch">Skip to the football pitch</a>
   <header class="game-header">
-    <a class="identity" href="../"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK<small>ONE COMPANY. FIVE BRANDS.</small></span></a>
+    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK<small>ONE COMPANY. FIVE BRANDS.</small></span></a>
     <a class="back-link" href="../">← All games</a>
   </header>
   <main>
-    <div class="intro-row"><div><p class="eyebrow">Original teams · 11 versus 11 · Live match play</p><h1>Adigun Football</h1><p class="muted">Build the attack, find the pass and finish the chance. You play as Adigun XI, with a full team moving around you.</p></div><span class="badge">In progress · Browser build</span></div>
+    <div class="intro-row"><div><p class="eyebrow">Original teams · 11 versus 11 · Live match play</p><h1>WORLD FOOTBALL</h1><p class="muted">Build the attack, find the pass and finish the chance. You play as Adigun XI, with a full team moving around you.</p></div><span class="badge">In progress · Browser build</span></div>
     <div class="toolbar">
       <label for="level">Campaign level <input id="level" type="number" min="1" max="1" value="1" aria-describedby="campaign-status"></label>
       <button id="load-level" type="button">Load level</button>
@@ -50,14 +50,15 @@
         <label for="aim">Shot target</label><select id="aim"><option value="-1">Far post · J</option><option value="0" selected>Centre · K</option><option value="1">Near post · L</option></select>
         <label for="player-select">Control a player</label><select id="player-select" aria-describedby="situation"></select>
         <p id="situation" class="hint">Your striker begins with the ball at the centre spot.</p>
+        <h2>Pitch position</h2><p class="hint">The centre is (0, 0). Positive x points to the opponent’s goal; negative y points to the far touchline. Distances are in metres.</p><div class="position-grid"><span>You (x, y)</span><strong>(<span id="player-x">−0.8</span>, <span id="player-y">0.0</span>)</strong><span>Ball (x, y)</span><strong>(<span id="ball-x">0.0</span>, <span id="ball-y">0.0</span>)</strong></div>
         <h2>Match record</h2><table><thead><tr><th scope="col">Action</th><th scope="col">Adigun</th><th scope="col">Opponent</th></tr></thead><tbody><tr><th scope="row">Shots</th><td id="home-shots">0</td><td id="away-shots">0</td></tr><tr><th scope="row">Passes</th><td id="home-passes">0</td><td id="away-passes">0</td></tr><tr><th scope="row">Saves</th><td id="home-saves">0</td><td id="away-saves">0</td></tr></tbody></table>
         <p class="hint">Gold marks the player you control. Adigun attacks right. Pass into space and shoot across the goalkeeper.</p>
       </aside>
     </div>
-    <details><summary>Rules, access and development status</summary><p>This is an original 11-a-side football game with fictional players and kits. A complete ball crossing the goal line inside the frame scores. Throw-ins, corners and goal kicks restart automatically; time stops while paused or during a restart. Offside, fouls, cards, substitutions, league management and online multiplayer are not implemented.</p><p>The campaign contains 10,000 deterministic match configurations. AI speed, decision time, pressure, shot accuracy and match objectives change with level. Configuration tests do not mean all 10,000 matches have been manually played. Progress is saved on this device after a qualifying full-time result.</p><p>The pitch uses real WebGL geometry and the quality readout shows its actual drawing buffer. 4K requires compatible hardware; production visual quality, full accessibility and hardware performance remain under evaluation. Keyboard and touch controls, text match events, visible focus and reduced camera motion are implemented. Spatial play still relies on seeing the pitch.</p><p><a href="README.md">Game evidence and controls</a> · <a href="../PROJECT_STATUS.md">Current project status</a></p></details>
+    <details><summary>Rules, access and development status</summary><p>This is an original 11-a-side football game with fictional players and kits. A complete ball crossing the goal line inside the frame scores. Throw-ins, corners and goal kicks restart automatically; time stops while paused or during a restart. Offside, fouls, cards, substitutions, league management and online multiplayer are not implemented.</p><p>The campaign contains 10,000 deterministic match configurations. AI speed, decision time, pressure, shot accuracy and match objectives change with level. Configuration tests do not mean all 10,000 matches have been manually played. Progress is saved on this device after a qualifying full-time result.</p><p>The pitch uses real WebGL geometry and the quality readout shows its actual drawing buffer. 4K requires compatible hardware; production visual quality, full accessibility and hardware performance remain under evaluation. Keyboard and touch controls, text match events, visible focus and reduced camera motion are implemented. Spatial play still relies on seeing the pitch.</p><p><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/game11/README.md">Game evidence and controls</a> · <a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md">Current project status</a></p></details>
     <noscript><p class="message error">JavaScript is required to run this football game.</p></noscript>
   </main>
-  <footer>HEPHZIBAH BEHULAH · ADIGUN GAME BANK · Original browser football.<br><a href="../">Game Bank</a><a href="https://hephzibahbehulahhq.github.io/">Corporate home</a><a href="../PROJECT_STATUS.md">Project status</a></footer>
+  <footer>HEPHZIBAH BEHULAH · ADIGUN GAME BANK · Original browser football.<br><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md">Project status</a></footer>
   <script type="module">import('./app.js').catch(() => { const status = document.getElementById('render-status'); status.textContent = 'The 3D game could not load. Check the connection and WebGL support, then reload this page.'; document.getElementById('message').textContent = 'Match unavailable because the renderer did not load.'; });</script>
 </body>
 </html>

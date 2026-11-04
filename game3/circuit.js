@@ -108,6 +108,7 @@ export function simulateCircuit(setup) {
   return {
     ...result,
     prospectiveCurrent: prospective.current,
+    sourceVoltage: setup.power ? setup.voltage : 0,
     supplyVoltage: enabled && !tripped ? setup.voltage : 0,
     equivalentResistance: unit.current > 1e-12 ? 1 / unit.current : Infinity,
     tripped,

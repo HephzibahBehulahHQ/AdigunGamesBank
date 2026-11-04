@@ -163,3 +163,39 @@ test('an unattended match reaches full-time with finite actors and bounded ball 
   for (const field of ['x', 'y', 'z', 'vx', 'vy', 'vz']) assert.ok(Number.isFinite(s.ball[field]));
   assert.ok(s.ball.z >= FIELD.ballRadius);
 });
+
+test('a complete campaign win is reachable through movement, tackle and shot inputs only', () => {
+  const s = createMatch(1); startMatch(s);
+  for (let tick = 0; tick < 20000 && s.phase !== 'fulltime'; tick++) {
+    const p = s.players.find(p => p.id === s.controlledId), keeper = s.players.find(p => p.id === 'a1');
+    const own = s.ball.owner === p.id;
+    stepMatch(s, {
+      x: own ? 1 : s.ball.x - p.x,
+      y: own ? -p.y * 0.1 : s.ball.y - p.y,
+      sprint: true, tackle: !own,
+      shoot: own && p.x > 29 && Math.abs(p.y) < 15,
+      aim: keeper.y >= 0 ? -1 : 1
+    }, 1 / 60);
+  }
+  assert.equal(s.phase, 'fulltime');
+  assert.equal(s.qualified, true);
+  assert.ok(s.score[0] > s.score[1]);
+  assert.ok(s.stats.shots[0] > 0);
+});
+
+test('an own goal counts for the team attacking that end regardless of last touch', () => {
+  const s = clearFlight();
+  Object.assign(s.ball, { x: -52.1, y: 0, z: 0.4, vx: -30, vy: 0, vz: 0, lastTouch: 0 });
+  stepMatch(s, {}, 0.05);
+  assert.deepEqual(s.score, [0, 1]);
+  assert.equal(s.kickoffTeam, 0);
+});
+
+test('an end-line exit last touched by a defender awards a corner', () => {
+  const s = clearFlight();
+  Object.assign(s.ball, { x: 52.1, y: 8, z: 0.4, vx: 30, vy: 0, vz: 0, lastTouch: 1 });
+  stepMatch(s, {}, 0.05);
+  assert.equal(s.phase, 'restart');
+  assert.match(s.event, /Corner/);
+  assert.equal(s.players.find(p => p.id === s.ball.owner).team, 0);
+});

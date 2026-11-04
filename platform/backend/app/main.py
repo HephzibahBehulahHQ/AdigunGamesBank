@@ -3,7 +3,6 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional, Literal
 
-from sqlalchemy.exc import IntegrityError
 from starlette.responses import JSONResponse
 from .providers import LABELS, PROVIDERS, compete, provider_status, provider_ready
 from .judging import judge_status, match_ranking, score_answers, scoring_policy
@@ -205,9 +204,9 @@ def login(data:LoginIn,db:Session=Depends(get_db)):
 def me(user:User=Depends(current_user)):return {"id":user.id,"email":user.email,"display_name":user.display_name,"role":user.role}
 @app.get("/api/me/dashboard")
 def dashboard(user:User=Depends(current_user),db:Session=Depends(get_db)):
-    total=db.scalar(select(func.count(Match.id)).where(Match.user_id==user.id)) or 0; wins=db.scalar(select(func.count(Score.id)).join(Match,Match.id==Score.match_id).where(Match.user_id==user.id,Score.rating>=4)) or 0
+    total=db.scalar(select(func.count(Match.id)).where(Match.user_id==user.id,Match.mode=="live")) or 0; wins=db.scalar(select(func.count(Score.id)).join(Match,Match.id==Score.match_id).where(Match.user_id==user.id,Score.rating>=4)) or 0
     recent=db.scalars(select(Match).where(Match.user_id==user.id).order_by(Match.created_at.desc()).limit(10)).all()
-    return {"matches":total,"strong_answers":wins,"recent":[{"id":m.id,"task_type":m.task_type,"mode":m.mode,"created_at":m.created_at.isoformat()} for m in recent]}
+    return {"matches":total,"strong_answers":wins,"recent":[{"id":m.id,"task_type":m.task_type,"mode":m.mode,"created_at":m.created_at.replace(tzinfo=timezone.utc).isoformat()} for m in recent]}
 
 # Admission is reserved in the database before any chargeable provider request.
 # A single lock-row UPDATE serializes admission in SQLite and PostgreSQL.
@@ -285,7 +284,7 @@ def arena_history(user:User=Depends(current_user),db:Session=Depends(get_db)):
             details = json.loads(score.details_json) if score and score.details_json else {"key": response.model_key, "model": None, "source": score.source if score else "legacy", "final_score": None, "accuracy": score.accuracy if score else None}
             responses.append({**details, "model_key": response.model_key, "body": response.body, "state": response.state, "latency_ms": details.get("latency_ms", response.latency_ms), "rating": score.rating if score else None})
         history.append({"id": match.id, "prompt": match.prompt, "task_type": match.task_type, "mode": match.mode,
-                        "created_at": match.created_at.replace(tzinfo=timezone.utc).isoformat(), "responses": responses})
+                        "created_at": match.created_at.replace(tzinfo=timezone.utc).isoformat(), "responses": responses, "ranking": match_ranking(responses)})
     return history
 
 

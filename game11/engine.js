@@ -1,6 +1,6 @@
 import { LEVEL_COUNT, tierFor, validLevel } from '../shared/progression.js';
 
-export const FIELD = Object.freeze({ length: 105, width: 68, goalWidth: 7.32, goalHeight: 2.44, ballRadius: 0.22 });
+export const FIELD = Object.freeze({ length: 105, width: 68, goalWidth: 7.32, goalHeight: 2.44, ballRadius: 0.11 });
 const HALF = FIELD.length / 2, SIDE = FIELD.width / 2, DT = 1 / 60;
 const FORMATION = [[-48,0],[-33,-25],[-36,-9],[-36,9],[-33,25],[-18,-20],[-22,0],[-18,20],[-8,-23],[-6,0],[-8,23]];
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
@@ -202,8 +202,8 @@ function ballStep(s, dt) {
     const cross = (sign * HALF - previous.x) / (b.x - previous.x);
     if (cross >= 0 && cross <= 1 && Number.isFinite(cross)) {
       const y = previous.y + (b.y - previous.y) * cross, z = previous.z + (b.z - previous.z) * cross;
-      const post = Math.abs(Math.abs(y) - FIELD.goalWidth / 2) < FIELD.ballRadius + 0.06 && z < FIELD.goalHeight + FIELD.ballRadius;
-      const bar = Math.abs(z - FIELD.goalHeight) < FIELD.ballRadius + 0.06 && Math.abs(y) < FIELD.goalWidth / 2 + FIELD.ballRadius;
+      const post = Math.abs(Math.abs(y) - (FIELD.goalWidth / 2 + 0.06)) < FIELD.ballRadius + 0.06 && z < FIELD.goalHeight + FIELD.ballRadius;
+      const bar = Math.abs(z - (FIELD.goalHeight + 0.06)) < FIELD.ballRadius + 0.06 && Math.abs(y) < FIELD.goalWidth / 2 + FIELD.ballRadius;
       if (post || bar) { b.x = sign * (HALF - FIELD.ballRadius - 0.08); b.vx *= -0.65; b.owner = null; announce(s, 'Off the goal frame. Play continues.'); return; }
     }
   }
