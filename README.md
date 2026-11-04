@@ -14,6 +14,8 @@ The authoritative brief is [Adigun Game bank pursuing goals and template.md](<Ad
 
 Stages, seeded variants and renamed templates are never counted as additional games. Automated generator checks are not claims of 10,000 manual playtests. Native PlayStation builds are not available.
 
+The verified development build is live at **https://adigungamesbank.hephzibahbehulah.com/**. [Recorded test and deployment evidence](docs/evidence/2026-11-04/README.md) includes actual 4K buffers, completed gameplay flows, source hashes and the remaining qualification limits.
+
 ## Play and develop
 
 Use Node.js 24+ and Python 3.12+. Serve through HTTP; opening index.html as a file is not supported.

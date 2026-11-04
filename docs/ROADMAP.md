@@ -30,9 +30,7 @@ being inferred from this earlier successful revision.
 
 These checks used Chromium with **SwiftShader software rendering**. They are
 valid 3D/4K render checks, not hardware performance measurements. The native
-cloud preview's GL renderer was disabled. Production acceptance and verification
-of the final deployed revision remain separate, unfinished gates; the current
-candidate and later test receipts belong in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+cloud preview's GL renderer was disabled. Production acceptance remains unfinished. The later `b9db74c` development milestone passed its final CI and public deployment checks; exact receipts belong in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
 
 ## Five native-console candidates
 

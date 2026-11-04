@@ -12,3 +12,7 @@ The images below are unmodified browser screenshots. Each 4K test also read the 
 Football completed a real keyboard-controlled match 3–0 in this run; the earlier successful run `41770210966` finished 4–0. Both inspected results unlocked level 2. The Bible test hit all three targets, advanced to level 2 and verified persistence after reload. Electronicer verified a real 15 mA circuit, fuse failure/repair and level persistence. API fixtures are test doubles and were not displayed as live AI answers.
 
 These checks ran with a **software renderer**. They establish real 3D rendering and the drawing-buffer size, not sustained 4K performance on physical devices, production visual quality, full screen-reader parity or the complete 2,000-game requirement.
+
+## Published milestone
+
+The later candidate `b9db74c1406b44d47afb48c219548f2bdc7d4434` passed **93 JavaScript, 49 API and 11 browser tests**. Its [CI receipt](ci-b9db74c.json) records the exact run and clean fingerprint. Its [deployment receipt](deployment-b9db74c.json) records successful Pages publication, exact HTTP/SHA-256 matches for 45 files and direct verification of the four priority routes. The public Game Bank is https://adigungamesbank.hephzibahbehulah.com/. Production qualification remains In progress.

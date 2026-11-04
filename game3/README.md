@@ -137,8 +137,8 @@ text is documented in the shared token stylesheet.
 | Responsive and focus check | Same run: 390 px viewport, no horizontal page overflow, keyboard entry focus and reduced-motion preference checked |
 | Remaining qualification | Physical-device touch, assistive-technology play, measured contrast, loading targets and sustained hardware FPS are **NOT TESTED**; CI software rendering does not establish these results |
 | GitHub Pages path | `/AdigunGamesBank/game3/` |
-| Public URL | https://hephzibahbehulahhq.github.io/AdigunGamesBank/game3/ |
-| Deployed revision and verified public play | Final deployment verification pending; see project status. A URL in documentation is not a deployment receipt |
+| Public URL | https://adigungamesbank.hephzibahbehulah.com/game3/ |
+| Deployed revision and verified public play | Published `b9db74c1406b44d47afb48c219548f2bdc7d4434`; Pages passed, public route returned HTTP 200 and source hashes matched. See the [deployment receipt](../docs/evidence/2026-11-04/deployment-b9db74c.json) and current project status |
 
 No native PlayStation or other console release is claimed. Fully localized,
 cross-device production qualification remains part of the broader project.

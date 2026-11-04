@@ -28,7 +28,7 @@ succeeded at **`1002ca420bd76b10e94f29fd916374dfb13ed5f7`**, completed
 | Responsive entry | 390 px viewport, no horizontal page overflow, keyboard entry focus and reduced-motion preference passed |
 | Visual inspection | Run 41771833545: `bible-4k.png`, the mobile frame and `bible-win.png` inspected. The victory frame shows **3/3 targets in three throws, one cleared level and challenge 2 unlocked** |
 | Hardware and complete access | Sustained physical-GPU FPS, physical touch devices, complete assistive-technology play, measured contrast and 320 px/zoom qualification remain **NOT TESTED** |
-| Final deployment | Public verification of the final deployed revision remains pending |
+| Final deployment | Published `b9db74c1406b44d47afb48c219548f2bdc7d4434`; Pages succeeded and the public route/source hashes were verified; see the [deployment receipt](../docs/evidence/2026-11-04/deployment-b9db74c.json) |
 
 The earlier [run 41770823345](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770823345)
 passed its Bible 4K check but failed the subsequent completion test because the

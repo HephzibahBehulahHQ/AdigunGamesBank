@@ -111,8 +111,8 @@ across the expanded suite. Its inspected football full-time frame showed a
 | 4K frame | Read actual drawing buffer/error; inspect screenshot | Passed at `484141c50acfebe5526085fd983b7964a2b02e44`: `[3840, 2160, 0]` and inspected `football-4k.png`. |
 | Responsive entry and focus | 390 px browser viewport; reduced-motion preference; keyboard entry | Passed in the same run; this does not establish physical touch or full assistive-technology play. |
 | Hardware / accessibility qualification | Device benchmarks, contrast and assistive/touch checks | **NOT TESTED** for sustained hardware FPS, physical touch, measured contrast or complete screen-reader play. |
-| Pages path | `/AdigunGamesBank/game11/` | Final deployment verification pending. |
-| Public URL | https://hephzibahbehulahhq.github.io/AdigunGamesBank/game11/ | Public verification of the final deployed revision remains pending. |
+| Pages path | `/AdigunGamesBank/game11/` | Published development milestone at `b9db74c1406b44d47afb48c219548f2bdc7d4434`. |
+| Public URL | https://adigungamesbank.hephzibahbehulah.com/game11/ | HTTP 200 and exact candidate bytes verified; see the [deployment receipt](../docs/evidence/2026-11-04/deployment-b9db74c.json). |
 
 ## Adopted standards and acceptance
 

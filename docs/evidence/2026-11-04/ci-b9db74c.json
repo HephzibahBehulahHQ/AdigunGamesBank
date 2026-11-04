@@ -1,0 +1,22 @@
+{
+  "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+  "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
+  "completedAt": "2026-11-04T04:26:35Z",
+  "javascriptPassed": 93,
+  "apiPassed": 49,
+  "browserStats": {
+    "startTime": "2026-11-04T04:22:16.627Z",
+    "duration": 254614.085,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "build": {
+    "baseCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+    "modified": false,
+    "fingerprintSha256": "97be11b6e06e3e05e47f7827ee519bb55369325eba927cf7f2e68c02cc1efed6"
+  },
+  "visualReview": "All three 4K frames, updated Bible mobile layout and football full-time frame inspected. Football result was 6\u20130 with level 2 unlocked. Prior retained images are pinned to the earlier 1002ca4 run.",
+  "limitations": "Software-rendered WebGL2 CI. No physical-device FPS/full assistive or live AI API verification."
+}

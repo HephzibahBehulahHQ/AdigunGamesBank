@@ -1,12 +1,12 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T05:20:55+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T05:34:01+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
 **In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (22 local implementations and one API-dependent comparison client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
-Main currently contains the saved requirements. Implementation is checkpointed on **work/production-rebuild-2026-11-04** until the applicable CI/browser gates pass. Existing CNAME and Pages audience are preserved.
+The verified development milestone **`b9db74c1406b44d47afb48c219548f2bdc7d4434`** was integrated into **main** and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
 
 ## Changed implementation
 
@@ -40,7 +40,8 @@ Main currently contains the saved requirements. Implementation is checkpointed o
 | Football complete match | Real UI keyboard movement, passes/shots/tackle/pause; inspected 4–0 full-time win and level 2 unlock screenshot. Match used adaptive resolution; this is not a 4K FPS benchmark |
 | CI run 41770823345 at `33e63d8` | 88 JS and 49 API tests passed; 10 of 11 browser checks passed. Bible 4K buffer and 390px frame passed and were inspected. Chapter test tried to alter a disabled feedback-state slider; repaired test waits for enabled controls |
 | CI run 41771833545 at `1002ca4` | PASSED: 88 JS, 49 API and all 11 browser tests, no skips/flaky cases. Bible used real aiming keys to hit all 3 targets, unlock level 2 and retain it after reload. Inspected victory and 4K/mobile frames. Football won 3–0 in this run |
-| CI run 41772308261 at `9ac8f12` | In progress: includes five additional history/storage regressions (93 JS tests total), truthful manifest and catalog controls copy |
+| CI run 41772308261 at `9ac8f12` | PASSED: 93 JS, 49 API and all 11 browser tests, including five history/storage regressions |
+| Final milestone CI run 41772713488 at `b9db74c` | PASSED: 93 JS, 49 API and all 11 browser tests, no skips/flaky cases; inspected full-time football result was 6–0 with level 2 unlocked. Local and CI clean builds match SHA-256 `97be11b6e06e3e05e47f7827ee519bb55369325eba927cf7f2e68c02cc1efed6` across 123 build files |
 | 390px responsive / reduced motion | Catalog, circuit, football, AI and Bible passed no-horizontal-overflow and visible first-focus checks. This does not establish full screen-reader or physical touch conformance |
 | Physical mobile/controller/GPU performance, full screen-reader parity | NOT TESTED |
 | Live AI providers / deployed API | NOT TESTED; configuration dependencies remain |
@@ -62,8 +63,9 @@ Every SHA below was read back from GitHub. Times are the actual commit times in 
 | `33e63d8e24e988aabf6af5d608476d4c6ab46471` | 05:03:10 | Bible chapter, 23-title manifest and browser checks |
 | `1002ca420bd76b10e94f29fd916374dfb13ed5f7` | 05:12:55 | Wait for enabled Bible controls; explicit disconnected AI assertions |
 | `9ac8f12450ccb5d819521c32c44ddb35697091e5` | 05:17:29 | Cached history/storage reliability; five new regressions and evidence metadata |
+| `b9db74c1406b44d47afb48c219548f2bdc7d4434` | 05:21:29 | Retained screenshot/CI evidence; complete chapter acceptance; subsequently passed all release checks and deployed |
 
-The five-minute checkpoint target was missed across several implementation and verification intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Current uncommitted changes remain pending until the next verified receipt. Main has not yet been advanced to unqualified game code.
+The five-minute checkpoint target was missed across several implementation and verification intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Each receipt identifies its verified revision rather than claiming that an unwritten future checkpoint is already synchronized. Main was advanced only after the milestone candidate passed its applicable checks.
 
 ## Recovery and deployment
 
@@ -71,7 +73,11 @@ The five-minute checkpoint target was missed across several implementation and v
 - Direct Git push lacks CLI credentials; authenticated GitHub Git-object/ref tools successfully synchronize with expected-head protection. No force push or access change used.
 - Restore from a fresh checkout: verified on 2026-11-04 at `33e63d8e24e988aabf6af5d608476d4c6ab46471`. An independent fresh clone matched the exact HEAD and SHA-256 of the circuit solver, football engine, Bible engine and AI main API source. This proves source recovery, not recovery of live credentials or database data.
 - Conflict reconciliation, interruption during upload and rollback exercises: NOT TESTED.
-- Production deployment of the rebuilt games: pending passing gates, exact main revision, Pages workflow success and public asset/content verification.
+- Main fast-forward and exact remote readback: `b9db74c1406b44d47afb48c219548f2bdc7d4434`, **2026-11-04T05:27:00+01:00**.
+- [Pages build and deployment 41773274195](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41773274195): **success** for that exact revision, completed **2026-11-04T05:27:28+01:00**.
+- Public verification completed **2026-11-04T05:29:40+01:00**: **45 served files** returned HTTP 200 with SHA-256 matching the candidate, including all 23 entry pages and the new games' JS, shared renderer, catalog, tokens, vendor module and official artwork. The Pages URL resolves to **https://adigungamesbank.hephzibahbehulah.com/**. The public browser view showed the new 23-title catalog and the explicit AI Configure state.
+- The first public-fetch attempt encountered HTTP 503; a bounded retry completed the exact-byte checks successfully. No failed check was relabelled as passed.
+- [Immutable deployment receipt](docs/evidence/2026-11-04/deployment-b9db74c.json) retains per-file URLs and hashes. CI proves the recorded gameplay/4K behavior; HTTP hashes establish that those sources are actually public. Neither establishes sustained physical-device performance or live AI connectivity.
 
 ## Exact external dependencies
 
@@ -81,4 +87,4 @@ The five-minute checkpoint target was missed across several implementation and v
 
 ## Unfinished work that remains actionable
 
-Finish the final candidate CI and verified Pages deployment, then convert remaining legacy titles individually. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).
+Convert the 19 remaining legacy browser titles individually; finish AI Arena’s 3D presentation and substantive progression. Continue physical-device and accessibility qualification of the three 3D games. Complete Genesis-to-Revelation content and further named war games; add distinct titles toward 2,000; finish localization, accessibility, production art and hardware profiling. These are unfinished implementation tasks, not invented external blockers. See [docs/ROADMAP.md](docs/ROADMAP.md).

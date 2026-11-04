@@ -145,8 +145,8 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "484141c50acfebe5526085fd983b7964a2b02e44",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966",
+          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
           "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
         }
       },
@@ -175,11 +175,13 @@
       "testing": {
         "unit": "7 tests, including 10,000 distinct solvable networks and independent equations",
         "integration": "All 10,000 DC networks independently checked for solvability, conservation and distinctness",
-        "browser": "CI 41770210966: real 15 mA circuit completion, fuse trip/repair, next level and reload persistence; inspected 4K and 390px frames"
+        "browser": "CI 41772713488 passed: real 15 mA circuit completion, fuse trip/repair, next level and reload; inspected 4K frame and mobile layout. Five app-resilience checks additionally cover history/storage cases."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game3/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game3/",
+        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
       },
       "blockers": [],
       "policy": {
@@ -649,8 +651,8 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "484141c50acfebe5526085fd983b7964a2b02e44",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966",
+          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
           "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
         }
       },
@@ -679,11 +681,13 @@
       "testing": {
         "unit": "16 tests, including 10,000 unique match configs, physical outcomes and input-only win",
         "integration": "All 10,000 configurations distinct; input-only winning simulation, collision/goal/restart and fixed-step checks",
-        "browser": "CI 41770210966: actual 4K framebuffer, real keyboard movement/shots/pause and full 4\u20130 match with level 2 unlocked; inspected desktop/mobile frames"
+        "browser": "CI 41772713488 passed: actual 4K framebuffer, real keyboard movement/shots/pause and full 6\u20130 match with level 2 unlocked; inspected desktop/mobile frames"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game11/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game11/",
+        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
       },
       "blockers": [],
       "policy": {
@@ -1299,11 +1303,13 @@
       "testing": {
         "unit": "5 frontend + 49 backend tests; all API transport tests are explicit doubles",
         "integration": "49 backend tests cover provider transports, bounds, evaluation, concurrency admission and failures using explicit test doubles; real provider calls NOT TESTED",
-        "browser": "CI 41771833545 passed: zero configured providers, empty results, eight disabled provider controls and 390px layout. Live API/microphone permission tests remain unperformed."
+        "browser": "CI 41772713488 passed: zero configured providers, empty results, eight disabled provider controls and 390px layout. Live API/microphone permission tests remain unperformed."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game22/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game22/",
+        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
       },
       "blockers": [
         "Configured API host, provider keys/model IDs and judge"
@@ -1403,8 +1409,8 @@
           "drawingBuffer": "3840x2160",
           "renderer": "WebGL2",
           "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
-          "commit": "1002ca420bd76b10e94f29fd916374dfb13ed5f7",
-          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545",
+          "commit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41772713488",
           "scope": "Actual framebuffer dimensions, zero WebGL error, inspected scene screenshot. Not a hardware performance or production-art certification."
         }
       },
@@ -1433,11 +1439,13 @@
       "testing": {
         "unit": "7 tests, including 10,000 complete wins and all 30,000 target shots",
         "integration": "All 30,000 target shots across 10,000 distinct levels pass at 0.1-unit input precision",
-        "browser": "CI 41771833545 passed: actual 4K framebuffer, three hits through keyboard aiming controls, level 2 unlock and reload persistence; inspected 4K, win and 390px frames"
+        "browser": "CI 41772713488 passed: actual 4K framebuffer, three hits through keyboard aiming controls, level 2 unlock and reload persistence; inspected 4K and 390px frames"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game23/",
-        "verifiedUrl": null
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game23/",
+        "verifiedCommit": "b9db74c1406b44d47afb48c219548f2bdc7d4434",
+        "evidence": "docs/evidence/2026-11-04/deployment-b9db74c.json"
       },
       "blockers": [],
       "policy": {

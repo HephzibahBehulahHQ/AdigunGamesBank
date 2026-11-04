@@ -18,8 +18,8 @@ This single chapter does **not** deliver the entire Genesis-to-Revelation story.
 | Performance | Static page and game-specific ES modules. Three.js and game geometry load only when this route is entered. Initial interactive-load goal: under five seconds on a documented broadband test; 4K frame-rate qualification remains a measured-device gate |
 | Asset rights | Original procedural terrain, river stones, sling, shields and character geometry. Unchanged corporate artwork is documented in `docs/STANDARDS.md`. No player/actor likenesses, stock art, provider audio or third-party game textures |
 | Testing evidence | Engine tests validate all 10,000 configurations and full simulated level completions. CI run 41771833545 additionally completed the first level's three targets through real aiming/throw controls, unlocked level 2 and preserved it after reload, with no page errors. See [TEST.md](TEST.md) for exact scope |
-| Deployment | Existing Pages route `/AdigunGamesBank/game23/`; final public URL/revision verification is pending in `PROJECT_STATUS.md` |
-| Status | **In progress** toward production acceptance. 3D/4K rendering and first-level browser completion have passed; hardware performance, complete touch/assistive qualification, final deployment verification and full Bible coverage remain unfinished |
+| Deployment | Pages path `/AdigunGamesBank/game23/`; verified public URL https://adigungamesbank.hephzibahbehulah.com/game23/ at `b9db74c1406b44d47afb48c219548f2bdc7d4434`; see the [deployment receipt](../docs/evidence/2026-11-04/deployment-b9db74c.json) |
+| Status | **In progress** toward production acceptance. 3D/4K rendering and first-level browser completion have passed; hardware performance, complete touch/assistive qualification and full Bible coverage remain unfinished |
 | Policy adopted | HB-AI-ENGINEERING-001 v2.0 at `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e` |
 | Design tokens | Design-system commit `52f01f9986d97088413ca9785bc7a2d3f2967123`; Midnight Navy, Ivory White, Royal Blue and Evangelism Metallic Gold, shared corporate header and original official artwork |
 
@@ -71,3 +71,5 @@ targets in three throws, one cleared level and challenge 2 unlocked**. The same
 run's `bible-4k.png` and mobile frame were also inspected.
 Later candidates require their own receipts; this result does not claim that a
 newer revision or the final public deployment has passed.
+
+The later `b9db74c1406b44d47afb48c219548f2bdc7d4434` milestone passed 93 JavaScript, 49 API and all 11 browser tests, then passed Pages deployment and public source-byte verification. This adds a verified deployment receipt; the broader production limits above still apply.

@@ -33,8 +33,7 @@ Electronicer and football milestones are supported by
 at `484141c50acfebe5526085fd983b7964a2b02e44`: nine browser checks passed;
 actual 3840 × 2160 WebGL 2 buffers and rendered screenshots were inspected.
 This is software-rendering and browser-flow evidence. Hardware FPS, physical
-touch, full assistive-technology play and final deployment verification remain
-open. See the per-game records for the exact tested scope.
+touch and full assistive-technology play remain open. The later `b9db74c` milestone passed all 93 JS, 49 API and 11 browser checks and was publicly deployed with exact-source verification; see [PROJECT_STATUS.md](PROJECT_STATUS.md). See the per-game records for the exact tested scope.
 
 The David chapter's first-level milestone is supported by
 [CI run 41771833545](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41771833545)
