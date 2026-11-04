@@ -6,7 +6,7 @@ New-Item -ItemType Directory -Force -Path $folder | Out-Null
 $games = @(
   @{ Name = "01 NEON PULSE - LED Light Designer"; Path = "game1/" },
   @{ Name = "02 CIRCUIT RUSH - Wire the Power"; Path = "game2/" },
-  @{ Name = "03 OHM HUNTER"; Path = "game3/" },
+  @{ Name = "03 ELECTRONICER - Circuit Lab"; Path = "game3/" },
   @{ Name = "04 VOLT DODGE"; Path = "game4/" },
   @{ Name = "05 RESISTOR MATCH"; Path = "game5/" },
   @{ Name = "06 CAPACITOR CHARGE"; Path = "game6/" },
@@ -24,8 +24,9 @@ $games = @(
   @{ Name = "18 DEBATE ARENA - AI Debate"; Path = "game18/" },
   @{ Name = "19 CASEFILE - AI Detective"; Path = "game19/" },
   @{ Name = "20 MARKET DUEL - AI Trader"; Path = "game20/" },
-  @{ Name = "21 AI ARENA - Six Model Competition"; Path = "game22/" },
-  @{ Name = "22 LAST SIGNAL - Battle Royale"; Path = "game21/" }
+  @{ Name = "21 AI ARENA - Live Model Competition"; Path = "game22/" },
+  @{ Name = "22 LAST SIGNAL - Battle Royale"; Path = "game21/" },
+  @{ Name = "23 VALLEY OF ELAH - Davids Sling"; Path = "game23/" }
 )
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 $crlf = [char]13 + [char]10

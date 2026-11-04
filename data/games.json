@@ -145,7 +145,7 @@
       "levels": {
         "target": 10000,
         "implemented": 10000,
-        "method": "Deterministic, game-specific generated challenges; verification pending",
+        "method": "Game-specific DC networks; all 10,000 challenges validated for solvability and distinctness",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
@@ -165,7 +165,7 @@
         "status": "Original procedural geometry; Three.js under MIT. No real club or player likenesses."
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "7 tests, including 10,000 distinct solvable networks and independent equations",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -641,7 +641,7 @@
       "levels": {
         "target": 10000,
         "implemented": 10000,
-        "method": "Deterministic, game-specific generated challenges; verification pending",
+        "method": "Game-specific match AI, formations and objectives; 10,000 configs validated, not 10,000 manual matches",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
@@ -661,7 +661,7 @@
         "status": "Original procedural geometry; Three.js under MIT. No real club or player likenesses."
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "16 tests, including 10,000 unique match configs, physical outcomes and input-only win",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1281,7 +1281,7 @@
         "status": "Legacy asset review incomplete"
       },
       "testing": {
-        "unit": "Historical tests exist for game15\u201321; see PROJECT_STATUS.md",
+        "unit": "5 frontend + 49 backend tests; all API transport tests are explicit doubles",
         "integration": "NOT TESTED against new quality bar",
         "browser": "NOT TESTED against new quality bar"
       },
@@ -1351,6 +1351,68 @@
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game21/",
+        "verifiedUrl": null
+      },
+      "blockers": [],
+      "policy": {
+        "version": "2.0",
+        "commit": "d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e"
+      },
+      "design": {
+        "commit": "52f01f9986d97088413ca9785bc7a2d3f2967123",
+        "tokens": [
+          "navy",
+          "royalBlue",
+          "gold",
+          "ivory"
+        ]
+      }
+    },
+    {
+      "id": "game23",
+      "title": "VALLEY OF ELAH",
+      "description": "Master the sling: read the wind, set your aim and clear a David-inspired precision challenge.",
+      "genre": "bible",
+      "division": "Evangelism",
+      "path": "game23/",
+      "platforms": [
+        "Browser"
+      ],
+      "status": "In progress",
+      "rendering": {
+        "engine": "WebGL 2 / Three.js",
+        "is3D": true,
+        "verified4K": false
+      },
+      "levels": {
+        "target": 10000,
+        "implemented": 10000,
+        "method": "Deterministic ballistic challenges; all 10,000 complete wins verified in engine tests",
+        "tierStart": "Beginner",
+        "tierEnd": "Professional Master"
+      },
+      "controls": [
+        "Keyboard",
+        "Mouse / touch where implemented"
+      ],
+      "accessibility": {
+        "status": "Needs per-game audit"
+      },
+      "performance": {
+        "initialLoadTargetMs": 3000,
+        "measured": null,
+        "lazy3DAssets": true
+      },
+      "assetRights": {
+        "status": "Original procedural terrain, sling, shields and character; original adaptation of 1 Samuel 17; Three.js MIT"
+      },
+      "testing": {
+        "unit": "7 tests, including 10,000 complete wins and all 30,000 target shots",
+        "integration": "NOT TESTED against new quality bar",
+        "browser": "NOT TESTED against new quality bar"
+      },
+      "deployment": {
+        "pagesPath": "/AdigunGamesBank/game23/",
         "verifiedUrl": null
       },
       "blockers": [],

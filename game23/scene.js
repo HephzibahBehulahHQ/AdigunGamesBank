@@ -187,11 +187,12 @@ export function buildValleyScene(stage) {
       if (state !== previousState) { previousState = state; impact.visible = false; }
       const target = currentTarget(state);
       targets.forEach((value, index) => {
-        value.group.visible = index === state.targetIndex || index === 2;
+        value.group.visible = index === state.targetIndex;
         const hit = state.lastResult?.hit && state.lastResult.targetIndex === index;
         value.face.ring.material.color.set(hit ? '#7de6ab' : '#D4AF37');
         value.face.root.rotation.y = hit && !reducedMotion && state.phase === 'feedback' ? Math.sin(state.feedbackTime * 16) * 0.07 * (1 - state.feedbackTime) : 0;
       });
+      champion.root.visible = state.targetIndex === 2;
       champion.root.position.y = state.phase === 'won' ? -0.20 : 0;
       champion.root.rotation.x = state.phase === 'won' ? -0.12 : 0;
       const cameraKey = `${cameraMode}:${state.targetIndex}:${state.config.level}`;

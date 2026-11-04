@@ -98,7 +98,35 @@ test('AI Arena discloses missing live configuration and does not invent model an
   await page.screenshot({ path: 'test-results/ai-arena-unconfigured.png', fullPage: true });
 });
 
-for (const route of ['/', '/game3/', '/game11/', '/game22/']) {
+test('David chapter renders 4K and completes all targets using real aiming controls', async ({ page }) => {
+  test.setTimeout(90000);
+  const errors=[]; page.on('pageerror', error=>errors.push(error.message));
+  await page.goto('/game23/'); await expect(page.locator('#start')).toBeEnabled();
+  await page.locator('#quality').selectOption('4k');
+  await expect(page.locator('#valley')).toHaveAttribute('data-resolution','3840x2160');
+  expect(await page.locator('#valley').evaluate(c=>{ const g=c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
+  await page.screenshot({path:'test-results/bible-4k.png',fullPage:true});
+  await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
+  async function aimControl(id,value) {
+    const slider=page.locator(`#${id}`), current=Number(await slider.inputValue());
+    const steps=Math.round((value-current)/Number(await slider.getAttribute('step')));
+    await slider.focus();
+    for(let i=0;i<Math.abs(steps);i++) await slider.press(steps>0?'ArrowRight':'ArrowLeft');
+    await expect(slider).toHaveValue(value.toFixed(1).replace(/\.0$/,''));
+  }
+  const shots=[[-1.3,44.9,12.6],[1.2,45.4,14.2],[1.2,45.4,15.5]];
+  for(let i=0;i<shots.length;i++) {
+    for(const [j,id] of ['yaw','elevation','speed'].entries()) await aimControl(id,shots[i][j]);
+    await page.locator('#throw').click();
+    await expect(page.locator('#hits-readout')).toHaveText(`${i+1} / 3`,{timeout:20000});
+  }
+  await expect(page.locator('#next')).toBeVisible();
+  await page.screenshot({path:'test-results/bible-win.png',fullPage:true});
+  await page.locator('#next').click(); await expect(page.locator('#level-readout')).toHaveText('2 / 10,000');
+  await page.reload(); await expect(page.locator('#level-readout')).toHaveText('2 / 10,000'); expect(errors).toEqual([]);
+});
+
+for (const route of ['/', '/game3/', '/game11/', '/game22/', '/game23/']) {
   test(`390px responsive layout and visible focus: ${route}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(route); await page.waitForLoadState('networkidle');

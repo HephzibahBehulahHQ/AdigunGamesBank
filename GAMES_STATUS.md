@@ -27,6 +27,8 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game22/ | AI ARENA | Live API client; configuration required | Blocked |
 | game21/ | LAST SIGNAL | Legacy 2D | In progress |
 
+| game23/ | VALLEY OF ELAH | First Bible chapter, 3D ballistic game | In progress |
+
 The ten Godot couch-suite source games remain separate Node2D implementations. Their previous headless checks have not been rerun here; hardware controller validation and 3D conversion remain unfinished.
 
 Scale: 2,000 individual titles is the target, not the delivered count. The data manifest records per-game platforms, levels, controls, rights, tests, rendering status and pinned standards. Historical reports are preserved in docs/history/.

@@ -23,7 +23,7 @@ for (const file of ['index.html', ...catalog.games.map(g => `${g.path}index.html
 const logo = await readFile(path.join(root, 'assets/corporate/hephzibah-behulah-official.jpg'));
 const logoSha = createHash('sha1').update(`blob ${logo.length}\0`).update(logo).digest('hex');
 if (logoSha !== 'f7b0e4a650d861fb9d52ed91ea894edec030e03b') failures.push('Official artwork was altered');
-for (const entry of ['shared','game3','game11','game22','assets']) {
+for (const entry of ['shared','game3','game11','game22','game23','assets']) {
   for (const name of await readdir(path.join(root, entry))) if (/\.(?:js|mjs)$/.test(name)) {
     try { execFileSync(process.execPath, ['--check', path.join(root, entry, name)], { stdio: 'pipe' }); } catch { failures.push(`Invalid JavaScript: ${entry}/${name}`); }
   }

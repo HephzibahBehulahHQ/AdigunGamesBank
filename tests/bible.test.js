@@ -16,6 +16,13 @@ test('all 10,000 levels have distinct mechanics and every target is solvable at 
       assert.ok(predict(target, solution).hit, `Unsolvable level ${level}: ${JSON.stringify({ target, solution, prediction: predict(target, solution) })}`);
       for (const [control, [low, high]] of Object.entries(CONTROLS)) assert.ok(solution[control] >= low && solution[control] <= high);
     }
+    const run = createGame(level); startGame(run);
+    for (let target = 0; target < 3; target++) {
+      assert.equal(throwStone(run, solveTarget(currentTarget(run))), true);
+      finishFlight(run);
+    }
+    assert.equal(run.phase, 'won', `Level ${level} failed its complete simulation`);
+    assert.equal(run.stones, 2);
   }
   assert.equal(signatures.size, 10000);
   assert.equal(levelConfig(1).tier, 'Beginner');

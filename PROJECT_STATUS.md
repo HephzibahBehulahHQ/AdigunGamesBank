@@ -4,7 +4,7 @@ Updated: **2026-11-04T04:57:01+01:00 (Europe/Berlin)**. This is the one current 
 
 ## Acceptance
 
-**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 22 browser titles (21 local implementations and one API-dependent comparison client), with a first Bible chapter being added. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
+**In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (22 local implementations and one API-dependent comparison client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
 Main currently contains the saved requirements. Implementation is checkpointed on **work/production-rebuild-2026-11-04** until the applicable CI/browser gates pass. Existing CNAME and Pages audience are preserved.
 
@@ -49,7 +49,7 @@ Every SHA below was read back from GitHub. Times are the actual commit times in 
 | `22761ad57eec6ccf81f150d14ead0f8522009c57` | 04:34:02 | Pinned standards and recovery checkpoint on work branch |
 | `0b83cef21788fc6d2b06e2aaf47041af4a8e4e05` | 04:41:49 | Original assets, 3D engines, catalog, AI safeguards |
 | `1994210913d02d17474fe45361aa7e0a6d07f42c` | 04:49:33 | Playable game interfaces and CI gates |
-| `903ee30ed3b6b0a866037089f73859ad82bf5d45` | 04:51:44 | Supported CI runner, Bible core and football controls |
+| `903ee30ed3b6b0a866037089f73859ad82bf5d45` | 04:51:32 | Supported CI runner, Bible core and football controls |
 
 The five-minute checkpoint target was missed across the two longer implementation intervals above; these revisions are verified recoverable checkpoints, not a claim of perfect cadence. Current uncommitted changes remain pending until the next verified receipt. Main has not yet been advanced to unqualified game code.
 

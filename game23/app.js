@@ -6,7 +6,7 @@ import { buildValleyScene } from './scene.js';
 const $ = id => document.getElementById(id), canvas = $('valley');
 const progress = campaign('bible-valley-of-elah');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let game = createGame(progress.unlocked), aim = normalizeAim(), stage = null, visual = null;
+let game = createGame(progress.unlocked), aim = normalizeAim(), stage = null, visual = null, graphicsAvailable = false;
 let previousFrame = null, frameId = null, lastEvent = -1, recorded = false, dirty = true, drag = null;
 
 function message(text) { $('message').textContent = text; }
@@ -45,11 +45,11 @@ function updateUI() {
   $('target-height').textContent = `${target.y.toFixed(2)} m`;
   $('target-radius').textContent = `${target.radius.toFixed(2)} m`;
   $('target-wind').textContent = `${target.wind > 0 ? '+' : ''}${target.wind.toFixed(2)} m/s²`;
-  $('start').disabled = !stage || game.phase !== 'ready';
-  $('throw').disabled = !stage || game.phase !== 'aim';
-  $('pause').disabled = !stage || !isActive();
+  $('start').disabled = !graphicsAvailable || game.phase !== 'ready';
+  $('throw').disabled = !graphicsAvailable || game.phase !== 'aim';
+  $('pause').disabled = !graphicsAvailable || !isActive();
   $('pause').textContent = game.phase === 'paused' ? 'Resume · Esc' : 'Pause · Esc';
-  for (const key of ['yaw', 'elevation', 'speed']) $(key).disabled = !stage || !['aim', 'ready'].includes(game.phase);
+  for (const key of ['yaw', 'elevation', 'speed']) $(key).disabled = !graphicsAvailable || !['aim', 'ready'].includes(game.phase);
   $('load-level').disabled = isActive(); $('level').disabled = isActive();
   $('game-overlay').hidden = ['aim', 'flight', 'feedback'].includes(game.phase);
   if (game.phase === 'ready') {
@@ -81,12 +81,12 @@ function reset(level = game.config.level) {
   for (const key of ['yaw', 'elevation', 'speed']) $(key).value = String(aim[key]);
   controlsToAim(); updateUI();
 }
-function begin() { if (stage && startGame(game)) { updateUI(); focusGame(); } }
+function begin() { if (graphicsAvailable && startGame(game)) { updateUI(); focusGame(); } }
 function release() {
-  if (stage && throwStone(game, aim)) { drag = null; updateUI(); focusGame(); }
+  if (graphicsAvailable && throwStone(game, aim)) { drag = null; updateUI(); focusGame(); }
 }
 function togglePause() {
-  if (!stage) return;
+  if (!graphicsAvailable) return;
   if (game.phase === 'paused') resumeGame(game); else pauseGame(game);
   previousFrame = null; drag = null; updateUI(); focusGame();
 }
@@ -114,7 +114,7 @@ window.addEventListener('resize', () => { dirty = true; });
 reducedMotion.addEventListener('change', () => { dirty = true; });
 window.addEventListener('blur', automaticPause);
 document.addEventListener('visibilitychange', () => { if (document.hidden) automaticPause(); });
-canvas.addEventListener('stage-lost', () => { automaticPause(); message('Graphics connection lost. Reload to resume from your last saved challenge.'); });
+canvas.addEventListener('stage-lost', () => { graphicsAvailable = false; automaticPause(); updateUI(); message('Graphics connection lost. Reload to resume from your last saved challenge.'); });
 canvas.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   const handled = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'z', 'x', ' ', 'enter', 'escape', 'r'];
@@ -159,10 +159,11 @@ function frame(timestamp) {
 try {
   stage = createStage({ canvas, qualitySelect: $('quality'), status: $('render-status'), position: [4.5, 4.2, -8], target: [0, 2, 12] });
   visual = buildValleyScene(stage);
+  graphicsAvailable = true;
   controlsToAim(); updateUI(); frameId = requestAnimationFrame(frame);
 } catch (error) {
   stage?.dispose(); stage = null; updateUI();
-  message('This game needs a working WebGL 2 renderer. Enable hardware acceleration or try a compatible browser. No 2D stand-in is substituted.');
+  message('This game needs a working WebGL 2 renderer. Enable hardware acceleration or try a compatible browser.');
   $('overlay-kicker').textContent = 'Graphics unavailable'; $('overlay-title').textContent = 'The 3D scene could not start.';
   $('overlay-copy').textContent = 'Check WebGL 2 support and reload. Saved campaign progress is retained.';
   $('render-status').textContent = '3D renderer unavailable';
