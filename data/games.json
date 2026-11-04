@@ -32,7 +32,7 @@
         "Touch; equivalent labelled signal controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -43,16 +43,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game1/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -99,7 +99,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -110,16 +110,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game2/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -239,7 +239,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -250,16 +250,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game4/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -306,7 +306,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -317,16 +317,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game5/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -373,7 +373,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -384,16 +384,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game6/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -440,7 +440,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -451,16 +451,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game7/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -507,7 +507,7 @@
         "Touch; equivalent labelled cabinet controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -518,16 +518,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game8/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -639,7 +639,7 @@
         "Touch controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -650,16 +650,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game10/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {
@@ -1113,7 +1113,7 @@
         "Touch; labelled shot controls"
       ],
       "accessibility": {
-        "status": "Introductory 320px route axe/focus audit and keyboard fallback passed at 10e3b16; advanced Circuit Rush/Binary Flash reflow corrected, recheck pending; full physical assistive-technology play remains open"
+        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1124,16 +1124,16 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269 repository JavaScript checks passed at 10e3b16; per-game domain coverage in README",
-        "integration": "Final corrected candidate gate pending; prior candidate had two advanced mobile-layout failures",
-        "browser": "Actual4K, true-control completion, save/reload and fallback scenarios passed at 10e3b16. Exact current gate and qualification limits: PROJECT_STATUS.md"
+        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
+        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game17/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
         "verifiedUrl": null,
-        "status": "New 3D conversion not yet published"
+        "status": "Release gate passed; GitHub Pages publication and exact public-byte verification in progress."
       },
       "blockers": [],
       "policy": {

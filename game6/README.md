@@ -2,9 +2,9 @@
 
 ## Integration evidence — 4 November 2026
 
-The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL 2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 
-The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+That historical measured run passed **269 JavaScript, 52 API and 67/69 browser checks** and exposed two advanced mobile-layout failures. Corrected source **`09385bd8105e235f90493390fccbbe133083bd72`** then passed the complete gate: **269 JavaScript, 52 API and 69/69 browser checks**, including both 390px/320px layout regressions, in [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609). [Successful immutable receipt](../docs/evidence/2026-11-04-nine-games/verification-09385bd.json). Hardware performance, physical devices, complete assistive-technology play and production qualification remain open. Current publication evidence belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
 
 
 ## Identity and playable scope
@@ -167,4 +167,4 @@ engine test is not a browser or deployment pass.
 - **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`.
 - Design-system revision `52f01f9986d97088413ca9785bc7a2d3f2967123`.
 - Used tokens: Midnight Navy `#0B1220`, Royal Blue `#2563EB`, Metallic Gold `#D4AF37`, Ivory White `#F8FAFC`, Elektroniker Electric Cyan `#22D3EE`; shared header, controls, typography and focus foundation.
-- Acceptance remains **In progress** pending the recorded release gate and the remaining hardware, language and assistive-technology qualification. Browser support does not establish native PlayStation availability.
+- Acceptance remains **In progress** for the remaining hardware, language and assistive-technology qualification; the recorded release gate passed. Browser support does not establish native PlayStation availability.

@@ -1,119 +1,96 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-04T23:52:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-05T00:15:18+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
-**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The current integration keeps **24 existing titles** and individually converts nine of them: **nine legacy 2D, fourteen local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
+**In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This completed implementation batch converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.
 
-This continuation does not add renamed templates or count procedural levels as separate games. Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished.
+Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished. Live provider competition still requires its server-side deployment and configuration.
 
 ## Source and public state
 
 | State | Verified revision / evidence |
 | --- | --- |
-| Integration branch | `work/finish-games-2026-11-04` |
-| Latest verified work checkpoint | `10e3b16af8c314379e540da65b8aa7da0f536775`, exact remote head read back **2026-11-04T22:33:21Z** |
-| Current local changes | Two advanced-layout CSS corrections; first-completion wording; retained original frames and measured evidence. New exact-candidate release gate pending. |
-| Remote main at recovery | `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` |
-| Last verified public gameplay source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file exact-byte receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
+| Scoped integration branch | `work/finish-games-2026-11-04` |
+| Completed gameplay checkpoint | `09385bd8105e235f90493390fccbbe133083bd72`, exact remote head read back **2026-11-04T22:54:03Z** |
+| Exact-candidate release gate | [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609) **SUCCESS**, completed **2026-11-04T23:05:14Z** |
+| Main gameplay integration | Normal fast-forward from `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` to `09385bd8105e235f90493390fccbbe133083bd72`, exact head read back **2026-11-04T23:11:23Z** |
+| Pages publication | [New run 41931693983](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41931693983) on exact source `09385bd8105e235f90493390fccbbe133083bd72`; build succeeded, publication still being observed |
+| Last recorded public source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
 | Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
-| New publication | **NOT DEPLOYED** until the final candidate passes its gate and exact public-byte verification |
+| This evidence follow-up | Records the completed gate and recovery facts; its synchronization and public delivery must be verified separately |
 
-The preceding documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out twice. Read-only diagnosis confirmed build/upload succeeded while publishing stalled; the preceding successful release used the same action revision and runner. Live catalog/status bytes still matched `b3844bf` when recovery began. No host, audience, permissions or action-version change was justified. The next tested source will use the existing Pages flow; an unchanged third retry is not the plan. [Previous failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
+Publication is not yet claimed for the new source. A spot check while Pages was publishing still returned older catalog/Circuit bytes and no new Binary stylesheet. The preceding documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out twice after a successful build/upload. A fresh tested source triggered the existing Pages flow. No host, audience, access-control or action-version change was made. [Earlier publication failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
 
-## First four individual conversions
+## Nine individual conversions
 
-| Existing title | Distinct playable work |
+| Existing title | Playable work and numerical coverage |
 | --- | --- |
-| **Neon Pulse — game1** | Original 3D LED matrix and coupled three-state signal puzzle. Target patterns, finite pulse budget, undo, hints, pause, loss/retry, keyboard/scene/DOM controls and sequential saves. All 10,000 distinct boards are solved through the actual engine within budget. |
-| **Fuse Box — game8** | Original 3D DC distribution cabinet. Assign loads, fit finite breaker stock, respect budget/cable/supply current limits, run three operating profiles, isolate/reset real trips and repair the retained plan. All 10,000 distinct reference configurations complete through the numerical engine. |
-| **Apex Circuit — game10** | Original closed-course 3D vehicle/track. Steering, throttle, brake, grip, ordered lap gates, invalid-sector latch, recovery/time penalties, finite qualification/loss, step driving and saves. All 10,000 physical configurations are distinct and geometrically checked; 12 representative complete races cover every tier boundary and the final level. |
-| **Penalty Pro — game17** | Original 3D training ground and ten-turn shootout: five physical kicks followed by five player-controlled goalkeeper dives. Aim/elevation/power/wind, frame and goalkeeper collision, separate opponent-goal/save counters, explicit win/draw/loss, pause/retry and saves. All 10,000 campaigns complete through 50,000 physical shots and 50,000 physical saves. |
+| **Neon Pulse — game1** | Original 3D LED matrix; coupled three-state pulses, finite budget, target patterns, undo/hints, pause, failure/retry and saves. All **10,000 distinct boards** solved through the actual engine within budget. |
+| **Circuit Rush — game2** | Original 3D conductor board; reciprocal terminals, source/loads/return, open circuits, shorts, unwanted branches and current overloads with a finite rotation budget. All **10,000 distinct topologies** solved through public commands. |
+| **Volt Dodge — game4** | Original 3D rover/maze; moving sparks and swept collisions, finite time/shields, all-core collection and extraction. Independent route search completed all **10,000 distinct sectors** through the movement engine. |
+| **Resistor Match — game5** | Concealed 3D component trays; exact four-band resistance/tolerance reading, persistent comparisons and finite-budget memory play. All **10,000 unique decks** completed. Keyboard navigation skips disabled trays and preserves actual focus. |
+| **Capacitor Charge — game6** | Original 3D RC bench; component selection, exact exponential charge/hold/discharge, leakage, current/power/energy limits and switch rules. All **10,000 procedures** completed with independent KCL checks. Ideal resistors carry exact Ω/W captions. |
+| **Binary Flash — game7** | Original 3D digital bench; separate staging/latch, serial clock, logical shifts/rotations, signed/unsigned values, parity and ordered frames under finite budgets. All **10,000 distinct missions** completed through public commands. |
+| **Fuse Box — game8** | Original 3D DC cabinet; load allocation, finite breaker stock/budget, cable/supply current, operating profiles, actual trips/isolation/reset and retained repair plans. All **10,000 distinct reference configurations** complete through the numerical engine. |
+| **Apex Circuit — game10** | Original closed 3D track/car; steering/throttle/brake/grip, twelve ordered gates per lap, anti-shortcut state, time/recovery penalties, step driving and saves. **10,000 distinct configurations** geometrically checked; **12 representative full races**, not 10,000 full-race playtests. |
+| **Penalty Pro — game17** | Original 3D training ground; five physical shots then five player-controlled keeper dives, gravity/wind, frame/keeper collisions, explicit win/draw/loss and saves. All **10,000 campaigns** complete through **50,000 shots and 50,000 saves**. |
 
-Each conversion includes its own game-template README, original-asset record, numerical tests, real-control browser tests and equivalent commands when WebGL is unavailable. Existing legacy assets/styles needed by other routes are retained. In particular, games 18–21 still depend on `game17/style.css`.
+Every conversion includes its own game guide, assumptions, asset-rights record, numerical tests, genuine-control browser tests and equivalent commands without WebGL. Existing assets needed by other routes remain intact, including `game17/style.css` for games18–21. The official corporate artwork is unchanged. Simultaneous racing touches no longer release a held throttle after focus changes.
 
-The catalog and asset inventory reflect these implementations without prematurely claiming new 4K or deployment evidence. `GAMES_STATUS.md` now includes Ark and correctly identifies the previously released Tactics Grid as 3D. Release syntax checks derive routes from the complete catalog. A concrete racing input defect was fixed: a second touch/focus change no longer releases an already held throttle or steering control.
+## Exact verification
 
-## Engineering integration
+Source **`09385bd8105e235f90493390fccbbe133083bd72`** passed [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609), job **126921619461**, artifact **13371571737**. [Structured receipt](docs/evidence/2026-11-04-nine-games/verification-09385bd.json) · [Evidence index](docs/evidence/2026-11-04-nine-games/README.md).
 
-Engineering checkpoint `c01f283658335f16f4be9badda959220b1dc3aec` was read back at **2026-11-04T22:22:26Z** and is merged as a second parent, preserving both work histories. Circuit Rush, Resistor Match and Capacitor Charge include complete 3D scenes, genuine state transitions, local saves, documentation and browser suites. Their combined **42 new numerical tests pass**; legacy Circuit Rush adds seven existing regressions. That checkpoint contained only partial Volt Dodge and Binary Flash files; the final handoff adds their complete interfaces, original 3D scenes, numerical/browser tests and game guides. Their complete exact-candidate browser release gate remains pending.
-
-Browser discovery now includes every game spec automatically, and accessibility route discovery follows the catalog’s implemented 3D routes. Neon camera framing is adjusted to the active board size and requires a fresh inspected frame. Resistor’s graphics selector test receives the same role/name correction as Penalty.
-
-Engineering remote receipts: `7db0840`21:59:16Z, `6fb58d8`22:04:20Z, `e32afcd`22:09:28Z, `4019851`22:13:13Z, `5a466b5`22:19:31Z, `c01f283`22:22:26Z. Intervals of **5m4s, 5m8s and 6m18s** missed the five-minute requirement and are recorded as failures of cadence, not compliance. All snapshots were nevertheless read back exactly and remain recoverable. Preparation targets three-minute intervals.
-
-### Final engineering scope and review corrections
-
-Final engineering source `c230318855d4e227e151b9d497072122b4f34136` was read back at **2026-11-04T22:32:05Z**. Both writers are frozen; the real merge retains its complete history. Subsequent receipts after `c01f283`: `54a9797`22:25:56Z, `ba62a45`22:29:28Z and `c230318`22:32:05Z, all within five minutes. The final Volt coordinate map uses X for extraction and A–G for cores, verified at the highest tier.
-
-- Circuit Rush: actual conductor rotation and network tests; all 10,000 distinct topologies solved. Root also manually commissioned the first 100.0 mA lamp in seven rotations through the cloud controls and confirmed Job 2 after reload.
-- Resistor Match: concealed component trays, exact four-band resistance/tolerance matching and finite-budget memory play; all 10,000 unique decks completed. Review fixed arrow navigation stalling on disabled trays and added a true active-focus browser regression.
-- Capacitor Charge: exact exponential RC charge/hold/discharge, leakage and physical limits; all 10,000 procedures completed with independent KCL checks. Review replaced misleading rounded colour bands with unbanded ideal resistors bearing exact Ω/W captions.
-- Volt Dodge: actual swept wall/spark contacts, finite shields/time, all-core collection and exit requirement; independent route search completed all 10,000 distinct sectors through the movement engine.
-- Binary Flash: actual staging/latch/serial-clock/shift/rotate/parity operations, signed/unsigned values and ordered frame transmission with finite operation/error budgets; all 10,000 distinct missions completed through public commands.
-
-Intermediate merge `748fb20` passed **251 JavaScript + 52 API checks** and **15/16 accessibility checks** in [CI 41925023565](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41925023565). Circuit Rush’s visible cell spans and redundant accessible labels differed in whitespace. The correction derives names from visible content and retains terminal descriptions in screen-reader text. This failed candidate was not integrated to main or deployed. No axe rule is excluded.
-
-## Verification so far
-
-### Complete candidate result and bounded corrections
-
-Exact source **`10e3b16af8c314379e540da65b8aa7da0f536775`** completed [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553): **269 JavaScript + 52 API checks passed; 18 accessibility + 15 contract/fallback + 34/36 rendered/gameplay checks passed**, with zero skips/flaky results. Every new actual-4K and full-control completion/save test passed. The only failures were **advanced Circuit Rush (426px) and Binary Flash (519px) page widths at a 390px viewport**. The local grid tracks now use `minmax(0,1fr)` and their children may shrink, preserving full-size internally scrolling controls. Long binary weight labels wrap within their cells. No test or assertion was weakened.
-
-[Exact measurements, failures and manual-control record](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json) · [All nine original inspected PNG frames](docs/evidence/2026-11-04-nine-games/README.md). Local and CI clean builds matched **188 runtime files**, SHA-256 **`d64fc5cb1ef64a8c25457cfb4533d682a9df8545cf5ae4782bce540fdfa342e5`**. Original PNG bytes and SHA-256 hashes are retained; no generated substitute is used as rendering evidence. The catalog’s 4K field now names this observed source, while release/deployment remains pending. First changed correction work began **22:48:01Z**; CSS correction began **22:48:15Z**.
-
-Root-controlled cloud UI verification also completed Binary’s two-frame packet in nine operations, Volt’s 18-command full-shield extraction, and Capacitor’s real charge/hold/discharge procedure to **0.500 V**, with genuine unlock/save feedback. The resistor arrow correction visibly skipped a matched tray. This browser explicitly disables WebGL; these are command-flow checks, not its rendering evidence. Singular first-completion wording was corrected in four interfaces.
-
-The frozen combined working tree passed **269/269 JavaScript tests**, with zero failures/skips, in **23.066 seconds** using `npm test` on 2026-11-04. `npm run check` passed all 24 routes, links, pinned policy, exact corporate artwork and syntax checks. Dynamic browser discovery includes **36 rendered/gameplay scenarios** plus separate contract/fallback and accessibility gates; discovery alone is not execution. The final remote candidate still requires its full CI gate.
-
-Exact candidate `8a9ff73d1de2184f4b9abe5b646012892830b81e` failed [CI 41921885769](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41921885769): **197 JavaScript + 52 API tests passed**, **13 accessibility + 8 contract/fallback + 22/23 rendered gameplay checks passed**. The sole failure was the Penalty Pro test’s exact `getByLabel` locator on a wrapping select label; the captured accessibility tree correctly exposes a Graphics combobox. The test now addresses that actual accessible role/name. No gameplay assertion was removed and no timeout was increased. A new exact-candidate gate remains required. The inspected Neon and Apex frames show actual original 3D; Neon’s first-board camera framing will be improved in the engineering integration.
-
-| Check | Actual outcome / limit |
+| Gate | Actual result |
 | --- | --- |
-| Existing regressions + Neon, Fuse Box and racing tests | **182 passed**, zero failed/skipped in the local combined run before final penalty tests were added |
-| Simultaneous racing input | **2 passed**: independent touches, focus blur, cancellation, lost capture, keyboard overlap and reset |
-| Penalty numerical + legacy compatibility | **20 passed**, zero failed/skipped; includes the 10,000 complete campaigns described above |
-| Release integrity | Passed for 24 unique catalog routes, local links, official artwork blob, policy pin and JavaScript syntax |
-| Preliminary CI at `3b94403` | Node, API, build, accessibility/reflow and gateway/graphics-fallback stages passed; final rendered stage was still running when the next required recovery checkpoint was pushed. This preliminary run is not the final release gate. |
-| Manual cloud-browser play | Neon first-board completion/save; Fuse Box valid 5/7/11 A branch plan, all three stages, 100% completion, 0.920 Wh, board 2 unlock and save feedback observed through the actual controls |
-| Cloud-browser graphics | Explicit WebGL-disabled environment. Command play works; no 3D/4K claim comes from that browser. |
-| Inspected actual 4K at `10e3b16` | All **nine conversions** measured **3840 × 2160 WebGL2**, zero GL error, with original captured scenes inspected by the integration owner. Software rendering is not hardware FPS qualification. |
-| Corrected exact-candidate release gate | **PENDING**; the prior complete run passed 67/69 browser checks and exposed the two advanced-layout failures described below. |
-| Physical hardware/touch/gamepad/full screen-reader play | **NOT TESTED**; automated checks do not substitute for these |
+| `npm run check` | Passed: 24 unique routes, local links, policy/design pins, official artwork blob and JavaScript syntax |
+| `npm test` | **269/269 passed**, zero failures/skips |
+| `python -m pytest platform/backend/tests -q` | **52/52 passed**, one existing Starlette/httpx warning |
+| `npm run build` | Clean source; **188 runtime files**, SHA-256 **`9964edf1e711b3b6152285f0ff9280ee4df0ccd207e9c86b8c135604e97ba638`**; [build receipt](docs/evidence/2026-11-04-nine-games/build-09385bd.json) |
+| Accessibility/reflow | **18/18 passed**, no axe rule exclusions |
+| Contract/graphics fallback | **15/15 passed**, fixtures explicitly test-only |
+| Rendered gameplay | **36/36 passed**: genuine controls, success/failure/retry, persistence, actual 4K and advanced mobile layouts |
+| Browser total | **69/69 passed**, zero unexpected, skipped or flaky results |
+| Actual 4K | All nine conversions passed **3840 × 2160 WebGL 2**, GL error 0; original nine frames from `10e3b16` were inspected and retained unchanged; the final candidate reran every measurement |
+| Advanced mobile corrections | Circuit Rush seven-column and Binary Flash sixteen-bit fixtures passed unchanged **390px and 320px** width/target assertions. Final 320px original captures were inspected and retained. |
 
-The release workflow runs `npm run check`, `npm test`, the pinned Python API tests, a clean build and the browser suite. Tests assert true controls, failure/retry, save/reload, actual 3840 × 2160 buffers and narrow layouts; transport fixtures remain explicitly test-only. No live AI result is claimed.
+CI used Ubuntu 24.04 Chromium/SwiftShader. Actual raster size and browser interaction do not establish gaming-GPU frame rate. Hardware FPS/load, physical touch/gamepad and full screen-reader play are **NOT TESTED**. The 3,000 ms load target is not a measured result.
 
-Initial WIP failures were retained rather than published: the first Neon checkpoint lacked its newly linked README; the early accessibility run found redundant Neon accessible labels and legacy-route name mismatches before their conversions were included. The current Neon buttons derive accessible names from their visible text. A later intermediate WIP lacked the new racing README; all game guides now exist. Final release checks must verify these repairs.
+Root cloud-control checks completed Neon and Fuse first boards, Circuit's 100.0 mA lamp commission and reload, Binary's two-frame packet in nine operations, Volt's full-shield extraction, a resistor match/focus skip, and Capacitor's actual charge/hold/discharge to 0.500 V with unlock/save feedback. That browser explicitly disables WebGL; those checks establish command flow, not rendering. [Recorded detailed controls](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 
-## Recovery receipts
+### Preserved failures and their corrections
 
-Plain Git write authentication was unavailable. The existing authorized GitHub connector created **identical Git trees**, used expected-head checks and normal fast-forward ref updates, then read back each exact head. Public Git fetch reconciled the local work branch to the identical-tree connector commit while preserving unstaged work. No credentials were exposed, force pushes performed or repository access changed.
+- `8a9ff73`:197 JavaScript+52 API passed;43/44 browser passed. Penalty's exact wrapping-label locator failed; the corrected test uses the actual Graphics combobox role/name, preserving assertions/timeouts. [Receipt](docs/evidence/2026-11-04-nine-games/verification-8a9ff73.json).
+- `748fb20`:251 JavaScript+52 API passed;15/16 accessibility passed. Circuit's redundant labels differed from visible spans in whitespace. Native visible names plus screen-reader terminal descriptions fixed it; no axe exclusion. [Receipt](docs/evidence/2026-11-04-nine-games/verification-748fb20.json).
+- `10e3b16`: 269 JavaScript+52 API passed;67/69 browser passed, including every new 4K/control completion. Advanced Circuit/Binary page widths were 426px/519px at 390px. Shrinkable grid tracks/children and wrapped weight labels fixed both without reducing touch targets. [Measured failed-run receipt and original frames](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+- Earlier WIP missing-guide/accessibility failures were corrected before the passing release candidate. Failed WIP candidates were never integrated to main or deployed.
 
-| Useful work checkpoint | Exact remote verification |
-| --- | --- |
-| `f9a6a982947e8530b30ec195f8a6d83ea14e6b4e` | 21:44:17Z; first changed work was 21:41:59Z |
-| `a14c4f5b54a74a40cbc66d940d90e01cd11ef516` | 21:46:36Z |
-| `148954a88d43f84dd5a382c2ff4ce9769de16087` | 21:50:55Z |
-| `3b94403ae1f62834a46854e4980109d61a96e71b` | 21:55:06Z |
-| `24819e438121c52f2e47cbcb638934b735ca7c9a` | 22:00:05Z |
+## Checkpoints and recovery
 
-All above dates are 2026-11-04 UTC; add one hour for Europe/Berlin. First/subsequent changed checkpoints met the five-minute cadence. WIP status does not waive release gates. Simulated concurrent writers/interrupted-push recovery and the remaining policy recovery scenarios are **NOT TESTED** unless separately recorded. This receipt text is locally pending until its next checkpoint.
+Primary work remains on `work/finish-games-2026-11-04`. Engineering work on `work/finish-engineering-2026-11-04` is fully merged with real merge ancestry through **`c230318855d4e227e151b9d497072122b4f34136`**, read back **22:32:05Z**. Both specialist writers are frozen.
 
-## Parallel engineering work
+Plain Git write authentication was unavailable. The authorized connector created identical Git trees, used expected-head checks and normal fast-forwards, read back exact remote heads, and public Git fetch reconciled identical-tree local commits while preserving unstaged work. No credentials were exposed, force pushes performed or access changed.
 
-`work/finish-engineering-2026-11-04` is isolated at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering`. Its first RC engine checkpoint **`7db0840741f7ea29508bedf5dcaf88cc86f75cb8`** was remotely verified at **2026-11-04T21:59:16Z**, following first changed work at 21:56:34Z. All five engineering conversions are now handed off and their writers are frozen. The final merge includes their complete source; independent exact-candidate verification is still required before release.
+Verified primary checkpoints on 2026-11-04 UTC: `f9a6a982` 21:44:17, `a14c4f5` 21:46:36, `148954a` 21:50:55, `3b94403` 21:55:06, `24819e4` 22:00:05, `8a9ff73` 22:04:03, `904cdc7` 22:22:12, `748fb20` 22:24:36, `10e3b16` 22:33:21 and `09385bd` 22:54:03. Frozen periods do not require empty commits. First primary changed work began 21:41:59Z; the first checkpoint met five minutes.
+
+Engineering receipts: `7db0840` 21:59:16, `6fb58d8` 22:04:20, `e32afcd` 22:09:28, `4019851` 22:13:13, `5a466b5` 22:19:31, `c01f283` 22:22:26, `54a9797` 22:25:56, `ba62a45` 22:29:28 and `c230318` 22:32:05. Three changed-work intervals of **5m4s, 5m8s and 6m18s missed the five-minute cadence**; they are not compliant intervals. All snapshots were exactly read back and recovered.
+
+For `09385bd`, first correction work began **22:48:01Z** (CSS 22:48:15Z); exact remote verification at **22:54:03Z** took **6m2s**, another cadence miss. An initial unbounded parallel chunk-read transfer failed at chunk 24 before any ref mutation. Reducing transfer chunks to 8,000 characters and concurrency to 8 allowed exact binary blobs/tree/commit synchronization; all 1,474,601 original PNG bytes were recovered. Recovery stayed below ten minutes. Future preparation targets three minutes to leave transfer time. This evidence follow-up began **23:13:21Z** and needs its own exact remote receipt.
+
+Unexercised concurrent-writer/interrupted-push and other policy recovery scenarios remain **NOT TESTED**. A later evidence-only commit does not retroactively change the immutable candidate receipts above.
 
 ## Remaining acceptance and external dependencies
 
-- **Catalog:** the original 2,000-title target and remaining individual legacy conversions are open. Automated level generators are not separate titles or 10,000 manual playtests.
-- **Bible:** the released David and Genesis ark chapters do not complete the full Genesis–Revelation campaign or requested Moses/Samson/Abimelech coverage.
-- **Live AI:** an API host, server-side provider credentials, active model IDs and independent judge configuration are required. Adigun AI needs a real endpoint. No client key exposure or replay-as-live substitution is permitted.
-- **Native consoles:** platform-holder developer access, approved tooling/SDKs, licensing and certification are required. Browser games and the separate Godot Node2D suite are not native PlayStation releases; future console availability is not assumed.
-- **Production qualification:** hardware frame-time/initial-load measurements, physical device controls, complete language review, screen-reader play and production-art work remain open. The 3,000 ms load target is not a measured result.
+- **Catalog:** nine existing legacy 2D conversions remain; the broader 2,000-title target is open. Level-generator coverage does not establish separate titles or 10,000 human playtests.
+- **Bible:** David and Genesis 6–9 do not complete Genesis–Revelation or the requested Moses/Samson/Abimelech coverage.
+- **Live AI:** API host, server-side provider credentials, active model IDs, independent judge configuration and a real Adigun AI endpoint are required. No replay-as-live substitution or client keys.
+- **Native consoles:** platform-holder developer access, approved tooling/SDKs, licensing and certification are required. Browser games and the separate Godot Node2D suite are not native PlayStation releases.
+- **Production:** hardware load/frame-time measurements, physical controls, complete languages, screen-reader play and production-art qualification remain open.
 
-Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; design system remains `52f01f9986d97088413ca9785bc7a2d3f2967123`. [Standards](docs/STANDARDS.md), [asset rights](ASSETS.md) and [prior release evidence](docs/evidence/2026-11-04-ark/README.md) remain in force.
+Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`; design system remains `52f01f9986d97088413ca9785bc7a2d3f2967123`. [Standards](docs/STANDARDS.md), [asset rights](ASSETS.md) and [earlier release evidence](docs/evidence/2026-11-04-ark/README.md) remain in force.
 
 ## Next bounded action
 
-Run the complete exact-candidate release gate, inspect actual 4K captures, correct observed failures, fast-forward main only after it passes, then publish and verify source bytes at the existing public URL. Full-project finish time is **unknown**; ETA **pending**.
+Observe the fresh Pages run, verify exact public source bytes, synchronize the final evidence/catalog update and pass its applicable gate before integration. Then continue an individually scoped remaining legacy conversion; provider/native-release dependencies remain explicit. Full-project finish time is **unknown**; ETA **pending**.

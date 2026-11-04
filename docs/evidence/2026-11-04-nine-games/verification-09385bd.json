@@ -1,0 +1,184 @@
+{
+  "source": "09385bd8105e235f90493390fccbbe133083bd72",
+  "ciRun": 41929244609,
+  "ciUrl": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609",
+  "ciJob": 126921619461,
+  "conclusion": "success",
+  "completedAt": "2026-11-04T23:05:14Z",
+  "node": {
+    "passed": 269,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api": {
+    "passed": 52,
+    "warnings": 1,
+    "warning": "Existing Starlette/httpx deprecation warning"
+  },
+  "browser": {
+    "accessibility-results": {
+      "startTime": "2026-11-04T22:55:26.600Z",
+      "duration": 37118.058,
+      "expected": 18,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "browser-results": {
+      "startTime": "2026-11-04T22:57:57.108Z",
+      "duration": 430877.496,
+      "expected": 36,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "contract-results": {
+      "startTime": "2026-11-04T22:56:04.370Z",
+      "duration": 112112.862,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "totalBrowserPassed": 69,
+  "rendering": [
+    {
+      "title": "Ark renders a real 4K frame and commissions a saved voyage through player controls",
+      "file": "ark.spec.js",
+      "name": "ark-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Binary Flash renders a real 4K register and saves an ordered packet through parallel and serial controls",
+      "file": "binary-flash.spec.js",
+      "name": "binary-flash-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Capacitor Charge renders a real 4K RC bench and completes a saved experiment using physical switch controls",
+      "file": "capacitor.spec.js",
+      "name": "capacitor-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Circuit Rush renders a real 4K frame and commissions a saved job through actual terminal controls",
+      "file": "circuit-rush.spec.js",
+      "name": "circuit-rush-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Fuse Box renders an actual 4K cabinet and commissions, saves and reloads a board through player inputs",
+      "file": "fusebox.spec.js",
+      "name": "fusebox-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Neon Pulse renders actual 4K, commissions a board through controls and resumes progress",
+      "file": "neon.spec.js",
+      "name": "neon-render-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Penalty Pro renders actual 4K and wins through five shots and five goalkeeper turns, then resumes",
+      "file": "penalty.spec.js",
+      "name": "penalty-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "APEX renders a real 4K frame and qualifies through keyboard and step driving",
+      "file": "racing.spec.js",
+      "name": "apex-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Resistor Match renders actual 4K components, compares visible codes and clears a real memory game with reload",
+      "file": "resistor-match.spec.js",
+      "name": "resistor-match-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Volt Dodge renders an actual 4K arena, moves with keyboard, requires every core and saves a control-driven exit",
+      "file": "volt-dodge.spec.js",
+      "name": "volt-dodge-4k-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    }
+  ],
+  "advancedLayoutRegressions": {
+    "conclusion": "both passed unchanged 390px and 320px assertions; all controls retain minimum44px targets",
+    "scenarios": [
+      {
+        "title": "Binary Flash contains a sixteen-bit saved-layout fixture at 390 and 320 pixel widths",
+        "file": "binary-flash.spec.js"
+      },
+      {
+        "title": "Circuit Rush keeps a seven-column saved-layout fixture inside 390 and 320 pixel screens",
+        "file": "circuit-rush.spec.js"
+      }
+    ],
+    "captures": [
+      {
+        "game": "game7",
+        "capture": "binary-flash-mobile-320-09385bd.png",
+        "originalArtifactPath": "test-results/browser/binary-flash-Binary-Flash--04a53-at-390-and-320-pixel-widths/binary-flash-mobile-320.png",
+        "sha256": "4c8b1935a1c92f49fbfc88c19cde5bf43b22a727b2bdfca11ba6b695e134d65c",
+        "pixels": [
+          320,
+          4317
+        ],
+        "inspection": "Original final-candidate capture inspected by integration owner. Page fits 320px; full-size controls scroll within their own region."
+      },
+      {
+        "game": "game2",
+        "capture": "circuit-rush-mobile-320-09385bd.png",
+        "originalArtifactPath": "test-results/browser/circuit-rush-Circuit-Rush--9c47a-e-390-and-320-pixel-screens/circuit-rush-mobile-320.png",
+        "sha256": "c79ce5c9269e692a265384dbaa06a751438f6be3421c6d93e63430ec42779407",
+        "pixels": [
+          320,
+          3586
+        ],
+        "inspection": "Original final-candidate capture inspected by integration owner. Page fits 320px; full-size controls scroll within their own region."
+      }
+    ]
+  },
+  "priorInspectedNineFrames": {
+    "source": "10e3b16af8c314379e540da65b8aa7da0f536775",
+    "receipt": "verification-10e3b16.json",
+    "note": "Original prior-run PNGs remain unchanged. Final093 changes are two layout fixes, four first-completion copy corrections, metadata and evidence; all actual4K/control scenarios reran and passed."
+  },
+  "build": {
+    "runtimeFiles": 188,
+    "fingerprintSha256": "9964edf1e711b3b6152285f0ff9280ee4df0ccd207e9c86b8c135604e97ba638",
+    "receipt": "build-09385bd.json"
+  },
+  "artifact": {
+    "id": 13371571737,
+    "bytes": 26148695
+  },
+  "limitations": [
+    "Ubuntu24.04 Chromium/SwiftShader raster and browser-flow evidence; no hardware GPU frame-rate or physical touch/gamepad qualification.",
+    "Automated axe/reflow/focus checks do not establish complete screen-reader or assistive-technology play.",
+    "Cloud manual controls were exercised with WebGL disabled; no cloud-rendering claim.",
+    "The original2000-title, complete Bible, full localization, configured live AI and native-console requirements remain unfinished."
+  ]
+}

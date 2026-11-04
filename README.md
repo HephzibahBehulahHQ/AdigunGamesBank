@@ -27,6 +27,10 @@ Stages, seeded variants and renamed templates are never counted as additional ga
 
 The verified development build is live at **https://adigungamesbank.hephzibahbehulah.com/**. [Recorded test and deployment evidence](docs/evidence/2026-11-04/README.md) includes actual 4K buffers, completed gameplay flows, source hashes and the remaining qualification limits.
 
+## Nine-game release gate
+
+Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro passed the exact `09385bd` release gate: **269 JavaScript, 52 API and 69 browser checks**. Both advanced mobile-layout regressions pass at 320px and 390px. [Current measured evidence and publication state](docs/evidence/2026-11-04-nine-games/README.md). The catalog now implements fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles.
+
 ## Play and develop
 
 Use Node.js 24+ and Python 3.12+. Serve through HTTP; opening index.html as a file is not supported.
@@ -64,4 +68,4 @@ GitHub Pages publishes the existing main/root site and retains its CNAME. Work i
 
 ### Historical second-wave public milestone
 
-The earlier source milestone `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks**, including actual 4K on all five rebuilt routes, full-game completion, automated accessibility and explicit test-only AI contract regressions. **61 public files matched the deployed source exactly.** [Retained test/deployment evidence](docs/evidence/2026-11-04-wave2/README.md). Live AI configuration, full production/device qualification, the remaining 18 legacy rewrites and the wider 2,000-game/Bible/console scope are still unfinished.
+The earlier source milestone `88c3035320044b254ed719ef840f527aa5520e2c` passed **142 JavaScript, 52 API and 23 browser checks**, including actual 4K on all five rebuilt routes, full-game completion, automated accessibility and explicit test-only AI contract regressions. **61 public files matched the deployed source exactly.** [Retained test/deployment evidence](docs/evidence/2026-11-04-wave2/README.md). Live AI configuration, full production/device qualification, the nine remaining legacy rewrites (eighteen at that historical milestone) and the wider 2,000-game/Bible/console scope are still unfinished.

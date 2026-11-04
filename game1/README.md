@@ -2,23 +2,23 @@
 
 ## Integration evidence — 4 November 2026
 
-The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL 2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 
-The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+That historical measured run passed **269 JavaScript, 52 API and 67/69 browser checks** and exposed two advanced mobile-layout failures. Corrected source **`09385bd8105e235f90493390fccbbe133083bd72`** then passed the complete gate: **269 JavaScript, 52 API and 69/69 browser checks**, including both 390px/320px layout regressions, in [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609). [Successful immutable receipt](../docs/evidence/2026-11-04-nine-games/verification-09385bd.json). Hardware performance, physical devices, complete assistive-technology play and production qualification remain open. Current publication evidence belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
 
 
 ## Identity and scope
 
 - **ID / route:** `game1`, `/game1/`. **Genre:** signal-routing logic puzzle.
 - **Owner:** Hephzibah Behulah, Elektroniker. **Platform:** web browser.
-- **Status:** In progress. The runtime is implemented; executed development browser/4K evidence is above; the corrected release gate and publication remain pending.
+- **Status:** In progress. The runtime is implemented; executed development browser/4K evidence is above; the corrected release gate passed; current publication is recorded in PROJECT_STATUS.md.
 - **Distinct mechanics:** an abstract LED matrix has three logical states. Pulsing one LED advances it and its orthogonal neighbours modulo three. Match a separate target pattern within a finite pulse budget. The board has explicit win/loss, undo, pause, restart and sequential unlock states. It has no timer or reaction requirement.
 
 This replaces the legacy RGB-slider challenge, not a separate title. It does not model real voltages, AC phases or a physical installation.
 
 ## Rendering and campaign
 
-Actual Three.js WebGL2 scene: original layered matrix enclosure, circuit traces, LED cylinders, target rings, fixings and selection ring. The scene is lazy loaded. Adaptive, 1920 × 1080 and 3840 × 2160 drawing-buffer requests use `shared/three-stage.js`; actual dimensions are reported by the renderer. A selector is not evidence of successful 4K: see the candidate's browser receipt.
+Actual Three.js WebGL 2 scene: original layered matrix enclosure, circuit traces, LED cylinders, target rings, fixings and selection ring. The scene is lazy loaded. Adaptive, 1920 × 1080 and 3840 × 2160 drawing-buffer requests use `shared/three-stage.js`; actual dimensions are reported by the renderer. A selector is not evidence of successful 4K: see the candidate's browser receipt.
 
 **10,000 deterministic boards**, seeded by level. Board size progresses 3 × 3 → 6 × 6, with increasingly dense initial perturbations and decreasing spare pulses: 8, 6, 4, 2, then 0. Five 2,000-level tiers span Beginner through Professional Master. Targets and starting patterns differ; each complete configuration is checked for uniqueness. A finite-field linear solver establishes a reachable solution and its pulse budget. All 10,000 boards are solved through the actual engine in Node tests. This is computational verification, not 10,000 human playtests or a proof of optimal minimum moves.
 
@@ -41,7 +41,7 @@ Corporate navy `#0B1220`, royal blue `#2563EB`, gold `#D4AF37`, ivory `#F8FAFC` 
 ## Verification and delivery
 
 - Engine: `node --test tests/neon.test.js` (neighbour bounds, invalid input, full first-board win, locked terminal states, pause/undo/loss and all 10,000 unique reachable configurations).
-- Browser: `npm run test:browser -- tests/browser/neon.spec.js` (actual WebGL2 drawing buffer, captured frame, control-only win/reload, loss/retry, locked levels, graphics/storage fallback and narrow layout).
+- Browser: `npm run test:browser -- tests/browser/neon.spec.js` (actual WebGL 2 drawing buffer, captured frame, control-only win/reload, loss/retry, locked levels, graphics/storage fallback and narrow layout).
 - Accessibility: `tests/browser/accessibility.spec.js` includes this route with no rule exclusions.
 - Integration, candidate SHA, screenshots, exact commands, dates and public-byte receipt: see `PROJECT_STATUS.md` and its evidence links. A WIP checkpoint is not a production acceptance.
 - Existing Pages route: `/AdigunGamesBank/game1/`; public host remains the existing custom domain. This rewritten route is not claimed deployed until exact-source verification succeeds.

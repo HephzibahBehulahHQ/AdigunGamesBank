@@ -2,9 +2,9 @@
 
 ## Integration evidence — 4 November 2026
 
-The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL 2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 
-The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its only failures were advanced narrow-screen layouts in Circuit Rush and Binary Flash; those styles are now corrected and await the final exact-candidate gate. This is development rendering evidence, with hardware performance, physical devices, complete assistive-technology play and production qualification still open. Current release/publication state belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+That historical measured run passed **269 JavaScript, 52 API and 67/69 browser checks** and exposed two advanced mobile-layout failures. Corrected source **`09385bd8105e235f90493390fccbbe133083bd72`** then passed the complete gate: **269 JavaScript, 52 API and 69/69 browser checks**, including both 390px/320px layout regressions, in [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609). [Successful immutable receipt](../docs/evidence/2026-11-04-nine-games/verification-09385bd.json). Hardware performance, physical devices, complete assistive-technology play and production qualification remain open. Current publication evidence belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
 
 
 ## Identity and playable scope
@@ -17,7 +17,7 @@ The whole run passed **269 JavaScript, 52 API and 67/69 browser checks**. Its on
 | Platform | Browser, keyboard, mouse and touch commands. No native-console build or gamepad mapping is claimed. |
 | Source | `campaign.js`, `engine.js`, `map.js`, `app.js`, `scene.js`, `index.html`, `style.css` |
 | Status | **In progress:** playable implementation and complete campaign engine validation. Browser, rendering and production acceptance remain subject to the exact revision's evidence in [PROJECT_STATUS.md](../PROJECT_STATUS.md). |
-| Blocking dependency | No implementation access blocker. Development browser/4K evidence is above; final release and deployment verification remain pending. |
+| Blocking dependency | No implementation access blocker. Development browser/4K evidence is above; the release gate passed; current deployment verification is recorded in PROJECT_STATUS.md. |
 
 Drive the recovery rover through the factory lanes, recover **every energy core**,
 then physically enter the extraction gate before the timer or shields run out.
