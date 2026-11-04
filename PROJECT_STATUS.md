@@ -1,12 +1,20 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T19:44:17+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated: **2026-11-04T20:16:31+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance and published revision
 
 **In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.
 
 **The verified gameplay release source is `b3844bff8775b509ddda6f9002726bf4ec1dc89b`**, integrated into main and read back exactly at **2026-11-04T18:36:31Z** after its release gate passed. Subsequent evidence/documentation checkpoints retain that tested gameplay implementation; receipts identify the immutable revision actually verified. GitHub Pages [run 41888830443](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41888830443) succeeded for that exact source at **2026-11-04T18:36:58Z**. Public verification completed at **2026-11-04T18:41:10Z**: **all 67 checked files returned HTTP 200 and matched exact source bytes**. [Per-file deployment receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json). The custom domain remains **https://adigungamesbank.hephzibahbehulah.com/**; the new game is live at **https://adigungamesbank.hephzibahbehulah.com/game24/**. The preceding verified public source was `88c3035320044b254ed719ef840f527aa5520e2c`.
+
+## Final source checkpoint and publication blocker
+
+**Main is `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`**, verified by exact remote readback at **2026-11-04T18:53:41Z**. That exact commit passed [CI 41890099819](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41890099819), updated **2026-11-04T18:52:56Z**: **153 JavaScript + 52 API + 27 browser checks**, with 138 runtime build files and fingerprint `1f316a27a65d82a600f5e3379f07b79eceb7d3f89e49c9d762766e96f575570f`. It retains the verified gameplay implementation and adds final evidence/documentation.
+
+**Final documentation publication is blocked.** GitHub Pages [run 41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out in its deployment step on both attempts, recorded at **2026-11-04T19:04:10Z** and **2026-11-04T19:15:19Z**. The failed-job retry was requested at **2026-11-04T19:04:45Z**. Public checks completed at **2026-11-04T19:00:21Z** and **2026-11-04T19:13:19Z**; each found all 11 changed evidence/documentation/catalog files stale or unavailable. The preceding 67-file gameplay deployment remains the last verified public release. These failures do not establish an application defect or a service-wide outage.
+
+[Exact application, deployment-attempt and per-file receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json). This failure record is preserved on the work branch; no release gate or publication is claimed for this subsequent recovery checkpoint. No additional source changes or third deployment retry were made.
 
 ## Changed implementation in this continuation
 
@@ -54,4 +62,4 @@ Updated: **2026-11-04T19:44:17+01:00 (Europe/Berlin)**. This is the current acce
 
 ## Next bounded action
 
-Publish and verify the final evidence-only checkpoint, then continue the next individual title/Bible chapter under the same template. The whole 2,000-game program has no defensible completion ETA.
+Resolve/retry GitHub Pages publication for the already tested main revision, verify the 11 changed public files, and reconcile this work-branch failure record before continuing the next individual title/Bible chapter. Two deployment timeouts are recorded; further retries must be bounded and evidence-led. Final documentation publication and the whole 2,000-game program have no defensible completion ETA.

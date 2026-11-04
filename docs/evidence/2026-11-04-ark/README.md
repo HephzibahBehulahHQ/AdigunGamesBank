@@ -33,3 +33,7 @@ The actual renderer produced **3840 × 2160**, WebGL2, with zero GL error. The o
 The aggregate `f5378f5` gate was **not a pass**: 26 browser checks passed and the football roster assertion failed. Its own failure snapshot recorded a 2–0 win, one substitution and `Adigun #12: sent off`. The test had incorrectly required the dismissed substitute to remain in the active-player selector. The corrected test verifies the exact #11→#12 request, one applied substitution, removal of #11 and either active #12 or the explicit dismissal record. The corrected aggregate gate passed at `b3844bf` as recorded above. No assertion was simply removed and no failed candidate was approved for publication.
 
 All 10,000 ark configurations complete their numerical launch through normal engine controls in seven domain tests. This is automated solvability coverage, not 10,000 manual playtests. Current acceptance and public deployment receipts belong in [PROJECT_STATUS.md](../../../PROJECT_STATUS.md).
+
+## Final source publication blocker
+
+[Publication receipt for e7c60ac](publication-e7c60ac.json) records the exact successful 153/52/27 application gate, verified main readback, two GitHub Pages deployment timeouts, and both unsuccessful checks of the 11 changed public files. The prior 67-file gameplay deployment remains the last verified public release. This additional recovery record is a work-branch checkpoint; its own release gate/publication is not claimed.
