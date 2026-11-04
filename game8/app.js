@@ -88,7 +88,7 @@ function sync() {
   $('isolate').disabled = state.isolated || state.phase === 'won'; $('reset-trip').hidden = state.phase !== 'tripped'; $('reset-trip').disabled = !state.isolated;
   $('clear-board').disabled = !editable && state.phase !== 'won'; $('next-level').hidden = state.phase !== 'won' || state.config.level >= LEVEL_COUNT;
   text($('message'), state.message); $('message').className = `message${state.phase === 'tripped' ? ' error' : state.phase === 'won' ? ' success' : ''}`;
-  text($('save-status'), !progress.completed ? 'Completed boards save on this device.' : `${progress.completed.toLocaleString()} boards completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
+  text($('save-status'), !progress.completed ? 'Completed boards save on this device.' : `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'board' : 'boards'} completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
   telemetry(); dirty = true;
 }
 function telemetry() {

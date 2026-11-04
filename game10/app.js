@@ -22,7 +22,7 @@ function progressText() {
     const saved = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null');
     durable = validCampaignSave(saved) && saved.completed >= campaign.completed;
   } catch { /* Storage may be unavailable or silently reject a write. */ }
-  return `${campaign.completed.toLocaleString()} races qualified. ` + (durable
+  return `${campaign.completed.toLocaleString()} ${campaign.completed === 1 ? 'race' : 'races'} qualified. ` + (durable
     ? 'Progress saved on this device.'
     : 'Progress is available for this session only; browser storage could not confirm a save.');
 }

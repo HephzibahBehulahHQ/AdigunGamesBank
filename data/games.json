@@ -1076,7 +1076,7 @@
     {
       "id": "game17",
       "title": "PENALTY PRO",
-      "description": "Place ballistic shots past an anticipating goalkeeper. Control aim, height and power across five-kick challenges.",
+      "description": "Take five ballistic penalties, then defend five shots with your own dives. Read the wind, goalkeeper and striker to win.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game17/",
@@ -1093,7 +1093,7 @@
       "levels": {
         "target": 10000,
         "implemented": 10000,
-        "method": "10,000 deterministic five-kick challenges; ball/keeper/frame collision and reachability validation",
+        "method": "10,000 deterministic ten-turn campaigns; 50,000 physical shots and 50,000 physical saves validated through the actual engine",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
