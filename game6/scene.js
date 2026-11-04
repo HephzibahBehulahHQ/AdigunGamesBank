@@ -1,7 +1,12 @@
 import { THREE, createStage, box, cylinder, material } from '../shared/three-stage.js';
 import { electrical, selectedParts } from './engine.js';
 
-const BAND_COLORS = ['#19232c','#7b4d30','#bd373e','#e38f42','#e4c459','#4d9066','#366fba','#9270b5','#82909c','#e9eef2'];
+// These ideal scenario values can have more than two significant figures.
+// Print their exact value on unbanded components instead of implying a rounded
+// four-band nominal value or a physical tolerance the solver does not model.
+export function resistorCaption(id, ohms, watts) {
+  return ohms ? `${id} · ${ohms} Ω${watts ? ` · ${watts} W` : ''}` : `${id} · FIT PART`;
+}
 function label(parent, text, position, width = 2.2, color = '#d8f4fc') {
   const canvas = document.createElement('canvas'); canvas.width = 640; canvas.height = 144;
   const context = canvas.getContext('2d'); context.fillStyle = '#102033'; context.fillRect(0, 0, 640, 144);
@@ -27,20 +32,13 @@ function resistor(parent, position, id) {
   const group = new THREE.Group(); group.position.set(...position); parent.add(group);
   const body = cylinder(group, .24, 1.42, [0, 0, 0], '#bfad8c'); body.rotation.z = Math.PI / 2;
   const pin = cylinder(group, .045, 2.42, [0, 0, 0], '#a8bac7', { metalness: .9 }); pin.rotation.z = Math.PI / 2;
-  const bands = [-.5, -.22, .08, .48].map(x => { const band = cylinder(group, .247, .1, [x, 0, 0], '#536173'); band.rotation.z = Math.PI / 2; return band; });
   const caption = label(group, id, [0, .62, 0], 2.35);
-  return { body, bands, caption, id, ohms: null };
+  return { body, caption, id, ohms: null, watts: null };
 }
 function setResistor(resistor, ohms, watts) {
-  if (resistor.ohms === ohms) return;
-  resistor.ohms = ohms; resistor.body.material.color.set(ohms ? '#c8b48d' : '#4d5c6c');
-  if (ohms) {
-    const exponent = Math.max(0, Math.floor(Math.log10(ohms)) - 1), digits = Math.round(ohms / 10 ** exponent);
-    [Math.floor(digits / 10), digits % 10, exponent].forEach((digit, index) => resistor.bands[index].material.color.set(BAND_COLORS[digit] || '#8997a2'));
-    resistor.bands[3].material.color.set('#c5a363');
-  } else resistor.bands.forEach(band => band.material.color.set('#4d5c6c'));
-  const value = ohms >= 1000 ? `${Number((ohms / 1000).toFixed(3))}kΩ` : `${ohms}Ω`;
-  resistor.caption = replaceLabel(resistor.caption, ohms ? `${resistor.id} · ${value}${watts ? ` · ${watts}W` : ''}` : `${resistor.id} · FIT PART`, ohms ? '#e6f3f5' : '#b7c5d4');
+  if (resistor.ohms === ohms && resistor.watts === watts) return;
+  resistor.ohms = ohms; resistor.watts = watts; resistor.body.material.color.set(ohms ? '#c8b48d' : '#4d5c6c');
+  resistor.caption = replaceLabel(resistor.caption, resistorCaption(resistor.id, ohms, watts), ohms ? '#e6f3f5' : '#b7c5d4');
 }
 export function createScene({ canvas, qualitySelect, status, onAction }) {
   const stage = createStage({ canvas, qualitySelect, status, position: [11.5, 13.5, 17.5], target: [0, .5, .2], shadows: true });

@@ -35,7 +35,7 @@ function savedText() {
   if (!campaign.completed) return 'Progress saves on this device after commissioning.';
   let stored = false;
   try { const value = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null'); stored = validCampaignSave(value) && value.completed >= campaign.completed; } catch {}
-  return `${campaign.completed.toLocaleString()} jobs commissioned. ` + (stored ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
+  return `${campaign.completed.toLocaleString()} ${campaign.completed === 1 ? 'job' : 'jobs'} commissioned. ` + (stored ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
 function selectCell(index, focus = false) {
   if (!Number.isInteger(index) || index < 0 || index >= state.config.tiles.length) return;

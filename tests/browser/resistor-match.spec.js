@@ -54,14 +54,14 @@ test('Resistor Match renders actual 4K components, compares visible codes and cl
   await expect(page.locator('#inspection-b')).toContainText('100 Ω ±5%');
   await expect(tray(page, 0).locator('.card-pattern')).toHaveText('1 · 0 · ×1 · ±5%');
   await expect(tray(page, 1).locator('.card-colors')).toHaveText('Brown · Black · Brown · Gold');
-  await page.getByLabel('Graphics', { exact: true }).selectOption('4k');
+  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await page.waitForTimeout(500); // Capture the opened opaque covers after their transition.
   await canvas.screenshot({ path: testInfo.outputPath('resistor-match-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('resistor-match-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
-  await page.getByLabel('Graphics', { exact: true }).selectOption('auto');
+  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
   await page.setViewportSize({ width: 320, height: 900 });
   const dimensions = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(dimensions[0]).toBeLessThanOrEqual(dimensions[1] + 1);
