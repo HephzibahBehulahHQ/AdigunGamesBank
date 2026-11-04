@@ -10,6 +10,7 @@ export function evolveVoltage(initial, asymptote, tau, seconds) {
   return asymptote + (initial - asymptote) * Math.exp(-seconds / tau);
 }
 export function timeToVoltage(initial, target, asymptote, tau) {
+  if (![initial, target, asymptote, tau].every(Number.isFinite) || tau <= 0) return Infinity;
   if (target === initial) return 0;
   const ratio = (target - asymptote) / (initial - asymptote);
   if (!(tau > 0) || !Number.isFinite(ratio) || ratio <= 0 || ratio > 1) return Infinity;
@@ -103,6 +104,7 @@ export function stepExperiment(state, delta) {
     if (circuit.sourceCurrent > config.limits.chargeAmps + EPSILON) { lose(state, 'charge-current', `Charge current ${(circuit.sourceCurrent * 1000).toFixed(2)} mA exceeds the bench limit.`); return true; }
     if (circuit.chargePower > circuit.charge.watts + EPSILON) { lose(state, 'charge-power', `Charge resistor power ${circuit.chargePower.toFixed(3)} W exceeds its ${circuit.charge.watts} W rating.`); return true; }
     const ceiling = Math.min(config.limits.ceilingVolts, circuit.capacitor.voltageRating);
+    if (state.voltage >= ceiling - EPSILON) { lose(state, 'overvoltage', 'The capacitor is already at the overvoltage trip threshold.'); return true; }
     const ceilingTime = timeToVoltage(state.voltage, ceiling, circuit.chargeAsymptote, circuit.chargeTau);
     const deadline = Math.max(0, config.limits.chargeSeconds - state.stageTime);
     const elapsed = Math.min(dt, deadline, ceilingTime);
@@ -110,6 +112,7 @@ export function stepExperiment(state, delta) {
     if (ceilingTime <= dt + EPSILON && ceilingTime <= deadline + EPSILON) lose(state, 'overvoltage', `Charge exceeded the ${ceiling.toFixed(3)} V trip threshold. Capture the target earlier.`);
     else if (deadline <= dt + EPSILON) lose(state, 'charge-timeout', 'The charge deadline expired before a valid capture. Check the RC time constant.');
   } else if (phase === 'holding') {
+    if (state.voltage < config.target.holdFloor - EPSILON) { lose(state, 'hold-droop', 'The capacitor is already below the hold-voltage floor.'); return true; }
     const remaining = Math.max(0, config.target.holdSeconds - state.stageTime);
     const floorTime = timeToVoltage(state.voltage, config.target.holdFloor, 0, circuit.holdTau);
     const elapsed = Math.min(dt, remaining, floorTime);
