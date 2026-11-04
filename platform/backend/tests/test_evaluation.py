@@ -43,3 +43,10 @@ def test_test_inputs_are_bounded_and_require_expected_value():
         validate_cases([{"args": [float("inf")], "expected": 1}])
     with pytest.raises(ValueError):
         validate_cases([{"args": [], "expected": 0}] * 26)
+
+
+@pytest.mark.parametrize("value", [10**400, -(10**400), 10**12 + 1, -(10**12) - 1])
+def test_oversized_integers_are_validation_errors_in_inputs_and_expectations(value):
+    for case in [{"args": [value], "expected": 0}, {"args": [], "expected": value}]:
+        with pytest.raises(ValueError, match="Number exceeds the limit"):
+            validate_cases([case])

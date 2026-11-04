@@ -121,13 +121,17 @@ test('touchline exits award a throw-in to the other team', () => {
 });
 
 test('fixed-step simulation behaves consistently across frame durations', () => {
-  const a = createMatch(500), b = createMatch(500); startMatch(a); startMatch(b);
+  const a = createMatch(500), b = createMatch(500), slow = createMatch(500); startMatch(a); startMatch(b); startMatch(slow);
   for (let i = 0; i < 30; i++) stepMatch(a, { x: 1, y: -0.2 }, 0.1);
   for (let i = 0; i < 60; i++) stepMatch(b, { x: 1, y: -0.2 }, 0.05);
+  for (let i = 0; i < 12; i++) stepMatch(slow, { x: 1, y: -0.2 }, 0.25);
   assert.ok(Math.abs(a.elapsed - b.elapsed) < 1e-8);
+  assert.ok(Math.abs(a.elapsed - slow.elapsed) < 1e-8);
   for (let i = 0; i < a.players.length; i++) {
     assert.ok(Math.abs(a.players[i].x - b.players[i].x) < 1e-8);
     assert.ok(Math.abs(a.players[i].y - b.players[i].y) < 1e-8);
+    assert.ok(Math.abs(a.players[i].x - slow.players[i].x) < 1e-8);
+    assert.ok(Math.abs(a.players[i].y - slow.players[i].y) < 1e-8);
   }
 });
 

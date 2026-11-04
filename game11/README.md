@@ -22,7 +22,7 @@ The simulation implements possession, grounded and airborne ball movement,
 gravity, bounce, drag, swept player contact, goalkeeper interception, solid
 posts/crossbar, whole-ball goal-line crossing, own goals, kickoffs, throw-ins,
 corners and goal kicks. Restarts reposition the designated taker and briefly
-stop play. Match time is 120–180 active seconds. Offside, fouls, cards,
+stop play. Match time is 120–180 active seconds. The simulation runs fixed 1/60-second steps, processing up to 0.25 seconds per rendered frame; severe stalls beyond that cap can slow game time. Offside, fouls, cards,
 substitutions, extra time, penalties, leagues and network multiplayer are not
 implemented. This is a football game with a stated rules subset, not a claim to
 reproduce every law or a licensed professional competition.
@@ -34,7 +34,7 @@ reproduce every law or a licensed professional competition.
 | 3D | `scene.js` constructs a real Three.js scene: a 105 × 68 metre pitch, original stadium, seating, roofs, lighting, nets, patterned spherical ball and 22 articulated players. Node scene construction/update passed; actual rendered frame **NOT VERIFIED** in this record. |
 | Human/ball scale | A constructed player measures about 1.83 m high. Ball radius is 0.11 m; model and collision dimensions use the same value. No circles or flat sprites substitute for players. |
 | 4K | Shared renderer offers an actual requested 3840 × 2160 WebGL drawing buffer, alongside auto and 1920 × 1080. The page reports the context's actual dimensions. An inspected 4K frame is **NOT TESTED** here. |
-| Rendering budget | Approximately 70,948 triangles and 592 mesh objects, including instanced stadium seats, from source inspection on 2026-11-04. This is a scene count, not an FPS measurement. |
+| Rendering budget | Approximately 70,948 triangles and 489 mesh objects, including instanced stadium seats, structural boxes, lights and pitch strips, from source inspection on 2026-11-04. This is a scene count, not an FPS measurement. |
 | Levels | 10,000 reproducible procedural match configurations, Beginner → Apprentice → Skilled → Expert → Professional Master. They are levels of this one game. |
 | Actual progression | Opponent running speed 4.65–6.5 m/s, decision interval 1.0–0.29 s, pressing range, shot error, goalkeeper speed and formation width change with the level. Match length rises from 120 to 180 s; required goals and winning margin rise from one to three. |
 | Validation | All 10,000 configurations have validated numeric bounds and distinct gameplay parameters after excluding their level, seed, tier and opponent labels. This does not establish 10,000 individually authored matches or manual playthroughs. |
@@ -88,7 +88,7 @@ restarts and progression targets are original game design choices.
 
 ## Testing and deployment evidence
 
-Implementation check recorded **2026-11-04T04:49:21+01:00**, working tree based on
+Implementation check recorded **2026-11-04T04:53:47+01:00**, working tree based on
 `0b83cef21788fc6d2b06e2aaf47041af4a8e4e05`. Later exact release candidates and
 browser/deployment receipts belong in the authoritative
 [project status](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md).

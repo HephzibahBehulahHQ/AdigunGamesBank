@@ -1,0 +1,10 @@
+import { execFileSync } from 'node:child_process';
+const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
+const branch = process.argv[2] || git('branch', '--show-current');
+const local = git('rev-parse', 'HEAD');
+const line = git('ls-remote', '--refs', 'origin', `refs/heads/${branch}`);
+const remote = line.split(/\s/)[0];
+if (!/^[a-f0-9]{40}$/.test(remote)) throw new Error('Remote branch could not be verified');
+const receipt = { branch, local, remote, synchronized: local === remote, workingTreeModified: Boolean(git('status', '--porcelain')), verifiedAt: new Date().toISOString() };
+console.log(JSON.stringify(receipt, null, 2));
+if (!receipt.synchronized) process.exitCode = 1;

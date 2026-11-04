@@ -15,6 +15,7 @@ const hashes = {};
 async function fingerprint(directory, prefix = '') {
   for (const entry of (await readdir(directory, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
     const relative = prefix + entry.name;
+    if (relative === 'build-evidence.json' || relative.startsWith('qa-')) continue;
     if (entry.isDirectory()) await fingerprint(path.join(directory, entry.name), `${relative}/`);
     else hashes[relative] = createHash('sha256').update(await readFile(path.join(directory, entry.name))).digest('hex');
   }

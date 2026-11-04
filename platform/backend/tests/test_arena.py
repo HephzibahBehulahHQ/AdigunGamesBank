@@ -221,6 +221,28 @@ def test_request_validation_and_payload_bound(api, configure, player):
     assert api.post("/api/arena/matches", headers=headers, content=b"x" * 65_537).status_code == 413
 
 
+@pytest.mark.parametrize("case", [
+    {"args": [10**400], "expected": 0},
+    {"args": [-(10**400)], "expected": 0},
+    {"args": [], "expected": 10**400},
+    {"args": [], "expected": -(10**400)},
+])
+def test_oversized_integers_rejected_before_admission_or_provider_calls(api, configure, player, monkeypatch, case):
+    configure("openai", "kimi")
+    calls = []
+    async def test_double(key, prompt):
+        calls.append(key)
+        return "Explicit numeric-boundary test response"
+    monkeypatch.setattr(providers, "call_provider", test_double)
+    response = api.post("/api/arena/matches", headers=player(), json=match_request(task_type="coding", tests=[case]))
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Number exceeds the limit"
+    assert calls == []
+    with main.SessionLocal() as db:
+        assert db.scalar(select(func.count(main.Match.id))) == 0
+        assert db.scalar(select(func.count(main.ArenaLease.user_id))) == 0
+
+
 def test_disabled_models_cannot_be_called(api, configure, player):
     configure("openai", "kimi")
     with main.SessionLocal() as db:

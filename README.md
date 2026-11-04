@@ -1,56 +1,50 @@
-# Hephzibah Behulah Game Bank
+# Adigun Game Bank
 
-A growing library of individual browser games. GitHub Pages publishes the catalog and every released game page.
+**One Company. Five Brands.** A Hephzibah Behulah browser-game collection being rebuilt to the owner's production requirements.
 
-## Current catalog titles
+The authoritative brief is [Adigun Game bank pursuing goals and template.md](<Adigun Game bank pursuing goals and template.md>). The target is **2,000 individually designed games**, each with **10,000 meaningful levels**, real 3D scenes and verified 4K rendering. **The full target is not delivered.** Read [PROJECT_STATUS.md](PROJECT_STATUS.md) for current evidence and limitations.
 
-1. NEON PULSE — RGB LED light design
-2. CIRCUIT RUSH — wire-path puzzle
-3. OHM HUNTER — electrical engineering quiz
-4. VOLT DODGE — arcade obstacle dodger
-5. RESISTOR MATCH — component memory
-6. CAPACITOR CHARGE — timing challenge
-7. BINARY FLASH — binary decoding
-8. FUSE BOX — electrical logic puzzle
-9. GOAL LINE — football penalty shootout
-10. APEX CIRCUIT — arcade traffic-dodging race
-11. WORLD FOOTBALL — interactive 2D club/international match
-12. CORTEX PRIME — sequences, matrices, hidden-rule reasoning
-13. SYNAPSE SPRINT — working-memory sequence challenge
-14. BILLIONAIRE CHALLENGE — 15-question quiz ladder with lifelines
-15. TACTICS GRID — turn-based 8×8 squad tactics against a legal-move heuristic AI
-16. APEX STRATEGY — 10-lap race manager with tyre, fuel, aggression, pit, weather and incident strategy
-17. PENALTY PRO — 10-round adaptive penalty shootout; keeper and striker tendencies update from player direction choices
-18. DEBATE ARENA — three-round debate with authored replay responses and a transparent scoring rubric
-19. CASEFILE — three deterministic mysteries with suspect interviews and a ten-question accusation limit
-20. MARKET DUEL — 30-day fictional stock-market game versus an observable moving-average AI
-21. AI ARENA — sends a prompt concurrently to ChatGPT, Gemini, DeepSeek, Claude, Grok and Ollama; authenticated players compare live answers and save ratings through a protected API
-22. LAST SIGNAL — top-down survival battle with nine tactical bots, field supplies, solid cover, and a closing safe zone
+## Current implementation
 
-## Progression
+- **Electronicer · game3/** replaces the electrical quiz with a real DC circuit commissioning game: five network topologies, live meters, wiring/contact logic, fuse failures and 10,000 deterministic solvable tasks. It uses original 3D components.
+- **World Football · game11/** replaces the old 2D match with original 11v11 gameplay, ball physics, passing, shots, keepers, goals, restarts, match results and 10,000 distinct difficulty/objective configurations. Players, teams and kits are fictional. Offside, fouls/cards and substitutions are not implemented.
+- **AI Arena · game22/** sends selected competitors the same prompt concurrently through server-side APIs. ChatGPT/OpenAI, Claude, Gemini, DeepSeek, Grok, Kimi, configurable Adigun AI and Ollama adapters are implemented. Speed is measured; judge scores include provenance and unknown scores remain unknown. **Live deployment needs an API host, provider credentials/model IDs and a configured judge.** This client remains a 2D interface, with no claim of 10,000 authored competition levels.
+- **Bible Chronicles** is being introduced through one playable David chapter. The complete Genesis-to-Revelation story and separate Samson, Moses, Abimelech and other games remain unfinished.
+- Existing local games remain available, with explicit **Legacy 2D** labels. They have not passed the new production qualification. Original historical status is retained in [docs/history](docs/history/legacy-status-2026-10-27.md).
 
-Current titles have per-game 10,000-stage progression saved in the browser. The requested **100,000 individual titles are not complete**; a stage counter does not count as a separate game. Titles are added as individually designed and tested games, not template relabels.
+Stages, seeded variants and renamed templates are never counted as additional games. Automated generator checks are not claims of 10,000 manual playtests. Native PlayStation builds are not available.
 
-## Football scope and rights
+## Play and develop
 
-WORLD FOOTBALL currently provides a 2D arcade match and official team-name selections for LaLiga 2026/27, the UEFA Champions League 2026/27 league phase, UEFA Nations League 2026/27 League A, and FIFA World Cup 2026. It does **not** yet contain verified real-player rosters or licensed player likenesses; the requested Ronaldo/Messi/Okocha/Pogba/Osimhen and Chelsea/Bayern/Manchester United player matches remain in progress. The screenshots supplied were search-result pages containing stock-photo previews and watermarks, not licensed image files, so they are not embedded in the game. Player photos, club crests, kits, and console/store release need appropriate rights and platform approvals. The project is not an official licensed football game.
+Use Node.js 24+ and Python 3.12+. Serve through HTTP; opening index.html as a file is not supported.
 
-## IQ and quiz games
+```sh
+npm ci
+npm run check
+npm test
+npm run build
+npm run serve
+```
 
-CORTEX PRIME generates deterministic sequence, matrix and rule-decoding challenges. SYNAPSE SPRINT tests digit recall with growing length and shorter display intervals. BILLIONAIRE CHALLENGE provides original calculations, logic and curated fact questions, three per-run lifelines, safety-net prize tiers and local best-score storage. It is an independent quiz game and is not affiliated with a television quiz brand.
+Open http://localhost:4173/ after `npm run serve`. The static export is in `dist/`. Three.js is locally vendored under its MIT license, so gameplay does not depend on a third-party script CDN. The heavy 3D module is loaded only on 3D game routes. `npm run vendor` reproduces the pinned bundle.
 
-## AI competition
+### Browser and API verification
 
-AI ARENA is catalog item 21 (game22/). Its page supports account sign-in, concurrent provider matches, per-answer ratings, history, and optional speech-to-text. It never presents replay fixtures as real model output. The API is separate from GitHub Pages and must be deployed with AI_MODE=live, production JWT and CORS settings, provider keys and active model identifiers. Each cloud competitor uses its own server-side provider API; Ollama requires a configured reachable endpoint. Without that configured API, the page reports that live play is unavailable.
-## Controls and launchers
+```sh
+npx playwright install --with-deps chromium
+npm run test:browser
+python -m pip install -r platform/backend/requirements.txt
+python -m pytest platform/backend/tests -q
+```
 
-WORLD FOOTBALL uses WASD/arrows, P to pass, Space to shoot, on-screen touch arrows and mouse selection. GOAL LINE is a penalty shootout; APEX CIRCUIT is an arcade racer. Run `install-launchers.ps1` on Windows to create shortcuts for all released browser games and Godot launchers for completed couch-suite games in `Desktop/Game Bank Launchers` when the local Godot runtime is available. TACTICS GRID uses an adaptive local heuristic opponent and needs no network or API key. APEX STRATEGY simulates six fictional drivers for ten laps; strategy calls change lap times, pit time, fuel, tyre wear, and event risk. PENALTY PRO resolves five shots and five saves with visible, adaptive directional probabilities. DEBATE ARENA runs offline with authored response fixtures and a rule-based scoring rubric; it does not claim a live language model. CASEFILE runs locally with three consistent authored mysteries and no live LLM claim. MARKET DUEL uses fictional prices and a local crossover strategy; it is not connected to securities markets.
+The browser suite starts its own static server on port 4180. CI uses Ubuntu 24.04, records actual WebGL drawing-buffer dimensions, plays through controls, checks responsive layouts, and uploads screenshots and test reports. A software-rendered 3840 × 2160 frame verifies raster dimensions, not gaming-GPU performance. Hardware performance and complete accessibility need separate qualification.
 
-## Build and publish
+For the separately hosted AI API, follow [platform/README.md](platform/README.md). Never put provider keys in client code or GitHub Pages. Test transports and fixtures stay in tests; production has no replay fallback.
 
-The project is plain HTML/CSS/JavaScript. Open `index.html` for the catalog. GitHub Pages publishes `main` from the repository root. Verify the Actions build/deploy and cache-busted public pages after each main-branch update.
+## Standards and releases
 
-## Console and account roadmap
+The product explicitly adopts **HB-AI-ENGINEERING-001 v2.0**, pinned in [AGENTS.md](AGENTS.md). [docs/STANDARDS.md](docs/STANDARDS.md) pins the corporate, design-system and trading references. [docs/GAME_TEMPLATE.md](docs/GAME_TEMPLATE.md) defines the required evidence for every game.
 
-User accounts, cloud-synced progress, admin controls, multiplayer, secure AI provider deployment, native iOS/Android/Windows packages and PS5/PS6-native games have not been delivered. Native console releases require platform-holder developer access, approved tooling, licensing and certification; a browser game is not a native PlayStation title.
+The catalog and new games use the official unmodified corporate artwork, Midnight Navy, Royal Blue, Metallic Gold, Ivory, and approved division accents. The catalog includes working search, filters and a persistent light/dark theme. The interface is currently English; a language selector will be exposed only when translations are complete.
 
+GitHub Pages publishes the existing main/root site and retains its CNAME. Work is checkpointed on a scoped branch, tested, integrated and verified against the actual public deployment. Repository status records exact commits and times. The existing Godot couch suite remains a separate development target; its Node2D scenes are not native console releases or 3D-certified games.

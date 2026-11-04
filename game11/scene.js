@@ -7,7 +7,7 @@ export function buildFootballScene(stage) {
   scene.background = new THREE.Color('#8fa6b3');
   scene.fog = new THREE.Fog('#8fa6b3', 150, 290);
   box(scene, [134, 0.4, 96], [0, -0.24, 0], '#31573a');
-  for (let i = 0; i < 21; i++) box(scene, [5, 0.035, 68], [-50 + i * 5, -0.005, 0], i % 2 ? '#326b42' : '#39794a', { roughness: 1, metalness: 0 });
+  instancedBoxes(scene, Array.from({length:21},(_,i)=>({size:[5,0.035,68],position:[-50+i*5,-0.005,0],color:i%2?'#326b42':'#39794a'})), {roughness:1,metalness:0});
   const white = '#e7eedb', lineY = 0.035;
   const markings = points => line3(scene, points.map(([x, z]) => [x, lineY, z]), white);
   markings([[-52.5,-34],[52.5,-34],[52.5,34],[-52.5,34],[-52.5,-34]]);
@@ -107,20 +107,25 @@ function buildGoal(scene, sign) {
   scene.add(net);
 }
 function buildStands(scene) {
-  const seatPositions = [];
+  const seatPositions = [], groups = new Map();
+  const addBox = (size,position,color,options={}) => {
+    const key=JSON.stringify(options);
+    if(!groups.has(key))groups.set(key,{options,items:[]});
+    groups.get(key).items.push({size,position,color});
+  };
   for (const sign of [-1,1]) {
-    box(scene, [116,0.9,0.45], [0,0.4,sign*38], '#173453');
-    box(scene, [116,0.07,0.5], [0,0.9,sign*38], '#D4AF37');
+    addBox( [116,0.9,0.45], [0,0.4,sign*38], '#173453');
+    addBox( [116,0.07,0.5], [0,0.9,sign*38], '#D4AF37');
     for (let row = 0; row < 8; row++) {
-      box(scene,[119,0.9,1.7],[0,0.6+row*0.85,sign*(42+row*1.6)],'#555f68',{roughness:0.95});
+      addBox([119,0.9,1.7],[0,0.6+row*0.85,sign*(42+row*1.6)],'#555f68',{roughness:0.95});
       for (let col = 0; col < 132; col++) seatPositions.push([-57+col*0.87,1.25+row*0.85,sign*(41.9+row*1.6),sign,row,col]);
     }
     for (let row = 0; row < 6; row++) {
-      box(scene,[1.7,0.9,82],[sign*(61+row*1.6),0.6+row*0.85,0],'#555f68',{roughness:0.95});
+      addBox([1.7,0.9,82],[sign*(61+row*1.6),0.6+row*0.85,0],'#555f68',{roughness:0.95});
       for (let col = 0; col < 90; col++) seatPositions.push([sign*(60.9+row*1.6),1.25+row*0.85,-39+col*0.87,sign,row,col,true]);
     }
-    box(scene,[121,0.35,16],[0,12,sign*50],'#18293a',{metalness:0.45,roughness:0.5});
-    for (const x of [-55,-28,0,28,55]) box(scene,[0.24,12,0.24],[x,6,sign*53],'#6a7a81',{metalness:0.7,roughness:0.4});
+    addBox([121,0.35,16],[0,12,sign*50],'#18293a',{metalness:0.45,roughness:0.5});
+    for (const x of [-55,-28,0,28,55]) addBox([0.24,12,0.24],[x,6,sign*53],'#6a7a81',{metalness:0.7,roughness:0.4});
   }
   const seats = new THREE.InstancedMesh(new THREE.BoxGeometry(0.57,0.55,0.5),material('#2563EB',{roughness:0.8}),seatPositions.length);
   const dummy = new THREE.Object3D();
@@ -131,9 +136,10 @@ function buildStands(scene) {
   seats.receiveShadow=true; scene.add(seats);
   for (const x of [-57,57]) for (const z of [-39,39]) {
     cylinder(scene,0.12,18,[x,9,z],'#526778',{metalness:0.7});
-    box(scene,[3.3,1.7,0.35],[x,18,z],'#27384a');
-    for(let i=0;i<5;i++) for(let j=0;j<2;j++) box(scene,[0.46,0.46,0.06],[x-1.3+i*0.65,17.6+j*0.7,z-Math.sign(z)*0.22],'#e8f2fa',{emissive:'#d7e9ff',emissiveIntensity:0.35,roughness:0.2});
+    addBox([3.3,1.7,0.35],[x,18,z],'#27384a');
+    for(let i=0;i<5;i++) for(let j=0;j<2;j++) addBox([0.46,0.46,0.06],[x-1.3+i*0.65,17.6+j*0.7,z-Math.sign(z)*0.22],'#e8f2fa',{emissive:'#d7e9ff',emissiveIntensity:0.35,roughness:0.2});
   }
+  for(const {items,options} of groups.values()) instancedBoxes(scene,items,options);
 }
 function makePlayer(team, number) {
   const root = new THREE.Group(), keeper = number === 1;
@@ -163,4 +169,15 @@ function makePlayer(team, number) {
     mesh(arm,new THREE.SphereGeometry(0.05,8,6),skin,[0,-0.61,0.04]);
   }
   return { root,leftHip:hips[0],rightHip:hips[1],leftKnee:knees[0],rightKnee:knees[1],leftArm:arms[0],rightArm:arms[1] };
+}
+
+// Batch repeated static boxes without changing their geometry or material design.
+function instancedBoxes(parent, items, options={}) {
+  const mesh=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),material('#ffffff',options),items.length);
+  const transform=new THREE.Object3D();
+  items.forEach((item,index)=>{
+    transform.position.set(...item.position);transform.scale.set(...item.size);transform.updateMatrix();
+    mesh.setMatrixAt(index,transform.matrix);mesh.setColorAt(index,new THREE.Color(item.color));
+  });
+  mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
 }

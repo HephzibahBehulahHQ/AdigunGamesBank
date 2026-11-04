@@ -119,7 +119,7 @@ canvas.addEventListener('pointerdown',event=>{
   if(hit){let object=hit.object;while(object&&!object.userData.playerId)object=object.parent;selectPlayer(match,object.userData.playerId);updateUI(true);}
 });
 function frame(time) {
-  const seconds=lastTime===null?0:Math.min(0.1,(time-lastTime)/1000);lastTime=time;
+  const seconds=lastTime===null?0:Math.min(0.25,(time-lastTime)/1000);lastTime=time;
   const down=key=>held.has(key);
   const before=match.phase;
   stepMatch(match,{

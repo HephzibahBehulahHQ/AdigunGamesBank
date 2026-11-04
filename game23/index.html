@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0B1220">
+  <meta name="description" content="David’s Sling: a playable 3D precision challenge inspired by 1 Samuel 17, with real projectile motion, crosswind and five stones.">
+  <title>Valley of Elah · David’s Sling · Adigun Game Bank</title>
+  <link rel="stylesheet" href="../shared/game.css"><link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#game">Skip to game controls</a>
+  <header class="game-header"><a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>EVANGELISM · BIBLE CHRONICLES</small></span></a><a class="back-link" href="../">← Game library</a></header>
+  <main id="game">
+    <div class="chapter-heading"><div><p class="eyebrow">Bible Chronicles · first playable chapter</p><h1>Valley of Elah<span>David’s Sling</span></h1><p class="muted">Five river stones. A changing wind. Master two practice shields, then strike the bronze target to complete the encounter.</p></div><div class="chapter-badge"><span>1 SAMUEL</span><strong>17</strong><span>Original game adaptation</span></div></div>
+    <div class="toolbar"><label for="quality">Rendering <select id="quality"><option value="auto">Auto</option><option value="1080">1920 × 1080</option><option value="4k">3840 × 2160</option></select></label><label for="camera-view">View <select id="camera-view"><option value="sling">Behind the sling</option><option value="overview">Valley overview</option><option value="target">Inspect target</option></select></label><span id="render-status" class="muted" role="status">Loading the 3D scene…</span></div>
+    <div class="layout">
+      <section aria-label="Sling challenge">
+        <div class="viewport"><canvas id="valley" tabindex="0" aria-label="Interactive 3D valley and sling challenge. Keyboard controls are described below." aria-describedby="keyboard-help target-telemetry"></canvas><div id="game-overlay" class="game-overlay"><p class="eyebrow" id="overlay-kicker">Five stones. One encounter.</p><h2 id="overlay-title">Stand in the valley.</h2><p id="overlay-copy">Select Begin. Adjust your aim and release speed, then throw.</p></div></div>
+        <div class="stats"><span>Challenge <strong id="level-readout">1 / 10,000</strong></span><span>Stones <strong id="stones-readout">5</strong></span><span>Targets <strong id="hits-readout">0 / 3</strong></span><span id="tier" class="badge">Beginner</span></div>
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+        <div class="controls"><button id="start" class="primary" type="button">Begin · Enter</button><button id="throw" class="throw-button" type="button" disabled>Throw stone · Space</button><button id="pause" type="button" disabled>Pause · Esc</button><button id="restart" type="button">Retry level · R</button><button id="next" class="primary" type="button" hidden>Next challenge →</button></div>
+        <div class="aim-controls" aria-label="Aim and release controls">
+          <div><div class="control-label"><label for="yaw">Direction</label><output id="yaw-value" for="yaw">0.0°</output></div><input id="yaw" type="range" min="-25" max="25" step="0.1" value="0"><div class="range-captions"><span>Left −25°</span><span>Right +25°</span></div></div>
+          <div><div class="control-label"><label for="elevation">Elevation</label><output id="elevation-value" for="elevation">35.0°</output></div><input id="elevation" type="range" min="12" max="62" step="0.1" value="35"><div class="range-captions"><span>Low 12°</span><span>High 62°</span></div></div>
+          <div><div class="control-label"><label for="speed">Release speed</label><output id="speed-value" for="speed">18.0 m/s</output></div><input id="speed" type="range" min="8" max="36" step="0.1" value="18"><div class="range-captions"><span>Gentle 8 m/s</span><span>Strong 36 m/s</span></div></div>
+        </div>
+        <div class="assist-row"><label><input id="assist" type="checkbox" checked> Trajectory and aiming guidance</label><span class="hint">Guidance is optional and does not throw for you.</span></div>
+        <p id="aim-telemetry" class="aim-telemetry">Adjust your aim to inspect the projected path.</p>
+        <p id="keyboard-help" class="instructions"><strong>Keyboard:</strong> focus the valley. <kbd>←</kbd> <kbd>→</kbd> change direction; <kbd>↑</kbd> <kbd>↓</kbd> change elevation; <kbd>Z</kbd> <kbd>X</kbd> change speed. Hold <kbd>Shift</kbd> for finer adjustments. <kbd>Space</kbd> throws, <kbd>Esc</kbd> pauses, <kbd>R</kbd> retries. <strong>Mouse/touch:</strong> drag across the valley to aim, or use the sliders and buttons. Dragging never releases a stone.</p>
+      </section>
+      <aside>
+        <section class="panel target-panel"><p class="eyebrow" id="target-kind">Practice 1 of 2</p><h2 id="target-name">Riverbank practice</h2><p>Strike inside the gold ring. Read the range and crosswind before you release.</p><dl id="target-telemetry" class="target-data"><div><dt>Range</dt><dd id="target-range">—</dd></div><div><dt>Side offset</dt><dd id="target-offset">—</dd></div><div><dt>Centre height</dt><dd id="target-height">—</dd></div><div><dt>Target radius</dt><dd id="target-radius">—</dd></div><div><dt>Crosswind acceleration</dt><dd id="target-wind">—</dd></div></dl><p class="hint">Wind pushes the stone sideways throughout its flight. Positive values push right. Gravity always pulls down.</p></section>
+        <section class="panel"><h2>Your chapter progress</h2><p id="campaign-status" class="hint">Progress is saved on this device.</p><form id="level-form"><label for="level">Replay an unlocked challenge</label><input id="level" type="number" min="1" max="1" step="1" value="1" required><button id="load-level" type="submit">Load challenge</button></form><p class="hint">Beginner → Apprentice → Skilled → Expert → Professional Master. Clear all three targets to unlock the next challenge.</p></section>
+        <section class="panel passage"><p class="eyebrow">Setting and source</p><h2>Courage in the valley</h2><p>In 1 Samuel 17, David chooses five smooth stones and confronts Goliath with a sling. The armies face each other across the valley of Elah.</p><p>The practice shields, measured wind and non-lethal bronze-shield objective are original gameplay. They are not additional claims about Scripture.</p><a href="https://ebible.org/eng-web/1SA17.htm" target="_blank" rel="noopener noreferrer">Read 1 Samuel 17 ↗</a></section>
+      </aside>
+    </div>
+    <details class="adaptation-notes"><summary>Adaptation, physics and release notes</summary><p>This is the first Bible Chronicles chapter, not the entire Genesis-to-Revelation story. Original procedural development art depicts the valley, sling, shields and figures; no photorealistic or archaeological reconstruction claim is made. The encounter ends with a shield hit and contains no graphic injury.</p><p>The game uses gravity at 9.81 m/s², a constant sideways acceleration to represent wind, a level collision floor and exact target-plane intersection. Air resistance and real sling technique are simplified. Ten thousand deterministic configurations change range, crosswind, offset and target size; they are challenges within this one game.</p><p>The 4K setting requests a 3840 × 2160 drawing buffer. The rendering readout reports the actual buffer. Performance depends on the device; choose Auto if needed. Current production qualification and browser evidence are recorded in the <a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md">project status</a>.</p></details>
+  </main>
+  <footer><div class="split"><span>© <span id="year">2026</span> Hephzibah Behulah · Adigun Game Bank · Evangelism</span><span>One Company. Five Brands.</span></div><p><a href="../">Game library</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/tree/main/game23">Game documentation</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/issues">Report a problem</a></p></footer>
+  <noscript><p class="message">This playable 3D challenge requires JavaScript and a WebGL 2 capable browser.</p></noscript>
+</body>
+</html>

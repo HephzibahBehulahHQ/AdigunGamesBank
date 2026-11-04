@@ -26,7 +26,8 @@ def checked(value, depth=0, budget=None):
     if value is None or isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
-        if not math.isfinite(value) or abs(value) > MAX_NUMBER:
+        # Reject large integers before isfinite attempts an overflowing float conversion.
+        if abs(value) > MAX_NUMBER or not math.isfinite(value):
             raise LimitExceeded("Number exceeds the limit")
         return value
     if isinstance(value, str) and len(value) <= MAX_STRING:
