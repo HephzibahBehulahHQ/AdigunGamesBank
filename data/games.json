@@ -1501,7 +1501,15 @@
       "rendering": {
         "engine": "WebGL 2 / Three.js",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true,
+        "verification": {
+          "drawingBuffer": "3840x2160",
+          "renderer": "WebGL2",
+          "environment": "Chromium / Ubuntu 24.04 / SwiftShader software rendering",
+          "commit": "f5378f561bb7a8ef9c3a725d7ef6425f371c4234",
+          "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957",
+          "scope": "Actual drawing buffer plus inspected scene. No gaming-GPU performance or manual device qualification claimed."
+        }
       },
       "levels": {
         "target": 10000,
@@ -1516,7 +1524,7 @@
         "Touch controls"
       ],
       "accessibility": {
-        "status": "Equivalent labelled deck commands, live telemetry, keyboard scene controls and reduced decorative motion implemented; browser audit pending"
+        "status": "320px/390px reflow, visible keyboard focus, reduced-motion handling and WCAG 2.1 A/AA automated checks passed. Physical touch, full screen-reader and localization qualification remain open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1528,8 +1536,8 @@
       },
       "testing": {
         "unit": "7 domain tests passed, including all 10,000 complete numerical launch trials; not manual playtesting",
-        "integration": "Engine completion, invalid loads, ballast limits, loss, retry and fixed-step pause/resume passed; UI integration pending",
-        "browser": "NOT YET VERIFIED"
+        "integration": "All 10,000 complete engine trials; browser controls prove failure/retry, successful completion and persisted progression.",
+        "browser": "All three ark checks passed in CI 41885055957: actual 4K, real cargo/ballast commands, 100% completion, save/reload, loss/retry/rebalance, keyboard fallback and 320/390px reflow. Aggregate release gate pending corrected football assertion."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game24/",

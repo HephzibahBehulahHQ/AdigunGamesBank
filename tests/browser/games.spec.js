@@ -63,9 +63,9 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   await page.locator('#pause').click(); const paused = await page.locator('#clock').innerText();
   await page.waitForTimeout(1200); await expect(page.locator('#clock')).toHaveText(paused);
   await page.locator('#sub-out').selectOption('h11'); await page.locator('#sub-in').selectOption('h12');
-  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage');
+  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage: #11 off / #12 on.');
   await page.locator('#cancel-subs').click(); await expect(page.locator('#sub-status')).toContainText('No substitution queued');
-  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage');
+  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage: #11 off / #12 on.');
   await page.locator('#pause').click();
   await page.locator('#pitch').focus();
   // Only read player-visible telemetry and issue real keyboard inputs. No engine state mutation.
@@ -98,7 +98,11 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   await expect(page.locator('#clock')).toHaveText('00:00');
   await expect(page.locator('#home-shots')).not.toHaveText('0');
   await expect(page.locator('#home-substitutions')).toHaveText('1');
-  await expect(page.locator('#player-select option[value="h12"]')).toHaveCount(1);
+  // A real substitute can subsequently be sent off. The selector correctly
+  // excludes dismissed players; the public team sheet retains their identity.
+  const replacement = page.locator('#player-select option[value="h12"]');
+  const dismissedReplacement = page.locator('#team-sheet').filter({ hasText: /Adigun #12: sent off(?:;|$)/ });
+  await expect(replacement.or(dismissedReplacement)).toHaveCount(1);
   await expect(page.locator('#player-select option[value="h11"]')).toHaveCount(0);
   await expect(page.locator('#overlay-title')).toContainText(/Full.time|Objective|Win/i);
   await page.screenshot({ path: 'test-results/football-fulltime.png', fullPage: true });

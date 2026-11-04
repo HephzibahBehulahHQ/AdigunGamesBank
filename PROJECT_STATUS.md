@@ -1,6 +1,6 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T18:59:00+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T19:28:00+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
@@ -25,6 +25,14 @@ A separate recoverable worktree/branch `work/genesis-ark-2026-11-04` develops a 
 - **Candidate `05a4704`:** [CI 41881414221](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41881414221) passed 153 JavaScript and 52 API tests plus eight of nine accessibility checks. Ark bay buttons had visible-name/accessible-name mismatches; their redundant overriding labels were removed. The failure blocked later gameplay checks. A genuine unbalanced-load loss, retained-plan retry and successful rebalance are now included in the keyboard fallback browser test. The original 138-file clean build fingerprint was `6ef262b10cdd6e641ac96e73c93ddac386d4992068f1972e7689d3b849b2259b`.
 - **Follow-up `9d53b1e8b477279fa445455137015ae72aa17c71`:** verified remote readback at **2026-11-04T17:56:29Z**; [replacement CI 41882172834](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41882172834) was running at last check. Independent review subsequently found vertical arrow keys changing columns at grid boundaries; source and browser regression are corrected. Scene deck/cargo heights and the intact hull edge now track the physical configuration.
 - **Unfinished acceptance:** ark actual rendering, UI completion/reload/fallback and automated accessibility; the inherited football gate; device performance, screen-reader and physical touch qualification. Live AI and native-console dependencies remain unchanged.
+
+### Latest chapter gate — 2026-11-04T18:28Z
+
+- Verified checkpoint **`f5378f561bb7a8ef9c3a725d7ef6425f371c4234`**, remote readback **2026-11-04T18:14:03Z**, contains the corrected 100% completion display. Its clean local/CI build matches 138 files, fingerprint `500f27d5be235d92cf7b78662b568d31e2de3eaf61089fa0840a7a04dbdd5c8b`.
+- [CI 41883610973](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41883610973) at preceding `d3797b95d20c3ef22e925a83d718e944bb765b74` passed **153 JavaScript + 52 API + 27 browser checks**. Its original scene was inspected; the later rounding-display defect was corrected before publication.
+- [CI 41885055957](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957) at `f5378f5` passed **153 JavaScript + 52 API + 26 browser checks** and failed one football assertion. All ark 4K, 100%, controls, failure/retry, persistence and accessibility checks passed. The failure snapshot showed a **2–0 football win**, one applied substitution and **Adigun #12: sent off**. Correct football behavior had removed that player from the active selector; the test incorrectly required them to remain selectable.
+- The corrected test retains the exact #11→#12 request, completed-substitution count and outgoing-player absence; it accepts incoming #12 only as active or explicitly recorded as sent off. The replacement aggregate gate is pending. No failed candidate is deployed.
+- [Retained ark evidence](docs/evidence/2026-11-04-ark/README.md) includes original 4K scene, 100% completion and 320px frames, source hashes and an honest failed-aggregate receipt. Main/public remain `88c3035` until the complete candidate passes.
 
 ## Delivered second implementation wave
 

@@ -4,7 +4,7 @@
 
 A distinct browser cargo and ballast commissioning simulation inspired by Genesis 6–9. The player arranges six loads in suitable stations, adjusts low ballast tanks, and launches a simplified floating hull through a timed wave trial. Draft, freeboard, heel, trim, and stability reserve respond to the actual loading plan. The narrative introduces the setting; successful commissioning depends on the physical model.
 
-The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. The accessible command interface and original 3D scene are implemented. Browser verification, actual 4K evidence, measured performance, and public deployment remain pending. Passing numerical tests does not close those acceptance gates.
+The campaign and numerical engine are implemented and have completed automated launches for all 10,000 configurations. The accessible command interface and original 3D scene are implemented. All three ark browser checks and actual 4K rendering are verified at `f5378f5`; the aggregate release gate and public deployment remain pending. Hardware performance, localization and full accessibility qualification remain open. Passing numerical tests does not close those acceptance gates.
 
 ## 1. Identity and scope
 
@@ -92,7 +92,7 @@ Conceptual reference: the [NSW Government vessel guide](https://www.nsw.gov.au/e
 | Genuine 3D scene | Scene implementation is in progress; renderer, geometry, camera, lighting, materials and interactive synchronization need a finished-code inventory and browser inspection |
 | Visual causality | Cargo placement, ballast and hull motion must visibly agree with the numerical state; browser verification pending |
 | Render modes | Adaptive, 1080p and 4K drawing-buffer controls are implemented through the shared renderer; actual buffer evidence pending |
-| Actual 4K | **PENDING.** Required proof is a 3840×2160 drawing buffer, the selected mode, device/browser details, screenshot and CI receipt. A menu label or screenshot resized to 4K is not evidence |
+| Actual 4K | **Confirmed for Chromium/SwiftShader:** 3840×2160 WebGL2 drawing buffer, zero GL error and inspected original frame at `f5378f5`; evidence linked below. This is not gaming-GPU performance certification |
 | Responsive layout | Planned checks at 390×844, 768×1024, 1920×1080 and 3840×2160; overflow, focus visibility and telemetry readability pending |
 | Degraded graphics | Accessible loading controls and telemetry must remain usable if rendering fails; retry and failure-state behavior pending |
 
@@ -152,6 +152,8 @@ The [World English Bible publisher](https://worldenglish.bible/) states that the
 | Persons, clubs, trading or financial content | Not applicable to this game's adopted scope; no likeness, sports licence or financial-performance claim |
 
 ## 9. Test and release evidence
+
+**Latest chapter evidence:** [CI 41885055957](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957) passed all three ark checks and all nine accessibility checks at `f5378f561bb7a8ef9c3a725d7ef6425f371c4234`. Actual 3840×2160 WebGL2, zero GL error, original scene inspection, 100% completion, save/reload, keyboard-only loss/retry/rebalance and 320/390px layouts are recorded in [the chapter evidence](../docs/evidence/2026-11-04-ark/README.md). Its aggregate gate failed one football test assumption about a later-dismissed substitute; publication awaits the corrected gate. This supersedes the earlier NOT TESTED browser entries below; physical-device, full screen-reader, localization and hardware-performance checks remain unperformed.
 
 Candidate `05a4704bed526bb4e6c8b807239ccc55bd7570e8` passed 153 JavaScript and 52 API tests in [CI 41881414221](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41881414221). Eight of nine accessibility checks passed; ark bay accessible names failed because they differed from their visible text. The redundant overriding names were removed in checkpoint `9d53b1e8b477279fa445455137015ae72aa17c71`, verified remotely at 2026-11-04T17:56:29Z. Later gameplay checks were blocked by that failure and are not claimed as passed.
 
