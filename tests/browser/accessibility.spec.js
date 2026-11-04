@@ -49,3 +49,17 @@ test('catalog light theme passes automated contrast and control checks', async (
   await expect(page.getByRole('button', { name: 'Switch to dark theme' })).toHaveAttribute('aria-pressed', 'true');
   await audit(page, testInfo);
 });
+
+test('AI campaign specifications and stage evidence remain accessible when expanded at 320px', async ({ page }, testInfo) => {
+  await page.setViewportSize({width:320,height:900});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto('/game22/');
+  await page.locator('#play-mode').selectOption('campaign');
+  await page.locator('.stage-evidence summary').click();
+  await page.locator('#campaign-panel details summary').click();
+  await page.locator('#campaign-level').fill('10000'); await page.locator('#load-challenge').click();
+  await expect(page.locator('#challenge-prompt')).toBeVisible();
+  const width = await page.evaluate(() => [document.documentElement.scrollWidth,document.documentElement.clientWidth]);
+  expect(width[0]).toBeLessThanOrEqual(width[1]+1);
+  await audit(page,testInfo);
+});

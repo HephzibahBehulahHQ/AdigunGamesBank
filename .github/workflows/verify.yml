@@ -32,7 +32,7 @@ jobs:
           ADIGUN_BROWSER_REPORT: test-results/accessibility-results.json
           ADIGUN_BROWSER_OUTPUT: test-results/accessibility
       - name: Verify actual rendering and playable game flows
-        run: npm run test:browser -- tests/browser/games.spec.js
+        run: npm run test:browser -- tests/browser/games.spec.js tests/browser/arena-contract.spec.js
       - name: Save verification evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

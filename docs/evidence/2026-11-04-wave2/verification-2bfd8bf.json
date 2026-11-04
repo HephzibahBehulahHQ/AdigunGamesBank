@@ -1,0 +1,414 @@
+{
+  "commit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
+  "workflow": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41789834075",
+  "artifactId": 13302658550,
+  "recordedAt": "2026-11-04T07:16:59+00:00",
+  "environment": "Ubuntu 24.04 / Chromium / SwiftShader",
+  "javascript": {
+    "passed": 137,
+    "failed": 0
+  },
+  "api": {
+    "passed": 50,
+    "warnings": 1,
+    "liveProviderCalls": false
+  },
+  "browserReports": {
+    "accessibility-results.json": {
+      "stats": {
+        "startTime": "2026-11-04T07:06:44.230Z",
+        "duration": 19605.027,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "sourceSha256": "36588193274515ab8f4b09e214a5e6d558bf7d75fbe6df51a793d64d8fc71422",
+      "tests": [
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1785
+            }
+          ]
+        },
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /game3/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1369
+            }
+          ]
+        },
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /game11/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 5639
+            }
+          ]
+        },
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /game15/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2774
+            }
+          ]
+        },
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /game22/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2215
+            }
+          ]
+        },
+        {
+          "title": "320px reflow, keyboard focus and automated accessibility: /game23/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1486
+            }
+          ]
+        },
+        {
+          "title": "catalog light theme passes automated contrast and control checks",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1362
+            }
+          ]
+        }
+      ]
+    },
+    "browser-results.json": {
+      "stats": {
+        "startTime": "2026-11-04T07:07:04.505Z",
+        "duration": 264630.118,
+        "expected": 13,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "sourceSha256": "f03b489549264d1b996c95a4c05d351c14699ae73bb73c4c0e0a0c6654a900a4",
+      "tests": [
+        {
+          "title": "catalog filters, search, empty results and persistent accessible theme",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 2323
+            }
+          ]
+        },
+        {
+          "title": "Electronicer renders actual 4K and completes a real circuit through controls",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 7196
+            }
+          ]
+        },
+        {
+          "title": "Electronicer fuse trips, stays open and can be repaired without a false level award",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 3133
+            }
+          ]
+        },
+        {
+          "title": "football renders 4K, accepts movement/shot input, pauses and reaches a full-time result",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 200957
+            }
+          ]
+        },
+        {
+          "title": "AI Arena renders 4K and previews real challenges without inventing live results or progress",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 7627
+            }
+          ]
+        },
+        {
+          "title": "TACTICS GRID renders 4K and wins a mission through real command controls with saved progression",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 11048
+            }
+          ]
+        },
+        {
+          "title": "David chapter renders 4K and completes all targets using real aiming controls",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 21474
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 953
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /game3/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 759
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /game11/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 3998
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /game15/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1705
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /game22/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 1547
+            }
+          ]
+        },
+        {
+          "title": "390px responsive layout and visible focus: /game23/",
+          "ok": true,
+          "results": [
+            {
+              "status": "passed",
+              "durationMs": 903
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "build": {
+    "baseCommit": "2bfd8bfa6c676a3caaa763f332fadb3fb78b1362",
+    "modified": false,
+    "fingerprintSha256": "e84898025949b7fd9496d2bad5487b3e7ad146af44a50c97b15cef32c4373f91",
+    "files": {
+      ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "assets/catalog.css": "e8efc6b2a30e4831931920ccb11efa99e10c977a62601b0bfcd73b012ad0d648",
+      "assets/catalog.js": "614d5a1860f776c972d08221904bd475aff8b35548808df431682829e5f32cd9",
+      "assets/corporate/hephzibah-behulah-official.jpg": "409c401be5189b80593797cbaf00a3a42a91ab8c0645e3648ff91205b47d4c95",
+      "assets/football-data.js": "ee676ec337640f6457034db6d76e920e1c92556676982815514ed990acb9ff16",
+      "assets/game-levels.js": "3fc7f85d7f2a66de71eaa5fdc53917524adc48f71be6dcf16dfb7d8622157a8c",
+      "assets/game1-challenge.js": "1b1ff1ad0c4903e414bca2b5978850d374f0d8db6f876889315d28cff63bfc4b",
+      "assets/game10.js": "687c6816cd491197a0e3c871e7b29d8b3bde399a408f5c47bb9e8577a68114e0",
+      "assets/game11.js": "29acb8b0e9ad92712730c3bfb7b2e06f26bd43da8ec0341ddeb35d5c112a30ea",
+      "assets/game12.js": "b923381e57dc52306bcfe1d88bc3d37ee82efd5902982573f484a2ca7d775b6e",
+      "assets/game13.js": "6d089930733325f18134750dacca3603dcbf81b5accd3d0e1a59434d529c8ab7",
+      "assets/game14.js": "8ffad040e7aa2c645bcca59ed6a54b1fd3e7585f8038ddb4c0f2e0d52485a3e9",
+      "assets/game2.js": "af447f9447f2278754252ac3816fe085b06b0363688fbbb01a5cbdcfa18a0fff",
+      "assets/game3.js": "79d090e9c3a79acdc7ac963b48c133b2784184e67908c4c59b158ea03c2669cf",
+      "assets/game4.js": "e35a95e50f2a73922e076c575015dc7f7dc7ff0fff0dd9d08b934deae615520c",
+      "assets/game5.js": "e02767cdbe8df553e38aa73117b329d550b43544e8bab2867e90631446b28580",
+      "assets/game6.js": "62972170d74c6cdb9346f9cab41131a181f5c6e071bc428eea90007103099c6b",
+      "assets/game7.js": "123a5de7299bd0730016c2e854ae5aff853bcbb14cfbc8919f948f142a3c0dce",
+      "assets/game8.js": "dc69587e802325c17a75544e1ced5b4e0ad027a0333cde3977802f764e9b7f02",
+      "assets/game9.js": "2565bcd4d680cd63294fc2638743580cd2edeec1f7cdd67a0b7f04f0e9c8b5ce",
+      "assets/hb-logo.svg": "edaff63c4e4f6b1a0401d5cb10bab1354291d363354c02a4c6553557d010272a",
+      "CNAME": "463487ae100cd3cbf929dd5ddb71475c8d2aa3fc36d513c510db09eba9bd6ceb",
+      "data/games.json": "08fbf3581dcbfb3c9b3ab1baf74271aac8765bd3676e17873b8624c4383a2659",
+      "game1/index.html": "981a6f8cf06bda699d771d1c5b020ea2882466cc81cb02ce998876f57fc85819",
+      "game10/index.html": "91e3f2eff6cda9bde4c250c3d84b972d6befb5e39fccc282f622070bd72e46b2",
+      "game11/app.js": "82b10c64e4b5336bfd622f2f48ba500bcd81aedf1583cab80e48ebb92acd31a7",
+      "game11/engine.js": "8e71c0c5080d19475bbaf62acc59b014aaf2e847b62499033311df18cc8b658f",
+      "game11/index.html": "a4a21eb680d67cbed1715739b2431e84911b47748f206107f417b7132c08e54b",
+      "game11/README.md": "fd8e29c4e419e32d46e2465a369d25843a9cc1187f80b2d2d3f38f0fb1acf974",
+      "game11/rules.js": "29c09da6ca765304a414242adbaaf1a4722930887a9bdb50e64c1b71189ecef1",
+      "game11/scene.js": "97adafa86eead2916d4bc4f18b41a0d28ba96294098d514dbc1b04416621e092",
+      "game11/style.css": "97d8bb92caae982149c65fbc184780db669f3fe575afe8dd3148d00b66fb0233",
+      "game12/index.html": "b21fed8e9a91e30a60b058a1447b4338470df033e1e1cbddded387741b350b96",
+      "game13/index.html": "b67626353c9196ada32f3bbe0416d5296feea63088e201e51ef1e82a4eec0214",
+      "game14/index.html": "ffa728623e829469eb89cec5c5e73f0fb91b08783dd938ca07ba4b0478c4e19a",
+      "game15/app.js": "7f7f601146108ca29325326dd5a303570a7244f1b1898401356e2c16cff2f98c",
+      "game15/campaign.js": "926ca4e3919d0734019b6b7f8e5d8964508df1eaee0c2c217c5f90e8a8fb7976",
+      "game15/engine.js": "a44829afc1b5a85b568c3ff0c32a96ede7d79986f232b519ceecc5f346f1aa41",
+      "game15/index.html": "894af3d8a5f570d8ae76388887467886c0ff1e3750ff8fdd2fa2a4edbceef7bd",
+      "game15/package.json": "fa3ac709eef338aac9353079681f7636474fc8b05f2d750fdfa796b834510e2b",
+      "game15/README.md": "00e1c84afb528281cac3f96383e8624472c6126546b297ca4f8588a00dc3bab1",
+      "game15/save.js": "9fb046840e27c7943ab3237950acb85356859b3dedf5dd4ff822f98705767277",
+      "game15/scene.js": "1b5d5e667539a8a404e09cd4a280b4c4093a9764078c9f5fce1796f0ed3f9dca",
+      "game15/style.css": "5e6997f80b3c91c230339c1d1af32103de972dd65db45e0932a2e5ac2e741bb4",
+      "game15/test.js": "aa5d52053596538ae74d6eed53f1ba2ceb4ec0392fcec0139d97dee50fd7875c",
+      "game16/app.js": "d6c98f5de92377cddeb42778d3b955af97179ceaba643a906816454f7e0bfc87",
+      "game16/engine.js": "ae7664b0cae750fc3b6949be944026a8893047575301165c61652ff5d5abd168",
+      "game16/index.html": "a9627939ab4b1e318b947878c01036e0e4b3bdfedc67c5b8845da6f0b4695057",
+      "game16/package.json": "fa3ac709eef338aac9353079681f7636474fc8b05f2d750fdfa796b834510e2b",
+      "game16/README.md": "2c59b6f30c34c5008d27115c4bed7d20e06af93718a18ac14a1924c942cd3927",
+      "game16/style.css": "799b7d6fdaecc1a3714e0491969bd75c9d85f366d146b1a1de3b8817f371c250",
+      "game16/test.js": "195a1cd4ee79993605faf2c2266d78bf1bb742b705ed0ad1722094ed5d9832d9",
+      "game17/app.js": "637c6081e8dc5b7f40252fd61abaaa121d0c78b21b3d2edc28ddc2d51d3807f1",
+      "game17/engine.js": "dc716b82d85b7612483fbe096db1ad8915bb1a6639f5c3e698fe8375b3f362cc",
+      "game17/index.html": "f582a84e88ae4e270c4fcad36f87b330eacf9ab8dac95d5a0c3431b3da6be225",
+      "game17/package.json": "fe98b39a1254903b84f38c5399cc2f88f6f261b74f3e8f66948340ea1c18fad8",
+      "game17/README.md": "0f681b281964005bf5ee96ff694e9742ef8e21961d883d64632ac0dc3bad2e1f",
+      "game17/style.css": "fe1f2dbd1d7c8908dc55d258b47061773f5ab40f2b4a27ea2f03d7b69bbde3ec",
+      "game17/test.js": "2dd437ebd7a56c4073a8068ad3521642af6c444566f524916df0e7aea88cbb39",
+      "game18/app.js": "b619c5b5005e022e21f12791db3e5b70e7fab5f5c2bd71872700cd60db9d8a27",
+      "game18/engine.js": "7cd2c87e3f05774a9e97ef7534a0c6fe4f816d3019aff27d2e4b97034e5a3c59",
+      "game18/index.html": "6a2cf0206d7d43d731492600250a1c50073c8f8e86b65dfdae5ae41375df0338",
+      "game18/package.json": "fe98b39a1254903b84f38c5399cc2f88f6f261b74f3e8f66948340ea1c18fad8",
+      "game18/README.md": "dd66153d00fb0b4269e9248ad3a7dacd535087a98b636aedf0c0681dc564ef51",
+      "game18/style.css": "7863d656ca6e4d4d9b09cd6a773265b6dbb13ff837201eb5dc043f9f4121fc0b",
+      "game18/test.js": "ce5cc2e398e21c03e5be7089bff114725c8e9ca8b47804e6e6f7f64ad17b4aec",
+      "game19/app.js": "2ec2ee278cdc430b3f3a584006931c94e58c4292dee34bffbad80b48c42281e7",
+      "game19/engine.js": "9f51e7105e97c1081b363842f6292795400a5d33f7aad993b0e86c8b31ad4042",
+      "game19/index.html": "cef52c7e92e768da9c02fd363cf1e32f4f843e204ddd3c2dbf107c5db646ca8a",
+      "game19/package.json": "fe98b39a1254903b84f38c5399cc2f88f6f261b74f3e8f66948340ea1c18fad8",
+      "game19/README.md": "61cc30d36f8ba64d2bd798b3c1e5b62854e3073e219cf04ac051c18656690fa6",
+      "game19/style.css": "ca60abf4a968c88e98dc7d21afe471e85ec3fa1f8ebb470671d0e1f1235adae5",
+      "game19/test.js": "0e9578f2741ab54d82c2220b956821bc1e62726f28a20ccd0c084976f0322717",
+      "game2/index.html": "ca81478616c72a84b77bccc18e485bc9be6967a385b7c3828000da17a47839d9",
+      "game2/script.js": "bf29c7ddfee40dbcefead65f5651a5cbf22ce0e5597a0de4bb7b2cc3602d6a33",
+      "game2/style.css": "ff16cdaf82fabc40c61d199e7065f69fb5430faddc5dc5a03a31380d899f37fd",
+      "game20/app.js": "d2c89de5ee01829287828c59d3c30598f07ebca0b1c50ec5f4be4aafb87abbd6",
+      "game20/engine.js": "ba42da97d25b93fa9a0cec85ca0b28ca1cde15a7483e51ffb29df2ef056576f0",
+      "game20/index.html": "3d5fb5503b690f36a790018ad49b87823235e8c224f774db347e12504964573e",
+      "game20/package.json": "fe98b39a1254903b84f38c5399cc2f88f6f261b74f3e8f66948340ea1c18fad8",
+      "game20/README.md": "5e04945af5667db8a144554a1634d776869ed61b6b45c874af16bb79eab1b5a5",
+      "game20/style.css": "5bf2287bce028bdcbc36d1f4f5abc5ceafb0f1e7821cf7a9be9f8836d93aff1e",
+      "game20/test.js": "3ecf0a9c91b4db8684017cd5da1aa5c04021ae8db6ad7fb92a3cdd8c28a7c856",
+      "game21/app.js": "3a096e96bc46756604f5f4ea98ea521fbc340da1fec5e6e8c5320e0405d3c69c",
+      "game21/engine.js": "97f1db23f8f260df5f50a0acdb1d60a7f622b2c75d635b963bfa31a8d2345b66",
+      "game21/index.html": "816a86aa1f36ba8a4f23ac5397c3c45ad73b89a5f4e27b7b2771e9080df872da",
+      "game21/package.json": "fe98b39a1254903b84f38c5399cc2f88f6f261b74f3e8f66948340ea1c18fad8",
+      "game21/README.md": "65282fabc646a0b152822bd24cb26af12f109d582dd90211721da52b2e288bf8",
+      "game21/style.css": "ebe41eccbfb7c5c755e013bec23054a0006595f1a55c9e0460ec60f5d3a34bc7",
+      "game21/test.js": "05248617e2a36125d6686d9fb9cdbf77dc8b7670433e262411f306383f3e7365",
+      "game21/TEST.md": "448bf2af4e3a7ce9d857843fdb388cedc0a50f761e1b57781c102ecd9cdec04e",
+      "game22/app.js": "83fa68b254402c5800a3f7aa994202904524e990e5a94616ba1c79e123de9724",
+      "game22/arena-utils.js": "20382b57d0878437c7e5c88e9772acc379e74ae87ad31b05a427a82841edf91e",
+      "game22/campaign.js": "d6a00d0ceceef51596fe6bdca47c9a11596aeed0c7c9304347974503d62476ea",
+      "game22/index.html": "c80a3c48cc11184148dedf9ac550edd87e2f693a49ecd2c62bf994bd9cae8e3d",
+      "game22/package.json": "8829740449470e13aa36fcfc0f05a259721ad0a5f2e25c0bf612c6d24a98ac1c",
+      "game22/README.md": "fa329882e3c32b6a0407dbdab7c25e25a627483124c3af9be2feb0143c5035ca",
+      "game22/scene.js": "43f4d8b6b9b3cbcdd7e9510e4cb40de5c4aa2ae858b331e1cc8a1aeb8b3e8596",
+      "game22/stage-data.js": "c880879b935bf62c4c4b7aac4a35cfed874abd5ad51270719c65cccb8c31741b",
+      "game22/style.css": "010d99f39685e73a9354a1ff7be755e4b6869eb70456b8b065e2b2e417728a0c",
+      "game22/test.js": "f56a01f101a1164027b4b8dfbbcfd9048f1f000c21de32497e23fa0dc34e06e9",
+      "game22/TEST.md": "bc4e6ec6485b9d28faeee6ac77194b7f319b3d09f5c0dd651e22fbc7cf930ce4",
+      "game23/app.js": "f33e875e9fc7155deb84540255e844838d80dc9adc34138e3c39ba56723fd995",
+      "game23/engine.js": "1d8233293d70cec7662dc3778df9e2f0a2afea08f0379095babcf3c6200bd71e",
+      "game23/index.html": "7d8a1b68e2a288ccae5a5a2622c2caef234f772327ad84b46628cd73879ad2fa",
+      "game23/README.md": "b26456a082b2a450885a3cfabe45d7c82a2ced3bbe231a84163b2ad3e301384b",
+      "game23/scene.js": "08cdafc2a4dc9c1ea9c3476c73d65e80c50e77c632f8492ec8c883c9d1e64637",
+      "game23/style.css": "f6b7256e737e24b97547d2e0973d2bd40b071e601f9399b89390a97347a4c1f4",
+      "game23/TEST.md": "99734cf48c9ee7c6f5d5f6c911c13af0b74d628eba695e308f0d493838e91ecf",
+      "game3/app.js": "f7098afdfebef802c8667a37df655bd028966c382663dafcdf13112205f73d8c",
+      "game3/bench.js": "932df60554309ce872cd47e5711a210c05b90b9284dd155e7bee8f35a973e9ae",
+      "game3/circuit.js": "06ae4c6fe2eca92d7bf580e4b453ab981064d86f084fd720e37aa545248dc652",
+      "game3/index.html": "23ba9cfdca0108b96fa51b9623e1ab0cfbca3745c521aec48c83ee4d1bb09f77",
+      "game3/README.md": "b6d42e57ae9b64d8538c107e07360ce9145deed6b3487d56255b0944254c7f65",
+      "game3/style.css": "e5555d88e40702d5a7302e15b8a8d4de90cec7c4af413753d26717d292c8400a",
+      "game4/index.html": "e593fefb51ae69b76be34ca735630be0b519aa673489139e065a0c4579d5ba18",
+      "game5/index.html": "d8ee9f7dad600d76fd00caab496200b777c2b023e38ff35a9858fbbca4727ed1",
+      "game6/index.html": "53459f1488f66f5b2bedd7eb31ceadb59a569a96f541d4897eaffb46701dc66d",
+      "game7/index.html": "d5fadf3f3e1c3f72ab54c6a965cbc9abef71449620908d85ff3ab704dde573f2",
+      "game8/index.html": "7030ba4938306ecd7976fa4a822e71dec710cc0ae5e9a8fc2240d8bc251f277e",
+      "game9/index.html": "d531ebc4d3062826613bc5edf8c68d730e6a8a95648f1fd38843f96410763301",
+      "index.html": "673f87276d5457af1298d5e004dc8470609a8c8ccebda1b9849baa8d0509144e",
+      "script.js": "f8b64c939b139618e70c0c8c12135dfa69a7552043c4453cd73a456c113570d7",
+      "shared/game.css": "a2b869c1ea8e21821c6643b92c35272d613341d2104b72040c4b650d36e0cee1",
+      "shared/progression.js": "19374bd21bbf1a47e83f0248ed316b244b99bdcac72fc8b9d004a8d72a5d8cba",
+      "shared/three-stage.js": "4734a1b32dcf1c7540c5e2ef83a969fbf78e1a7cd3020517c1ffed16a4311f58",
+      "shared/tokens.css": "4e20de78071b08efecddfb35f350ed6f230044055eadce192f4e1484afe4452c",
+      "style.css": "e55ef117b7165106e761d9342e5c900c1daa3d32f0e4bee26991989f6c969a57",
+      "vendor/three/LICENSE": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
+      "vendor/three/three.module.js": "b025879456a18f92a0c22782af9aa88d1627f15a7f1ec71a5ffbaf20b584fbac"
+    }
+  },
+  "screenshots": [
+    {
+      "file": "tactics-4k.png",
+      "bytes": 442824,
+      "sha256": "63d0cd951358da83b9bb946a27e3153800007835d7b44ebe4e8fc539c1438db4",
+      "inspected": true
+    },
+    {
+      "file": "tactics-win.png",
+      "bytes": 461719,
+      "sha256": "13dfd74946b3212be84d80702724a01a1e9d63072a2b81be1c73ffcb76ac5868",
+      "inspected": true
+    },
+    {
+      "file": "ai-arena-4k.png",
+      "bytes": 671176,
+      "sha256": "50e1d9e012c84743badf5448240b1c49677f15c19d3077ec2f6232fdf3a48c30",
+      "inspected": true
+    },
+    {
+      "file": "football-fulltime.png",
+      "bytes": 405480,
+      "sha256": "1b8005e88d603368a987b4e8f1b52fdc441454a4fb3ba632a4fdf4a863e18451",
+      "inspected": true
+    }
+  ],
+  "observations": [
+    "Tactics actual WebGL2 buffer 3840x2160, zero GL error; real 17-command mission win at round 8, next level and reload passed.",
+    "AI stage actual WebGL2 buffer 3840x2160, zero GL error; eight unconfigured cabinets, empty results and preview without progress. No live AI verification.",
+    "Football full-time screenshot shows 4\u20130 with one substitution used and level 2 unlocked.",
+    "Seven accessibility checks passed without disabled axe rules; full assistive-technology and hardware performance qualification remain open."
+  ],
+  "scope": "Verified development source, not production acceptance or live/API availability. Later source changes require their own CI record."
+}
