@@ -1,12 +1,18 @@
 # Adigun Game Bank — current project status
 
-Updated: **2026-11-04T08:37:49+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
+Updated: **2026-11-04T18:18:53+01:00 (Europe/Berlin)**. This is the one current acceptance record. Historical inventory reports are not current production approval.
 
 ## Acceptance
 
 **In progress.** The requested 2,000 individually designed games × 10,000 meaningful levels is not delivered. The current catalog contains 23 browser titles (18 legacy 2D titles, four rebuilt local 3D games and one 3D API-dependent competition client), including the first Bible chapter. The separate ten-game Godot suite is Node2D. No complete production-quality catalog or certified console release is claimed.
 
 The second-wave development source milestone **`88c3035320044b254ed719ef840f527aa5520e2c`** passed all release checks, was integrated into **main**, and deployed through the existing GitHub Pages project. The preserved custom domain is **https://adigungamesbank.hephzibahbehulah.com/**. This is a playable development milestone; complete production acceptance for the full brief remains open. Work and evidence checkpoints are retained on **work/production-rebuild-2026-11-04**.
+
+## Continued execution — 2026-11-04 evening
+
+The owner requested continuation. Verified source `88c3035` remains deployed. Later documentation checkpoint `a2225a3` did not pass its complete gate: [CI 41793634835](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41793634835) passed 142 JavaScript, 52 API, eight accessibility, two contract/fallback and twelve gameplay checks; the football bot finished its match but never took a shot. The test now explicitly exercises a real kickoff shot before the full opponent-driven match. No game state is injected, and the failure is retained as a failure. Superseded CI runs on the same work branch now cancel to avoid unnecessary duplicate execution.
+
+A separate recoverable worktree/branch `work/genesis-ark-2026-11-04` develops a distinct Genesis ark cargo/buoyancy chapter. Engine/campaign, original 3D controls and passage/rights documentation have separate owners. It is unfinished and is not added to the published catalog until its own checks pass. This continues the Bible scope; it does not complete Genesis–Revelation or the 2,000-title target.
 
 ## Delivered second implementation wave
 

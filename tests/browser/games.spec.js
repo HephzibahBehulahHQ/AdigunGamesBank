@@ -53,6 +53,10 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   // The full match runs at adaptive resolution: a CPU rasterizer is not a 4K performance benchmark.
   await page.setViewportSize({width: 800, height: 900});
   await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
+  // Exercise a real shot while the kickoff taker has possession. The later
+  // opponent-driven match is not a deterministic strategy benchmark.
+  await page.locator('#pitch').press('Space');
+  await expect(page.locator('#home-shots')).not.toHaveText('0');
   await page.locator('#pause').click(); const paused = await page.locator('#clock').innerText();
   await page.waitForTimeout(1200); await expect(page.locator('#clock')).toHaveText(paused);
   await page.locator('#sub-out').selectOption('h11'); await page.locator('#sub-in').selectOption('h12');
