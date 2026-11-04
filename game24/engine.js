@@ -58,7 +58,7 @@ export function hydrostatics(config, placement, ballast, heel = 0, trim = 0, wav
 }
 function updateMeasurements(state) {
   const c = state.config;
-  const wave = state.phase === 'sailing' ? c.environment.waveHeight * Math.sin(state.time * 2 * Math.PI / c.environment.wavePeriod + c.environment.phase) : 0;
+  const wave = (state.phase === 'sailing' || state.phase === 'won' || state.phase === 'lost' || (state.phase === 'paused' && state.previousPhase === 'sailing')) ? c.environment.waveHeight * Math.sin(state.time * 2 * Math.PI / c.environment.wavePeriod + c.environment.phase) : 0;
   state.metrics = hydrostatics(c, state.placement, state.ballast, state.heel, state.trim, wave);
   state.metrics.heelRate = state.heelRate;
   state.metrics.trimRate = state.trimRate;

@@ -117,7 +117,7 @@ export function levelConfig(input = 1) {
       trimMoment: round(-solutionMomentX * hull.gravity, 7), // kN m, idealised current / tow-line moment
       waveHeight: round(0.10 + difficulty * 0.22 + random() * 0.055),
       wavePeriod: round(5.2 + random() * 2.9), phase: round(random() * Math.PI * 2),
-      rollExcitation: round(0.32 + difficulty * 0.22), pitchExcitation: round(0.10 + difficulty * 0.10)
+      rollExcitation: round(0.07 + difficulty * 0.07), pitchExcitation: round(0.025 + difficulty * 0.025)
     },
     limits: {
       heel: [5.5, 4.5, 3.6, 2.8, 2.2][tierIndex], trim: [1.8, 1.5, 1.2, 1.0, 0.8][tierIndex],
