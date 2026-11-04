@@ -37,7 +37,7 @@
           <p class="eyebrow" id="campaign-tier">Beginner</p><h3 id="challenge-title">Challenge</h3><p id="campaign-level-readout"></p><p id="challenge-skill" class="note"></p>
           <p id="challenge-brief"></p><p id="campaign-progress" class="note" role="status"></p>
           <div class="level-picker"><div><label for="campaign-level">Preview level (1–10,000)</label><input id="campaign-level" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric"></div><button id="load-challenge" class="secondary" type="button">Load level</button><button id="resume-challenge" class="quiet" type="button">Resume unlocked level</button></div>
-          <details><summary>Required function and reference cases</summary><pre id="challenge-prompt" tabindex="0" aria-label="Challenge specification"></pre><h4>Reference tests</h4><pre id="challenge-tests" tabindex="0" aria-label="Reference test cases"></pre></details>
+          <details><summary>Required function and reference cases</summary><pre id="challenge-prompt" tabindex="0" role="region" aria-label="Challenge specification"></pre><h4>Reference tests</h4><pre id="challenge-tests" tabindex="0" role="region" aria-label="Reference test cases"></pre></details>
           <label for="prediction">Forecast the highest complete score</label><select id="prediction" aria-describedby="prediction-help"><option value="">Choose a contender or a tie</option><option value="tie">Tie between leading contenders</option></select>
           <p id="prediction-help" class="note">Choose at least two configured contenders. The independent judge must sit out. Clear a level by forecasting the result correctly while the leading answer passes every reference test. Every selected contender must return a scored live answer.</p><p id="campaign-ready" class="note" role="status"></p>
           <label for="campaign-hint">Your strategy hint (optional, up to 600 characters)</label><textarea id="campaign-hint" maxlength="600" placeholder="Suggest an approach while keeping the required function and rules intact…"></textarea>
@@ -55,7 +55,7 @@
           <p class="note" id="prompt-note">Your prompt goes to the selected configured providers and, when enabled, the judge. It is retained in your gateway's history. Provider accounts may incur charges.</p>
         </form>
         <p id="message" class="message" role="status" hidden></p>
-        <section id="result-summary" class="result-summary" aria-labelledby="result-title" hidden><h2 id="result-title">Match results</h2><p id="result-outcome"></p><details id="submitted-details" hidden><summary>Prompt used for this result</summary><p id="history-prompt"></p></details><p class="note">A result applies to this prompt, these model versions and this rubric. Model estimates do not establish verified truth or an overall best platform.</p></section>
+        <section id="result-summary" class="result-summary" aria-labelledby="result-title" hidden><h2 id="result-title">Match results</h2><p id="result-outcome"></p><details id="submitted-details" hidden><summary>Prompt used for this result</summary><p id="history-prompt" tabindex="0" role="region" aria-label="Prompt submitted for this result"></p></details><p class="note">A result applies to this prompt, these model versions and this rubric. Model estimates do not establish verified truth or an overall best platform.</p></section>
         <div id="results" class="results" role="region" aria-label="Provider answers" aria-busy="false"></div>
       </section>
       <aside>

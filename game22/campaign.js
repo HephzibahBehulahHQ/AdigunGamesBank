@@ -1,4 +1,4 @@
-import { LEVEL_COUNT, validLevel, tierFor, randomFor } from '../shared/progression.js';
+import { LEVEL_COUNT, validLevel, tierFor, randomFor, validCampaignSave } from '../shared/progression.js';
 import { providers, isLiveAnswer } from './arena-utils.js';
 
 export const CAMPAIGN_VERSION = 1;
@@ -205,7 +205,7 @@ export function progressScope(origin, userId) {
 export function progressWasSaved(raw, completed) {
   try {
     const saved = JSON.parse(raw || 'null');
-    return saved?.version === 1 && Number.isInteger(saved.completed) && saved.completed >= completed && saved.completed >= 0 && saved.completed <= LEVEL_COUNT && saved.unlocked === Math.min(LEVEL_COUNT, saved.completed + 1);
+    return validCampaignSave(saved) && saved.completed >= completed;
   } catch { return false; }
 }
 

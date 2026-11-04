@@ -159,6 +159,33 @@ test('TACTICS GRID renders 4K and wins a mission through real command controls w
   expect(errors).toEqual([]);
 });
 
+test('TACTICS GRID keeps visible keyboard command focus when WebGL is unavailable', async ({ page }) => {
+  // Deliberate unavailable-device test; this never counts as 3D rendering evidence.
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+      return /webgl/i.test(kind) ? null : original.call(this, kind, ...args);
+    };
+  });
+  await page.goto('/game15/');
+  await expect(page.locator('#quality')).toBeDisabled();
+  await expect(page.locator('#overlay-title')).toHaveText('3D rendering unavailable.');
+  await page.locator('#start').focus(); await page.keyboard.press('Enter');
+  await expect(page.locator('#phase')).toHaveText('Your turn');
+  const assertFocus = async () => {
+    const focus = await page.evaluate(() => {
+      const active = document.activeElement;
+      return {inMap: document.querySelector('#command-grid').contains(active),
+        opacity: getComputedStyle(active).opacity, outline: getComputedStyle(active).outlineStyle};
+    });
+    expect(focus.inMap).toBe(true); expect(focus.opacity).toBe('1'); expect(focus.outline).not.toBe('none');
+  };
+  await assertFocus();
+  await page.keyboard.press('g');
+  await expect(page.locator('#unit-P1')).toContainText('ACTED');
+  await assertFocus();
+});
+
 test('David chapter renders 4K and completes all targets using real aiming controls', async ({ page }) => {
   test.setTimeout(90000);
   const errors=[]; page.on('pageerror', error=>errors.push(error.message));

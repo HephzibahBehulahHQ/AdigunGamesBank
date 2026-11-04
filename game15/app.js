@@ -136,7 +136,7 @@ $('attack').addEventListener('click',()=>{const u=selected();if(u)act(()=>player
 $('guard').addEventListener('click',()=>{const u=selected();if(u)act(()=>playerGuard(game,u.id));});
 $('collect').addEventListener('click',()=>{const u=selected();if(u)act(()=>collectCore(game,u.id));});
 $('end-turn').addEventListener('click',()=>act(()=>endPlayerTurn(game)));
-function graphicsFailure(){graphicsAvailable=false;canvas.style.opacity='0';$('quality').disabled=$('camera').disabled=true;$('map-details').open=true;render();if(document.activeElement===canvas)focusBoard();message('3D graphics are unavailable. The accessible sector map and labelled commands remain fully playable.');}
+function graphicsFailure(){graphicsAvailable=false;canvas.style.opacity='0';$('quality').disabled=$('camera').disabled=true;$('map-details').open=true;if(document.activeElement===canvas)focusBoard();canvas.tabIndex=-1;canvas.setAttribute('aria-hidden','true');render();message('3D graphics are unavailable. The accessible sector map and labelled commands remain fully playable.');}
 try{stage=createStage({canvas,qualitySelect:$('quality'),status:$('render-status'),position:[18,22,24]});view=buildTacticsScene(stage,game,()=>motion.matches);}catch{graphicsFailure();}
 $('quality').addEventListener('change',requestDraw);$('camera').addEventListener('change',()=>{view?.cameraView($('camera').value);requestDraw();});
 canvas.addEventListener('stage-lost',graphicsFailure);

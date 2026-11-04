@@ -86,8 +86,8 @@ Local verification capture: **2026-11-04, Europe/Berlin**. `PROJECT_STATUS.md` r
 | Evidence | Command / procedure | Outcome / limitation |
 | --- | --- | --- |
 | Historical rules | `node --test game15/test.js` | All **8 existing tests pass unchanged**, preserving activation, movement, attack, AI-phase and finished/dead-state protections. |
-| Campaign / integration / saves | `node --test tests/tactics-campaign.test.js game15/test.js` | **23/23 pass** in local Node v24.22.1. Includes all 10,000 layouts, three complete objective wins, real enemy turns, representative higher-level wins/losses, passive defeat/retry, guard/cover/carrier rules and safe persistence. |
-| Syntax | `node --check game15/app.js`, `node --check game15/scene.js`, `node --check game15/save.js` | Passed locally. |
+| Campaign / integration / saves | `node --test tests/tactics-campaign.test.js game15/test.js` | **25/25 pass** in local Node v24.22.1. Includes all 10,000 layouts, three complete objective wins, real enemy turns, representative higher-level wins/losses, passive defeat/retry, guard/cover/carrier rules, safe persistence, actual objective markers and cancelled/multi-pointer/drag input regressions. |
+| Syntax | `node --check` on `game15/app.js`, `game15/scene.js`, `game15/save.js`, `game15/interaction.js` | Passed locally. |
 | Browser playthrough | Repository Playwright suite; real UI selection/move/attack sequence, next-level unlock and reload | Integration owner is running this against the current candidate. Do not substitute engine tests for browser evidence. |
 | Accessibility / reflow | Axe WCAG 2.1 A/AA at 320 px, visible first-link focus, overflow checks; keyboard/touch flow | An earlier candidate exposed visible-label/name mismatches. Source corrected; candidate CI result must verify the fix. Manual screen-reader/device review remains unverified. |
 | Actual 4K / visual quality | Inspect a rendered frame and actual WebGL drawing buffer `3840 × 2160`, record browser/device and graphics errors | **NOT YET CONFIRMED in this local authoring record.** Use current candidate artifacts and `PROJECT_STATUS.md` for subsequently verified results. |

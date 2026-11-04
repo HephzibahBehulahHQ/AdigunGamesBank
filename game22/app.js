@@ -344,7 +344,7 @@ function renderAnswer(answer, matchId, fromHistory = false, liveMode = true) {
   header.append(node('h3', name), node('p', answer.model || 'Model identifier not recorded'));
   header.append(node('p', `${live ? (fromHistory ? 'RECORDED LIVE RESPONSE' : 'LIVE RESPONSE') : 'NO VERIFIED LIVE RESPONSE'} · ${formatLatency(answer.latency_ms)}`, live ? 'live-label' : ''));
   const content = node('pre', live ? answer.body : (answer.error || 'No live response is available for this entry.'), 'answer-text');
-  content.tabIndex = 0; content.setAttribute('aria-label', name + ' answer');
+  content.tabIndex = 0; content.setAttribute('role', 'region'); content.setAttribute('aria-label', name + ' answer');
   article.append(header, content);
   if (live) {
     const metrics = node('div', '', 'answer-metrics');

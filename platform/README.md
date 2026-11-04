@@ -73,3 +73,7 @@ node --test game22/test.js
 ```
 
 The automated provider tests use explicitly named test doubles and `httpx.MockTransport`; they never contact or claim to verify live providers. Cases cover protocol formats for every adapter, concurrent requests, failure redaction, empty answers, score provenance, malformed scores, self-judging exclusion, account isolation, pre-call reservation, quotas and interpreter limits. Browser checks and operator acceptance remain separate evidence; see [game22/TEST.md](../game22/TEST.md).
+
+### Campaign request evidence
+
+Every new match returns its exact submitted `prompt` and ordered `tests` together with the scores. The same evidence is saved in account-owned history. Campaign grading requires those values to match the frozen attempt; a response for another prompt or test set cannot clear a level. A nullable `matches.tests_json` column is added without rewriting existing rows. Older history retains unknown test evidence (`null`) and cannot be presented as a newly earned campaign clear. The additive SQLite migration and response/history ownership are regression-tested; production database backups remain an operator responsibility.
