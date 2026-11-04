@@ -1,9 +1,10 @@
-import { campaign, validLevel } from '../shared/progression.js';
+import { validLevel } from '../shared/progression.js';
+import { openTacticsCampaign } from './save.js';
 import { createStage } from '../shared/three-stage.js';
 import { buildTacticsScene } from './scene.js';
 import { newGame, legalMoves, attackTargets, selectUnit, playerMove, playerAttack, playerGuard, endPlayerTurn, collectCore, runAIPhase, sectorName, living, unitAt, isCover, distance } from './engine.js';
 
-const $=id=>document.getElementById(id), canvas=$('board'), progress=campaign('tactics-grid');
+const $=id=>document.getElementById(id), canvas=$('board'), save=openTacticsCampaign(), progress=save.progress;
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let game=newGame(progress.unlocked),started=false,paused=false,recorded=false,focus={x:0,y:1};
 let stage=null,view=null,aiTimer=null,effectTimer=null,drawRequest=null,lastAnnouncement=-1,graphicsAvailable=true;
@@ -11,11 +12,7 @@ const unitButtons=new Map(),cells=new Map(),opponents=new Map();
 const selected=()=>game.units.find(u=>u.id===game.selected)||null;
 const actionable=()=>started&&!paused&&game.phase==='player'&&!game.winner;
 function message(text){$('message').textContent=text;}
-function storedProgress(){try{const saved=JSON.parse(localStorage.getItem('adigun.campaign.v1.tactics-grid')||'null');return saved?.version===1&&saved.completed>=progress.completed;}catch{return false;}}
-function campaignText(){
-  const state=`${progress.completed.toLocaleString()} missions cleared · ${progress.unlocked.toLocaleString()} unlocked.`;
-  return state+(progress.completed?(storedProgress()?' Campaign progress is saved on this device.':' Session-only progress: browser storage could not save it. Keep this page open.'):' Completed missions save locally when browser storage is available.');
-}
+const storedProgress=save.saved, campaignText=save.description;
 function draw(){
   drawRequest=null;if(!view||!graphicsAvailable)return;
   const u=selected(),moves=actionable()&&u?legalMoves(game,u):[],targets=actionable()&&u?attackTargets(game,u):[];
@@ -63,7 +60,6 @@ function render(){
       button.setAttribute('aria-pressed',String(unit.id===game.selected));
       button.firstElementChild.textContent=`${unit.id} · ${unit.name}`;
       button.lastElementChild.textContent=unit.hp?`${unit.hp}/${unit.maxHp} hull · ${unit.acted?'ACTED':unit.guarded?'GUARDED':'READY'}`:'DISABLED';
-      button.setAttribute('aria-label',`${unit.name}, ${unit.id}, ${unit.hp} of ${unit.maxHp} hull, ${unit.acted?'activated':'ready'}, select drone`);
     }else{
       const item=opponents.get(unit.id);item.firstElementChild.textContent=`${unit.id} · ${unit.name}`;
       item.lastElementChild.textContent=unit.hp?` · ${unit.hp}/${unit.maxHp} hull · ${sectorName(unit.x,unit.y)}${unit.guarded?' · guarded':''}`:' · disabled';
@@ -80,7 +76,7 @@ function render(){
     const key=`${x},${y}`,cell=cells.get(key),occupant=unitAt(game,x,y),cover=isCover(game,x,y);
     cell.className=[cover?'cover':'',occupant?.team==='player'?'friendly':occupant?'opponent':'',moveKeys.has(key)?'move-option':'',targetKeys.has(key)?'target-option':'',occupant?.id===game.selected?'selected':'',focus.x===x&&focus.y===y?'cursor':''].filter(Boolean).join(' ');
     cell.firstElementChild.textContent=sectorName(x,y);cell.lastElementChild.textContent=cover?'WALL':occupant?`${occupant.id} ${occupant.hp}`:game.config.mode!=='eliminate'&&x===game.config.relay.x&&y===game.config.relay.y?'CORE':'·';
-    cell.setAttribute('aria-label',describeCell(x,y)+(moveKeys.has(key)?' Legal move destination.':'')+(targetKeys.has(key)?' Attack available.':''));
+    cell.setAttribute('aria-label',`${cell.firstElementChild.textContent} ${cell.lastElementChild.textContent}. ${describeCell(x,y)}`+(moveKeys.has(key)?' Legal move destination.':'')+(targetKeys.has(key)?' Attack available.':''));
     cell.setAttribute('aria-selected',String(focus.x===x&&focus.y===y));cell.setAttribute('aria-disabled',String(!active||cover));cell.tabIndex=focus.x===x&&focus.y===y?0:-1;
   }
   $('sector-readout').textContent=describeCell(focus.x,focus.y);
@@ -107,13 +103,13 @@ function start(){if(started)return;started=true;paused=false;lastAnnouncement=-1
 function loadMission(level,begin=false){stopTimers();game=newGame(level);started=begin;paused=false;recorded=false;focus={x:game.units[0].x,y:game.units[0].y};lastAnnouncement=-1;render();message(begin?game.log[0]:'Select Begin to deploy your squad.');}
 function togglePause(){if(!started||game.winner)return;paused=!paused;if(paused)stopTimers();render();message(paused?'Mission paused. Opponent actions are suspended.':'Mission resumed.');}
 for(const unit of game.units){
-  if(unit.team==='player'){const button=document.createElement('button');button.id=`unit-${unit.id}`;button.type='button';button.append(document.createElement('strong'),document.createElement('small'));button.addEventListener('click',()=>select(unit.id));unitButtons.set(unit.id,button);$('squad').append(button);}
+  if(unit.team==='player'){const button=document.createElement('button');button.id=`unit-${unit.id}`;button.type='button';button.append(document.createElement('strong'),document.createTextNode(' '),document.createElement('small'));button.addEventListener('click',()=>select(unit.id));unitButtons.set(unit.id,button);$('squad').append(button);}
   else{const item=document.createElement('li');item.id=`enemy-${unit.id}`;item.append(document.createElement('strong'),document.createElement('span'));opponents.set(unit.id,item);$('opponents').append(item);}
 }
 for(let y=0;y<8;y++){
   const row=document.createElement('div');row.setAttribute('role','row');
   for(let x=0;x<8;x++){
-    const cell=document.createElement('button');cell.id=`sector-${x}-${y}`;cell.type='button';cell.setAttribute('role','gridcell');cell.append(document.createElement('b'),document.createElement('span'));
+    const cell=document.createElement('button');cell.id=`sector-${x}-${y}`;cell.type='button';cell.setAttribute('role','gridcell');cell.append(document.createElement('b'),document.createTextNode(' '),document.createElement('span'));
     cell.addEventListener('click',()=>activate(x,y));cell.addEventListener('focus',()=>{if(focus.x!==x||focus.y!==y){focus={x,y};render();}});cells.set(`${x},${y}`,cell);row.append(cell);
   }$('command-grid').append(row);
 }

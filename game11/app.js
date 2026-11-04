@@ -86,6 +86,7 @@ function updateUI(force = false) {
   actionButtons.forEach(id=>$(id).disabled=match.phase!=='live');
   if(match.restartKick) {
     ['switch','tackle','sprint','up','down','left','right'].forEach(id=>$(id).disabled=true);
+    if(match.restartKick.team===1) { $('pass').disabled=true; $('shoot').disabled=true; }
     if(match.restartKick.type==='Penalty') $('pass').disabled=true;
     if(match.restartKick.type==='Throw-in') $('shoot').disabled=true;
   }

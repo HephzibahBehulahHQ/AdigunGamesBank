@@ -21,11 +21,77 @@ same level. Selecting a player changes control without moving that player.
 The simulation implements possession, grounded and airborne ball movement,
 gravity, bounce, drag, swept player contact, goalkeeper interception, solid
 posts/crossbar, whole-ball goal-line crossing, own goals, kickoffs, throw-ins,
-corners and goal kicks. Restarts reposition the designated taker and briefly
-stop play. Match time is 120–180 active seconds. The simulation runs fixed 1/60-second steps, processing up to 0.25 seconds per rendered frame; severe stalls beyond that cap can slow game time. Offside, fouls, cards,
-substitutions, extra time, penalties, leagues and network multiplayer are not
-implemented. This is a football game with a stated rules subset, not a claim to
-reproduce every law or a licensed professional competition.
+corners and goal kicks. Offside involvement, tackle fouls, direct/indirect free
+kicks, penalties, yellow/red cards and roster substitutions now affect the real
+match. Match time is 120–180 active seconds. The simulation runs fixed
+1/60-second steps, processing up to 0.25 seconds per rendered frame; severe
+stalls beyond that cap can slow game time. This is a football game with the
+explicit rules subset below, not a claim to reproduce every law or a licensed
+professional competition.
+
+## Playable rules milestone
+
+- **Offside:** each pass/shot stores the ball position and second-last active
+  opponent's line at the kick. A player in their own half, level with that line,
+  or behind the ball is onside. Position alone does not stop play: a flagged
+  player must touch the ball or challenge its holder. Returning into their own
+  half does not erase the original snapshot. Goal-frame rebounds and deliberate
+  goalkeeper saves preserve it; deliberate opposing control resets it. Direct
+  throw-in, corner and goal-kick receptions are exempt. The receiving player's
+  subsequent play creates a normal new snapshot. An offence gives the other
+  side an indirect free kick at involvement, with the attacking goal-area
+  adjustment. Reference: [IFAB Law 11](https://www.theifab.com/laws/latest/offside/).
+- **Contact and discipline:** the player and AI use the same tackle decision.
+  A reachable ball-first challenge wins possession; body-first or late contact
+  awards a direct free kick, or a penalty inside the offender's penalty area.
+  Careless contact carries no automatic card, reckless contact a yellow,
+  excessive-force contact a red. A second yellow also sends the player off.
+  Clear-chance denial uses goal distance, direction, control and covering
+  opponents; a genuine ball challenge inside the area receives the penalty/yellow
+  exception. A dismissed player disappears from the pitch, selection, AI and
+  collision system. Reference: [IFAB Law 12](https://www.theifab.com/laws/latest/fouls-and-misconduct/).
+- **Free kicks and penalties:** opponents are placed at least 9.15 m away for
+  free kicks and corners. The penalty ball is 11 m from goal, the keeper begins
+  on the goal line, and other players start behind the mark and outside the area.
+  Pass/shot input releases the actual physical ball; the outcome still depends
+  on aim, flight and keeper contact. A restart taker cannot touch again before
+  another player. An indirect kick directly entering the opposing goal gives a
+  goal kick; a restart directly entering its own goal gives a corner. References:
+  [IFAB Law 13](https://www.theifab.com/laws/latest/free-kicks/) and
+  [Law 14](https://www.theifab.com/laws/latest/the-penalty-kick/).
+- **Boundary restarts:** the throw-in has a raised two-arm pose and an airborne
+  ball release; opponents start at least 2 m away. It cannot score directly.
+  Goal kicks start within the goal area with opponents outside the penalty area;
+  corners start inside the corner arc. References:
+  [IFAB Law 15](https://www.theifab.com/laws/latest/the-throw-in/),
+  [Law 16](https://www.theifab.com/laws/latest/the-goal-kick/) and
+  [Law 17](https://www.theifab.com/laws/latest/the-corner-kick/).
+- **Substitutions:** seven original reserves per side include one goalkeeper.
+  The home coach can queue up to five replacements over three stoppages.
+  Several changes at the same stoppage consume one opportunity. The outgoing
+  identity leaves the active roster; the incoming player has fresh stamina and
+  inherits the formation slot, position and control/possession when applicable.
+  Used reserves cannot return and dismissed players cannot be replaced. An
+  emergency outfielder takes the keeper role after a keeper dismissal; the
+  reserve keeper can replace that active player at a stoppage. Fewer than seven
+  active players abandons the match without a campaign award or invented score.
+  Reference: [IFAB Law 3](https://www.theifab.com/laws/latest/the-players/).
+
+**Deliberate simplifications:** offside uses player body centres rather than
+individual permitted body parts. It detects touching/challenging, but does not
+model every line-of-sight obstruction or other visual interference. Tackle
+classification uses explicit game thresholds: ball reach 1.24 m, reckless actor
+speed above 6.8 m/s or relative speed above 8 m/s, excessive relative speed above
+13.4 m/s. These are simulation choices, not numeric IFAB laws. Referees do not
+model advantage, handball, off-ball misconduct, VAR or every restart infringement.
+Penalty kicks use a shot rather than a passed penalty; throw-in foot placement,
+keeper time limits and substitution time protocols are not simulated. Stoppages
+reposition players immediately; the clock freezes during the 1.1-second setup
+and until the actual kick. The AI takes its restart after 0.65 seconds and a
+home taker acts automatically after four idle seconds. Kickoffs retain the
+existing centre-possession setup. There is one short period, no switching ends,
+extra time, shootout, league management or network multiplayer. Reserve controls
+are available for the home team; the opponent does not yet manage its bench.
 
 ## Rendering and level structure
 
@@ -34,7 +100,7 @@ reproduce every law or a licensed professional competition.
 | 3D | `scene.js` constructs a real Three.js scene: a 105 × 68 metre pitch, original stadium, seating, roofs, lighting, nets, patterned spherical ball and 22 articulated players. An actual rendered frame was inspected from [CI run 41770210966](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41770210966), commit `484141c50acfebe5526085fd983b7964a2b02e44`. |
 | Human/ball scale | A constructed player measures about 1.83 m high. Ball radius is 0.11 m; model and collision dimensions use the same value. No circles or flat sprites substitute for players. |
 | 4K | The same CI run verified the actual WebGL 2 drawing buffer as **3840 × 2160**, with `getError() === 0`, and produced the inspected `football-4k.png` frame. Auto and 1920 × 1080 remain available. Chromium SwiftShader verifies software-rendered 4K output, not hardware FPS. |
-| Rendering budget | Approximately 70,948 triangles and 489 mesh objects, including instanced stadium seats, structural boxes, lights and pitch strips, from source inspection on 2026-11-04. This is a scene count, not an FPS measurement. |
+| Rendering budget | Initial-roster source inspection on 2026-11-04 counted approximately 70,948 triangles and 489 mesh objects, including instanced stadium geometry. Incoming substitute models are created only when used; departed/dismissed models are hidden, with at most 22 active rendered players. Cached reserve models are reused on retries. This is a geometry/lifecycle record, not an FPS measurement. |
 | Levels | 10,000 reproducible procedural match configurations, Beginner → Apprentice → Skilled → Expert → Professional Master. They are levels of this one game. |
 | Actual progression | Opponent running speed 4.65–6.5 m/s, decision interval 1.0–0.29 s, pressing range, shot error, goalkeeper speed and formation width change with the level. Match length rises from 120 to 180 s; required goals and winning margin rise from one to three. |
 | Validation | All 10,000 configurations have validated numeric bounds and distinct gameplay parameters after excluding their level, seed, tier and opponent labels. This does not establish 10,000 individually authored matches or manual playthroughs. |
@@ -49,8 +115,10 @@ reproduce every law or a licensed professional competition.
 | Keyboard actions | P pass, Space shoot, Q switch, E tackle, Escape pause/resume, R restart. J/K/L choose far-post/centre/near-post shot targets. Enter starts a ready match. |
 | Mouse | Click an Adigun player model or use the labelled player selector. Buttons handle match actions; there is no click-to-teleport movement. |
 | Touch | Hold the directional pad; use pass/shoot/switch/tackle buttons and the sprint toggle. Pointer release/cancel releases the held direction. Physical touch testing remains open. |
+| Restarts | At a free kick, P/Pass or Space/Shoot releases play. At a throw-in, P/Pass throws. At a penalty, J/K/L or the shot-target selector chooses aim and Space/Shoot kicks. Movement and switching wait for the kick. A home restart is taken automatically after four idle seconds. |
+| Substitutions | After kickoff, use the labelled Player leaving and Reserve entering selectors, then Queue substitution. The change happens at the next real goal/boundary/foul/offside stoppage; during a stoppage it can happen immediately. Cancel queued removes pending changes. Keyboard, mouse and touch use the same native controls. |
 | Pause | Explicit pause and hidden-tab/window-blur pause freeze simulation and clear held input. Resume does not advance missed background time. |
-| Accessible feedback | Visible focus, named buttons/selectors, a focusable canvas, text score/time/possession, match-event announcements and a visible pitch-coordinate readout. Coordinates use metres from centre: +x attacks right, −y is the far touchline. |
+| Accessible feedback | Visible focus, named buttons/selectors, a focusable canvas, text score/time/possession, restart/card/substitution announcements, active-player counts and a visible pitch-coordinate readout. Coordinates use metres from centre: +x attacks right, −y is the far touchline. |
 | Reduced motion | Fixed broadcast camera, no camera shake, no decorative transitions; player vertical bob is suppressed under reduced-motion preference. Core player/ball movement remains necessary to play. |
 | Limits | A 390 px browser layout, absence of page overflow, keyboard entry focus and reduced-motion preference passed in CI. Spatial play still depends on seeing the pitch. Full screen-reader play parity, measured contrast and physical touch-device behavior remain **NOT TESTED**. |
 | Gamepad / languages | No gamepad mapping. English interface; further languages are not represented as implemented. |
@@ -104,7 +172,9 @@ across the expanded suite. Its inspected football full-time frame showed a
 
 | Evidence | Procedure | Outcome at this checkpoint |
 | --- | --- | --- |
-| Unit and logic integration | `node --test --test-reporter=tap tests/football.test.js` | **16 tests passed**: all 10,000 configs; 11v11 roster; selection without teleport; pass possession; whole-ball goals; missed shots; frame collisions; saves; throw-ins; delta-time equivalence; pause; full-time targets; finite unattended match; input-only complete win; own goals; corners. |
+| Unit and logic integration | `node --test tests/football.test.js tests/football-rules.test.js` | **37 tests passed** on 2026-11-04 during the rules milestone: all 16 prior checks, including all 10,000 configurations and input-only full-match victory, plus 21 rule/roster/scene checks covering offside timing and involvement, exemptions, rebound/save persistence, fouls/cards, playable free kicks, a physically scored penalty, minimum team size, restart restrictions and placement, swept keeper save, substitutions/limits and visible model replacement/removal. Latest scoped verification used the working tree based on `8304cd89e3e13abdc388407bafa1104fffec4aff`; exact final candidate and CI results remain in project status. |
+| Save resilience | `node --test tests/app-resilience.test.cjs` | All **5** cross-game checks passed alongside the 37 football checks, including football saved-vs-session-only reporting. |
+| New UI/rules browser evidence | Keyboard/touch-compatible restart controls, queued substitution through a natural stoppage, current-candidate 4K and accessibility regression | **PENDING integration CI** at author handoff. Earlier browser receipts below predate this rules milestone and do not establish that the new controls passed a browser run. |
 | Syntax | `node --check game11/app.js` and `node --check game11/scene.js` | Passed before handoff. |
 | Scene construction | Import `buildFootballScene`, build a real `THREE.Scene`, update with an engine state, inspect geometry bounds/counts in Node | Passed; does not exercise a WebGL context or render a frame. |
 | Real-browser match and rendering | Chromium/SwiftShader in CI run 41770210966 | Passed: movement, shot input, pause and full-time completion with no page errors. Inspected frame showed a 4–0 win and level 2 unlocked. The separate native cloud preview has GL disabled and was not the source of this render evidence. |

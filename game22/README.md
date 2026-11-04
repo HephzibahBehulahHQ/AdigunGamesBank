@@ -1,37 +1,156 @@
 # AI Arena
 
-A live-provider comparison client for Adigun Game Bank. Its secure gateway sends the same text prompt concurrently to selected configured providers: ChatGPT (OpenAI API), Claude, Gemini, DeepSeek, Grok, Kimi, Adigun AI and Ollama. Browser speech recognition can transcribe a voice prompt for review before submission.
+An original browser competition: choose real model contenders, study a coding challenge,
+forecast the highest complete score and optionally supply an approach hint. A 3D arena
+displays actual configuration, request state, returned scores and measured latency.
+The open prompt desk retains custom factual, creative and restricted coding tasks,
+including reviewed voice transcripts where browser speech recognition is supported.
 
-## Game record
+## Identity and scope
 
-| Requirement | Current implementation |
+| Field | Record |
 | --- | --- |
-| Title / genre | AI Arena / live AI comparison and judging |
-| Target platform | Modern desktop and mobile browsers; separate Python API required |
-| 4K / 3D | **Unimplemented**. The current client is a responsive comparison interface; no 3D game-rendering or 4K framebuffer claim is made |
-| 10,000 levels | **Unimplemented**. Open prompt comparisons are not counted as authored levels |
-| Controls | Keyboard, mouse and touch form controls; optional browser speech-to-text |
-| Accessibility | Labelled controls/dialogs, keyboard focus, skip link, live status, selectable answer text, reduced-motion styling |
-| Performance | Buildless HTML/CSS/ES modules; no 3D assets loaded; measured load evidence belongs in the project status |
-| Asset rights | Original interface; unchanged official corporate artwork with provenance in `docs/STANDARDS.md`; no provider logos or likenesses |
-| Testing | Backend unit/integration tests and frontend domain tests; browser evidence tracked separately |
-| Deployment path | `/AdigunGamesBank/game22/` on the existing Pages project, with configured custom-domain routing retained |
-| Release status | **Blocked for live play** until API hosting, active model IDs, provider credentials and live verification are supplied; 3D presentation and authored progression remain implementation work |
-| Policy | HB-AI-ENGINEERING-001 v2.0, commit `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e` |
-| Design system | Commit `52f01f9986d97088413ca9785bc7a2d3f2967123`; shared navy, royal blue, gold, ivory and AI violet tokens |
+| Title / stable ID / genre | AI Arena / `game22` / live model competition, evidence evaluation and prediction |
+| Corporate owner / division | Hephzibah Behulah; Artificial Intelligence within the five-brand corporate foundation |
+| Platforms | Modern desktop/mobile browsers; WebGL2 for 3D; separate Python gateway for live play |
+| Source | `game22/`; secure API and restricted evaluator in `platform/backend/` |
+| Status | **In progress**; live acceptance **Blocked** on operator-supplied hosting, provider credentials, active model IDs, an independent judge and real response evidence |
+| Console | Browser build only; no native PlayStation build or certification |
 
-The current verified public URL and release commit must be read from [PROJECT_STATUS.md](../PROJECT_STATUS.md), not inferred from this path.
+Eight integrations are supported: ChatGPT through the OpenAI API, Claude, Gemini,
+DeepSeek, Grok, Kimi, Adigun AI and Ollama. Text names identify integrations; the game
+uses no provider logos, likenesses or infrastructure models. An Adigun endpoint must
+be operator-supplied and is not assumed to be an independently trained foundation
+model. API behavior does not establish equivalence to a consumer app or subscription.
 
-## Use the arena
+## Objective and rules
 
-1. Select **Connection** and enter the HTTPS origin of the deployed Game Bank API. Local development permits HTTP localhost.
-2. Sign in. Create-account access appears only when the gateway permits registration.
-3. Select at least two configured contenders. A configured judge is deselected initially so it does not judge itself.
-4. Choose a factual, creative or restricted coding challenge. Coding needs explicit JSON test cases. Review any voice transcript before submission.
-5. Compare actual answers, observed full-response latency, disclosed judge estimates and the resulting score. Missing metrics stay unknown. Rate an answer and reopen it through your account's history.
+1. Connect the HTTPS origin of a deployed Game Bank API and sign in. Credentials stay
+   on that server. HTTP is accepted only for local development.
+2. Select **10,000-level prediction campaign**. Study the required function, mechanics,
+   boundary examples and full reference cases.
+3. Choose at least two configured contenders, leaving the configured judge out of
+   the lineup. Forecast a contender or a tie. Optionally suggest an approach while
+   preserving the required function and rules.
+4. Start one live competition. The gateway concurrently sends the same prompt and
+   evaluates returned functions against the fixed reference cases.
+5. Clear requires a fresh response from every contender, identified models, consistent
+   measured scores, complete independent judging, perfect reference results for the
+   leading answer(s), and the correct pre-match forecast. Otherwise progress stays
+   unchanged. Read the evidence, revise the hint/lineup/forecast and retry.
 
-Each card identifies the configured model. An Adigun endpoint must exist and be operator-configured; it is not presented as an independently trained model by default. API responses do not imply equivalence to consumer products or subscriptions.
+A clear unlocks the next sequential level. Completed levels can be replayed without
+inflating progress. Locked levels can be inspected but cannot award a clear. Saved
+history never grades an attempt. There is no automatic paid retry. Open prompt
+comparison is separate, and its draft is preserved when switching modes.
 
-No provider credential belongs in the browser. Configuration is separate from observed live availability. A failed or empty provider answer is never filled with a fixture. A single match and model judge cannot establish which AI platform is best overall.
+## Rendering and progression
 
-Backend deployment and rubric: [platform/README.md](../platform/README.md). Verification: [TEST.md](TEST.md).
+| Requirement | Implementation and evidence limit |
+| --- | --- |
+| Actual 3D | `scene.js`: original metal deck, eight server-style scoreboard cabinets, physical lighting/shadows, camera orbit, raycast selection, actual score columns and 1024-pixel label textures through the shared Three.js WebGL2 renderer |
+| 4K | The selector requests an actual **3840 × 2160** buffer. `#arena-stage[data-resolution]` and quality status report the obtained buffer. Inspected-frame/browser evidence is recorded for the release candidate in `PROJECT_STATUS.md`; a menu label is not verification |
+| Adaptive rendering | Adaptive and 1920 × 1080 modes remain available; unsupported buffers fall back with actual dimensions. Accessible DOM text duplicates scene evidence |
+| Real state only | Unconfigured cabinets have no score. HTTP requests say “Request sent,” with no invented percentage. Columns/leader colors require returned live evidence; saved records say “Recorded response” |
+| Level count / design | **10,000 deterministic generated levels in one game**; 20 original mechanical families, 500 meaningful parameterisations each. Numeric constants change required behavior; uniqueness does not use decorative level labels |
+| Ground truth | 9–17 bounded integer/Boolean/list cases per level; nested pairs use nine cases to respect evaluator limits. `referencePython` is a test oracle, never a contestant answer |
+| Validation | Node checks every level's distinct specification, determinism and bounds. A backend check executes all **10,000 reference functions through the actual restricted evaluator**. This is algorithmic validation, not 10,000 manual playthroughs or real model matches |
+
+| Levels / tier | Mechanics introduced |
+| --- | --- |
+| 1–2,000 · Beginner | Affine calibration, absolute distance, frame clearance, clamping |
+| 2,001–4,000 · Apprentice | Piecewise workload, modular wrapping, ceiling batches, Boolean interlocks |
+| 4,001–6,000 · Skilled | Bounded filtering, positional weighting, excess accumulation, signed aggregation |
+| 6,001–8,000 · Expert | Hysteresis, ordered saturation, overlapping windows, rolling checksums |
+| 8,001–10,000 · Professional Master | Maximal episodes, bounded ascending runs, unordered pairs, stateful queue admission |
+
+Difficulty advances through branching, aggregation and order-sensitive state to
+nested iteration and simulation. Four families interleave within each tier with
+distinct constants and deterministic cases. Boundary cases cover empty lists,
+negative values, equal thresholds, repeated values and order effects. Parameter
+growth does not claim a new mechanic or prove every generated level equally enjoyable.
+
+### Save and resume
+
+Local schema `adigun.campaign.v1.ai-arena-v1:<encoded-origin>:<numeric-account-id>`
+stores version, sequential completion and next unlocked level. It contains no prompt,
+email, answer or secret. Gateway/account changes select a separate record; sign-out
+clears active UI and attempts. Corrupt/unavailable storage falls back safely. Writes
+are read back; failed persistence is visibly reported as session-only. This is
+browser-local progression, not a server-attested ranking or tamper-proof economy.
+Server history remains account-scoped and requires the session token.
+
+## Controls and accessibility
+
+| Requirement | Implementation |
+| --- | --- |
+| Keyboard | Labelled forms/buttons; Tab; canvas arrows change angle/elevation, +/− zoom, Home resets; Enter loads preview; Escape/close controls dismiss dialogs |
+| Mouse / touch | Drag to orbit; select a configured cabinet to toggle it; duplicate DOM lineup controls; camera selects; vertical touch scrolling retained |
+| Speech | Optional browser transcription into custom prompt or campaign hint, followed by explicit review/submission; never auto-dispatched |
+| Screen readers | Skip link, named regions, labelled forms/dialogs/canvas, equivalent evidence table, selectable answer text, status/error announcements |
+| Contrast / focus | Corporate navy/ivory, AI violet, gold focus outlines; every state is written in text as well as color |
+| Reduced motion | Request-light pulse disabled by `prefers-reduced-motion`; otherwise on-demand rendering. Hidden documents pause animation |
+| Lifecycle | Context loss discloses recovery; DOM controls remain usable. Disposal removes listeners, observers and textures; back-forward cached pages retain and redraw the scene |
+| Language / gamepad | English implemented; no reviewed DE/YO/PCM or native gamepad claim |
+
+Automated WCAG, keyboard, responsive and 4K evidence belongs to the current candidate
+receipt. Speech hardware, assistive-technology user testing and mobile GPU measurements
+remain separate checks.
+
+## Loading and rights
+
+**Target, not measured acceptance:** usable controls within 2 seconds and initial 3D
+within 5 seconds on a representative 2023 midrange laptop, current Chromium, cold
+cache, 10 Mbps network and 100 ms latency. The renderer is dynamically imported only
+on this title's page. Geometry and labels are created locally; there are no external
+3D models, remote fonts or audio downloads. Failed 3D loading leaves the comparison
+desk usable with an explicit WebGL2/reload message. Measured size, load and frame-time
+distributions must name their device/network; headless rendering does not prove FPS.
+
+| Asset / dependency | Source and rights | Attribution / verification |
+| --- | --- | --- |
+| Deck, cabinets, indicators, scene, UI, challenge content | Original code-created assets authored for this repository | `scene.js`, `style.css`, `campaign.js`; no third-party model/kit/player/provider artwork |
+| Corporate logo | Unchanged official repository artwork | `assets/corporate/hephzibah-behulah-official.jpg`; provenance in `docs/STANDARDS.md` |
+| Three.js | Pinned vendored MIT dependency | License retained in `vendor/three/`; root lockfile |
+| Fonts / audio | System fonts; no supplied recordings | Browser speech service handles transcription under its own permissions |
+
+## Live integrity and scoring
+
+Latency measures the gateway's full response; the stage never simulates thought or
+per-token timing. Test pass rate/correctness contributes 50%, estimated quality 30%,
+suggestion relevance 10%, and speed 10%. Speed is `max(0, 1 − latency_ms / 50000)`.
+Missing metrics stay unknown. The judge cannot score its own provider. Campaign
+checks metric bounds, test counts, provenance fields and weighted arithmetic against
+the current contract. Fields are not independent network attestation; only the active,
+fresh POST callback may reach the award path. History never does.
+
+Factual/creative correctness and quality/suggestions are model estimates. Coding
+accuracy covers supplied finite cases, not all possible inputs. A match applies to
+one prompt, the named model versions and its rubric; it does not prove a universally
+best platform. Failed/empty/fixture answers are never replaced with successful text.
+Provider accounts may incur charges; dispatch requires a user action. Development
+introduced no real provider credentials or purported real outputs.
+
+## Tests, deployment and standards
+
+[TEST.md](TEST.md) gives repeatable checks and selectors. Exact candidate commits,
+verification times, browser frames, performance and deployment receipts are owned by
+[PROJECT_STATUS.md](../PROJECT_STATUS.md). The focused suite checks generator validity,
+adversarial grading, truthful stage presentation and account storage isolation.
+
+Pages path: `/AdigunGamesBank/game22/`. Intended public URL:
+<https://hephzibahbehulahhq.github.io/AdigunGamesBank/game22/>. A previously reachable
+page does not prove this candidate was deployed; use the verified production revision
+and URL in the current release receipt. Live acceptance needs separately hosted
+API/providers/judge and observed real responses.
+
+- Policy: **HB-AI-ENGINEERING-001 · v2.0**, commit `d42d4e04ac6ab77ebafa1d4fccb724a4dde8d02e`.
+- Design system: commit `52f01f9986d97088413ca9785bc7a2d3f2967123`.
+- Tokens: Midnight Navy `#0B1220`, Royal Blue `#2563EB`, Metallic Gold `#D4AF37`,
+  Ivory White `#F8FAFC`, Slate Grey `#64748B`, AI Violet `#A78BFA`. Brighter secondary
+  text preserves readable contrast; slate is used for non-text structure.
+- Consuming components/renderer are verified in this product's Node/backend/browser
+  suites; adopted documentation alone does not establish release acceptance.
+- Synthetic workload tasks use abstract work units, not financial prices/returns.
+- Full release: **NOT ACCEPTED** while real model play and device evidence are missing.
+  This is one designed title, never a multiplier toward 2,000 separate games.

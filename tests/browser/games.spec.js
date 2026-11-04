@@ -55,6 +55,10 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
   await page.locator('#pause').click(); const paused = await page.locator('#clock').innerText();
   await page.waitForTimeout(1200); await expect(page.locator('#clock')).toHaveText(paused);
+  await page.locator('#sub-out').selectOption('h11'); await page.locator('#sub-in').selectOption('h12');
+  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage');
+  await page.locator('#cancel-subs').click(); await expect(page.locator('#sub-status')).toContainText('No substitution queued');
+  await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage');
   await page.locator('#pause').click();
   await page.locator('#pitch').focus();
   // Only read player-visible telemetry and issue real keyboard inputs. No engine state mutation.
@@ -86,20 +90,73 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   for (const key of held) await page.keyboard.up(key);
   await expect(page.locator('#clock')).toHaveText('00:00');
   await expect(page.locator('#home-shots')).not.toHaveText('0');
+  await expect(page.locator('#home-substitutions')).toHaveText('1');
+  await expect(page.locator('#player-select option[value="h12"]')).toHaveCount(1);
+  await expect(page.locator('#player-select option[value="h11"]')).toHaveCount(0);
   await expect(page.locator('#overlay-title')).toContainText(/Full.time|Objective|Win/i);
   await page.screenshot({ path: 'test-results/football-fulltime.png', fullPage: true });
   expect(errors).toEqual([]);
 });
 
-test('AI Arena discloses missing live configuration and does not invent model answers', async ({ page }) => {
+test('AI Arena renders 4K and previews real challenges without inventing live results or progress', async ({ page }) => {
+  const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/game22/');
+  await expect(page.locator('#arena-stage')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#arena-quality').selectOption('4k');
+  await expect(page.locator('#arena-stage')).toHaveAttribute('data-resolution', '3840x2160');
+  expect(await page.locator('#arena-stage').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
+  await page.screenshot({ path: 'test-results/ai-arena-4k.png', fullPage: true });
+  await page.locator('#arena-quality').selectOption('auto');
   await expect(page.locator('#configured-count')).toContainText('0');
   await expect(page.locator('#results')).toBeEmpty();
   await expect(page.locator('#lineup input[type="checkbox"]')).toHaveCount(8);
   for (const provider of ['openai','anthropic','gemini','deepseek','grok','kimi','adigun','ollama']) {
     await expect(page.locator(`#provider-${provider}`)).toBeDisabled();
   }
+  await page.locator('#play-mode').selectOption('campaign');
+  await expect(page.locator('#campaign-level-readout')).toHaveText('Level 1 / 10,000');
+  const first = await page.locator('#challenge-prompt').textContent();
+  await page.locator('#campaign-level').fill('10000'); await page.locator('#load-challenge').click();
+  await expect(page.locator('#campaign-level-readout')).toHaveText('Level 10,000 / 10,000');
+  await expect(page.locator('#campaign-tier')).toHaveText('Professional Master');
+  expect(await page.locator('#challenge-prompt').textContent()).not.toBe(first);
+  await expect(page.locator('#campaign-progress')).toContainText('Sign in to a configured gateway');
+  await expect(page.locator('#next-challenge')).toBeHidden();
+  await expect(page.locator('#results')).toBeEmpty();
+  await expect(page.locator('#prompt-form')).toBeHidden();
   await page.screenshot({ path: 'test-results/ai-arena-unconfigured.png', fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+test('TACTICS GRID renders 4K and wins a mission through real command controls with saved progression', async ({ page }) => {
+  test.setTimeout(120000);
+  const errors = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/game15/'); await expect(page.locator('#board')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#quality').selectOption('4k');
+  await expect(page.locator('#board')).toHaveAttribute('data-resolution', '3840x2160');
+  expect(await page.locator('#board').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
+  await page.screenshot({ path: 'test-results/tactics-4k.png', fullPage: true });
+  await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
+  const actions = [
+    ['P1','move','2,2'], ['P2','move','3,5'], ['P3','move','2,3'],
+    ['P1','attack','E1'], ['P2','attack','E2'], ['P3','move','1,2'],
+    ['P1','attack','E1'], ['P2','attack','E2'], ['P3','move','2,1'],
+    ['P1','attack','E1'], ['P3','move','4,2'], ['P1','attack','E3'],
+    ['P3','attack','E2'], ['P1','attack','E3'], ['P3','move','3,2'],
+    ['P3','move','2,3'], ['P3','attack','E3'],
+  ];
+  for (const [unit, command, target] of actions) {
+    await expect(page.locator('#phase')).toHaveText('Your turn');
+    await page.locator(`#unit-${unit}`).click();
+    await page.locator(command === 'move' ? '#move-to' : '#target-select').selectOption(target);
+    await page.locator(`#${command}`).click();
+  }
+  await expect(page.locator('#phase')).toHaveText('Mission cleared');
+  await expect(page.locator('#next')).toBeVisible();
+  await page.screenshot({ path: 'test-results/tactics-win.png', fullPage: true });
+  await page.locator('#next').click(); await expect(page.locator('#level-readout')).toHaveText('Mission 2 / 10,000');
+  await page.reload(); await expect(page.locator('#level-readout')).toHaveText('Mission 2 / 10,000');
+  expect(errors).toEqual([]);
 });
 
 test('David chapter renders 4K and completes all targets using real aiming controls', async ({ page }) => {
@@ -132,7 +189,7 @@ test('David chapter renders 4K and completes all targets using real aiming contr
   await page.reload(); await expect(page.locator('#level-readout')).toHaveText('2 / 10,000'); expect(errors).toEqual([]);
 });
 
-for (const route of ['/', '/game3/', '/game11/', '/game22/', '/game23/']) {
+for (const route of ['/', '/game3/', '/game11/', '/game15/', '/game22/', '/game23/']) {
   test(`390px responsive layout and visible focus: ${route}`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(route); await page.waitForLoadState('networkidle');
