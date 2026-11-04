@@ -2,6 +2,12 @@
 
 Updated: **2026-11-04T20:16:31+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
+## Isolated engineering continuation
+
+Branch **`work/finish-engineering-2026-11-04`**, based on `148954a88d43f84dd5a382c2ff4ce9769de16087`. This worktree contains the next individual conversions while the four-game candidate is tested separately. Root remains the integration owner; no new release is claimed.
+
+First useful changed work **2026-11-04T21:56:34Z**: `game6/campaign.js` and `game6/engine.js` implement an original RC charge/hold/discharge commissioning model. Syntax and a numerical introductory procedure pass; full engine, browser, 4K and publication verification are pending. Circuit Rush is assigned exclusive `game2/` paths. Remote checkpoint verification is pending for this snapshot; the source below records the preceding recovery baseline.
+
 ## Active continuation — 4 November 2026
 
 **In progress, work branch `work/finish-games-2026-11-04`.** Recovered from `37bf36fa317537d535cf8e6f1ec36e464764c451`. Remote main remains `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18`; the last publicly verified runtime remains `b3844bff8775b509ddda6f9002726bf4ec1dc89b`.
