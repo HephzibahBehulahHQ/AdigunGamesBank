@@ -8,7 +8,7 @@ export const TRACK_LIMIT_PENALTY = 3;
 
 export function createRace(level = 1) {
   const config = circuitFor(level), start = trackPoint(config, 0);
-  const car = { x: start.x, z: start.z, heading: level === 1 ? 0 : start.heading, speed: 0, steering: 0 };
+  const car = { x: start.x, z: start.z, heading: config.level === 1 ? 0 : start.heading, speed: 0, steering: 0 };
   return { config, car, phase: 'ready', elapsed: 0, drivingTime: 0, penalty: 0, gatesPassed: 0,
     completedLaps: 0, nextGate: 1, sectorInvalid: false, offTrack: false, gripLimited: false,
     distanceDriven: 0, recoveries: 0, projection: projectToTrack(config, car.x, car.z),
@@ -103,6 +103,7 @@ function tick(state, controls, dt) {
 /** Fixed substeps, bounded catch-up and no reverse gear; a paused frame advances nothing. */
 export function stepRace(state, controls = {}, duration = 0) {
   if (state.phase !== 'running' || !Number.isFinite(duration) || duration <= 0) return state;
+  if (!controls || typeof controls !== 'object') controls = {};
   const dt = Math.min(duration, 0.25), steps = Math.ceil(dt / (1 / 60)), h = dt / steps;
   for (let i = 0; i < steps && state.phase === 'running'; i++) tick(state, controls, h);
   return state;

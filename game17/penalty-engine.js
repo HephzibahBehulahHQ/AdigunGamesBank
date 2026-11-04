@@ -32,7 +32,14 @@ export function challengeFor(value = 1) {
     kick.wind = [0, 0.15, -0.2, 0.3, -0.3][index];
     Object.assign(kick.keeper, { side: index % 2 ? 1 : -1, startX: 0, targetX: index % 2 ? 2.4 : -2.4, high: index % 2 === 0, reaction: 0.15, duration: 0.24 });
   });
-  return { version: 1, level, tier: tierFor(level), tierIndex, target: tierIndex < 2 ? 3 : tierIndex < 4 ? 4 : 5, kicks };
+  const opponents = kicks.map((kick, index) => {
+    const side = level === 1 ? (index % 2 ? 1 : -1) : random() < 0.5 ? -1 : 1;
+    const high = level === 1 ? index % 2 === 0 : random() < 0.5;
+    const targetX = side * (level === 1 ? 2.6 : round(2.2 + random() * 0.7));
+    const targetY = high ? 1.12 : 0.3;
+    return { side, high, targetX, targetY, shot: shotForTarget(kick, targetX, targetY, Math.min(88, kick.powerMax)) };
+  });
+  return { version: 1, level, tier: tierFor(level), tierIndex, target: tierIndex < 2 ? 3 : tierIndex < 4 ? 4 : 5, kicks, opponents };
 }
 
 export function normalizeSettings(settings = {}) {
@@ -50,7 +57,7 @@ export function keeperPose(kick, seconds = 0) {
   const fraction = clamp((seconds - k.reaction) / k.duration, 0, 1);
   const eased = fraction * fraction * (3 - 2 * fraction);
   return { x: k.startX + (k.targetX - k.startX) * eased,
-    y: 1 + (k.high ? 0.3 : -0.44) * eased, z: 0.16,
+    y: 1 + (k.high ? 0.3 : -0.44) * eased, z: 0.16 * eased,
     angle: -k.side * eased * (k.high ? 0.78 : 1.16), fraction: eased };
 }
 
@@ -59,6 +66,8 @@ export const KEEPER_PARTS = Object.freeze([
   { name: 'torso', a: [0, -0.25], b: [0, 0.28], radius: 0.22 },
   { name: 'left arm', a: [-0.2, 0.18], b: [-0.82, 0.2], radius: 0.105 },
   { name: 'right arm', a: [0.2, 0.18], b: [0.82, 0.2], radius: 0.105 },
+  { name: 'left glove', a: [-0.82, 0.2], b: [-0.88, 0.2], radius: 0.11 },
+  { name: 'right glove', a: [0.82, 0.2], b: [0.88, 0.2], radius: 0.11 },
   { name: 'left leg', a: [-0.12, -0.26], b: [-0.3, -0.88], radius: 0.12 },
   { name: 'right leg', a: [0.12, -0.26], b: [0.3, -0.88], radius: 0.12 },
   { name: 'head', a: [0, 0.58], b: [0, 0.58], radius: 0.19 }
@@ -97,6 +106,26 @@ export function planeTime(flight, z) {
   const discriminant = flight.landVz ** 2 - 2 * acceleration * distance;
   if (discriminant < 0) return Infinity;
   return flight.landAt + 2 * distance / (flight.landVz + Math.sqrt(discriminant));
+}
+
+// Original opponent placement policy. This solves its chosen target through
+// the same ballistic model; it never changes a result or teleports the ball.
+function shotForTarget(kick, x, y, power) {
+  let aim = Math.atan2(x, GOAL.distance) * 180 / Math.PI, elevation = 9;
+  for (let pass = 0; pass < 3; pass++) {
+    let low = 0, high = 28;
+    for (let i = 0; i < 15; i++) {
+      const middle = (low + high) / 2, flight = makeFlight(kick, { aim, elevation: middle, power });
+      if (ballAt(flight, planeTime(flight, -BALL_RADIUS)).y < y) low = middle; else high = middle;
+    }
+    elevation = (low + high) / 2; low = -24; high = 24;
+    for (let i = 0; i < 15; i++) {
+      const middle = (low + high) / 2, flight = makeFlight(kick, { aim: middle, elevation, power });
+      if (ballAt(flight, planeTime(flight, -BALL_RADIUS)).x < x) low = middle; else high = middle;
+    }
+    aim = (low + high) / 2;
+  }
+  return { aim: round(aim, 3), elevation: round(elevation, 3), power };
 }
 
 function distanceToSegment(point, start, end) {
@@ -138,10 +167,10 @@ function firstContact(distance, start, end) {
 }
 
 export function resolveFlight(flight) {
-  const h = GOAL.width / 2, frame = [
-    { name: 'left post', a: [-h, 0, 0], b: [-h, GOAL.height, 0] },
-    { name: 'right post', a: [h, 0, 0], b: [h, GOAL.height, 0] },
-    { name: 'crossbar', a: [-h, GOAL.height, 0], b: [h, GOAL.height, 0] }
+  const h = GOAL.width / 2, post = h + GOAL.postRadius, bar = GOAL.height + GOAL.postRadius, frame = [
+    { name: 'left post', a: [-post, 0, 0], b: [-post, bar, 0] },
+    { name: 'right post', a: [post, 0, 0], b: [post, bar, 0] },
+    { name: 'crossbar', a: [-post, bar, 0], b: [post, bar, 0] }
   ];
   const events = [];
   const keeperTime = firstContact(time => keeperDistance(flight, time).distance, planeTime(flight, 0.51), planeTime(flight, -0.19));
@@ -163,14 +192,26 @@ export function resolveFlight(flight) {
 
 export function createShootout(level = 1) {
   const config = challengeFor(level);
-  return { config, phase: 'ready', kickIndex: 0, goals: 0, elapsed: 0, flight: null,
+  return { config, phase: 'ready', role: 'shoot', kickIndex: 0, goals: 0, opponentGoals: 0, saves: 0, winner: null, elapsed: 0, flight: null,
     result: null, log: [], ball: { x: 0, y: BALL_RADIUS, z: GOAL.distance }, event: 0 };
 }
-export function currentKick(state) { return state.config.kicks[Math.min(state.kickIndex, state.config.kicks.length - 1)]; }
+export function currentKick(state) { return state.config.kicks[state.kickIndex % 5]; }
+export function currentOpponent(state) { return state.config.opponents[state.kickIndex % 5]; }
 
 export function shoot(state, input) {
-  if (state.phase !== 'ready') return false;
+  if (state.phase !== 'ready' || state.role !== 'shoot') return false;
   const flight = makeFlight(currentKick(state), input);
+  state.flight = flight; state.result = resolveFlight(flight); state.elapsed = 0;
+  state.ball = ballAt(flight, 0); state.phase = 'flight'; state.event++; return true;
+}
+export function facePenalty(state, input = {}) {
+  if (state.phase !== 'ready' || state.role !== 'keeper') return false;
+  const targetX = Number(input.targetX ?? 0), reaction = Number(input.delay ?? 80) / 1000;
+  if (!Number.isFinite(targetX) || Math.abs(targetX) > 3.4) throw new RangeError('Dive position must be between -3.4 and 3.4 metres.');
+  if (!Number.isFinite(reaction) || reaction < 0.05 || reaction > 0.3) throw new RangeError('Dive delay must be between 50 and 300 milliseconds.');
+  if (input.high !== undefined && typeof input.high !== 'boolean') throw new TypeError('Dive height must be high or low.');
+  const original = currentKick(state), kick = { ...original, keeper: { side: Math.sign(targetX), startX: 0, targetX, high: input.high ?? true, reaction, duration: 0.2 } };
+  const flight = makeFlight(kick, currentOpponent(state).shot);
   state.flight = flight; state.result = resolveFlight(flight); state.elapsed = 0;
   state.ball = ballAt(flight, 0); state.phase = 'flight'; state.event++; return true;
 }
@@ -179,17 +220,22 @@ export function stepShootout(state, seconds) {
   state.elapsed = Math.min(state.result.time, state.elapsed + seconds);
   state.ball = ballAt(state.flight, state.elapsed);
   if (state.elapsed >= state.result.time) {
-    const result = { kick: state.kickIndex + 1, ...state.result, settings: { ...state.flight.settings } };
+    const result = { kick: state.kickIndex + 1, role: state.role, ...state.result, settings: { ...state.flight.settings } };
     state.log.push(result);
-    if (result.outcome === 'goal') state.goals++;
+    if (result.outcome === 'goal') { if (state.role === 'shoot') state.goals++; else state.opponentGoals++; }
+    if (result.outcome === 'saved' && state.role === 'keeper') state.saves++;
     state.kickIndex++;
-    state.phase = state.kickIndex === state.config.kicks.length ? (state.goals >= state.config.target ? 'won' : 'lost') : 'result';
+    if (state.kickIndex === 10) {
+      state.winner = state.goals > state.opponentGoals ? 'player' : state.goals < state.opponentGoals ? 'opponent' : 'draw';
+      state.phase = state.winner === 'player' && state.goals >= state.config.target ? 'won' : state.winner === 'draw' ? 'draw' : 'lost';
+    } else state.phase = 'result';
     state.event++;
   }
   return true;
 }
 export function nextKick(state) {
   if (state.phase !== 'result') return false;
+  state.role = state.kickIndex < 5 ? 'shoot' : 'keeper';
   state.phase = 'ready'; state.flight = null; state.result = null; state.elapsed = 0;
   state.ball = { x: 0, y: BALL_RADIUS, z: GOAL.distance }; state.event++; return true;
 }

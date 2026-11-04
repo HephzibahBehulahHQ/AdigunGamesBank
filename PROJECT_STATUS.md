@@ -20,6 +20,10 @@ Second WIP **`a14c4f5b54a74a40cbc66d940d90e01cd11ef516`** was verified remotely 
 
 WIP CI is not a release gate. The first Neon-only checkpoint failed while its newly linked game README was not yet present; the subsequent checkpoint contains it. A local release check briefly encountered a file mid-replacement during coordinated agent work; run the final check only after all writers finish. Current modified work is not integrated or deployed. Next: finish all four scenes/UI/tests, run the exact candidate gate and inspect actual 4K frames before publication.
 
+Third WIP **`148954a88d43f84dd5a382c2ff4ce9769de16087`** was verified remotely at **2026-11-04T21:50:55Z**. Subsequent local release integrity passed and **182 Node checks passed** with no failures/skips. Cabinet/racing completed numerical tests are included. A reviewed multi-touch defect in racing was corrected with source-aware held inputs; two regression checks cover simultaneous throttle/steering, focus changes, cancellation, keyboard overlap and reset. New README links now resolve. The earlier accessibility failure identified Neon accessible-name mismatch; redundant names were removed so the visible signal labels are the accessible names.
+
+The next engineering conversions are isolated on `work/finish-engineering-2026-11-04` at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering` (base `148954a`). They cannot be treated as part of this release before integration and verification. Penalty Pro's goalkeeper half is being preserved before final acceptance.
+
 ## Acceptance and published revision
 
 **In progress.** The 2,000 individually designed games × 10,000 meaningful levels target is not delivered. The published catalog has **24 titles: 18 legacy 2D, five playable local 3D games and one API-dependent 3D competition client**. The Bible work currently comprises the David chapter and the new Genesis ark commissioning chapter. Full production, complete Genesis–Revelation coverage and native-console certification are not claimed.

@@ -1,12 +1,13 @@
 import { createCampaign, CAMPAIGN_ID, LEVEL_COUNT, trackPoint } from './campaign.js';
 import { createRace, startRace, pauseRace, resumeRace, restartRace, recoverCar, stepRace, drivingGuide } from './engine.js';
 import { validCampaignSave } from '../shared/progression.js';
+import { bindHoldButton } from './input.js';
 
 const $ = id => document.getElementById(id), canvas = $('race-canvas');
 const campaign = createCampaign(), motion = matchMedia('(prefers-reduced-motion: reduce)');
 let state = createRace(campaign.unlocked), scene = null, recorded = false, dirty = true;
 let previousTime = 0, previousUI = 0, previousRender = 0, frame = 0, suspended = false;
-const keys = new Set(), held = new Set(), buttonFor = new Map();
+const keys = new Set(), held = new Set(), buttonFor = new Map(), resetButtons = [];
 const number = (value, precision = 1) => value.toFixed(precision);
 const phases = { ready: 'READY', running: 'ON TRACK', paused: 'PAUSED', won: 'QUALIFIED', lost: 'TIME EXPIRED' };
 let lastMessage = '';
@@ -26,7 +27,7 @@ function progressText() {
     : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
 function clearHeld() {
-  keys.clear(); held.clear();
+  keys.clear(); held.clear(); resetButtons.forEach(reset => reset());
   for (const button of buttonFor.values()) button.setAttribute('aria-pressed', 'false');
 }
 function resetControls() {
@@ -142,12 +143,7 @@ $('reload-graphics').addEventListener('click', () => location.reload());
 
 for (const [id, control] of [['steer-left', 'left'], ['steer-right', 'right'], ['accelerate', 'accelerate'], ['brake', 'brake']]) {
   const button = $(id); buttonFor.set(control, button); button.setAttribute('aria-pressed', 'false');
-  const press = () => { held.add(control); button.setAttribute('aria-pressed', 'true'); };
-  const release = () => { held.delete(control); button.setAttribute('aria-pressed', 'false'); };
-  button.addEventListener('pointerdown', event => { event.preventDefault(); button.focus(); button.setPointerCapture(event.pointerId); press(); });
-  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture', 'blur']) button.addEventListener(type, release);
-  button.addEventListener('keydown', event => { if ([' ', 'Enter'].includes(event.key)) { event.preventDefault(); press(); } });
-  button.addEventListener('keyup', event => { if ([' ', 'Enter'].includes(event.key)) { event.preventDefault(); release(); } });
+  resetButtons.push(bindHoldButton(button, control, held));
 }
 document.addEventListener('keydown', event => {
   if (/^(INPUT|SELECT|TEXTAREA|BUTTON)$/.test(event.target.tagName)) return;
