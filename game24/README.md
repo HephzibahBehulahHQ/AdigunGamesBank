@@ -14,11 +14,11 @@ The campaign and numerical engine are implemented and have completed automated l
 | Genre | Cargo planning, ballast management, and launch simulation |
 | Distinct mechanics | Cargo destination and station capacity constraints; mass distribution; finite ballast budgets; calculated draft, freeboard, heel and trim; a dynamic launch trial with recoverable brief excursions and explicit failure limits |
 | Platform | Web browser using keyboard, pointer, and touch; no native console certification claim |
-| Intended browsers | Current desktop Chrome, Edge, Firefox and Safari, plus current Android Chrome and iOS Safari; compatibility is pending browser evidence |
+| Intended browsers | Chromium browser checks passed; current desktop Edge, Firefox and Safari, plus Android Chrome and iOS Safari remain compatibility targets without device-specific evidence |
 | Product divisions | Hephzibah Behulah Elektroniker, AI and Evangelism |
 | Ownership | Core: campaign, engine and numerical tests. Scene: 3D rendering. Integration owner: application, repository checkpoints, CI, catalogue and release. Independent review: this README and bounded defect review |
-| Implementation | `game24/campaign.js`, `game24/engine.js`; HTML/CSS integration and scene work are in progress |
-| Acceptance blocker | Browser and visual evidence, measured load/performance results, and exact public release verification are outstanding; the original geometry/material inventory is recorded in ASSETS.md |
+| Implementation | Campaign, engine, app, HTML/CSS integration and original procedural 3D scene are implemented; browser chapter evidence is linked in section 9 |
+| Acceptance blocker | Aggregate release gate, exact public deployment verification, hardware load/performance measurements, physical touch, full screen-reader testing and localization remain open; original geometry/materials are recorded in `ASSETS.md` |
 
 This is one game in the wider bank. The requested bank-wide target of 2,000 distinct games does not establish delivery or acceptance of other entries.
 
@@ -30,7 +30,7 @@ Each bay has a low ballast tank. Add or remove integer tonnes within the individ
 
 During the trial, waves and environmental moments affect roll and pitch. The hull must finish the prescribed duration without exhausting the permitted continuous breach time or crossing an immediate failure limit. Brief excursions below a target freeboard reserve or above a target heel/trim limit can recover. Failure occurs immediately at zero edge freeboard, 40° absolute heel, or 20° absolute trim, or after 1.25 seconds of accumulated envelope breach. Breach recovers at 0.6 seconds per safe second. The on-screen damage fraction derives from that breach timer.
 
-The implemented phases are `ready`, `loading`, `sailing`, `paused`, `won`, and `lost`. Pause preserves the preceding loading/sailing phase. Retry returns a sailing or finished run to loading, resets dynamics and the result, and preserves the cargo and ballast plan, move count and attempt history. Completion records success/reason, simulated time, moves and attempts. Browser controls and focus transitions still require integration verification.
+The implemented phases are `ready`, `loading`, `sailing`, `paused`, `won`, and `lost`. Pause preserves the preceding loading/sailing phase. Retry returns a sailing or finished run to loading, resets dynamics and the result, and preserves the cargo and ballast plan, move count and attempt history. Completion records success/reason, simulated time, moves and attempts. Browser checks verified cargo and ballast controls, pause/resume, completion and preserved-plan failure/retry/rebalance. Full manual focus and screen-reader qualification remain open.
 
 ## 3. The 10,000-challenge campaign
 
@@ -46,13 +46,13 @@ The deterministic generator uses `randomFor(level * 7919 + 240609)`, campaign ID
 
 For normalized difficulty `d = (level - 1) / 9999`, target edge freeboard is `depth - solutionDraft - 0.40 - 0.10*d` metres. Maximum draft is `solutionDraft + 0.20 - 0.08*d` metres; minimum transverse GM is 0.35 m. Tank capacity is `max(20, ...solutionBallast) + 8 + 2*tierIndex` tonnes. A level-dependent cargo-mass term distinguishes the physical configurations; other seeded values also vary their constraints.
 
-Each configuration includes a generated feasible loading/ballast witness. `solutionFor` returns copies for hints and tests. The witness is exercised through the public loading, ballast and launch controls; it does not bypass the simulation or force a win. Automated testing has verified 10,000 distinct physical configurations and 10,000 completed launches. These are procedurally generated challenges, not 10,000 separately authored stories or 10,000 manual playtests. Meaningful player difficulty and representative full browser playthroughs remain acceptance work.
+Each configuration includes a generated feasible loading/ballast witness. `solutionFor` returns copies for hints and tests. The witness is exercised through the public loading, ballast and launch controls; it does not bypass the simulation or force a win. Automated testing has verified 10,000 distinct physical configurations and 10,000 completed launches. These are procedurally generated challenges, not 10,000 separately authored stories or 10,000 manual playtests. The browser chapter also verified a complete launch and keyboard-only failure/retry/rebalance. Meaningful player difficulty across the five tiers still needs representative human playtesting.
 
 ### Progress and saves
 
 The shared progression store uses `adigun.campaign.v1.genesis-ark` and schema `{version: 1, unlocked: 1, completed: 0}`. Completion advances sequentially; `completed` is bounded to 0–10,000 and the next unlocked level is capped at 10,000. Completing a locked later level is rejected. Refresh merges higher completed progress monotonically. Storage and parsing errors fall back to usable session progress.
 
-The saved payload contains campaign progress only. Current cargo positions, ballast and a partially completed launch are not persisted. Data resides in the browser profile's local storage; this store does not transmit the payload to a server. A Map-backed storage check verified sequential completion and refresh between two progression instances. Actual reload, corrupt-storage recovery, blocked storage and multiple browser tabs still need browser-level evidence.
+The saved payload contains campaign progress only. Current cargo positions, ballast and a partially completed launch are not persisted. Data resides in the browser profile's local storage; this store does not transmit the payload to a server. A Map-backed storage check verified sequential completion and refresh between two progression instances. Browser save/reload passed in the chapter checks. Corrupt-storage recovery, blocked storage and multiple live browser tabs still need browser-level evidence.
 
 ## 4. Physical model, units and limits
 
@@ -89,12 +89,12 @@ Conceptual reference: the [NSW Government vessel guide](https://www.nsw.gov.au/e
 
 | Requirement | Current evidence / remaining work |
 | --- | --- |
-| Genuine 3D scene | Scene implementation is in progress; renderer, geometry, camera, lighting, materials and interactive synchronization need a finished-code inventory and browser inspection |
-| Visual causality | Cargo placement, ballast and hull motion must visibly agree with the numerical state; browser verification pending |
-| Render modes | Adaptive, 1080p and 4K drawing-buffer controls are implemented through the shared renderer; actual buffer evidence pending |
+| Genuine 3D scene | Original procedural timber hull, cutaway, cargo, tanks, pier and water are implemented and inventoried in `ASSETS.md`; the rendered scene was inspected in the verified browser chapter |
+| Visual causality | Scene geometry follows cargo placement, ballast, draft, heel and trim; chapter checks exercised cargo/ballast controls and a numerical launch to 100% completion, with inspected rendered evidence |
+| Render modes | Adaptive, 1080p and 4K drawing-buffer controls are implemented through the shared renderer; actual 4K buffer evidence passed in Chromium/SwiftShader |
 | Actual 4K | **Confirmed for Chromium/SwiftShader:** 3840×2160 WebGL2 drawing buffer, zero GL error and inspected original frame at `f5378f5`; evidence linked below. This is not gaming-GPU performance certification |
-| Responsive layout | Planned checks at 390×844, 768×1024, 1920×1080 and 3840×2160; overflow, focus visibility and telemetry readability pending |
-| Degraded graphics | Accessible loading controls and telemetry must remain usable if rendering fails; retry and failure-state behavior pending |
+| Responsive layout | 320 px and 390 px reflow checks passed, alongside the actual 3840×2160 rendering check; broader tablet/device coverage and manual focus/readability qualification remain open |
+| Degraded graphics | Keyboard-only WebGL fallback passed an unbalanced loss, preserved-plan retry, rebalance and successful completion |
 
 The engine suite uses simulated frame advances. It does not create a WebGL context or prove a rendered frame, GPU performance, accessibility or visual quality.
 
@@ -102,14 +102,14 @@ The engine suite uses simulated frame advances. It does not create a WebGL conte
 
 | Input / feature | Declared or intended behavior | Verification |
 | --- | --- | --- |
-| Keyboard | Tab between controls; Enter/Space activate buttons; canvas arrows select a bay; Enter loads; Backspace unloads; Space pauses/resumes | Handlers implemented; edge-of-grid vertical navigation corrected after independent review; real-input browser evidence pending |
-| Pointer / touch | Cargo/bay selection and labeled ballast, launch, pause, retry and next controls | Browser integration pending |
-| Gamepad | No implemented support claimed | Pending scope decision; no console claim |
-| Screen reader | Named controls, readable telemetry, a focusable scene description, and polite live status | Markup inspected; name/state announcements and screen-reader testing pending |
-| Focus / contrast | Visible focus, no keyboard trap, readable non-color status, target WCAG 2.2 AA contrast | Measured and manual evidence pending |
+| Keyboard | Tab between controls; Enter/Space activate buttons; canvas arrows select a bay; Enter loads; Backspace unloads; Space pauses/resumes | Browser keyboard checks passed, including corrected vertical grid boundaries and fallback loss/retry/rebalance |
+| Pointer / touch | Cargo/bay selection and labeled ballast, launch, pause, retry and next controls | Browser cargo/ballast and trial controls passed; physical touch remains unperformed |
+| Gamepad | No implemented support claimed | Outside the implemented control set; no console claim |
+| Screen reader | Named controls, readable telemetry, a focusable scene description, and polite live status | All nine axe WCAG 2.1 A/AA audits passed; full screen-reader operation and announcement testing remain unperformed |
+| Focus / contrast | Visible focus, no keyboard trap, readable non-color status, target WCAG 2.2 AA contrast | Automated WCAG 2.1 A/AA audits and the keyboard gameplay path passed; full manual qualification and WCAG 2.2 conformance are not claimed |
 | Target sizes | Ballast buttons and numeric inputs now specify at least 44×44 CSS px | Physical touch testing pending |
 | Reduced motion | Respect `prefers-reduced-motion` and retain necessary state feedback | Decorative water motion is suppressed; essential physics feedback remains; browser evidence pending |
-| Languages | EN, DE, YO and PCM are the bank's required locales | Complete gameplay strings, layout, language tags and human review pending; coverage is not claimed |
+| Languages | EN, DE, YO and PCM are required by [repository standards](../docs/STANDARDS.md) | Complete gameplay strings, layout, language tags and human review pending; coverage is not claimed |
 
 No personal names, religious knowledge test or memorized Scripture answer is required to operate the simulation. Narrative summaries are separate from the commissioning controls.
 
@@ -125,7 +125,7 @@ These are targets, not measurements. Reference profiles must be recorded with CI
 | Mobile / 4K performance | Target 30 fps on the documented profiles; measure separately for each quality mode |
 | Lifecycle | Pause on relevant loss of visibility/focus as designed; no runaway elapsed-time catch-up; repeated retry/start cycles retain bounded resources |
 
-Measured load time, download size, frame rate, memory use, lazy-loading behavior and render-failure retry are **NOT TESTED**. Numerical speed in Node is not a browser performance result. Root CI owns the browser and visual receipts.
+Hardware frame rate, cold initial-load timing, measured download size, memory use and lazy-loading behavior remain **unperformed**. Pause/resume and keyboard-only WebGL fallback loss/retry/rebalance passed browser checks; extended resource-lifecycle measurements remain open. Numerical speed in Node and a SwiftShader 4K frame are not hardware performance measurements.
 
 ## 8. Scripture, original narrative and rights
 
@@ -143,7 +143,7 @@ The [World English Bible publisher](https://worldenglish.bible/) states that the
 | Asset / material | Source and rights status |
 | --- | --- |
 | Game code and original summary prose | Created for this repository by the development team; release under the repository's adopted license and ownership policy. Files recorded in `ASSETS.md`: campaign, engine, app and procedural scene |
-| Hull, cargo, water and other scene geometry/materials | Intended original procedural assets. Finished scene must be inspected for imported models, textures, external images or generated assets and each recorded before acceptance |
+| Hull, cargo, water and other scene geometry/materials | Original procedural assets are implemented and recorded in `ASSETS.md`; the scene includes timber hull/cutaway, cargo, tank gauges, pier and water, and its rendered frame was inspected in the chapter evidence |
 | Corporate logo | Repository asset `assets/corporate/hephzibah-behulah-official.jpg`; adopted corporate asset blob `f7b0e4a650d861fb9d52ed91ea894edec030e03b`, 54,461 bytes; corporate use under the adopted identity policy, not a public-domain asset |
 | Third-party rendering/software | Exact dependency version, license, bundled notices and CDN/download behavior must be reconciled with the finished implementation; no unverified license inventory is claimed |
 | Fonts | Intended Inter/system sans stack with Georgia editorial text; any downloaded or bundled font requires its own license inventory |
@@ -153,27 +153,22 @@ The [World English Bible publisher](https://worldenglish.bible/) states that the
 
 ## 9. Test and release evidence
 
-**Latest chapter evidence:** [CI 41885055957](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957) passed all three ark checks and all nine accessibility checks at `f5378f561bb7a8ef9c3a725d7ef6425f371c4234`. Actual 3840×2160 WebGL2, zero GL error, original scene inspection, 100% completion, save/reload, keyboard-only loss/retry/rebalance and 320/390px layouts are recorded in [the chapter evidence](../docs/evidence/2026-11-04-ark/README.md). Its aggregate gate failed one football test assumption about a later-dismissed substitute; publication awaits the corrected gate. This supersedes the earlier NOT TESTED browser entries below; physical-device, full screen-reader, localization and hardware-performance checks remain unperformed.
+**Latest verified chapter:** [CI 41885055957](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41885055957), candidate `f5378f561bb7a8ef9c3a725d7ef6425f371c4234`, passed **all three ark browser tests and all nine axe WCAG 2.1 A/AA audits**. Screenshots, checks and inspected frames are recorded in [the chapter evidence](../docs/evidence/2026-11-04-ark/README.md). These results replace the earlier pending browser entries; they do not establish full accessibility conformance or hardware performance.
 
-Candidate `05a4704bed526bb4e6c8b807239ccc55bd7570e8` passed 153 JavaScript and 52 API tests in [CI 41881414221](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41881414221). Eight of nine accessibility checks passed; ark bay accessible names failed because they differed from their visible text. The redundant overriding names were removed in checkpoint `9d53b1e8b477279fa445455137015ae72aa17c71`, verified remotely at 2026-11-04T17:56:29Z. Later gameplay checks were blocked by that failure and are not claimed as passed.
-
-Source review also corrected vertical keyboard navigation at grid edges. The scene now uses generated deck elevations and cargo heights, and the intact hull edge uses the configured depth; its near wall is explicitly a cutaway. Browser regressions cover both arrow boundaries and an actual unbalanced launch, no award on failure, preserved-plan retry, rebalancing and completion. Their execution evidence is pending.
-
-| Check | Result and scope |
+| Check | Verified result / remaining scope |
 | --- | --- |
-| Independent numerical suite | `node --test tests/ark.test.js` completed on 2026-11-04, exit 0: **7 tests passed, 0 failed, 18.885 s**. Includes determinism, unit consistency, loading/swaps/invalid inputs, station/cargo/ballast constraints, fixed stepping/pause, failure/retry and all 10,000 launches |
-| All-level numerical trial | **10,000 distinct configurations; 10,000 complete launches; 720,000 simulated frame advances.** Maximum sampled absolute heel 1.617°, trim 0.237°. Minimum sampled reserve relative to the target was −0.0189 m, permitted by the transient-breach rule; this is not a claim that every frame remained above its target |
-| Root's independent receipt | At parent-reported candidate `beae935`, seven tests passed in **30.38 s**, including all 10,000 launches. Root also reported levels 1/2000/4000/6000/8000/10000 finishing in 14/14/16/18/20/22 simulated seconds |
-| Save-store check | Map-backed sequential completion rejected level 2 before level 1; two store instances refreshed to completed 2 / unlocked 3. Browser persistence and corrupt-data coverage pending |
-| Candidate binding | Shared files can change during integration. Root must bind final receipts to the exact committed candidate and rerun affected checks after subsequent engine changes; the earlier passing runs do not certify later edits |
-| Browser controls and complete playthroughs | **NOT TESTED** by this review; root CI pending |
-| 3D, screenshots and actual 4K | **NOT TESTED**; drawing-buffer evidence and inspected frames pending |
-| Accessibility and language review | **NOT TESTED**; automated and manual evidence pending |
-| Load/GPU/frame-time/memory metrics | **NOT TESTED**; reference-device measurements pending |
-| Final asset/license audit | **PENDING** finished scene and dependency inventory |
-| Build/deploy/public route | **NOT VERIFIED**; root owns release and public verification |
+| Actual 4K and original scene | Real **3840×2160 WebGL2 drawing buffer**, zero GL error and inspected original rendered scene in Chromium/SwiftShader; no physical gaming-GPU performance claim |
+| Browser gameplay | Cargo and ballast controls, numerical launch reaching **100% completion**, pause/resume and campaign save/reload passed |
+| Keyboard and graphics fallback | Keyboard-only WebGL fallback passed an unbalanced loss, no progress award on failure, preserved-plan retry, rebalance and completion; corrected vertical grid boundaries are covered |
+| Responsive layout | **320 px and 390 px reflow passed**; broader tablet/device and physical touch testing remain open |
+| Automated accessibility | **9/9 axe WCAG 2.1 A/AA audits passed**; full screen-reader operation, manual accessibility qualification and localization remain unperformed |
+| Numerical campaign | Independent `node --test tests/ark.test.js`: **7/7 passed**, 18.885 s on 2026-11-04; **10,000 distinct configurations and 10,000 completed launches** through public controls, with 720,000 simulated frame advances. Maximum sampled absolute heel 1.617°, trim 0.237°; minimum reserve relative to its target −0.0189 m, permitted by the transient-breach rule |
+| Performance | Hardware FPS, cold initial-load timing, download/memory measurements and extended resource-lifecycle checks remain unperformed |
+| Asset inventory | Original code and procedural scene inventory recorded in `ASSETS.md`; final dependency-license/notice reconciliation remains open |
+| Aggregate release gate | The `f5378f5` aggregate failed **only** a football test's incorrect assumption that substitute #12 must remain active after being sent off. The corrected expectation is under validation in [CI 41887296841](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41887296841), candidate `b384`, **running at this documentation update**; no passing result is claimed yet |
+| Public deployment | **Pending** exact game24 route, deployed candidate and public interaction verification |
 
-Numerical evidence covers implemented equations and a feasible solution for each generated challenge. It does not establish that every possible loading is safe, every player strategy works, or the finished browser product meets its acceptance requirements.
+Numerical evidence establishes a feasible simulated solution for every generated challenge; it does not establish that every possible loading is safe or every player strategy succeeds. Browser and audit receipts apply to their recorded candidate. Later changes require the affected checks to pass again before release.
 
 ### Deployment target
 
