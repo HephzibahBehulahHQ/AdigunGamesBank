@@ -76,8 +76,10 @@ Current and resistor-power exceedances stop the game instantly; there is no
 thermal accumulation or real failure model. Capacitor tolerance, ESR, dielectric
 absorption, source internal resistance, temperature and switching transients are
 omitted. The fixed leakage element is a model parameter rather than a commercial
-capacitor specification. Resistor band colors are illustrative markings; modeled
-part values are exact. Reset is a virtual restart, not an instruction to short a
+capacitor specification. Resistor bodies are unbanded and their printed captions
+give the exact modeled resistance in ohms and the selected power rating in watts.
+No rounded colour code or physical tolerance is implied; the leakage model has
+no invented component power rating. Reset is a virtual restart, not an instruction to short a
 physical capacitor. The game is not a procedure for energized equipment.
 
 Primary sources checked on 2026-11-04:
@@ -92,7 +94,7 @@ illustration, photograph, textbook passage or exercise is copied into the game.
 
 | Requirement | Implementation / evidence |
 | --- | --- |
-| Actual 3D | Existing local Three.js / shared WebGL 2 stage; original DC source, component board, axial resistors and bands, metal capacitor bank, conductors, source switch, clickable C/H/D keys and a separate voltage indicator. Component choices and actual switch state update the scene. |
+| Actual 3D | Existing local Three.js / shared WebGL 2 stage; original DC source, component board, unbanded axial resistors with exact printed-value captions, metal capacitor bank, conductors, source switch, clickable C/H/D keys and a separate voltage indicator. Component choices and actual switch state update the scene. |
 | 4K | Selector requests 3840 × 2160 through the shared renderer. The browser test reads the actual drawing buffer and GL error and saves a frame. **The selector is not proof of a verified 4K frame; consult the release receipt.** |
 | Levels | **10,000 deterministic physical experiments**, generator version 1; Beginner through Professional Master. |
 | Difficulty | Higher tiers narrow the relative voltage window, lengthen the leakage hold and increase leakage. Source voltage, bank/resistor choices, energy window, retention floor and deadlines vary with the experiment. |
@@ -140,7 +142,7 @@ unverified. A software-rendered 4K test does not prove hardware 4K performance.
 
 | Evidence | Procedure | Current record |
 | --- | --- | --- |
-| Numerical / campaign | `node --test tests/capacitor.test.js` | **14 passed, zero failed/skipped** in the local working tree on 2026-11-04. |
+| Numerical / campaign | `node --test tests/capacitor.test.js` | **15 passed, zero failed/skipped** in the local working tree on 2026-11-04; includes exact printed resistance and power captions across all 10,000 scenarios. |
 | Independent physics | Same suite | Normalized exponential reference values, explicit first-experiment current/energy/timing and independent fine-step Euler/Kirchhoff comparison for every topology passed. |
 | Full generator | Same suite | All 10,000 normalized physical signatures were distinct, and every reference procedure reached actual `won` after all three stages. |
 | Failure / recovery | Same suite | Component locks; incorrect voltage/energy; current, power, voltage, leakage and time failures; exact event thresholds; pause/stepping; reset and sequential/final save boundaries passed. |
