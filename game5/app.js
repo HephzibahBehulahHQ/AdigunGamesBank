@@ -40,7 +40,7 @@ function buildBoard() {
   grid.style.setProperty('--columns', state.config.columns);
   for (let index = 0; index < state.config.deck.length; index++) {
     const button = element('button', '', 'component-card'); button.type = 'button'; button.id = `tray-${index + 1}`; button.dataset.index = String(index);
-    button.addEventListener('click', () => select(index, true));
+    button.addEventListener('click', event => select(index, true, event.detail === 0));
     button.addEventListener('focus', () => { selected = index; updateSelection(); });
     button.addEventListener('keydown', event => boardKeys(event, index, true));
     buttons.push(button); grid.append(button);
@@ -92,10 +92,18 @@ function sync() {
   }
   updateSelection();
 }
-function select(index, open = false) {
+function select(index, open = false, keyboard = false, fromCanvas = false) {
   if (!Number.isInteger(index) || index < 0 || index >= buttons.length) return;
   selected = index;
-  if (open && reveal(state, index)) sync(); else updateSelection();
+  if (open && reveal(state, index)) {
+    sync();
+    if (state.phase === 'compare') $('resolve').focus({ preventScroll: !keyboard });
+    else if (keyboard && !fromCanvas) {
+      const next = buttons.findIndex((button, candidate) => candidate > index && !button.disabled);
+      const fallback = buttons.findIndex(button => !button.disabled);
+      if (next >= 0 || fallback >= 0) buttons[next >= 0 ? next : fallback].focus();
+    }
+  } else updateSelection();
 }
 function comparePair() {
   if (!resolvePair(state)) return;
@@ -120,7 +128,7 @@ function boardKeys(event, index = selected, fromButton = false) {
   if (key.startsWith('arrow')) {
     event.preventDefault(); selected = target; updateSelection();
     if (fromButton && !buttons[target].disabled) buttons[target].focus();
-  } else if ((key === 'enter' || key === ' ') && !fromButton) { event.preventDefault(); if (!event.repeat) select(selected, true); }
+  } else if ((key === 'enter' || key === ' ') && !fromButton) { event.preventDefault(); if (!event.repeat) select(selected, true, true, true); }
   else if (key === 'c') { event.preventDefault(); if (!event.repeat) comparePair(); }
   else if (key === 'r') { event.preventDefault(); if (!event.repeat) reset(); }
 }

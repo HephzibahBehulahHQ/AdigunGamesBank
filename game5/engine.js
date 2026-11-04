@@ -24,7 +24,7 @@ export function formatOhms(value) {
 export function resistor(mantissa, exponent, tolerance = 5) {
   if (!Number.isInteger(mantissa) || mantissa < 10 || mantissa > 99) throw new RangeError('Four-band exercises require two significant digits, from 10 to 99.');
   if (!Number.isInteger(exponent) || exponent < -2 || exponent > 9) throw new RangeError('Multiplier exponent must be between -2 and 9.');
-  if (!(tolerance in TOLERANCE_BANDS)) throw new RangeError('Use the supported 2%, 5% or 10% tolerance.');
+  if (!Number.isInteger(tolerance) || !(tolerance in TOLERANCE_BANDS)) throw new RangeError('Use the supported 2%, 5% or 10% tolerance.');
   const centiohms = mantissa * 10 ** (exponent + 2);
   const multiplierBand = exponent === -2 ? 'silver' : exponent === -1 ? 'gold' : BAND_NAMES[exponent];
   const bands = [BAND_NAMES[Math.floor(mantissa / 10)], BAND_NAMES[mantissa % 10], multiplierBand, TOLERANCE_BANDS[tolerance]];
