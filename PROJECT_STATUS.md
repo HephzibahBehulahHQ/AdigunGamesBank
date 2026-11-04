@@ -10,7 +10,9 @@ First useful changed work: **2026-11-04T21:41:59Z**. This first WIP includes the
 
 Read-only deployment diagnosis found both prior attempts failed after successful build/upload while Pages publishing stalled. A prior successful release used the same action revision and runner. Do not change hosting or rerun the unchanged deployment a third time. The next fully verified source will use the existing Pages flow and exact-byte public verification.
 
-Checkpoint prepared at **2026-11-04T21:43:30+00:00**; remote verification is pending until recorded by a subsequent checkpoint. No integration or new public release is claimed.
+First checkpoint **`f9a6a982947e8530b30ec195f8a6d83ea14e6b4e`** was verified remotely at **2026-11-04T21:44:17Z**, within five minutes. Plain Git push had no credential in this environment; the authorized GitHub connector created the same exact tree, fast-forwarded the work branch with an expected-SHA check, and its head was read back. The local worktree was reconciled to that identical-tree connector commit, preserving uncommitted work.
+
+The next WIP adds Neon browser tests/documentation, release-check coverage for every catalog route, and the initial racing/fuse/penalty engines. Root cloud-browser play completed the first Neon board and observed persisted progression; this browser explicitly disables WebGL. Actual rendered 4K, full accessibility and new gameplay release checks remain pending in CI. No new integration or deployment is claimed.
 
 ## Acceptance and published revision
 
