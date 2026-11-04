@@ -1,6 +1,7 @@
 import { LEVEL_COUNT, tierFor, validLevel } from '../shared/progression.js';
+import { FIELD, activePlayer, attackingDirection, offsideSnapshot, tackleDecision } from './rules.js';
 
-export const FIELD = Object.freeze({ length: 105, width: 68, goalWidth: 7.32, goalHeight: 2.44, ballRadius: 0.11 });
+export { FIELD };
 const HALF = FIELD.length / 2, SIDE = FIELD.width / 2, DT = 1 / 60;
 const FORMATION = [[-48,0],[-33,-25],[-36,-9],[-36,9],[-33,25],[-18,-20],[-22,0],[-18,20],[-8,-23],[-6,0],[-8,23]];
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
@@ -24,17 +25,23 @@ export function levelConfig(value) {
 export function createMatch(level = 1) {
   const config = levelConfig(level);
   const players = [0, 1].flatMap(team => FORMATION.map(([x, y], i) => ({
-    id: `${team === 0 ? 'h' : 'a'}${i + 1}`, team, number: i + 1, keeper: i === 0,
+    id: `${team === 0 ? 'h' : 'a'}${i + 1}`, team, number: i + 1, slot: i + 1, keeper: i === 0,
     baseX: x, baseY: y, x: team === 0 ? x : -x, y: team === 0 ? y : -y,
     vx: 0, vy: 0, facingX: team === 0 ? 1 : -1, facingY: 0, stamina: 1,
-    cooldown: 0, decision: i * 0.07, running: 0
+    cooldown: 0, decision: i * 0.07, running: 0, active: true, yellowCards: 0, redCard: false, throwTime: 0
   })));
   const match = {
     config, players, controlledId: 'h10', phase: 'ready', pausedFrom: null,
     elapsed: 0, accumulator: 0, score: [0, 0], winner: null, qualified: false,
     ball: { x: 0, y: 0, z: FIELD.ballRadius, vx: 0, vy: 0, vz: 0, owner: null, lastTouch: 0, ignoreId: null, ignoreTime: 0 },
     rng: config.seed, restartTime: 0, kickoffTeam: 0, pending: {}, eventNumber: 0,
-    event: 'Kick off when ready. Adigun XI attacks the goal on the right.', stats: { shots: [0, 0], passes: [0, 0], saves: [0, 0] }
+    offside: null, restartKick: null, restartTouch: null, restartSerial: 0, rosterVersion: 0, endReason: null,
+    bench: [0, 1].map(team => Array.from({ length: 7 }, (_, i) => ({
+      id: `${team === 0 ? 'h' : 'a'}${i + 12}`, team, number: i + 12, keeper: i === 6, used: false
+    }))),
+    substitutions: { used: [0, 0], windows: [0, 0], lastWindow: [-1, -1], queued: [], departed: [] },
+    event: 'Kick off when ready. Adigun XI attacks the goal on the right.',
+    stats: { shots: [0, 0], passes: [0, 0], saves: [0, 0], offsides: [0, 0], fouls: [0, 0], yellows: [0, 0], reds: [0, 0], substitutions: [0, 0] }
   };
   prepareKickoff(match, 0);
   return match;
@@ -42,12 +49,15 @@ export function createMatch(level = 1) {
 function random(s) { s.rng = (Math.imul(s.rng, 1664525) + 1013904223) >>> 0; return s.rng / 4294967296; }
 function announce(s, message) { s.event = message; s.eventNumber++; }
 function player(s, id) { return s.players.find(p => p.id === id); }
+const teamPlayers = (s, team) => s.players.filter(p => p.team === team && activePlayer(p));
 function prepareKickoff(s, team) {
-  for (const p of s.players) {
+  s.offside = s.restartKick = s.restartTouch = null;
+  for (const p of s.players.filter(activePlayer)) {
     const sign = p.team === 0 ? 1 : -1;
     p.x = p.baseX * sign; p.y = p.baseY * sign; p.vx = p.vy = 0; p.cooldown = 0;
   }
-  const taker = s.players.find(p => p.team === team && p.number === 10);
+  const available = teamPlayers(s, team);
+  const taker = available.find(p => p.slot === 10) || available.find(p => !p.keeper) || available[0];
   taker.x = team === 0 ? -0.8 : 0.8; taker.y = 0;
   s.ball = { x: 0, y: 0, z: FIELD.ballRadius, vx: 0, vy: 0, vz: 0, owner: taker.id, lastTouch: team, ignoreId: null, ignoreTime: 0 };
   if (team === 0) s.controlledId = taker.id;
@@ -60,11 +70,12 @@ export function pauseMatch(s) {
 export function resumeMatch(s) { if (s.phase !== 'paused') return false; s.phase = s.pausedFrom || 'live'; s.pausedFrom = null; return true; }
 export function selectPlayer(s, id) {
   const p = player(s, id);
-  if (!p || p.team !== 0 || s.phase === 'fulltime') return false;
+  if (!activePlayer(p) || p.team !== 0 || s.phase === 'fulltime' ||
+    (s.restartKick?.team === 0 && p.id !== s.restartKick.takerId)) return false;
   s.controlledId = id; return true;
 }
 export function switchPlayer(s) {
-  const candidates = s.players.filter(p => p.team === 0 && p.id !== s.controlledId && !p.keeper);
+  const candidates = teamPlayers(s, 0).filter(p => p.id !== s.controlledId && !p.keeper);
   candidates.sort((a, b) => distance(a, s.ball) - distance(b, s.ball));
   return candidates[0] ? selectPlayer(s, candidates[0].id) : false;
 }
