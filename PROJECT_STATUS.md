@@ -29,6 +29,8 @@ The previous final checkpoint `a19b184` passed 93 JavaScript, 49 API and 11 brow
 
 - Independent cross-review reproduced wrong-request AI awards, stale result displays and stale-tab progress rollback. Fixes bind prompt plus ordered test cases, clear old results, validate readback schema and refresh higher saved progress. **52 API tests** now pass locally, including additive migration and owned-history request evidence. The new gateway browser regression uses explicitly labelled test doubles; it is never live-provider evidence.
 
+- CI `41790908775` at `30202bb`: 142 JavaScript and 52 API tests passed, seven accessibility checks and 13 gameplay/reflow checks passed. The new unavailable-graphics test failed because it issued Guard before selecting a drone; the corrected test uses the actual Select 1 shortcut before Guard. Visible fallback focus itself passed. The short contract/fallback checks now run before the complete-match suite to surface errors sooner.
+
 ## Changed implementation
 
 - `Adigun Game bank pursuing goals and template.md`: owner's complete requirements saved at the requested path.
