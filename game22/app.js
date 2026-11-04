@@ -1,5 +1,5 @@
 import { providers, parseApiOrigin, isLiveAnswer, formatLatency, formatMetric, parseCodingTests } from './arena-utils.js';
-import { createChallenge, prepareAttempt, gradeAttempt, progressScope, CAMPAIGN_LEVELS } from './campaign.js';
+import { createChallenge, prepareAttempt, gradeAttempt, progressScope, progressWasSaved, CAMPAIGN_LEVELS } from './campaign.js';
 import { campaign } from '../shared/progression.js';
 import { stageRows } from './stage-data.js';
 
@@ -135,6 +135,7 @@ function syncPrediction() {
 }
 function switchMode() {
   if (recognition) recognition.abort();
+  clearDisplayedMatch();
   if (campaignMode()) {
     customDraft = { prompt: $('prompt').value, type: $('task-type').value, tests: $('coding-tests').value };
     showChallenge();
@@ -152,9 +153,17 @@ function loadChallenge(level) {
   if (!Number.isInteger(value) || value < 1 || value > CAMPAIGN_LEVELS) {
     $('campaign-verdict').hidden = false; $('campaign-verdict').textContent = 'Choose a whole-number level from 1 to 10,000.'; return;
   }
+  clearDisplayedMatch();
   challenge = createChallenge(value); $('prediction').value = ''; $('campaign-hint').value = '';
   $('campaign-verdict').hidden = true; $('next-challenge').hidden = true;
   showChallenge(); syncSubmit();
+}
+function clearDisplayedMatch() {
+  currentMatch = null; historicalMatch = false;
+  $('results').replaceChildren(); $('result-summary').hidden = true;
+  $('campaign-verdict').hidden = true; $('next-challenge').hidden = true;
+  $('match-state').textContent = gateway ? 'Challenge ready' : 'Setup required';
+  note('');
 }
 function evaluateChallenge(attempt, match, scope) {
   if (!progress || scope !== activeScope || awardedMatches.has(match.id)) return;
@@ -164,7 +173,7 @@ function evaluateChallenge(attempt, match, scope) {
   if (result.cleared) {
     awardedMatches.add(match.id);
     if (progress.complete(attempt.level)) {
-      try { sessionOnly = JSON.parse(stored('local', `adigun.campaign.v1.${scope}`) || 'null')?.completed !== progress.completed; } catch { sessionOnly = true; }
+      sessionOnly = !progressWasSaved(stored('local', `adigun.campaign.v1.${scope}`), progress.completed);
       $('campaign-verdict').textContent += sessionOnly ? ' Progress is available for this session, but browser storage could not save it.' : ' Progress saved on this browser for your gateway account.';
     } else $('campaign-verdict').textContent += ' This level was already completed; progress stays unchanged.';
     $('next-challenge').hidden = progress.mastered;
@@ -368,7 +377,7 @@ function renderAnswer(answer, matchId, fromHistory = false, liveMode = true) {
   }
   return article;
 }
-function renderMatch(match, fromHistory = false) {
+function renderMatch(match, fromHistory = false, submittedPrompt = '') {
   currentMatch = match; historicalMatch = fromHistory;
   $('results').replaceChildren();
   const answers = Array.isArray(match.responses) ? match.responses.filter(answer => answer && typeof answer === 'object') : [];
@@ -376,8 +385,9 @@ function renderMatch(match, fromHistory = false) {
   for (const answer of answers) $('results').append(renderAnswer(answer, match.id, fromHistory, match.mode === 'live'));
   $('match-state').textContent = `${live}/${answers.length} ${fromHistory ? 'recorded' : 'live'} responses`;
   $('result-summary').hidden = false;
-  $('history-prompt').hidden = !fromHistory;
-  $('history-prompt').textContent = fromHistory ? 'Saved prompt: ' + match.prompt : '';
+  const recordedPrompt = fromHistory ? match.prompt : submittedPrompt || match.prompt;
+  $('submitted-details').hidden = !recordedPrompt;
+  $('history-prompt').textContent = recordedPrompt ? `${fromHistory ? 'Saved' : 'Submitted'} prompt: ${recordedPrompt}` : '';
   const leaders = stageRows({ match }).filter(row => row.leader);
   $('result-outcome').textContent = leaders.length === 1 ? `Highest complete score for this prompt: ${leaders[0].label}.` : leaders.length > 1 ? 'The highest-scoring answers are tied for this prompt.' : 'No complete ranking is available. Compare the returned evidence and any scored metrics below.';
   note(live ? `${live} actual provider response${live === 1 ? '' : 's'} ${fromHistory ? 'in this saved match' : 'received'}. Failed providers are shown separately.` : 'No live provider answered. Demonstration text is never substituted.', live === 0);
@@ -411,7 +421,7 @@ async function run(event) {
   try {
     const match = await request('/api/arena/matches', { method: 'POST', match: true, body: JSON.stringify({ prompt, task_type: taskType, tests, providers: selected }) });
     if (version !== epoch) return;
-    renderMatch(match);
+    renderMatch(match, false, prompt);
     if (attempt) evaluateChallenge(attempt, match, scope);
     await refreshRecord();
   } catch (error) { if (version === epoch) { $('match-state').textContent = 'Request failed'; note(error.message, true); } }

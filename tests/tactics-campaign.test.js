@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { missionFor, validateMission, reachableCells } from '../game15/campaign.js';
 import { newGame, legalMoves, attackTargets, lineOfSight, living, isCover, chooseAIAction, selectUnit, playerMove, playerAttack, playerGuard, collectCore, endPlayerTurn, runAIPhase } from '../game15/engine.js';
 import { openTacticsCampaign, SAVE_KEY } from '../game15/save.js';
+import { objectiveLabel, createTapTracker } from '../game15/interaction.js';
 
 function invariant(state) {
   const occupied=new Set();
@@ -178,11 +179,34 @@ test('TACTICS GRID: unavailable actions cannot mutate dead, activated, enemy-tur
 
 test('TACTICS GRID: collecting consumes an activation and losing the carrier drops the recoverable core',()=>{
   const state=fixture(4),carrier=state.units[0];state.core={x:2,y:0};
+  assert.equal(objectiveLabel(state,2,0),'CORE');assert.equal(objectiveLabel(state,state.config.relay.x,state.config.relay.y),'');
   assert.equal(collectCore(state,'P1'),false);carrier.x=2;carrier.hp=1;
   assert.equal(collectCore(state,'P1'),true);assert.equal(state.carrier,'P1');assert.equal(carrier.acted,true);
+  assert.equal(objectiveLabel(state,2,0),'','A carried core is not left on the map');
   assert.equal(collectCore(state,'P1'),false);assert.equal(playerMove(state,'P1',0,0),false);
   assert.equal(endPlayerTurn(state),true);runAIPhase(state);
   assert.equal(carrier.hp,0);assert.equal(state.carrier,null);assert.deepEqual(state.core,{x:2,y:0});assert.equal(state.winner,null);
+  assert.equal(objectiveLabel(state,2,0),'CORE','The marker follows the actual dropped core');
+});
+
+test('TACTICS GRID: command-map objective markers distinguish uplink, retrieval and elimination',()=>{
+  const state=newGame(3),{x,y}=state.config.relay;
+  assert.equal(objectiveLabel(state,x,y),'LINK');assert.equal(objectiveLabel(state,0,0),'');
+  state.units[0].x=x;state.units[0].y=y;assert.equal(objectiveLabel(state,x,y),'LINK','Occupying the uplink must not erase its accessible description');
+  const elimination=newGame(1);assert.equal(objectiveLabel(elimination,elimination.config.relay.x,elimination.config.relay.y),'');
+});
+
+test('TACTICS GRID: only a completed primary tap can dispatch one scene command',()=>{
+  const commands=[],tracker=createTapTracker((x,y)=>commands.push([x,y]));
+  const event=(patch={})=>({pointerId:7,isPrimary:true,button:0,clientX:100,clientY:200,...patch});
+  tracker.up(event());assert.equal(commands.length,0,'Pointer up without a press does nothing');
+  tracker.down(event());tracker.cancel();tracker.up(event());assert.equal(commands.length,0,'Cancelled touch does nothing');
+  tracker.down(event());tracker.down(event({pointerId:8,isPrimary:false}));tracker.up(event());assert.equal(commands.length,0,'A second touch cancels tactical input');
+  tracker.down(event());tracker.up(event({clientX:150}));tracker.up(event());assert.equal(commands.length,0,'Dragging cannot leave a pending command');
+  tracker.down(event({button:2}));tracker.up(event({button:2}));assert.equal(commands.length,0,'Secondary mouse buttons do nothing');
+  tracker.down(event());tracker.up(event({pointerId:8}));assert.equal(commands.length,0,'Unrelated pointers cannot consume a press');
+  tracker.up(event({clientX:103,clientY:202}));assert.deepEqual(commands,[[103,202]]);
+  tracker.up(event());assert.equal(commands.length,1,'Repeated pointer-up cannot repeat an activation');
 });
 
 test('TACTICS GRID: mission budgets terminate play even while surviving drones remain',()=>{

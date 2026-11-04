@@ -16,7 +16,7 @@ python -m pytest platform/backend/tests/test_campaign_contract.py -q
 python -m pytest platform/backend/tests -q
 ```
 
-The focused Node suite passed **13/13** during implementation: all 10,000 mechanically
+The focused Node suite passed **14/14** during implementation: all 10,000 mechanically
 distinct specifications, deterministic generation, bounded cases, five tiers, twenty
 families, independent arithmetic/state examples, frozen attempts, forecast/tie
 outcomes, malformed evidence rejection, fixture suppression, truthful stage states
@@ -64,20 +64,23 @@ execution. The current release receipt determines which checks apply to its revi
 4. Pending state says “Request sent”; no progress percentage, answer, score or winner.
    Latency appears only from a returned response.
 5. For labelled **mocked integration**, return mathematically consistent evidence:
+   exact returned `prompt` and ordered `tests` equal to the frozen request,
    correct case counts, `accuracy_source: restricted_test_cases`, complete metrics,
    `judge_state: scored`, independent judge/provider IDs and known live source.
    A correct forecast plus perfect leading reference cases clears once, saves,
    reveals `#next-challenge` and resumes for the same account. Such fixture tests
    are never reported as real provider output.
 6. Wrong forecast, failed leading case, replay source, missing contender/judge or
-   inconsistent arithmetic cannot clear. Selecting the judge blocks campaign
+   inconsistent arithmetic or missing/mismatched request evidence cannot clear.
+   Selecting the judge blocks campaign
    dispatch. Opening history cannot award progress; cards say “RECORDED LIVE RESPONSE.”
 7. Deny storage writes: completion may remain in memory, but UI must say session only.
    Different accounts/gateways load separate progress. Sign out or change gateway
    while pending; stale results must neither repopulate UI nor award another user.
 8. In `custom` mode verify factual/creative/coding paths, malformed cases, ratings,
    history and retained drafts. Missing judging can leave custom output unranked;
-   campaign clears stay blocked.
+   campaign clears stay blocked. Loading a different challenge or changing mode
+   clears prior results; every retained result includes its submitted prompt.
 
 ### Accessibility, lifecycle and performance
 

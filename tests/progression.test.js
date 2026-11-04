@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { campaign, validLevel, tierFor, randomFor } from '../shared/progression.js';
+import { campaign, validLevel, tierFor, randomFor, validCampaignSave } from '../shared/progression.js';
 const memory = () => { const data = new Map(); return { getItem: key => data.get(key), setItem: (key, value) => data.set(key, value) }; };
 test('campaign awards once, locks future levels, and persists a genuine final clear', () => {
   const storage = memory(), progress = campaign('unit', storage);
@@ -22,4 +22,25 @@ test('seeded randomness repeats exactly and remains bounded', () => {
   assert.deepEqual(values, Array.from({ length: 100 }, second));
   assert.notDeepEqual(values, Array.from({ length: 100 }, third));
   assert.ok(values.every(value => value >= 0 && value < 1));
+});
+test('a stale tab adopts saved progress and cannot overwrite it or award the same clear twice', () => {
+  const storage = memory(), first = campaign('tabs', storage), stale = campaign('tabs', storage);
+  assert.equal(first.complete(1), true); assert.equal(first.complete(2), true);
+  assert.equal(stale.complete(1), false);
+  assert.equal(stale.completed, 2); assert.equal(stale.unlocked, 3);
+  assert.equal(campaign('tabs', storage).completed, 2);
+  assert.equal(stale.complete(3), true); assert.equal(first.completed, 3);
+  assert.equal(first.complete(3), false); assert.equal(campaign('tabs', storage).completed, 3);
+});
+test('unsupported, fractional and inconsistent saves do not become earned progression', () => {
+  for (const value of [
+    {version:2,completed:1,unlocked:2}, {version:1,completed:1.5,unlocked:2},
+    {version:1,completed:20,unlocked:1}, {version:1,completed:-1,unlocked:1},
+    {version:1,completed:10001,unlocked:10000},
+  ]) {
+    assert.equal(validCampaignSave(value), false);
+    const storage = memory(); storage.setItem('adigun.campaign.v1.bad', JSON.stringify(value));
+    assert.equal(campaign('bad', storage).completed, 0);
+  }
+  assert.equal(validCampaignSave({version:1,completed:10000,unlocked:10000}),true);
 });

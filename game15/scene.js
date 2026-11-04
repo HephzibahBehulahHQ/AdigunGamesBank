@@ -1,6 +1,5 @@
 import { THREE, box, cylinder, material, line3 } from '../shared/three-stage.js';
-import { distance } from './engine.js';
-const CELL=2.25, HALF=3.5*CELL;
+const CELL=2.25;
 export const worldPoint=(x,y,height=.18)=>[(x-3.5)*CELL,height,(y-3.5)*CELL];
 const colors={player:'#A78BFA',ai:'#FB923C',floor:'#263647',floorAlt:'#223140',cover:'#65737a'};
 
@@ -94,6 +93,7 @@ export function buildTacticsScene(stage, initial, reducedMotion=()=>false) {
   }
   cameraView();
   function update(state,focus={x:0,y:1},moves=[],targets=[]) {
+    if(current!==state){lastShot=-1;shotUntil=0;}
     current=state;
     if(missionLevel!==state.config.level) {
       missionLevel=state.config.level;

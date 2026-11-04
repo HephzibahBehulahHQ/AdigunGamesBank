@@ -120,8 +120,10 @@ Latency measures the gateway's full response; the stage never simulates thought 
 per-token timing. Test pass rate/correctness contributes 50%, estimated quality 30%,
 suggestion relevance 10%, and speed 10%. Speed is `max(0, 1 − latency_ms / 50000)`.
 Missing metrics stay unknown. The judge cannot score its own provider. Campaign
-checks metric bounds, test counts, provenance fields and weighted arithmetic against
-the current contract. Fields are not independent network attestation; only the active,
+checks exact returned prompt/reference-case identity, metric bounds, test counts,
+provenance fields and weighted arithmetic against the current contract. Missing
+request evidence blocks awards, including when an older gateway can compare answers.
+Fields are not independent network attestation; only the active,
 fresh POST callback may reach the award path. History never does.
 
 Factual/creative correctness and quality/suggestions are model estimates. Coding

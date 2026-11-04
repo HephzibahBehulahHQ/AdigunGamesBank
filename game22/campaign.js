@@ -177,6 +177,7 @@ export function gradeAttempt(attempt, match) {
   if (attempt.task_type !== 'coding' || typeof attempt.prompt !== 'string' || !attempt.prompt.startsWith(challenge.prompt) || JSON.stringify(attempt.tests) !== JSON.stringify(challenge.tests) || !Array.isArray(attempt.providers) || new Set(attempt.providers).size !== attempt.providers.length || attempt.providers.length < 2 || attempt.providers.length > 8 || attempt.providers.some(key => !providerKeys.has(key))) return fail('Challenge tests or competitors changed. Start a fresh attempt.');
   if (attempt.prediction !== 'tie' && !attempt.providers.includes(attempt.prediction)) return fail('A valid forecast is required.');
   if (match?.mode !== 'live' || match.task_type !== 'coding' || typeof match.id !== 'string' || !match.id.trim()) return fail('A completed live coding match is required.');
+  if (match.prompt !== attempt.prompt || JSON.stringify(match.tests) !== JSON.stringify(attempt.tests)) return fail('The gateway evidence does not match the submitted prompt and reference cases. No progress was awarded; use an updated gateway.');
   const answers = match.responses;
   if (!Array.isArray(answers) || answers.length !== attempt.providers.length || answers.some(answer => !answer || typeof answer !== 'object') || new Set(answers.map(a => a.key)).size !== answers.length || answers.some(a => !attempt.providers.includes(a.key))) return fail('The response set does not match the selected contenders.');
   for (const answer of answers) {
@@ -198,6 +199,14 @@ export function gradeAttempt(attempt, match) {
 export function progressScope(origin, userId) {
   if (!origin || !Number.isInteger(userId) || userId < 1) return null;
   return `ai-arena-v${CAMPAIGN_VERSION}:${encodeURIComponent(origin)}:${userId}`;
+}
+
+/** Read-back must be a restorable campaign record, not only a matching counter. */
+export function progressWasSaved(raw, completed) {
+  try {
+    const saved = JSON.parse(raw || 'null');
+    return saved?.version === 1 && Number.isInteger(saved.completed) && saved.completed >= completed && saved.completed >= 0 && saved.completed <= LEVEL_COUNT && saved.unlocked === Math.min(LEVEL_COUNT, saved.completed + 1);
+  } catch { return false; }
 }
 
 /** Test oracle only: source is never sent as a contestant answer or shown in the arena. */

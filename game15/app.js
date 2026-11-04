@@ -1,5 +1,6 @@
 import { validLevel } from '../shared/progression.js';
 import { openTacticsCampaign } from './save.js';
+import { objectiveLabel, createTapTracker } from './interaction.js';
 import { createStage } from '../shared/three-stage.js';
 import { buildTacticsScene } from './scene.js';
 import { newGame, legalMoves, attackTargets, selectUnit, playerMove, playerAttack, playerGuard, endPlayerTurn, collectCore, runAIPhase, sectorName, living, unitAt, isCover, distance } from './engine.js';
@@ -33,7 +34,8 @@ function options(select,items,empty){
 }
 function describeCell(x,y){
   const occupant=unitAt(game,x,y);
-  if(occupant)return `${sectorName(x,y)}: ${occupant.name} (${occupant.id}), ${occupant.team==='player'?'your drone':'opponent'}, ${occupant.hp} of ${occupant.maxHp} hull${occupant.guarded?', guarding':''}${occupant.acted?', activated':''}.`;
+  const marker=objectiveLabel(game,x,y),objective=marker==='LINK'?' Uplink terminal.':marker==='CORE'?' Data core; Collect uses an activation.':'';
+  if(occupant)return `${sectorName(x,y)}: ${occupant.name} (${occupant.id}), ${occupant.team==='player'?'your drone':'opponent'}, ${occupant.hp} of ${occupant.maxHp} hull${occupant.guarded?', guarding':''}${occupant.acted?', activated':''}.${objective}`;
   if(isCover(game,x,y))return `${sectorName(x,y)}: solid barrier. Blocks movement and sight.`;
   if(game.config.mode==='uplink'&&x===game.config.relay.x&&y===game.config.relay.y)return `${sectorName(x,y)}: uplink terminal.`;
   if(game.config.mode==='retrieve'&&!game.carrier&&x===game.core.x&&y===game.core.y)return `${sectorName(x,y)}: data core. Move here, then Collect.`;
@@ -47,7 +49,7 @@ function render(){
   $('phase').textContent=!started?'Awaiting command':paused?'Paused':game.phase==='player'?'Your turn':game.phase==='ai'?'Opponent turn':game.winner==='player'?'Mission cleared':'Mission lost';
   $('squad-count').textContent=living(game,'player').length;$('enemy-count').textContent=living(game,'ai').length;
   $('mission-title').textContent=game.config.title;$('objective').textContent=game.config.objective;
-  $('mission-progress').textContent=game.config.mode==='eliminate'?`${3-living(game,'ai').length} of 3 opposing drones disabled.`:game.config.mode==='uplink'?`Uncontested uplink: your squad ${game.hold} / ${game.config.holdRounds}; opposition ${game.enemyHold} / ${game.config.holdRounds}.`:
+  $('mission-progress').textContent=game.config.mode==='eliminate'?`${3-living(game,'ai').length} of 3 opposing drones disabled.`:game.config.mode==='uplink'?`Uplink at ${sectorName(game.config.relay.x,game.config.relay.y)}. Uncontested control: your squad ${game.hold} / ${game.config.holdRounds}; opposition ${game.enemyHold} / ${game.config.holdRounds}.`:
     game.carrier?`Core carrier: ${game.units.find(v=>v.id===game.carrier).name}. Extract at column 1.`:`Core location: ${sectorName(game.core.x,game.core.y)}. Collecting uses one activation.`;
   $('campaign-status').textContent=campaignText();$('level').max=String(progress.unlocked);$('level').value=String(game.config.level);
   $('load-level').disabled=$('level').disabled=started&&!game.winner;
@@ -75,7 +77,8 @@ function render(){
   for(let y=0;y<8;y++)for(let x=0;x<8;x++){
     const key=`${x},${y}`,cell=cells.get(key),occupant=unitAt(game,x,y),cover=isCover(game,x,y);
     cell.className=[cover?'cover':'',occupant?.team==='player'?'friendly':occupant?'opponent':'',moveKeys.has(key)?'move-option':'',targetKeys.has(key)?'target-option':'',occupant?.id===game.selected?'selected':'',focus.x===x&&focus.y===y?'cursor':''].filter(Boolean).join(' ');
-    cell.firstElementChild.textContent=sectorName(x,y);cell.lastElementChild.textContent=cover?'WALL':occupant?`${occupant.id} ${occupant.hp}`:game.config.mode!=='eliminate'&&x===game.config.relay.x&&y===game.config.relay.y?'CORE':'·';
+    const objective=objectiveLabel(game,x,y)||'·';
+    cell.firstElementChild.textContent=sectorName(x,y);cell.lastElementChild.textContent=cover?'WALL':occupant?`${occupant.id} ${occupant.hp}`:objective;
     cell.setAttribute('aria-label',`${cell.firstElementChild.textContent} ${cell.lastElementChild.textContent}. ${describeCell(x,y)}`+(moveKeys.has(key)?' Legal move destination.':'')+(targetKeys.has(key)?' Attack available.':''));
     cell.setAttribute('aria-selected',String(focus.x===x&&focus.y===y));cell.setAttribute('aria-disabled',String(!active||cover));cell.tabIndex=focus.x===x&&focus.y===y?0:-1;
   }
@@ -89,7 +92,7 @@ function render(){
   if(started&&lastAnnouncement!==game.event){message(game.log[0]);lastAnnouncement=game.event;}
   requestDraw();scheduleAI();
 }
-function focusBoard(){canvas.focus({preventScroll:true});}
+function focusBoard(){(graphicsAvailable?canvas:cells.get(`${focus.x},${focus.y}`)).focus({preventScroll:true});}
 function act(operation){if(!actionable())return false;const fromMap=$('command-grid').contains(document.activeElement);const accepted=operation();if(accepted){render();if(fromMap)cells.get(`${focus.x},${focus.y}`).focus({preventScroll:true});else focusBoard();}else message('That action is unavailable. Choose a ready drone and a legal destination or visible target.');return accepted;}
 function select(id){if(!actionable()||!selectUnit(game,id))return false;const unit=selected();focus={x:unit.x,y:unit.y};render();message(`${unit.name} selected. Move ${unit.move} sectors or fire within range ${unit.range}.`);return true;}
 function activate(x,y){
@@ -123,9 +126,8 @@ function keyControl(event){
   if(commands[key]){event.preventDefault();commands[key]();}
 }
 canvas.addEventListener('keydown',keyControl);$('command-grid').addEventListener('keydown',keyControl);
-let pointerStart=null;
-canvas.addEventListener('pointerdown',event=>{pointerStart={x:event.clientX,y:event.clientY};});
-canvas.addEventListener('pointerup',event=>{if(!pointerStart||Math.hypot(event.clientX-pointerStart.x,event.clientY-pointerStart.y)>12)return;pointerStart=null;if(!view||!graphicsAvailable)return;const p=view.pick(event.clientX,event.clientY,canvas.getBoundingClientRect());if(p)activate(p.x,p.y);});
+const taps=createTapTracker((x,y)=>{if(!view||!graphicsAvailable)return;const p=view.pick(x,y,canvas.getBoundingClientRect());if(p)activate(p.x,p.y);});
+canvas.addEventListener('pointerdown',taps.down);canvas.addEventListener('pointerup',taps.up);canvas.addEventListener('pointercancel',taps.cancel);
 $('start').addEventListener('click',start);$('restart').addEventListener('click',()=>loadMission(game.config.level,true));$('pause').addEventListener('click',togglePause);
 $('next').addEventListener('click',()=>{if(game.winner==='player'&&game.config.level<progress.unlocked)loadMission(game.config.level+1);});
 $('load-level').addEventListener('click',()=>{const value=Number($('level').value);if(!Number.isInteger(value)||value<1||value>progress.unlocked){message(`Choose an unlocked mission from 1 to ${progress.unlocked}.`);return;}loadMission(validLevel(value));});
@@ -134,7 +136,7 @@ $('attack').addEventListener('click',()=>{const u=selected();if(u)act(()=>player
 $('guard').addEventListener('click',()=>{const u=selected();if(u)act(()=>playerGuard(game,u.id));});
 $('collect').addEventListener('click',()=>{const u=selected();if(u)act(()=>collectCore(game,u.id));});
 $('end-turn').addEventListener('click',()=>act(()=>endPlayerTurn(game)));
-function graphicsFailure(){graphicsAvailable=false;canvas.style.opacity='0';$('quality').disabled=$('camera').disabled=true;$('map-details').open=true;message('3D graphics are unavailable. The accessible sector map and labelled commands remain fully playable.');}
+function graphicsFailure(){graphicsAvailable=false;canvas.style.opacity='0';$('quality').disabled=$('camera').disabled=true;$('map-details').open=true;render();if(document.activeElement===canvas)focusBoard();message('3D graphics are unavailable. The accessible sector map and labelled commands remain fully playable.');}
 try{stage=createStage({canvas,qualitySelect:$('quality'),status:$('render-status'),position:[18,22,24]});view=buildTacticsScene(stage,game,()=>motion.matches);}catch{graphicsFailure();}
 $('quality').addEventListener('change',requestDraw);$('camera').addEventListener('change',()=>{view?.cameraView($('camera').value);requestDraw();});
 canvas.addEventListener('stage-lost',graphicsFailure);

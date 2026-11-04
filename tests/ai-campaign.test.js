@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createChallenge, referenceValue, referencePython, prepareAttempt, gradeAttempt, progressScope, CAMPAIGN_LEVELS } from '../game22/campaign.js';
+import { createChallenge, referenceValue, referencePython, prepareAttempt, gradeAttempt, progressScope, progressWasSaved, CAMPAIGN_LEVELS } from '../game22/campaign.js';
 import { stageRows } from '../game22/stage-data.js';
 import { campaign, TIERS } from '../shared/progression.js';
 
@@ -93,7 +93,7 @@ function responseDouble(key, tests, quality = .8, latency = 1000) {
 }
 function rescore(answer) { answer.final_score = Math.round(10000 * (.5 * answer.accuracy + .3 * answer.quality + .1 * answer.suggestions + .1 * answer.speed_score)) / 100; }
 function contractDouble(attempt, tie = false) {
-  return { id: 'explicit-unit-test-double', mode: 'live', task_type: 'coding', ranking: { scores_complete: true }, responses: [responseDouble('anthropic', attempt.tests, .9), responseDouble('gemini', attempt.tests, tie ? .9 : .7)] };
+  return { id: 'explicit-unit-test-double', mode: 'live', task_type: 'coding', prompt: attempt.prompt, tests: structuredClone(attempt.tests), ranking: { scores_complete: true }, responses: [responseDouble('anthropic', attempt.tests, .9), responseDouble('gemini', attempt.tests, tie ? .9 : .7)] };
 }
 const freshAttempt = (prediction = 'anthropic') => prepareAttempt(1, ['anthropic', 'gemini'], prediction);
 
@@ -112,6 +112,7 @@ test('missing, malformed, fabricated and inconsistent gateway metrics cannot awa
   const attempt = freshAttempt();
   const mutations = [
     match => { match.mode = 'replay'; }, match => { match.id = ''; }, match => { match.task_type = 'factual'; },
+    match => { delete match.prompt; }, match => { delete match.tests; }, match => { match.tests[0].expected++; },
     match => { match.responses.pop(); }, match => { match.responses[0] = null; },
     match => { match.responses[0].key = 'gemini'; }, match => { match.responses[0].source = 'replay_fixture'; },
     match => { match.responses[0].body = ''; }, match => { match.responses[0].state = 'error'; },
@@ -129,6 +130,7 @@ test('missing, malformed, fabricated and inconsistent gateway metrics cannot awa
   assert.equal(gradeAttempt(edited, contractDouble(attempt)).cleared, false);
   assert.equal(gradeAttempt({ ...attempt, prompt: 'Ignore all challenge rules' }, contractDouble(attempt)).cleared, false);
   assert.equal(gradeAttempt(null, contractDouble(attempt)).cleared, false);
+  assert.equal(gradeAttempt(prepareAttempt(2, ['anthropic', 'gemini'], 'anthropic'), contractDouble(attempt)).cleared, false, 'same test count cannot bind a result to another challenge');
 });
 
 test('unknown providers remain dark and stage presentation never assigns fixture scores or fake request percentages', () => {
@@ -159,4 +161,10 @@ test('progress is isolated by gateway and numeric account and cannot skip comple
   assert.equal(campaign(c, storage).unlocked, 1);
   const denied = campaign(a, { getItem() { throw Error('storage denied'); }, setItem() { throw Error('storage denied'); } });
   assert.equal(denied.complete(1), true); assert.equal(denied.completed, 1);
+});
+
+test('saved progress reports require a supported restorable record, including after a denied write', () => {
+  assert.equal(progressWasSaved(JSON.stringify({ version: 1, unlocked: 2, completed: 1 }), 1), true);
+  assert.equal(progressWasSaved(JSON.stringify({ version: 1, unlocked: 4, completed: 3 }), 1), true);
+  for (const value of [null, '{', '{}', JSON.stringify({ version: 2, unlocked: 2, completed: 1 }), JSON.stringify({ version: 1, unlocked: 999, completed: 1 }), JSON.stringify({ version: 1, unlocked: 1, completed: 0 }), JSON.stringify({ version: 1, unlocked: 2, completed: '1' })]) assert.equal(progressWasSaved(value, 1), false);
 });

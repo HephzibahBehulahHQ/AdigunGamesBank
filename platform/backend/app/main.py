@@ -34,6 +34,7 @@ class Model(Base):
 class Match(Base):
     __tablename__="matches"
     id:Mapped[str]=mapped_column(String(36),primary_key=True); user_id:Mapped[int]=mapped_column(ForeignKey("users.id")); prompt:Mapped[str]=mapped_column(Text); task_type:Mapped[str]=mapped_column(String(20)); mode:Mapped[str]=mapped_column(String(20)); created_at:Mapped[datetime]=mapped_column(DateTime,default=lambda:datetime.now(timezone.utc))
+    tests_json:Mapped[Optional[str]]=mapped_column(Text,nullable=True)
 class Response(Base):
     __tablename__="responses"
     id:Mapped[int]=mapped_column(Integer,primary_key=True); match_id:Mapped[str]=mapped_column(ForeignKey("matches.id"),index=True); model_key:Mapped[str]=mapped_column(String(50)); body:Mapped[str]=mapped_column(Text); latency_ms:Mapped[float]=mapped_column(Float); state:Mapped[str]=mapped_column(String(20)); error:Mapped[Optional[str]]=mapped_column(Text,nullable=True)
@@ -56,12 +57,19 @@ class Audit(Base):
 class IQRun(Base):
     __tablename__="iq_runs"
     id:Mapped[str]=mapped_column(String(36),primary_key=True); user_id:Mapped[int]=mapped_column(ForeignKey("users.id")); difficulty:Mapped[int]=mapped_column(Integer,default=2); question_no:Mapped[int]=mapped_column(Integer,default=0); score:Mapped[int]=mapped_column(Integer,default=0); categories:Mapped[str]=mapped_column(Text,default="{}"); finished:Mapped[bool]=mapped_column(Boolean,default=False); seed:Mapped[int]=mapped_column(Integer)
+def migrate_optional_columns(conn):
+    # Additive only: historical rows retain null evidence and cannot be credited
+    # as a newly submitted campaign attempt.
+    for table, additions in (("scores", (("rating", "INTEGER"), ("details_json", "TEXT"))),
+                             ("matches", (("tests_json", "TEXT"),))):
+        columns = {column["name"] for column in inspect(conn).get_columns(table)}
+        for name, kind in additions:
+            if name not in columns:
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {kind}"))
+
 Base.metadata.create_all(engine)
 with engine.begin() as conn:
-    columns = {column["name"] for column in inspect(conn).get_columns("scores")}
-    for name, kind in (("rating", "INTEGER"), ("details_json", "TEXT")):
-        if name not in columns:
-            conn.execute(text(f"ALTER TABLE scores ADD COLUMN {name} {kind}"))
+    migrate_optional_columns(conn)
 with SessionLocal() as db:
     for key, provider in PROVIDERS.items():
         if not db.scalar(select(Model).where(Model.key == key)):
@@ -227,7 +235,7 @@ def reserve_match(data, user, db):
     if recent >= 3:
         db.rollback()
         raise HTTPException(429, "Arena limit reached. Try again in one minute.")
-    record = Match(id=str(uuid.uuid4()), user_id=user.id, prompt=data.prompt, task_type=data.task_type, mode="running")
+    record = Match(id=str(uuid.uuid4()), user_id=user.id, prompt=data.prompt, task_type=data.task_type, mode="running", tests_json=json.dumps(data.tests))
     db.add(record)
     db.add(ArenaLease(user_id=user.id, match_id=record.id, started_at=now))
     db.commit()
@@ -259,6 +267,7 @@ async def arena_match(data:ArenaIn,user:User=Depends(current_user),db:Session=De
             db.add(Score(match_id=record.id, model_key=result["key"], accuracy=result["accuracy"], final_score=result["final_score"], source=result["source"], details_json=json.dumps(details)))
         db.commit()
         return {"id": record.id, "mode": record.mode, "task_type": record.task_type,
+                "prompt": record.prompt, "tests": json.loads(record.tests_json),
                 "responses": results, "ranking": match_ranking(results), "scoring": scoring_policy(),
                 "created_at": record.created_at.replace(tzinfo=timezone.utc).isoformat()}
     except BaseException:
@@ -284,6 +293,7 @@ def arena_history(user:User=Depends(current_user),db:Session=Depends(get_db)):
             details = json.loads(score.details_json) if score and score.details_json else {"key": response.model_key, "model": None, "source": score.source if score else "legacy", "final_score": None, "accuracy": score.accuracy if score else None}
             responses.append({**details, "model_key": response.model_key, "body": response.body, "state": response.state, "latency_ms": details.get("latency_ms", response.latency_ms), "rating": score.rating if score else None})
         history.append({"id": match.id, "prompt": match.prompt, "task_type": match.task_type, "mode": match.mode,
+                        "tests": json.loads(match.tests_json) if match.tests_json is not None else None,
                         "created_at": match.created_at.replace(tzinfo=timezone.utc).isoformat(), "responses": responses, "ranking": match_ranking(responses)})
     return history
 
