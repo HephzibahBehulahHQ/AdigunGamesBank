@@ -131,6 +131,45 @@ test('Resistor Match keeps visible keyboard controls without WebGL, loses at its
   expect(errors).toEqual([]);
 });
 
+test('Resistor Match keeps visible keyboard focus aligned while skipping unavailable trays without crossing grid boundaries', async ({ page }) => {
+  await removeGraphics(page); await page.goto('/game5/');
+  // Create disabled trays through a real match in the introductory layout.
+  await tray(page, 1).press('Enter'); await tray(page, 4).press('Enter');
+  await expect(page.locator('#comparison')).toHaveText('Nominal resistance and tolerance match.');
+  await page.getByRole('button', { name: 'Store matched pair', exact: true }).press('Enter');
+  await expect(tray(page, 1)).toBeDisabled(); await expect(tray(page, 4)).toBeDisabled();
+  const focused = async index => {
+    await expect(tray(page, index)).toBeFocused();
+    await expect(page.locator('.component-card.focus-card')).toHaveCount(1);
+    await expect(page.locator('.component-card.focus-card')).toHaveAttribute('id', `tray-${index + 1}`);
+  };
+  const move = async (key, index) => { await page.keyboard.press(key); await focused(index); };
+  await focused(0);
+  // Use the actual active element for every key, so a selector cannot hide a
+  // stalled arrow by focusing the expected destination on the test's behalf.
+  await move('ArrowRight', 2); await move('ArrowLeft', 0);
+  await move('ArrowLeft', 0); await move('ArrowUp', 0); await move('ArrowDown', 0);
+  await move('ArrowRight', 2); await move('ArrowRight', 3); await move('ArrowRight', 3);
+  await move('ArrowDown', 7); await move('ArrowDown', 7); await move('ArrowLeft', 6); await move('ArrowUp', 2);
+  // A currently revealed tray is also skipped; Enter must activate the
+  // highlighted, focused destination rather than the tray left behind.
+  await page.keyboard.press('Enter'); await focused(3);
+  await expect(tray(page, 2)).toHaveAttribute('data-state', 'revealed');
+  await move('ArrowLeft', 0); await move('ArrowRight', 3);
+  await page.keyboard.press('Enter');
+  await expect(tray(page, 3)).toHaveAttribute('data-state', 'revealed');
+  await expect(page.getByRole('button', { name: 'Cover mismatched pair', exact: true })).toBeFocused();
+  await page.keyboard.press('Enter'); await focused(0);
+  await expect(page.locator('#moves')).toHaveText('2 / 14');
+  // The responsive two-column DOM grid has different neighbours from the
+  // four-column 3D bench. Vertical skipping must use the visible DOM columns.
+  await page.setViewportSize({ width: 320, height: 900 });
+  await move('ArrowRight', 0); await move('ArrowDown', 2); await move('ArrowDown', 6);
+  await move('ArrowUp', 2); await move('ArrowUp', 0);
+  await move('ArrowDown', 2); await move('ArrowRight', 3); await move('ArrowRight', 3);
+  await move('ArrowUp', 3); await move('ArrowDown', 5); await move('ArrowUp', 3);
+});
+
 test('Resistor Match keeps visible keyboard progress honest when storage silently rejects the save', async ({ page }) => {
   test.setTimeout(90000);
   await removeGraphics(page);

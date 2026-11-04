@@ -15,10 +15,12 @@ The authoritative brief is [Adigun Game bank pursuing goals and template.md](<Ad
 - **Neon Pulse · game1/** rebuilds the legacy colour activity as a 3D signal-routing puzzle: coupled pulses, a finite budget, undo/hints, explicit failure/completion and 10,000 computationally solvable matrices.
 - **Fuse Box · game8/** provides a 3D DC cabinet commissioning game: load allocation, breaker inventory/budget, cable-current limits, overload trips, isolation/reset and a three-stage operating trial.
 - **Apex Circuit · game10/** is a proper closed-course 3D time trial with steering/throttle/braking, grip and track limits, ordered lap gates and recovery penalties.
-- **Penalty Pro · game17/** rebuilds penalty placement with ballistic shots, explicit frame/keeper collision, wind and finite ten-turn shootouts: five kicks followed by five player-controlled goalkeeper dives. These four conversions' verification and publication states are recorded in the current project status.
+- **Penalty Pro · game17/** rebuilds penalty placement with ballistic shots, explicit frame/keeper collision, wind and finite ten-turn shootouts: five kicks followed by five player-controlled goalkeeper dives. These conversions' verification and publication states are recorded in the current project status.
 - **Circuit Rush · game2/** builds reciprocal conductor networks on an original 3D patch board, with multiple loads, real shorts/open circuits/current overloads and a finite rotation budget.
 - **Resistor Match · game5/** uses concealed 3D component trays, four-band resistance/tolerance reading, persistent comparisons, finite move limits and 10,000 unique decks.
 - **Capacitor Charge · game6/** is an actual RC charge/hold/discharge commissioning game, with component selection, exponential voltage, leakage, current/power limits and safe-switch requirements.
+- **Volt Dodge · game4/** is a 3D rover retrieval game with generated factory mazes, continuously moving spark hazards, swept collisions, finite shields and a real exit/deadline objective.
+- **Binary Flash · game7/** makes digital operations tangible: staging switches, a latched register, serial clock, shifts/rotations, signed and unsigned values, parity and ordered multi-frame transmission under finite budgets.
 - Existing local games remain available, with explicit **Legacy 2D** labels. They have not passed the new production qualification. Original historical status is retained in [docs/history](docs/history/legacy-status-2026-10-27.md).
 
 Stages, seeded variants and renamed templates are never counted as additional games. Automated generator checks are not claims of 10,000 manual playtests. Native PlayStation builds are not available.

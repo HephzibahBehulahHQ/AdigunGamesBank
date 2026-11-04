@@ -156,6 +156,6 @@ export function circuitFor(requested) {
     title: ['Workshop feed', 'Two-load distribution', 'Three-branch service', 'Precision routing', 'Master commissioning'][tier],
     description: level === 1
       ? 'Route the positive feed from A1 to lamp E5. The return rail is already wired. Turn the seven route segments, keep exposed return B3 isolated, then test the circuit.'
-      : `Commission ${requiredCount} specified loads. Connect matching terminals, isolate the exposed return and parked auxiliary load, and finish within ${moveBudget} quarter-turns.`
+      : `Commission ${requiredCount} specified ${requiredCount === 1 ? 'load' : 'loads'}. Connect matching terminals, isolate the exposed return and parked auxiliary load, and finish within ${moveBudget} quarter-turns.`
   };
 }

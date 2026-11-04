@@ -32,3 +32,5 @@
 - Circuit Rush: original procedural copper conductors, terminal sockets, source terminals, lamps, board and materials. No third-party component images, brands, audio or font assets.
 - Resistor Match: original four-band axial resistor meshes, leads, opaque hinged trays, labels and bench. Numerical band references do not introduce manufacturer graphics or product likenesses.
 - Capacitor Charge: original electrolytic capacitor, resistor, selector, meters, copper traces and perforated lab bench; original text and materials. The circuit is an ideal educational model, not a component safety certification.
+- Volt Dodge: original procedural maze, rover, spark patrols, octahedral cores, exit gate and materials. Fictional arcade environment; no real electrical safety model or external art/audio.
+- Binary Flash: original procedural staging switches, register LEDs, serial/parity controls, receiver lamps, enclosure, traces and materials. Standard mathematical digital concepts; no third-party device artwork, code fonts or audio.

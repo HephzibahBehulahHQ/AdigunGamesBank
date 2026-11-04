@@ -1,10 +1,10 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-04T23:22:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-04T23:33:00+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
-**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The current integration keeps **24 existing titles** and individually converts seven of them: **11 legacy 2D, twelve local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
+**In progress.** The original target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. The current integration keeps **24 existing titles** and individually converts nine of them: **nine legacy 2D, fourteen local 3D games and one API-dependent 3D competition client**. These are candidate implementation counts, not a claim of complete production qualification. The public site still has the preceding counts until publication is verified.
 
 This continuation does not add renamed templates or count procedural levels as separate games. Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished.
 
@@ -13,8 +13,8 @@ This continuation does not add renamed templates or count procedural levels as s
 | State | Verified revision / evidence |
 | --- | --- |
 | Integration branch | `work/finish-games-2026-11-04` |
-| Latest verified work checkpoint | `24819e438121c52f2e47cbcb638934b735ca7c9a`, exact remote head read back **2026-11-04T22:00:05Z** |
-| Current local changes | Final Penalty Pro game guide and reviewed wording/focus fixes; this status. New exact-candidate release gate pending. |
+| Latest verified work checkpoint | `748fb20fa12e64dc625d068056f815955fd5a4cf`, exact remote head read back **2026-11-04T22:24:36Z** |
+| Current local changes | Complete engineering integration, reviewed control/label fixes and accurate catalog/inventory. New exact-candidate release gate pending. |
 | Remote main at recovery | `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` |
 | Last verified public gameplay source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file exact-byte receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
 | Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
@@ -22,7 +22,7 @@ This continuation does not add renamed templates or count procedural levels as s
 
 The preceding documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) timed out twice. Read-only diagnosis confirmed build/upload succeeded while publishing stalled; the preceding successful release used the same action revision and runner. Live catalog/status bytes still matched `b3844bf` when recovery began. No host, audience, permissions or action-version change was justified. The next tested source will use the existing Pages flow; an unchanged third retry is not the plan. [Previous failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
 
-## Implemented in the four-game candidate
+## First four individual conversions
 
 | Existing title | Distinct playable work |
 | --- | --- |
@@ -37,13 +37,27 @@ The catalog and asset inventory reflect these implementations without prematurel
 
 ## Engineering integration
 
-Engineering checkpoint `c01f283658335f16f4be9badda959220b1dc3aec` was read back at **2026-11-04T22:22:26Z** and is merged as a second parent, preserving both work histories. Circuit Rush, Resistor Match and Capacitor Charge include complete 3D scenes, genuine state transitions, local saves, documentation and browser suites. Their combined **42 new numerical tests pass**; legacy Circuit Rush adds seven existing regressions. Volt Dodge and Binary Flash remain WIP in the isolated engineering branch; their partial engine files in this checkpoint do not establish finished conversions.
+Engineering checkpoint `c01f283658335f16f4be9badda959220b1dc3aec` was read back at **2026-11-04T22:22:26Z** and is merged as a second parent, preserving both work histories. Circuit Rush, Resistor Match and Capacitor Charge include complete 3D scenes, genuine state transitions, local saves, documentation and browser suites. Their combined **42 new numerical tests pass**; legacy Circuit Rush adds seven existing regressions. That checkpoint contained only partial Volt Dodge and Binary Flash files; the final handoff adds their complete interfaces, original 3D scenes, numerical/browser tests and game guides. Their complete exact-candidate browser release gate remains pending.
 
 Browser discovery now includes every game spec automatically, and accessibility route discovery follows the catalog’s implemented 3D routes. Neon camera framing is adjusted to the active board size and requires a fresh inspected frame. Resistor’s graphics selector test receives the same role/name correction as Penalty.
 
 Engineering remote receipts: `7db0840`21:59:16Z, `6fb58d8`22:04:20Z, `e32afcd`22:09:28Z, `4019851`22:13:13Z, `5a466b5`22:19:31Z, `c01f283`22:22:26Z. Intervals of **5m4s, 5m8s and 6m18s** missed the five-minute requirement and are recorded as failures of cadence, not compliance. All snapshots were nevertheless read back exactly and remain recoverable. Preparation targets three-minute intervals.
 
+### Final engineering scope and review corrections
+
+Final engineering source `c230318855d4e227e151b9d497072122b4f34136` was read back at **2026-11-04T22:32:05Z**. Both writers are frozen; the real merge retains its complete history. Subsequent receipts after `c01f283`: `54a9797`22:25:56Z, `ba62a45`22:29:28Z and `c230318`22:32:05Z, all within five minutes. The final Volt coordinate map uses X for extraction and A–G for cores, verified at the highest tier.
+
+- Circuit Rush: actual conductor rotation and network tests; all 10,000 distinct topologies solved. Root also manually commissioned the first 100.0 mA lamp in seven rotations through the cloud controls and confirmed Job 2 after reload.
+- Resistor Match: concealed component trays, exact four-band resistance/tolerance matching and finite-budget memory play; all 10,000 unique decks completed. Review fixed arrow navigation stalling on disabled trays and added a true active-focus browser regression.
+- Capacitor Charge: exact exponential RC charge/hold/discharge, leakage and physical limits; all 10,000 procedures completed with independent KCL checks. Review replaced misleading rounded colour bands with unbanded ideal resistors bearing exact Ω/W captions.
+- Volt Dodge: actual swept wall/spark contacts, finite shields/time, all-core collection and exit requirement; independent route search completed all 10,000 distinct sectors through the movement engine.
+- Binary Flash: actual staging/latch/serial-clock/shift/rotate/parity operations, signed/unsigned values and ordered frame transmission with finite operation/error budgets; all 10,000 distinct missions completed through public commands.
+
+Intermediate merge `748fb20` passed **251 JavaScript + 52 API checks** and **15/16 accessibility checks** in [CI 41925023565](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41925023565). Circuit Rush’s visible cell spans and redundant accessible labels differed in whitespace. The correction derives names from visible content and retains terminal descriptions in screen-reader text. This failed candidate was not integrated to main or deployed. No axe rule is excluded.
+
 ## Verification so far
+
+The frozen combined working tree passed **269/269 JavaScript tests**, with zero failures/skips, in **23.066 seconds** using `npm test` on 2026-11-04. `npm run check` passed all 24 routes, links, pinned policy, exact corporate artwork and syntax checks. Dynamic browser discovery includes **36 rendered/gameplay scenarios** plus separate contract/fallback and accessibility gates; discovery alone is not execution. The final remote candidate still requires its full CI gate.
 
 Exact candidate `8a9ff73d1de2184f4b9abe5b646012892830b81e` failed [CI 41921885769](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41921885769): **197 JavaScript + 52 API tests passed**, **13 accessibility + 8 contract/fallback + 22/23 rendered gameplay checks passed**. The sole failure was the Penalty Pro test’s exact `getByLabel` locator on a wrapping select label; the captured accessibility tree correctly exposes a Graphics combobox. The test now addresses that actual accessible role/name. No gameplay assertion was removed and no timeout was increased. A new exact-candidate gate remains required. The inspected Neon and Apex frames show actual original 3D; Neon’s first-board camera framing will be improved in the engineering integration.
 
@@ -79,7 +93,7 @@ All above dates are 2026-11-04 UTC; add one hour for Europe/Berlin. First/subseq
 
 ## Parallel engineering work
 
-`work/finish-engineering-2026-11-04` is isolated at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering`. Its first RC engine checkpoint **`7db0840741f7ea29508bedf5dcaf88cc86f75cb8`** was remotely verified at **2026-11-04T21:59:16Z**, following first changed work at 21:56:34Z. Capacitor Charge, Circuit Rush and Resistor Match have exclusive writers. These conversions must be integrated and independently verified before their counts are included in a release.
+`work/finish-engineering-2026-11-04` is isolated at `/workspace/scratch/fc3241df4f14/AdigunGamesBank-engineering`. Its first RC engine checkpoint **`7db0840741f7ea29508bedf5dcaf88cc86f75cb8`** was remotely verified at **2026-11-04T21:59:16Z**, following first changed work at 21:56:34Z. All five engineering conversions are now handed off and their writers are frozen. The final merge includes their complete source; independent exact-candidate verification is still required before release.
 
 ## Remaining acceptance and external dependencies
 
@@ -93,4 +107,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Run the complete exact-candidate release gate, inspect actual 4K captures, correct observed failures, fast-forward main only after it passes, then publish and verify source bytes at the existing public URL. Continue the isolated engineering conversions without representing them as released. Full-project finish time is **unknown**; ETA **pending**.
+Run the complete exact-candidate release gate, inspect actual 4K captures, correct observed failures, fast-forward main only after it passes, then publish and verify source bytes at the existing public URL. Full-project finish time is **unknown**; ETA **pending**.

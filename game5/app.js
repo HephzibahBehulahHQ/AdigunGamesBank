@@ -121,11 +121,19 @@ function reset(level = state.config.level) {
 function boardKeys(event, index = selected, fromButton = false) {
   const key = event.key.toLowerCase(), columns = fromButton ? Math.max(1, getComputedStyle($('component-grid')).gridTemplateColumns.split(' ').length) : state.config.columns;
   let target = index;
-  if (key === 'arrowleft' && index % columns > 0) target--;
-  else if (key === 'arrowright' && index % columns < columns - 1 && index + 1 < buttons.length) target++;
-  else if (key === 'arrowup' && index - columns >= 0) target -= columns;
-  else if (key === 'arrowdown' && index + columns < buttons.length) target += columns;
   if (key.startsWith('arrow')) {
+    const adjacent = current => {
+      if (key === 'arrowleft' && current % columns > 0) return current - 1;
+      if (key === 'arrowright' && current % columns < columns - 1 && current + 1 < buttons.length) return current + 1;
+      if (key === 'arrowup' && current - columns >= 0) return current - columns;
+      if (key === 'arrowdown' && current + columns < buttons.length) return current + columns;
+      return null;
+    };
+    // Disabled trays cannot receive DOM focus. Skip them along this row or
+    // column, and keep both focus and selection here if that direction ends.
+    let candidate = adjacent(index);
+    while (candidate !== null && fromButton && buttons[candidate].disabled) candidate = adjacent(candidate);
+    if (candidate !== null) target = candidate;
     event.preventDefault(); selected = target; updateSelection();
     if (fromButton && !buttons[target].disabled) buttons[target].focus();
   } else if ((key === 'enter' || key === ' ') && !fromButton) { event.preventDefault(); if (!event.repeat) select(selected, true, true, true); }

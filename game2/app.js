@@ -35,7 +35,7 @@ function savedText() {
   if (!campaign.completed) return 'Progress saves on this device after commissioning.';
   let stored = false;
   try { const value = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null'); stored = validCampaignSave(value) && value.completed >= campaign.completed; } catch {}
-  return `${campaign.completed.toLocaleString()} jobs commissioned. ` + (stored ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
+  return `${campaign.completed.toLocaleString()} ${campaign.completed === 1 ? 'job' : 'jobs'} commissioned. ` + (stored ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
 function selectCell(index, focus = false) {
   if (!Number.isInteger(index) || index < 0 || index >= state.config.tiles.length) return;
@@ -55,15 +55,16 @@ function buildBoard() {
   $('terminal-board').style.setProperty('--cols', String(state.config.size));
   state.config.tiles.forEach((tile, index) => {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'terminal-cell'; button.id = `cell-${index}`; button.dataset.kind = tile.kind;
-    const code = document.createElement('span'), art = document.createElement('span'), type = document.createElement('span');
+    const code = document.createElement('span'), art = document.createElement('span'), type = document.createElement('span'), detail = document.createElement('span');
+    detail.className = 'sr-only';
     code.className = 'cell-code'; code.textContent = cellName(index, state.config.size); type.className = 'cell-type'; type.textContent = tile.loadId || typeNames[tile.kind];
-    button.append(code, art, type); button.addEventListener('click', () => selectCell(index));
+    button.append(code, ' ', art, ' ', type, detail); button.addEventListener('click', () => selectCell(index));
     button.addEventListener('focus', () => { if (selected !== index) selectCell(index); });
     button.addEventListener('keydown', event => {
       if (event.key.startsWith('Arrow')) { event.preventDefault(); moveSelection(event.key, true); }
       if (event.key.toLowerCase() === 'r' || event.key.toLowerCase() === 'l') { event.preventDefault(); rotate(event.key.toLowerCase() === 'r' ? 1 : -1); }
     });
-    $('terminal-board').append(button); cells.push({ button, art, mask: null });
+    $('terminal-board').append(button); cells.push({ button, art, detail, mask: null });
   });
   for (const index of state.config.loads) {
     const tile = state.config.tiles[index], row = document.createElement('li'), title = document.createElement('strong'), detail = document.createElement('small');
@@ -81,7 +82,7 @@ function sync() {
     if (cell.mask !== mask) { cell.art.replaceChildren(terminalArt(mask, tile.kind)); cell.mask = mask; }
     cell.button.tabIndex = index === selected ? 0 : -1;
     cell.button.setAttribute('aria-pressed', String(index === selected));
-    cell.button.setAttribute('aria-label', `${cellName(index, config.size)} ${tile.loadId || typeNames[tile.kind]}, ${typeNames[tile.kind].toLowerCase()}, terminals ${connectorText(mask)}`);
+    cell.detail.textContent = `, ${typeNames[tile.kind].toLowerCase()}, terminals ${connectorText(mask)}`;
     cell.button.dataset.trace = String(reached.has(index)); cell.button.dataset.live = String(reached.has(index) && state.phase === 'won');
   });
   for (const item of loadRows) item.row.dataset.powered = String(state.phase === 'won' && reached.has(item.index));

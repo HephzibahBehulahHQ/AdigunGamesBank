@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { levelConfig, referenceProcedure, createCampaign, CAMPAIGN_ID, LEVEL_COUNT } from '../game6/campaign.js';
 import { createExperiment, selectPart, electrical, inspectPlan, startCharge, captureTarget, startDischarge, stepExperiment,
   pauseExperiment, resumeExperiment, advancePaused, resetExperiment, evolveVoltage, timeToVoltage, energyAt } from '../game6/engine.js';
+import { resistorCaption } from '../game6/scene.js';
 
 const near = (actual, expected, tolerance = 1e-8) => assert.ok(Math.abs(actual - expected) < tolerance, `${actual} differs from ${expected}`);
 function prepared(level = 1) {
@@ -31,6 +32,24 @@ test('RC voltage and energy match independent closed-form reference values and r
   assert.equal(timeToVoltage(0, 13, 12, 2), Infinity);
   assert.equal(timeToVoltage(Infinity, Infinity, 12, 2), Infinity);
   assert.throws(() => evolveVoltage(0, 12, 0, 1), RangeError); assert.throws(() => evolveVoltage(0, 12, 2, -1), RangeError);
+});
+
+test('Unbanded RC resistor captions preserve exact scenario resistance and power rather than rounded colour codes', () => {
+  assert.equal(resistorCaption('R2', 2720, .125), 'R2 · 2720 Ω · 0.125 W');
+  assert.equal(resistorCaption('LEAK', 32450, null), 'LEAK · 32450 Ω');
+  assert.equal(resistorCaption('R1', 0), 'R1 · FIT PART');
+  for (let level = 1; level <= LEVEL_COUNT; level++) {
+    const config = levelConfig(level);
+    const parts = [...config.chargeResistors, ...config.dischargeResistors, { ohms: config.leakageOhms }];
+    for (const part of parts) {
+      const caption = resistorCaption('R', part.ohms, part.watts);
+      const reading = caption.match(/^R · ([\d.]+) Ω(?: · ([\d.]+) W)?$/);
+      assert.ok(reading, `resistance must have an explicit unit: ${caption}`);
+      assert.equal(Number(reading[1]), part.ohms, `experiment ${level}: printed and simulated resistance differ`);
+      if (part.watts) assert.equal(Number(reading[2]), part.watts);
+      else assert.equal(reading[2], undefined, 'leakage model must not invent a component power rating');
+    }
+  }
 });
 
 test('First experiment obeys leakage-aware KCL, measured current, capture energy, hold and release timing', () => {

@@ -7,10 +7,10 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game1/ | NEON PULSE | New 3D signal-puzzle conversion; release gate pending | In progress |
 | game2/ | CIRCUIT RUSH | New 3D conductor-network campaign; release gate pending | In progress |
 | game3/ | ELECTRONICER | Playable 3D DC bench; verified 4K/circuit/fuse/reload milestone | In progress |
-| game4/ | VOLT DODGE | Legacy 2D | In progress |
+| game4/ | VOLT DODGE | New 3D rover retrieval campaign; release gate pending | In progress |
 | game5/ | RESISTOR MATCH | New 3D component-memory campaign; release gate pending | In progress |
 | game6/ | CAPACITOR CHARGE | New 3D RC commissioning campaign; release gate pending | In progress |
-| game7/ | BINARY FLASH | Legacy 2D | In progress |
+| game7/ | BINARY FLASH | New 3D digital-register campaign; release gate pending | In progress |
 | game8/ | FUSE BOX | New 3D DC-cabinet conversion; release gate pending | In progress |
 | game9/ | GOAL LINE | Legacy 2D | In progress |
 | game10/ | APEX CIRCUIT | New 3D driving conversion; release gate pending | In progress |

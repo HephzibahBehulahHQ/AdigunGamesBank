@@ -40,7 +40,7 @@ export function createRegisterScene({ canvas, qualitySelect, status, action }) {
   }
   function build(config) {
     clear(); level = config.level; bits = []; receiptLamps = []; displayKey = '';
-    const columns = Math.min(config.width, 8), rows = Math.ceil(config.width / 8), span = columns * 1.35 + 4, depth = 9 + (rows - 1) * 3.5;
+    const columns = Math.min(config.width, 8), rows = Math.ceil(config.width / 8), span = columns * 1.35 + 4, depth = 10 + (rows - 1) * 4;
     rig = new THREE.Group(); stage.scene.add(rig);
     box(rig, [span, 0.75, depth], [0, -0.5, 0.15], '#152337', { metalness: 0.65, roughness: 0.4 });
     box(rig, [span - 0.45, 0.12, depth - 0.45], [0, -0.04, 0.15], '#244048', { roughness: 0.85 });
@@ -100,7 +100,7 @@ export function createRegisterScene({ canvas, qualitySelect, status, action }) {
       context.fillStyle = '#D4AF37'; context.font = '500 34px ui-monospace,monospace'; context.fillText(`${state.received.length}/${state.config.frames.length} FRAMES`, 680, 215);
       displayTexture.needsUpdate = true;
     }
-    const span = Math.min(state.config.width, 8) * 1.35 + 4, depth = 9 + (Math.ceil(state.config.width / 8) - 1) * 3.5;
+    const span = Math.min(state.config.width, 8) * 1.35 + 4, depth = 10 + (Math.ceil(state.config.width / 8) - 1) * 4;
     if (view === 'overhead') stage.camera.position.set(0, Math.max(span, depth) * 1.8, 0.01);
     else stage.camera.position.set(span * 0.72, Math.max(span, depth) * 1.28, depth * 1.65);
     stage.camera.lookAt(0, 0.3, 0.25); stage.render(); canvas.dataset.frame = String((Number(canvas.dataset.frame) || 0) + 1);

@@ -1,0 +1,27 @@
+{
+  "source": "748fb20fa12e64dc625d068056f815955fd5a4cf",
+  "ciRun": 41925023565,
+  "ciJob": 126907278325,
+  "conclusion": "failure; not integrated to main or deployed",
+  "node": {
+    "passed": 251,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api": {
+    "passed": 52,
+    "warnings": 1
+  },
+  "accessibility": {
+    "passed": 15,
+    "failed": 1,
+    "failedRoute": "game2/",
+    "rule": "label-content-name-mismatch",
+    "targets": "all 25 introductory terminal cells"
+  },
+  "correction": "Derive names from visible button contents with whitespace; retain terminal descriptions in screen-reader text instead of a redundant overriding aria-label. No axe rule excluded. Exact-candidate recheck required.",
+  "artifact": {
+    "id": 13367999482,
+    "sha256": "8e62d987ac3fc663c58903d603063d1bcca0622babf4503bdaf9a5df12c08b19"
+  }
+}

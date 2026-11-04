@@ -212,7 +212,7 @@
     {
       "id": "game4",
       "title": "VOLT DODGE",
-      "description": "Steer through the field and dodge incoming electrical sparks.",
+      "description": "Drive a shielded rover through a 3D factory maze. Collect every core, dodge moving sparks and reach the exit before time runs out.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game4/",
@@ -221,43 +221,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 distinct sectors completed through the swept-collision engine using an independent safe-route search",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game4/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
@@ -411,7 +413,7 @@
     {
       "id": "game7",
       "title": "BINARY FLASH",
-      "description": "Decode a changing binary signal into decimal before the next round.",
+      "description": "Operate a 3D digital register: set bits, clock serial data, shift and rotate values, verify parity, then transmit each ordered frame.",
       "genre": "engineering",
       "division": "Elektroniker",
       "path": "game7/",
@@ -420,43 +422,45 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "New conversion candidate; actual drawing-buffer verification pending the release gate"
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 distinct 4–16 bit missions completed through public toggle, latch, parity and transmit commands",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Labelled command equivalents, keyboard controls, visible focus, responsive layouts and reduced motion; release audits pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "New engine tests included; exact outcomes are in PROJECT_STATUS.md",
+        "integration": "Release gate pending for this candidate",
+        "browser": "New browser controls/4K/reflow coverage included; results pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game7/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "verifiedUrl": null,
+        "status": "New 3D conversion not yet published"
       },
       "blockers": [],
       "policy": {
