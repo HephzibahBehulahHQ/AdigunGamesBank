@@ -69,8 +69,9 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
       controlled: document.querySelector('#controlled').textContent
     }));
     if (view.clock === '00:00') break;
-    const own = view.possession === 'Adigun XI', owner = view.situation.match(/Adigun #(\d+) has/);
-    if (own && owner && view.controlled !== `#${owner[1]}`) await page.keyboard.press('q');
+    const owner = view.situation.match(/Adigun #(\d+) has/);
+    const own = view.possession === 'Adigun XI' && owner && view.controlled === `#${owner[1]}`;
+    if (view.possession === 'Adigun XI' && owner && !own) await page.keyboard.press('q');
     const dx = own ? 1 : view.bx - view.x, dy = own ? -view.y : view.by - view.y;
     const desired = new Set(['Shift']);
     if (dx > .6) desired.add('d'); else if (dx < -.6) desired.add('a');
