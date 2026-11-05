@@ -23,6 +23,7 @@ async function manualTiming(page) {
 async function prepareGoal(page, keyboard = false) {
   await activate(control(page, 'Middle left'), keyboard);
   await activate(control(page, 'Feint toward target'), keyboard);
+  if (keyboard) await expect(control(page, 'Advance time · 0.10 s')).toBeFocused();
   for (let i = 0; i < 4; i++) await activate(control(page, 'Advance time · 0.10 s'), keyboard);
   await activate(control(page, 'Middle right'), keyboard);
 }
@@ -40,6 +41,7 @@ async function playFive(page, { keyboard = false, lose = false } = {}) {
     if (lose) await activate(control(page, 'Middle centre'), keyboard);
     else await prepareGoal(page, keyboard);
     await activate(control(page, 'Strike the ball'), keyboard);
+    if (keyboard) await expect(control(page, 'Advance time · 0.10 s')).toBeFocused();
     await resolveKick(page, keyboard);
     await expect(phase(page)).toHaveAttribute('data-phase', kick === 4 ? lose ? 'lost' : 'won' : 'result', { timeout: 20000 });
     if (kick < 4) {
@@ -65,6 +67,8 @@ test('Goal Line renders actual 4K, wins five physical kicks through controls, sa
   const canvas = page.locator('canvas');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2');
   await manualTiming(page);
+  await page.locator('#quality').selectOption('1080');
+  await expect(canvas).toHaveAttribute('data-resolution', '1920x1080');
   await page.locator('#quality').selectOption('4k');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   const buffer = await canvas.evaluate(element => {
@@ -193,8 +197,33 @@ test('Goal Line survives actual WebGL context loss and preserves command scoring
   await expect(page.locator('#scene-fallback')).toBeVisible();
   await expect(canvas).not.toHaveAttribute('data-renderer', 'WebGL2');
   expect(await page.locator('#keeper-readout').innerText()).toBe(before);
+  await expect(phase(page)).toHaveAttribute('data-phase', 'paused');
+  await control(page, 'Resume play').click();
   await control(page, 'Strike the ball').click();
-    await resolveKick(page);
+  await resolveKick(page);
   await expect(phase(page)).toHaveAttribute('data-phase', 'result');
   await expect(page.locator('#goals-readout')).toHaveText('1 / 5');
+});
+
+
+test('Goal Line keeps visible keyboard real-time play, freezes on pause and resolves a physical shot', async ({ page }) => {
+  await noGraphics(page); await page.goto('/game9/');
+  await page.locator('#live-time').check();
+  const clock = page.locator('#pitch-clock');
+  await expect(clock).not.toHaveText('READ 0.00 s');
+  await control(page, 'Pause play').press('Enter');
+  await expect(phase(page)).toHaveAttribute('data-phase', 'paused');
+  const stopped = await clock.innerText();
+  await page.waitForTimeout(350); // Verify real time is frozen by the user's pause.
+  expect(await clock.innerText()).toBe(stopped);
+  await control(page, 'Resume play').press('Enter');
+  await control(page, 'Middle left').press('Enter');
+  await control(page, 'Feint toward target').press('Enter');
+  await expect(page.locator('#keeper-stage')).toHaveText('Committed');
+  await control(page, 'Middle right').press('Enter');
+  await control(page, 'Strike the ball').press('Enter');
+  await expect(control(page, 'Pause play')).toBeFocused();
+  await expect(phase(page)).toHaveAttribute('data-phase', 'result');
+  await expect(page.locator('#goals-readout')).toHaveText('1 / 5');
+  expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
 });

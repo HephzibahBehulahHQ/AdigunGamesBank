@@ -1,0 +1,61 @@
+{
+  "commit": "88e517fe9916db566174f43f96297488878bf43a",
+  "recordedAt": "2026-11-05T13:52:30+00:00",
+  "environment": "Local Linux, Node 24.22.1, Playwright Chromium 141 / SwiftShader",
+  "command": "npm run check && npm run build && npx playwright test tests/browser/goal-line.spec.js",
+  "stats": {
+    "startTime": "2026-11-05T13:48:15.350Z",
+    "duration": 122454.665,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "results": [
+    {
+      "title": "Goal Line renders actual 4K, wins five physical kicks through controls, saves and resumes",
+      "status": "passed",
+      "durationMs": 13053,
+      "errors": [],
+      "attachments": [
+        {
+          "name": "goal-line-4k-drawing-buffer",
+          "contentType": "application/json",
+          "body": "eyJ3aWR0aCI6Mzg0MCwiaGVpZ2h0IjoyMTYwLCJlcnJvciI6MH0="
+        }
+      ]
+    },
+    {
+      "title": "Goal Line keeps visible keyboard controls without WebGL, pauses preparation, rejects legacy saves and retries defeat at 320px",
+      "status": "passed",
+      "durationMs": 4035,
+      "errors": [],
+      "attachments": []
+    },
+    {
+      "title": "Goal Line keeps visible keyboard campaign play when storage writes fail and reports session-only progress",
+      "status": "passed",
+      "durationMs": 4332,
+      "errors": [],
+      "attachments": []
+    },
+    {
+      "title": "Goal Line final challenge honours its power limits, finishes mastery and reflows on mobile",
+      "status": "passed",
+      "durationMs": 8676,
+      "errors": [],
+      "attachments": []
+    },
+    {
+      "title": "Goal Line survives actual WebGL context loss and preserves command scoring",
+      "status": "timedOut",
+      "durationMs": 90422,
+      "errors": [
+        "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m",
+        "Error: locator.click: Test timeout of 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Strike the ball', exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled id=\"shoot\" type=\"button\" class=\"shoot-button\">\u2026</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 \u00d7 waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 \u00d7 waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    69 \u00d7 waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  194 |   await expect(canvas).not.toHaveAttribute('data-renderer', 'WebGL2');\n  195 |   expect(await page.locator('#keeper-readout').innerText()).toBe(before);\n> 196 |   await control(page, 'Strike the ball').click();\n      |                                          ^\n  197 |     await resolveKick(page);\n  198 |   await expect(phase(page)).toHaveAttribute('data-phase', 'result');\n  199 |   await expect(page.locator('#goals-readout')).toHaveText('1 / 5');\n    at /workspace/scratch/2414efadeadc/AdigunGamesBank/tests/browser/goal-line.spec.js:196:42"
+      ],
+      "attachments": []
+    }
+  ],
+  "assessment": "Four flows passed. Context-loss test omitted the required Resume control; product correctly paused. Subsequent focus/resize fixes are not part of this immutable candidate."
+}

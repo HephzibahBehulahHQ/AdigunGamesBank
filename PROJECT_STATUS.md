@@ -32,6 +32,31 @@ checkpoint **`5036ec53565ec73c091cba6f30ef485fc32979a9`** at
 trees. Later receipt/code edits remain pending until their own checkpoint. Full-project finish time remains **unknown**;
 ETA **pending**.
 
+### Goal Line implementation and first browser gate
+
+Implementation checkpoint **`88e517fe9916db566174f43f96297488878bf43a`** was
+read back at **2026-11-05T14:47:25+01:00**. Its clean static build contains
+193 runtime files. `npm run check` passed; the first five-scenario browser run
+passed **4/5**: actual 3840 × 2160 buffer with GL error 0, complete five-kick
+win/save/reload, no-WebGL keyboard defeat/retry, rejected-storage session play,
+and final-level mobile mastery. The fifth test incorrectly tried to shoot
+while context-loss recovery intentionally paused the game; its timeout is
+preserved in [the initial receipt](docs/evidence/2026-11-05-goal-line/verification-88e517f.json).
+The correction explicitly asserts pause, resumes through the actual button,
+and then checks the preserved kick. No production pause guard was removed.
+
+Independent review also confirmed and corrected keyboard focus when actions
+disable themselves, BFCache preservation, the 1080p option value and idle
+scene redraw after viewport resizing. The original mobile capture exposed a
+blank resized canvas; a local observer now invalidates rendering without
+changing shared code. These working corrections require the next exact gate.
+
+Checkpoint interval 14:42:01→14:47:25 was **5m24s**, a cadence miss. The first
+UI edit at 14:42:13 reached that checkpoint after **5m12s**. A full snapshot
+read exceeded tool output limits before any ref mutation; bounded 8,000-character
+reads recovered the exact tree. Synchronization recovered below ten minutes,
+with no force push or lost work. Earlier first checkpoints met the cadence.
+
 ## Acceptance
 
 **In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This **published development milestone** converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.

@@ -11,6 +11,8 @@ const outcomeNames = { goal: 'Goal', saved: 'Saved', post: 'Frame', miss: 'Miss'
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 let state = createShootout(progress.unlocked), scene = null, recorded = false;
 let previous = 0, frameId = 0, lastTelemetry = 0, lastPhase = '', lastLogLength = -1, dirty = true, disposed = false;
+const viewObserver = new ResizeObserver(() => { dirty = true; });
+viewObserver.observe(canvas);
 
 function announce(message) { $('status').textContent = message; }
 function saveConfirmed() {
@@ -64,6 +66,7 @@ function phaseMessage() {
   return `Kick ${state.kickIndex + 1} of 5. Choose a target, read the keeper, then strike. Round target: ${state.config.target} goals.`;
 }
 function sync(message) {
+  const focusedControl = document.activeElement;
   if (state.phase === 'won' && !recorded) { progress.complete(state.config.level); recorded = true; }
   const ready = state.phase === 'ready', finished = state.phase === 'won' || state.phase === 'lost';
   const kick = state.flight?.kick || currentKick(state), zone = ZONES.find(item => item.id === state.zoneId);
@@ -92,6 +95,17 @@ function sync(message) {
   $('result-copy').textContent = state.phase === 'won' ? (progress.mastered ? 'You completed every level. Replay any unlocked challenge to keep your touch sharp.' : `${state.goals} goals from five strikes. Your next training level is ready.`) : state.phase === 'lost' ? `${state.goals} goals from five strikes. You need ${state.config.target} to clear this level. Your unlocked progress is safe.` : state.phase === 'result' ? `${state.result.detail}. ${5 - state.kickIndex} kicks remain in this round.` : state.phase === 'paused' ? 'Simulation time is stopped. Resume when you are ready.' : state.phase === 'flight' ? ($('live-time').checked ? 'The selected launch angles, power, wind and keeper contact decide this shot.' : 'Study the ball and keeper together. Each press of Advance time moves the shot by 0.10 seconds.') : `Score at least ${state.config.target} goals from five kicks to unlock the next training level.`;
   if (message) announce(message); else if (lastPhase !== state.phase) announce(phaseMessage());
   lastPhase = state.phase; updateProgress(); telemetry(); renderHistory(); dirty = true;
+  // Keep keyboard play moving when an action disables its own focused button.
+  // Aim selections never replace or move the player's focused target button.
+  if (!document.hidden && focusedControl instanceof HTMLButtonElement && focusedControl.disabled) {
+    const nextFocus = state.phase === 'result' ? $('next-kick')
+      : state.phase === 'won' ? ($('next-level').hidden ? $('retry') : $('next-level'))
+      : state.phase === 'lost' ? $('retry')
+      : state.phase === 'paused' ? $('pause')
+      : state.phase === 'flight' ? ($('live-time').checked ? $('pause') : $('advance-time'))
+      : state.phase === 'ready' && focusedControl.id === 'feint' ? $('advance-time') : null;
+    nextFocus?.focus({ preventScroll: true });
+  }
 }
 function act(action, message) {
   try { if (action()) { previous = 0; sync(typeof message === 'function' ? message() : message); } }
@@ -178,7 +192,7 @@ function frame(time) {
 window.addEventListener('pagehide', event => {
   previous = 0;
   if (event.persisted) { if (pauseShootout(state)) sync(); return; }
-  disposed = true; cancelAnimationFrame(frameId); scene?.dispose(); scene = null;
+  disposed = true; cancelAnimationFrame(frameId); viewObserver.disconnect(); scene?.dispose(); scene = null;
 });
 window.addEventListener('pageshow', () => { previous = 0; dirty = true; });
 $('level-select').value = String(state.config.level); sync(); frameId = requestAnimationFrame(frame);
