@@ -15,14 +15,17 @@ keeper reading, one run-up feint, timed commitment, nine placement zones and
 physical ball/contact outcomes. [Design and acceptance record](game9/README.md).
 Other games and shared rendering/progression remain unchanged.
 
-Current stage: **WIP, not integrated or deployed**. Dependencies are installed;
-new engine, UI and tests are being authored. New-game checks and actual 4K are
+Current stage: **WIP, not integrated or deployed**. The physical engine is
+implemented. Independent working-tree probes completed all 10,000 campaigns
+through public actions and compared unique physical configurations; formal
+unit/browser gates are being prepared. Actual 4K, UI and persistence remain
 **NOT TESTED** at this checkpoint. First useful changed work began on
 2026-11-05T14:31:38+01:00 (Europe/Berlin); first remote checkpoint **`53958d08ed1e8e160b8dcb50d0610153f9f73f4b`**
 was read back exactly at **2026-11-05T14:32:14+01:00**, 36 seconds later.
 The connector tree matched the local Git tree exactly, and a public fetch
-fast-forwarded the local branch while preserving working changes. This receipt
-edit is pending until the next checkpoint. Full-project finish time remains **unknown**;
+fast-forwarded the local branch while preserving working changes. The next engine checkpoint **`063d5f78e429d2b0885afe047a60608380f04be0`**
+was exactly read back at **2026-11-05T14:34:48+01:00**. Later receipt/code
+edits remain pending until their own checkpoint. Full-project finish time remains **unknown**;
 ETA **pending**.
 
 ## Acceptance

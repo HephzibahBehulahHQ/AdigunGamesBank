@@ -11,6 +11,7 @@ export { LEVEL_COUNT, GOAL, BALL_RADIUS, GRAVITY, KEEPER_PARTS, ballAt };
 export const CAMPAIGN_ID = 'goal-line';
 export const POWER_MIN = 25;
 export const REFERENCE_POWER = 85;
+export const MAX_STEP_SECONDS = 60;
 
 export const ZONES = Object.freeze([
   { id: 'top-left', label: 'Top left', x: -2.8, y: 1.95 },
@@ -79,7 +80,10 @@ export function goalLineLevel(level = 1) {
 
 export function currentKick(state) { return state.config.kicks[Math.min(4, state.kickIndex)]; }
 
-function patrolX(kick, time) { return kick.patrolAmplitude * Math.sin(kick.patrolPhase + kick.patrolRate * time); }
+function patrolX(kick, time) {
+  const cycleTime = time % (2 * Math.PI / kick.patrolRate);
+  return kick.patrolAmplitude * Math.sin(kick.patrolPhase + kick.patrolRate * cycleTime);
+}
 function commitmentPosition(kick, plan, time) {
   const travel = Math.max(0.16, Math.abs(plan.targetX - plan.startX) / kick.diveSpeed);
   return plan.startX + (plan.targetX - plan.startX) * smooth((time - plan.commitAt) / travel);
@@ -162,7 +166,7 @@ export function shoot(state) {
 }
 
 export function stepShootout(state, seconds) {
-  if (!['ready', 'flight'].includes(state.phase) || typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds <= 0) return false;
+  if (!['ready', 'flight'].includes(state.phase) || typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds <= 0 || seconds > MAX_STEP_SECONDS) return false;
   if (state.phase === 'ready') {
     const nextTime = state.readTime + seconds;
     if (!Number.isFinite(nextTime)) return false;
