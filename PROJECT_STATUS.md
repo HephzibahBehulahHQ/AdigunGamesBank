@@ -1,10 +1,10 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-05T00:32:51+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Acceptance
 
-**In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This completed implementation batch converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.
+**In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This **published development milestone** converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.
 
 Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished. Live provider competition still requires its server-side deployment and configuration.
 
@@ -13,19 +13,23 @@ Full Genesis–Revelation coverage, production art/device qualification, complet
 | State | Verified revision / evidence |
 | --- | --- |
 | Scoped integration branch | `work/finish-games-2026-11-04` |
-| Completed gameplay checkpoint | `09385bd8105e235f90493390fccbbe133083bd72`, exact remote head read back **2026-11-04T22:54:03Z** |
-| Exact-candidate release gate | [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609) **SUCCESS**, completed **2026-11-04T23:05:14Z** |
-| Main gameplay integration | Normal fast-forward from `e7c60ac89f987c93d7af5fc03ac6b21eaadcef18` to `09385bd8105e235f90493390fccbbe133083bd72`, exact head read back **2026-11-04T23:11:23Z** |
-| Last recorded Pages attempt | [Run 41931693983](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41931693983) on `09385bd8105e235f90493390fccbbe133083bd72`: **FAILED**, completed **2026-11-04T23:22:20Z** after a successful build |
-| Exact public comparison | **115 files checked; 54 mismatched**, completed **2026-11-04T23:22:46Z**. New source not verified live. [Full comparison](docs/evidence/2026-11-04-nine-games/deployment-09385bd.json) |
-| Verified evidence checkpoint | `81826a4a1babfee41dfd118e70e5b081e9e765ea`, exact remote head read back **2026-11-04T23:17:00Z** |
-| Last recorded public source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [67-file receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
-| Existing public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, redirecting to <https://adigungamesbank.hephzibahbehulah.com/> |
-| This evidence follow-up | Records the completed gate, exact public mismatch and failed Pages publication; its own revision and checks are tracked by Git history and the branch workflow |
+| Recorded gameplay release | **`5547a5362bfb2edbddf3f922a918e05c14de6b18`** |
+| Exact-candidate release gate | [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881) **SUCCESS**, completed **2026-11-04T23:46:49Z** |
+| Main gameplay integration | Normal fast-forward from `09385bd8105e235f90493390fccbbe133083bd72` to `5547a5362bfb2edbddf3f922a918e05c14de6b18`, exact head read back **2026-11-04T23:47:14Z** |
+| Pages publication | [Run 41936442011](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011) **SUCCESS**, completed **2026-11-04T23:47:55Z**, deploy job 126946057508 |
+| Public source comparison | **115/115 selected public files exactly match**, all HTTP 200, completed **2026-11-04T23:51:27Z**. [Full receipt](docs/evidence/2026-11-04-nine-games/deployment-5547a53.json) |
+| Public URL | <https://hephzibahbehulahhq.github.io/AdigunGamesBank/>, confirmed redirect to **<https://adigungamesbank.hephzibahbehulah.com/>** |
+| Public control/save smoke | Binary Flash completed both frames in 9 operations with 0 rejections; reload opened Mission 2. [Record](docs/evidence/2026-11-04-nine-games/verification-5547a53.json) |
+| Previous public source | `b3844bff8775b509ddda6f9002726bf4ec1dc89b`; [preserved 67-file receipt](docs/evidence/2026-11-04-ark/deployment-b3844bf.json) |
+| This record update | Documents the already observed release above. Its own later commit/checks do not retroactively replace that immutable release source. |
 
-The **09385bd publication failed**. GitHub found the 9,029,786-byte Pages artifact and accepted the deployment at 23:11:47Z, then repeatedly returned `updating_pages` through 23:21:45Z. The publishing action reached its 600,000 ms timeout at 23:22:16Z and confirmed cancellation at 23:22:17Z. Build/upload success does not establish delivery. [Exact failed-run receipt](docs/evidence/2026-11-04-nine-games/publication-09385bd.json).
+The nine converted games are **published**. The live catalog contains fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles. The original 2,000-title and broader production requirements remain **In progress**.
 
-The earlier documentation-only Pages run [41891598230](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41891598230) also timed out twice after build/upload. The fresh tested gameplay source reproduced the post-creation stall. GitHub's [official status](https://www.githubstatus.com/) reported Actions and Pages operational when checked; the earlier resolved incidents do not establish this failure's cause. No concrete source, permission, DNS, host or action-version correction is established, so none was fabricated. The code remains recoverable. All 73 fetched paths that exist at the preceding b3844bf source exactly match that source; the 42 other paths are new to this batch. The last verified public release remains available. [Earlier failure receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
+### Earlier publishing failures and observed recovery
+
+The earlier 09385bd attempt built/uploaded successfully, stayed at `updating_pages`, timed out at 23:22:16Z and canceled at 23:22:17Z. Its 115-file public check had 54 mismatches; all 73 fetched paths existing in the preceding release matched b3844bf. [Failed publishing receipt](docs/evidence/2026-11-04-nine-games/publication-09385bd.json) · [Failed exact-byte comparison](docs/evidence/2026-11-04-nine-games/deployment-09385bd.json). The earlier e7c60ac documentation attempt also timed out twice. [Prior receipt](docs/evidence/2026-11-04-ark/publication-e7c60ac.json).
+
+The later 5547a53 source published successfully through the **same host and configuration**, with reported success at 23:47:52Z and independently matched public bytes afterward. No DNS, permission, action-version or hosting change was made; no causal configuration fix is claimed. GitHub’s internal reason for the earlier stall remains unconfirmed. [Successful publication receipt](docs/evidence/2026-11-04-nine-games/publication-5547a53.json).
 
 ## Nine individual conversions
 
@@ -45,24 +49,25 @@ Every conversion includes its own game guide, assumptions, asset-rights record, 
 
 ## Exact verification
 
-Source **`09385bd8105e235f90493390fccbbe133083bd72`** passed [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609), job **126921619461**, artifact **13371571737**. [Structured receipt](docs/evidence/2026-11-04-nine-games/verification-09385bd.json) · [Evidence index](docs/evidence/2026-11-04-nine-games/README.md).
+Source **`5547a5362bfb2edbddf3f922a918e05c14de6b18`** passed [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881), job **126940186721**, artifact **13374585946**. [Structured receipt](docs/evidence/2026-11-04-nine-games/verification-5547a53.json) · [Evidence index](docs/evidence/2026-11-04-nine-games/README.md).
 
 | Gate | Actual result |
 | --- | --- |
 | `npm run check` | Passed: 24 unique routes, local links, policy/design pins, official artwork blob and JavaScript syntax |
 | `npm test` | **269/269 passed**, zero failures/skips |
 | `python -m pytest platform/backend/tests -q` | **52/52 passed**, one existing Starlette/httpx warning |
-| `npm run build` | Clean source; **188 runtime files**, SHA-256 **`9964edf1e711b3b6152285f0ff9280ee4df0ccd207e9c86b8c135604e97ba638`**; [build receipt](docs/evidence/2026-11-04-nine-games/build-09385bd.json) |
+| `npm run build` | Clean source; **188 runtime files**, SHA-256 **`999d7a1da3bf44e7178006ff579c21d2915da6c65e53111a8641f3dd64535f93`**; [build receipt](docs/evidence/2026-11-04-nine-games/build-5547a53.json) |
 | Accessibility/reflow | **18/18 passed**, no axe rule exclusions |
 | Contract/graphics fallback | **15/15 passed**, fixtures explicitly test-only |
 | Rendered gameplay | **36/36 passed**: genuine controls, success/failure/retry, persistence, actual 4K and advanced mobile layouts |
 | Browser total | **69/69 passed**, zero unexpected, skipped or flaky results |
-| Actual 4K | All nine conversions passed **3840 × 2160 WebGL 2**, GL error 0; original nine frames from `10e3b16` were inspected and retained unchanged; the final candidate reran every measurement |
-| Advanced mobile corrections | Circuit Rush seven-column and Binary Flash sixteen-bit fixtures passed unchanged **390px and 320px** width/target assertions. Final 320px original captures were inspected and retained. |
+| Actual 4K | All nine conversions passed **3840 × 2160 WebGL 2**, GL error 0. Nine original inspected frames from 10e3b16 remain unchanged; final 5547a53 source measurements are in the receipt above. |
+| Advanced mobile corrections | Circuit Rush seven-column and Binary Flash sixteen-bit fixtures passed unchanged **390px and 320px** page-width assertions; sampled controls met 44px targets. Inspected final-correction 320px captures remain in the 09385bd receipt. |
+| Public source | **115/115 selected files** returned HTTP 200 and exact SHA-256 matches to 5547a53, including the catalog, shared rendering/progression, all 24 entry pages and 3D route JS/CSS. |
 
 CI used Ubuntu 24.04 Chromium/SwiftShader. Actual raster size and browser interaction do not establish gaming-GPU frame rate. Hardware FPS/load, physical touch/gamepad and full screen-reader play are **NOT TESTED**. The 3,000 ms load target is not a measured result.
 
-Root cloud-control checks completed Neon and Fuse first boards, Circuit's 100.0 mA lamp commission and reload, Binary's two-frame packet in nine operations, Volt's full-shield extraction, a resistor match/focus skip, and Capacitor's actual charge/hold/discharge to 0.500 V with unlock/save feedback. That browser explicitly disables WebGL; those checks establish command flow, not rendering. [Recorded detailed controls](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+Root manually opened the published catalog and Binary Flash. Actual staging/latch and serial/parity controls commissioned its two-frame packet in **nine operations**, with **zero rejected frames**. The save feedback appeared, and reload opened **Mission 2**. This cloud browser explicitly disables WebGL; the public smoke check establishes command flow and persistence, not rendering. Earlier manual checks covered Neon/Fuse first boards, Circuit’s 100.0 mA commissioning/reload, Volt’s full-shield extraction, resistor match/focus skip and Capacitor’s charge/hold/discharge to 0.500 V. [Earlier control record](docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
 
 ### Preserved failures and their corrections
 
@@ -75,7 +80,7 @@ Root cloud-control checks completed Neon and Fuse first boards, Circuit's 100.0 
 
 The exact failed-run artifact was inspected at **2026-11-04T23:29:03Z**: ZIP CRC passed; its single tar has **386 regular files**, 60 directories and 11,386,541 bytes of contents. No symbolic/hard links, unsafe paths, special entries, duplicate names or case collisions were found. All **386/386 packaged files match 09385bd exactly**; root index, all nine game runtimes and shared assets are present. The only omitted repository file is `.github/workflows/verify.yml`. [Complete immutable-source comparison](docs/evidence/2026-11-04-nine-games/pages-artifact-09385bd.json). No inspected package defect explains the publishing stall. Internal Pages state remains unavailable.
 
-This diagnostic follow-up is isolated on `work/pages-diagnostics-2026-11-04`, based on exact final-record candidate **0fc4f09892639a94f1bca3f1bffee9ee777f711e**. The primary candidate's full gate continues without interruption; diagnostic source/records are checkpointed separately.
+The diagnostic follow-up was isolated on `work/pages-diagnostics-2026-11-04`, preserving the primary gate without interruption. Its exact **5547a5362bfb2edbddf3f922a918e05c14de6b18** checkpoint was read back at 23:33:09Z, then passed its full gate and was fast-forwarded into the primary branch and main. Source 0fc4f098 also independently passed all 390 checks in CI 41933617782 at 23:36:48Z.
 
 ## Checkpoints and recovery
 
@@ -87,7 +92,7 @@ Verified primary checkpoints on 2026-11-04 UTC: `f9a6a982` 21:44:17, `a14c4f5` 2
 
 Engineering receipts: `7db0840` 21:59:16, `6fb58d8` 22:04:20, `e32afcd` 22:09:28, `4019851` 22:13:13, `5a466b5` 22:19:31, `c01f283` 22:22:26, `54a9797` 22:25:56, `ba62a45` 22:29:28 and `c230318` 22:32:05. Three changed-work intervals of **5m4s, 5m8s and 6m18s missed the five-minute cadence**; they are not compliant intervals. All snapshots were exactly read back and recovered.
 
-For `09385bd`, first correction work began **22:48:01Z** (CSS 22:48:15Z); exact remote verification at **22:54:03Z** took **6m2s**, another cadence miss. An initial unbounded parallel chunk-read transfer failed at chunk 24 before any ref mutation. Reducing transfer chunks to 8,000 characters and concurrency to 8 allowed exact binary blobs/tree/commit synchronization; all 1,474,601 original PNG bytes were recovered. Recovery stayed below ten minutes. Future preparation targets three minutes to leave transfer time. The first evidence follow-up began **23:13:21Z** and was exactly read back as **81826a4a1babfee41dfd118e70e5b081e9e765ea at 23:17:00Z**, a compliant **3m39s** interval. This later failure-receipt update requires its own checkpoint; no claim is made that a locally written receipt is already synchronized.
+For `09385bd`, first correction work began **22:48:01Z** (CSS 22:48:15Z); exact remote verification at **22:54:03Z** took **6m2s**, another cadence miss. An initial unbounded parallel chunk-read transfer failed at chunk 24 before any ref mutation. Reducing transfer chunks to 8,000 characters and concurrency to 8 allowed exact binary blobs/tree/commit synchronization; all 1,474,601 original PNG bytes were recovered. Recovery stayed below ten minutes. Future preparation targets three minutes to leave transfer time. The first evidence follow-up began **23:13:21Z** and was exactly read back as **81826a4a1babfee41dfd118e70e5b081e9e765ea at 23:17:00Z**, a compliant **3m39s** interval. The next failure-receipt checkpoint **0fc4f09892639a94f1bca3f1bffee9ee777f711e** was read back at 23:25:36Z; the artifact-diagnosis checkpoint **5547a5362bfb2edbddf3f922a918e05c14de6b18** at 23:33:09Z. Both remain in the integrated history. This later successful-publication record requires its own checkpoint; a locally written receipt is not claimed as already synchronized.
 
 Unexercised concurrent-writer/interrupted-push and other policy recovery scenarios remain **NOT TESTED**. A later evidence-only commit does not retroactively change the immutable candidate receipts above.
 
@@ -103,4 +108,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Synchronize and verify this final evidence/catalog update before integration. Existing-host publication still requires Pages to complete; use concrete publishing diagnostics and verify exact public bytes after any successful attempt. Repeated `updating_pages` timeouts are preserved for a GitHub Pages support investigation if the final recorded source also stalls. After this batch, the next product task is one individually scoped remaining legacy conversion; provider/native-release dependencies remain explicit. Full-project finish time is **unknown**; ETA **pending**.
+Verify and synchronize this published-release record, then integrate it through the existing release flow. The next product milestone is one individually scoped remaining legacy conversion, starting with Goal Line (game9); its playable rules, 3D scene, progression and actual browser evidence must be completed before proceeding to another title. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.

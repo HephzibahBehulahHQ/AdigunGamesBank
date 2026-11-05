@@ -17,7 +17,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -32,7 +32,7 @@
         "Touch; equivalent labelled signal controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -43,18 +43,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game1/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game1/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -86,7 +89,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -101,7 +104,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -112,18 +115,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game2/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game2/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -228,7 +234,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -243,7 +249,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -254,18 +260,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game4/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game4/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -297,7 +306,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -312,7 +321,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -323,18 +332,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game5/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game5/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -366,7 +378,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -381,7 +393,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -392,18 +404,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game6/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game6/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -435,7 +450,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -450,7 +465,7 @@
         "Touch; equivalent labelled command controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -461,18 +476,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game7/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game7/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -504,7 +522,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -519,7 +537,7 @@
         "Touch; equivalent labelled cabinet controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -530,18 +548,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game8/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game8/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -638,7 +659,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -653,7 +674,7 @@
         "Touch controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -664,18 +685,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game10/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game10/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {
@@ -1114,7 +1138,7 @@
         "engine": "Three.js WebGL 2",
         "is3D": true,
         "verified4K": true,
-        "evidence": "docs/evidence/2026-11-04-nine-games/verification-10e3b16.json; actual 3840× 2160 WebGL2 buffer and inspected original frame, CI 41926291553"
+        "evidence": "docs/evidence/2026-11-04-nine-games/verification-5547a53.json; actual 3840 × 2160 WebGL 2 checks passed. Original inspected scene frames retained with their exact 10e3b16 provenance."
       },
       "levels": {
         "target": 10000,
@@ -1129,7 +1153,7 @@
         "Touch; labelled shot controls"
       ],
       "accessibility": {
-        "status": "18/18 route, theme, focus and reflow audits passed at 09385bd; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
+        "status": "18/18 route, theme, focus and reflow audits passed at 5547a53; advanced Circuit Rush/Binary Flash fixtures passed at 390px and 320px. Full physical assistive-technology play remains open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -1140,18 +1164,21 @@
         "status": "Original procedural geometry and game text; unchanged official corporate artwork; vendored Three.js MIT license; see ASSETS.md"
       },
       "testing": {
-        "unit": "269/269 repository JavaScript checks passed at 09385bd; per-game domain coverage in README.",
-        "integration": "Exact 09385bd release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41929244609.",
-        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and corrected advanced mobile layouts. See verification-09385bd.json and PROJECT_STATUS.md for limits."
+        "unit": "269/269 repository JavaScript checks passed at 5547a53; per-game domain coverage in README.",
+        "integration": "Exact 5547a53 release gate passed: 269 JavaScript, 52 API and 69 browser checks; CI 41934609881.",
+        "browser": "18 accessibility + 15 contract/fallback + 36 rendered gameplay checks passed, including actual 4K, true-control completion, save/reload and advanced mobile layouts. See verification-5547a53.json and PROJECT_STATUS.md for limits."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game17/",
         "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
         "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "verifiedUrl": null,
-        "status": "At 2026-11-04T23:22:46Z, source 09385bd passed its release gate but its Pages publication timed out and exact public bytes did not match. See the timestamped publication receipt in PROJECT_STATUS.md.",
-        "checkedAt": "2026-11-04T23:22:46Z",
-        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-09385bd.json"
+        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game17/",
+        "status": "Published 3D conversion; exact public bytes verified against 5547a53. Broader production qualification remains open.",
+        "checkedAt": "2026-11-04T23:51:27+00:00",
+        "publicationEvidence": "docs/evidence/2026-11-04-nine-games/publication-5547a53.json",
+        "verifiedCommit": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+        "verifiedAt": "2026-11-04T23:51:27+00:00",
+        "evidence": "docs/evidence/2026-11-04-nine-games/deployment-5547a53.json"
       },
       "blockers": [],
       "policy": {

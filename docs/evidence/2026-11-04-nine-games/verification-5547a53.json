@@ -1,0 +1,156 @@
+{
+  "source": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+  "ciRun": 41934609881,
+  "ciUrl": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881",
+  "ciJob": 126940186721,
+  "completedAt": "2026-11-04T23:46:49Z",
+  "conclusion": "success",
+  "node": {
+    "passed": 269,
+    "failed": 0,
+    "skipped": 0
+  },
+  "api": {
+    "passed": 52,
+    "warnings": 1,
+    "warning": "Existing Starlette/httpx deprecation warning"
+  },
+  "browser": {
+    "accessibility-results": {
+      "startTime": "2026-11-04T23:35:31.761Z",
+      "duration": 44947.030000000006,
+      "expected": 18,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "browser-results": {
+      "startTime": "2026-11-04T23:38:23.858Z",
+      "duration": 497646.42600000004,
+      "expected": 36,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "contract-results": {
+      "startTime": "2026-11-04T23:36:17.573Z",
+      "duration": 125441.067,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "totalPassed": 390,
+  "totalBrowserPassed": 69,
+  "rendering": [
+    {
+      "title": "Ark renders a real 4K frame and commissions a saved voyage through player controls",
+      "file": "ark.spec.js",
+      "name": "ark-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Binary Flash renders a real 4K register and saves an ordered packet through parallel and serial controls",
+      "file": "binary-flash.spec.js",
+      "name": "binary-flash-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Capacitor Charge renders a real 4K RC bench and completes a saved experiment using physical switch controls",
+      "file": "capacitor.spec.js",
+      "name": "capacitor-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Circuit Rush renders a real 4K frame and commissions a saved job through actual terminal controls",
+      "file": "circuit-rush.spec.js",
+      "name": "circuit-rush-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Fuse Box renders an actual 4K cabinet and commissions, saves and reloads a board through player inputs",
+      "file": "fusebox.spec.js",
+      "name": "fusebox-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Neon Pulse renders actual 4K, commissions a board through controls and resumes progress",
+      "file": "neon.spec.js",
+      "name": "neon-render-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Penalty Pro renders actual 4K and wins through five shots and five goalkeeper turns, then resumes",
+      "file": "penalty.spec.js",
+      "name": "penalty-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "APEX renders a real 4K frame and qualifies through keyboard and step driving",
+      "file": "racing.spec.js",
+      "name": "apex-4k-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Resistor Match renders actual 4K components, compares visible codes and clears a real memory game with reload",
+      "file": "resistor-match.spec.js",
+      "name": "resistor-match-drawing-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    },
+    {
+      "title": "Volt Dodge renders an actual 4K arena, moves with keyboard, requires every core and saves a control-driven exit",
+      "file": "volt-dodge.spec.js",
+      "name": "volt-dodge-4k-buffer",
+      "width": 3840,
+      "height": 2160,
+      "error": 0
+    }
+  ],
+  "build": {
+    "runtimeFiles": 188,
+    "fingerprintSha256": "999d7a1da3bf44e7178006ff579c21d2915da6c65e53111a8641f3dd64535f93",
+    "receipt": "build-5547a53.json"
+  },
+  "artifact": {
+    "id": 13374585946,
+    "bytes": 26146469,
+    "sha256": "61907ec7b78cb7c40a3a1a97ee4ad7e3ba7bdebaf1a918b1e2c585b01a1c73cf"
+  },
+  "inspectedFrames": {
+    "originalNine3DFrames": "verification-10e3b16.json",
+    "correctedAdvancedMobileFrames": "verification-09385bd.json",
+    "note": "Original frame bytes/provenance retained unchanged. Final candidate reran all real 4K/control and advanced 320px/390px assertions successfully. No current-frame inspection claim is inferred from the run alone."
+  },
+  "publicSmoke": {
+    "source": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+    "url": "https://adigungamesbank.hephzibahbehulah.com/game7/",
+    "observedAt": "2026-11-04T23:53:17.905Z",
+    "result": "Published Binary Flash opened from the public catalog. Actual controls sent 1001/parity0, then 0111/parity1 using two serial clocks: 2/2 frames, 9 operations, 0 rejected. Commissioned/save feedback appeared; reload displayed Mission 2 and 1 packet commissioned.",
+    "environment": "Cloud browser with WebGL 2 explicitly unavailable; this is public command/progression/persistence smoke evidence, not rendering evidence."
+  },
+  "limitations": [
+    "Ubuntu 24.04 CI Chromium/SwiftShader evidence; hardware FPS/load and physical touch/gamepad are not qualified.",
+    "Automated axe/reflow/focus checks do not replace full assistive-technology play.",
+    "Live AI still requires actual API/provider/judge deployment and configuration; test fixtures are not live competition.",
+    "The original 2,000-title, complete Bible, complete localization and native-console scope remains unfinished."
+  ]
+}

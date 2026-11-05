@@ -1,0 +1,29 @@
+{
+  "source": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+  "workflowRun": 41936442011,
+  "runUrl": "https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011",
+  "deployJob": 126946057508,
+  "artifactId": 13374531311,
+  "mainIntegratedAndReadBackAt": "2026-11-04T23:47:14Z",
+  "deploymentCreatedAt": "2026-11-04T23:47:38.812Z",
+  "reportedSuccessAt": "2026-11-04T23:47:52.427Z",
+  "completedAt": "2026-11-04T23:47:55Z",
+  "conclusion": "success",
+  "environmentUrl": "https://adigungamesbank.hephzibahbehulah.com/",
+  "publicVerification": {
+    "receipt": "deployment-5547a53.json",
+    "completedAt": "2026-11-04T23:51:27+00:00",
+    "checkedFiles": 115,
+    "allMatch": true,
+    "mismatches": 0
+  },
+  "publicSmoke": {
+    "source": "5547a5362bfb2edbddf3f922a918e05c14de6b18",
+    "url": "https://adigungamesbank.hephzibahbehulah.com/game7/",
+    "observedAt": "2026-11-04T23:53:17.905Z",
+    "result": "Published Binary Flash opened from the public catalog. Actual controls sent 1001/parity0, then 0111/parity1 using two serial clocks: 2/2 frames, 9 operations, 0 rejected. Commissioned/save feedback appeared; reload displayed Mission 2 and 1 packet commissioned.",
+    "environment": "Cloud browser with WebGL 2 explicitly unavailable; this is public command/progression/persistence smoke evidence, not rendering evidence."
+  },
+  "priorFailedAttempt": "publication-09385bd.json",
+  "recoveryExplanation": "The later complete tested source published successfully through the unchanged existing Pages host/configuration. No causal configuration fix is claimed for the earlier publishing stall."
+}

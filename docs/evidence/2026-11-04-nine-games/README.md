@@ -1,8 +1,14 @@
 # Nine individual 3D conversions — evidence
 
-**Successful corrected candidate:** `09385bd8105e235f90493390fccbbe133083bd72` passed [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609) with **269 JavaScript, 52 API and 69/69 browser checks**: 18 accessibility,15 contract/fallback and36 rendered/gameplay. Zero failed, skipped or flaky browser results. [Successful receipt](verification-09385bd.json) · [Exact 188-file clean build](build-09385bd.json). The source was integrated to main, but its [Pages publishing attempt timed out](publication-09385bd.json). The [exact public comparison](deployment-09385bd.json) checked 115 files and found 54 mismatches at 2026-11-04T23:22:46Z. This source is **not verified live**. Current acceptance belongs in [PROJECT_STATUS.md](../../../PROJECT_STATUS.md).
+## Published milestone
 
-The corrected advanced 320px captures were inspected: [Binary Flash](binary-flash-mobile-320-09385bd.png) and [Circuit Rush](circuit-rush-mobile-320-09385bd.png). The unchanged assertions passed at both 390px and 320px.
+Exact source **`5547a5362bfb2edbddf3f922a918e05c14de6b18`** passed [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881): **269 JavaScript, 52 API and 69/69 browser checks** (18 accessibility,15 contract/fallback,36 rendered/gameplay), with zero unexpected, skipped or flaky browser results. [Final successful gate](verification-5547a53.json) · [Clean 188-file build](build-5547a53.json).
+
+[Pages run 41936442011](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011) succeeded at **2026-11-04T23:47:55Z**. **115/115 public files matched the source exactly** at **23:51:27Z**. [Publication receipt](publication-5547a53.json) · [Full public-file hashes](deployment-5547a53.json). The live site is **<https://adigungamesbank.hephzibahbehulah.com/>**. Actual public Binary Flash controls completed both frames in 9 operations with 0 rejections; reload opened Mission 2.
+
+The earlier 09385bd gate also passed all 390 checks, but its publishing attempt timed out. [Preserved gate](verification-09385bd.json) · [Failed publication](publication-09385bd.json) · [Failed public comparison](deployment-09385bd.json). The later successful deployment used the same host/configuration; no causal configuration fix is claimed.
+
+Corrected advanced 320px captures were inspected and remain unchanged: [Binary Flash](binary-flash-mobile-320-09385bd.png) and [Circuit Rush](circuit-rush-mobile-320-09385bd.png). Their page-width and sampled 44px target assertions passed at 390px and 320px again on the published candidate.
 
 ## Preserved earlier measured frames
 

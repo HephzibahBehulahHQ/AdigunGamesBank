@@ -25,11 +25,13 @@ The authoritative brief is [Adigun Game bank pursuing goals and template.md](<Ad
 
 Stages, seeded variants and renamed templates are never counted as additional games. Automated generator checks are not claims of 10,000 manual playtests. Native PlayStation builds are not available.
 
-The verified development build is live at **https://adigungamesbank.hephzibahbehulah.com/**. [Recorded test and deployment evidence](docs/evidence/2026-11-04/README.md) includes actual 4K buffers, completed gameplay flows, source hashes and the remaining qualification limits.
+The verified development build is live at **https://adigungamesbank.hephzibahbehulah.com/**. [Recorded test and deployment evidence](docs/evidence/2026-11-04-nine-games/README.md) includes actual 4K buffers, completed gameplay flows, source hashes and the remaining qualification limits.
 
-## Nine-game release gate
+## Nine-game published milestone
 
-Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro passed the exact `09385bd` release gate: **269 JavaScript, 52 API and 69 browser checks**. Both advanced mobile-layout regressions pass at 320px and 390px. [Current measured evidence and publication state](docs/evidence/2026-11-04-nine-games/README.md). The catalog now implements fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles. The 09385bd Pages publishing attempt timed out after its build succeeded; its exact public comparison did not match. The new conversions are not claimed as published by that failed attempt.
+**Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro are published.** Exact source `5547a5362bfb2edbddf3f922a918e05c14de6b18` passed **269 JavaScript, 52 API and 69 browser checks** in [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881), then completed [Pages publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011). **115/115 selected public files matched exactly**. A real public Binary Flash mission completed and resumed after reload.
+
+All eight existing engineering titles now have 3D implementations. The catalog contains **fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles**. [Successful release and retained earlier failures](docs/evidence/2026-11-04-nine-games/README.md). Production/device qualification and the full brief remain unfinished.
 
 ## Play and develop
 

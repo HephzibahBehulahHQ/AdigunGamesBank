@@ -1,26 +1,26 @@
 # Game inventory
 
-Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.md). This inventory replaces earlier unconditional DONE labels. The nine new conversions passed [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609) at `09385bd`: 269 JavaScript, 52 API and 69 browser checks. Broader production acceptance remains open; [current evidence](docs/evidence/2026-11-04-nine-games/README.md).
+Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.md). This inventory replaces earlier unconditional DONE labels. The nine new conversions are published at `5547a53`, after [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881) passed 269 JavaScript, 52 API and 69 browser checks. Their 115-file public comparison matched exactly. Broader production acceptance remains open; [current evidence](docs/evidence/2026-11-04-nine-games/README.md).
 
 | Route | Title | Current implementation | Acceptance |
 |---|---|---|---|
-| game1/ | NEON PULSE | New 3D signal-puzzle conversion; 4K, control completion/save and fallback gate passed | In progress |
-| game2/ | CIRCUIT RUSH | New 3D conductor-network campaign; 4K, control completion/save and fallback gate passed | In progress |
+| game1/ | NEON PULSE | New 3D signal-puzzle conversion; published; 4K, control completion/save and fallback verified | In progress |
+| game2/ | CIRCUIT RUSH | New 3D conductor-network campaign; published; 4K, control completion/save and fallback verified | In progress |
 | game3/ | ELECTRONICER | Playable 3D DC bench; verified 4K/circuit/fuse/reload milestone | In progress |
-| game4/ | VOLT DODGE | New 3D rover retrieval campaign; 4K, control completion/save and fallback gate passed | In progress |
-| game5/ | RESISTOR MATCH | New 3D component-memory campaign; 4K, control completion/save and fallback gate passed | In progress |
-| game6/ | CAPACITOR CHARGE | New 3D RC commissioning campaign; 4K, control completion/save and fallback gate passed | In progress |
-| game7/ | BINARY FLASH | New 3D digital-register campaign; 4K, control completion/save and fallback gate passed | In progress |
-| game8/ | FUSE BOX | New 3D DC-cabinet conversion; 4K, control completion/save and fallback gate passed | In progress |
+| game4/ | VOLT DODGE | New 3D rover retrieval campaign; published; 4K, control completion/save and fallback verified | In progress |
+| game5/ | RESISTOR MATCH | New 3D component-memory campaign; published; 4K, control completion/save and fallback verified | In progress |
+| game6/ | CAPACITOR CHARGE | New 3D RC commissioning campaign; published; 4K, control completion/save and fallback verified | In progress |
+| game7/ | BINARY FLASH | New 3D digital-register campaign; published; 4K, control completion/save and fallback verified | In progress |
+| game8/ | FUSE BOX | New 3D DC-cabinet conversion; published; 4K, control completion/save and fallback verified | In progress |
 | game9/ | GOAL LINE | Legacy 2D | In progress |
-| game10/ | APEX CIRCUIT | New 3D driving conversion; 4K, control completion/save and fallback gate passed | In progress |
+| game10/ | APEX CIRCUIT | New 3D driving conversion; published; 4K, control completion/save and fallback verified | In progress |
 | game11/ | WORLD FOOTBALL | Playable 3D 11-a-side match; verified 4K and full-time UI win | In progress |
 | game12/ | CORTEX PRIME | Legacy 2D | In progress |
 | game13/ | SYNAPSE SPRINT | Legacy 2D | In progress |
 | game14/ | BILLIONAIRE CHALLENGE | Legacy 2D | In progress |
 | game15/ | TACTICS GRID | Playable 3D tactical campaign; verified 4K and mission win | In progress |
 | game16/ | APEX STRATEGY | Legacy 2D | In progress |
-| game17/ | PENALTY PRO | New 3D penalty conversion; 4K, control completion/save and fallback gate passed | In progress |
+| game17/ | PENALTY PRO | New 3D penalty conversion; published; 4K, control completion/save and fallback verified | In progress |
 | game18/ | DEBATE ARENA | Legacy 2D | In progress |
 | game19/ | CASEFILE | Legacy 2D | In progress |
 | game20/ | MARKET DUEL | Legacy 2D | In progress |

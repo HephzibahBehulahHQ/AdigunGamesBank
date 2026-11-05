@@ -1,11 +1,12 @@
 # CIRCUIT RUSH — design and evidence record
 
-## Integration evidence — 4 November 2026
+## Published milestone — 5 November 2026 (Europe/Berlin)
 
-The implementation at **`10e3b16af8c314379e540da65b8aa7da0f536775`** passed this game’s actual **3840 × 2160 WebGL 2** drawing-buffer check (zero GL error), real-control completion, saved progression and fallback scenarios in [CI 41926291553](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41926291553). The integration owner inspected the original captured scene. [Immutable measured/frame receipt](../docs/evidence/2026-11-04-nine-games/verification-10e3b16.json).
+Source **`5547a5362bfb2edbddf3f922a918e05c14de6b18`** passed the complete repository gate: **269 JavaScript, 52 API and 69 browser checks** in [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881). This game’s actual **3840 × 2160 WebGL 2** buffer, genuine-control completion, save/reload and fallback scenarios passed. [Successful exact-source receipt](../docs/evidence/2026-11-04-nine-games/verification-5547a53.json).
 
-That historical measured run passed **269 JavaScript, 52 API and 67/69 browser checks** and exposed two advanced mobile-layout failures. Corrected source **`09385bd8105e235f90493390fccbbe133083bd72`** then passed the complete gate: **269 JavaScript, 52 API and 69/69 browser checks**, including both 390px/320px layout regressions, in [CI 41929244609](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41929244609). [Successful immutable receipt](../docs/evidence/2026-11-04-nine-games/verification-09385bd.json). Hardware performance, physical devices, complete assistive-technology play and production qualification remain open. Current publication evidence belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+The release completed [Pages publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011); **115/115 selected public files matched exactly**, including this game’s entry and JavaScript/CSS. [Public-source receipt](../docs/evidence/2026-11-04-nine-games/deployment-5547a53.json). Original inspected scene frames retain their earlier 10e3b16 provenance in the [evidence index](../docs/evidence/2026-11-04-nine-games/README.md).
 
+Hardware performance, physical devices, complete assistive-technology play, language coverage and production qualification remain open. Current acceptance belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
 
 ## Identity and scope
 
