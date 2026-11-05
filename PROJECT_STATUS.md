@@ -18,8 +18,11 @@ Other games and shared rendering/progression remain unchanged.
 Current stage: **WIP, not integrated or deployed**. Dependencies are installed;
 new engine, UI and tests are being authored. New-game checks and actual 4K are
 **NOT TESTED** at this checkpoint. First useful changed work began on
-2026-11-05T14:31:38+01:00 (Europe/Berlin); the exact first remote receipt
-will be recorded after readback. Full-project finish time remains **unknown**;
+2026-11-05T14:31:38+01:00 (Europe/Berlin); first remote checkpoint **`53958d08ed1e8e160b8dcb50d0610153f9f73f4b`**
+was read back exactly at **2026-11-05T14:32:14+01:00**, 36 seconds later.
+The connector tree matched the local Git tree exactly, and a public fetch
+fast-forwarded the local branch while preserving working changes. This receipt
+edit is pending until the next checkpoint. Full-project finish time remains **unknown**;
 ETA **pending**.
 
 ## Acceptance
