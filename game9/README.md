@@ -22,8 +22,10 @@ Take five penalties and reach the challenge's goal target. Read the keeper's
 actual position, choose one of nine zones, set shot power and decide when to
 kick. One run-up feint per attempt captures the selected zone. After a short
 reaction delay the keeper commits to that zone for a visible, finite window.
-Change the aim and strike while the commitment is active. Shooting too early
-or after recovery lets the keeper react to the actual shot instead.
+Change the aim and strike while the commitment is active. Shooting before commitment starts
+or after its window expires lets the keeper react to the actual shot instead.
+Commitment is sampled when the shot is released: a kick taken within the window
+retains that dive through its flight.
 
 The keeper patrols along the line before a shot. Its position changes the
 distance and time needed to reach the ball. A visible manual-step command
