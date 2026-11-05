@@ -1,6 +1,26 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-05T14:31:38+01:00 (Europe/Berlin)**. This is the current acceptance record.
+
+## Active continuation: Goal Line
+
+The published nine-game milestone below is preserved. A fresh checkout of
+`main` at **`70d9e5eff75373bbcc65514cdfa224a1f176e53c`** was recovered cleanly;
+both [verification 41940070816](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41940070816)
+and [Pages 41940070112](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41940070112)+succeeded. The earlier publication timeouts are no longer a current blocker.
+
+Work is isolated on **`work/goal-line-2026-11-05`**. The next individual
+conversion is **Goal Line (`game9`)**: a striker-only five-kick shootout with
+keeper reading, one run-up feint, timed commitment, nine placement zones and
+physical ball/contact outcomes. [Design and acceptance record](game9/README.md).
+Other games and shared rendering/progression remain unchanged.
+
+Current stage: **WIP, not integrated or deployed**. Dependencies are installed;
+new engine, UI and tests are being authored. New-game checks and actual 4K are
+**NOT TESTED** at this checkpoint. First useful changed work began on
+2026-11-05T14:31:38+01:00 (Europe/Berlin); the exact first remote receipt
+will be recorded after readback. Full-project finish time remains **unknown**;
+ETA **pending**.
 
 ## Acceptance
 
