@@ -593,8 +593,8 @@
       "rendering": {
         "engine": "Three.js WebGL 2",
         "is3D": true,
-        "verified4K": false,
-        "evidence": "Goal Line conversion in progress; actual 4K browser verification pending."
+        "verified4K": true,
+        "evidence": "docs/evidence/2026-11-05-goal-line/verification-1ad5287.json; actual 3840×2160 WebGL2 buffer, GL error0 and inspected original frame at1ad5287. Hardware performance remains unqualified."
       },
       "levels": {
         "target": 10000,
@@ -609,7 +609,7 @@
         "Touch through labelled target, power and timing controls"
       ],
       "accessibility": {
-        "status": "Complete visible commands and manual timing implemented; browser keyboard/reflow/axe verification pending. Physical screen-reader and touch qualification remain open."
+        "status": "Six Goal Line browser scenarios passed at1ad5287: keyboard focus,320/390px layout and automated WCAG2.1 A/AA checks without exclusions, corrupt/blocked saves and equivalent command play. Physical touch and full assistive-technology play remain open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -622,7 +622,7 @@
       "testing": {
         "unit": "21 Goal Line tests passed locally; 10,000 complete campaigns and 50,000 kicks. Full local JavaScript suite: 290 passed. Exact release candidate gate pending.",
         "integration": "52 backend tests passed locally; exact combined candidate verification pending.",
-        "browser": "Genuine controls, 4K, mobile, fallback, context loss, persistence and final mastery tests prepared; not yet executed."
+        "browser": "6/6 browser scenarios passed at1ad5287: actual4K/1080p, full win/save/reload, fallback defeat/retry, rejected storage, mobile final mastery, context loss and real-time pause. See game9/README.md."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game9/",

@@ -18,9 +18,9 @@ Other games and shared rendering/progression remain unchanged.
 Current stage: **WIP, not integrated or deployed**. The physical engine is
 implemented. Independent working-tree probes completed all 10,000 campaigns
 through public actions and compared unique physical configurations; **21/21 Goal Line tests and 290/290 complete JavaScript regression tests**
-passed locally, with **52/52 backend tests**. Browser gates are prepared.
-Actual 4K, UI and persistence remain
-**NOT TESTED** at this checkpoint. First useful changed work began on
+passed locally, with **52/52 backend tests**. All **6/6 scoped browser scenarios passed at 1ad5287**, including actual 4K,
+full control-based completion, persistence, mobile final mastery and recovery.
+The full repository release gate and publication are still pending. First useful changed work began on
 2026-11-05T14:31:38+01:00 (Europe/Berlin); first remote checkpoint **`53958d08ed1e8e160b8dcb50d0610153f9f73f4b`**
 was read back exactly at **2026-11-05T14:32:14+01:00**, 36 seconds later.
 The connector tree matched the local Git tree exactly, and a public fetch
@@ -56,6 +56,22 @@ UI edit at 14:42:13 reached that checkpoint after **5m12s**. A full snapshot
 read exceeded tool output limits before any ref mutation; bounded 8,000-character
 reads recovered the exact tree. Synchronization recovered below ten minutes,
 with no force push or lost work. Earlier first checkpoints met the cadence.
+
+### Corrected browser milestone
+
+The clean **`1ad5287a79473b214b95b8e48f5b4166e603af38`** candidate passed
+release integrity, a 193-file build and **6/6 Goal Line browser scenarios**
+with zero failures/skips/flaky results. The actual 4K buffer is 3840×2160,
+WebGL2 error 0;1080p is 1920×1080. Root inspected the 4K scene and corrected 320px
+final-mastery frame. [Exact receipt and original frames](docs/evidence/2026-11-05-goal-line/README.md).
+Hardware FPS, physical touch and full assistive-technology play remain NOT TESTED.
+
+The implementation checkpoint was exactly read back at 14:52:37+01:00. Its
+follow-up metadata/evidence changes do not alter gameplay; they need their own
+checkpoint and final gate before main integration. Current source counts are
+24 titles: 15 local 3D games, 1 API-dependent3D client and 8 legacy 2D titles.
+The published source below is the earlier nine-game milestone until the new
+candidate's deployment is recorded.
 
 ## Acceptance
 

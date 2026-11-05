@@ -6,7 +6,7 @@ The authoritative brief is [Adigun Game bank pursuing goals and template.md](<Ad
 
 ## Current implementation
 
-- **Goal Line · game9/** is being converted into a distinct striker-only 3D shootout: moving keeper, one-use run-up feint, expiring commitment, nine placement zones and physical ball/contact scoring. Its 10,000 configurations complete through 50,000 numerical kicks. Browser and publication gates are pending on the scoped work branch; [current status](PROJECT_STATUS.md).
+- **Goal Line · game9/** is being converted into a distinct striker-only 3D shootout: moving keeper, one-use run-up feint, expiring commitment, nine placement zones and physical ball/contact scoring. Its 10,000 configurations complete through 50,000 numerical kicks. All six scoped browser scenarios pass, including actual 4K, win/save/reload, mobile mastery, context loss and keyboard play. The final repository gate and publication are pending; [current status](PROJECT_STATUS.md).
 
 - **Electronicer · game3/** replaces the electrical quiz with a real DC circuit commissioning game: five network topologies, live meters, wiring/contact logic, fuse failures and 10,000 deterministic solvable tasks. It uses original 3D components.
 - **World Football · game11/** replaces the old 2D match with original 11v11 gameplay, ball physics, passing, shots, keepers, goals, restarts, match results and 10,000 distinct difficulty/objective configurations. Players, teams and kits are fictional. Offside involvement, fouls, direct/indirect free kicks, penalties, yellow/red cards and five substitutions across three stoppage windows are implemented; rule simplifications are documented in its game README.
@@ -33,7 +33,7 @@ The verified development build is live at **https://adigungamesbank.hephzibahbeh
 
 **Neon Pulse, Circuit Rush, Volt Dodge, Resistor Match, Capacitor Charge, Binary Flash, Fuse Box, Apex Circuit and Penalty Pro are published.** Exact source `5547a5362bfb2edbddf3f922a918e05c14de6b18` passed **269 JavaScript, 52 API and 69 browser checks** in [CI 41934609881](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41934609881), then completed [Pages publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/41936442011). **115/115 selected public files matched exactly**. A real public Binary Flash mission completed and resumed after reload.
 
-All eight existing engineering titles now have 3D implementations. The catalog contains **fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles**. [Successful release and retained earlier failures](docs/evidence/2026-11-04-nine-games/README.md). Production/device qualification and the full brief remain unfinished.
+All eight existing engineering titles now have 3D implementations. That published milestone contained **fourteen local 3D games, one API-dependent 3D client and nine legacy 2D titles**. The new Goal Line candidate brings the source inventory to fifteen local 3D games and eight legacy 2D games; its publication state is recorded above. [Successful release and retained earlier failures](docs/evidence/2026-11-04-nine-games/README.md). Production/device qualification and the full brief remain unfinished.
 
 ## Play and develop
 

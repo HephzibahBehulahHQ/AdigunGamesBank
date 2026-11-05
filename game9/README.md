@@ -8,7 +8,7 @@
 | Genre | Keeper-reading and timing: striker-only penalty training |
 | Owner | Hephzibah Behulah · Adigun Game Bank; corporate sport and strategy |
 | Target | Browser; WebGL 2 for the 3D scene, equivalent command play without graphics |
-| Current stage | **In progress.** Scoped conversion on `work/goal-line-2026-11-05`; not yet integrated or publicly verified |
+| Current stage | **In progress.** Scoped conversion on `work/goal-line-2026-11-05`; local browser milestone verified; final repository gate and publication pending |
 | Production qualification | Hardware performance, physical touch, full assistive-technology play, localization and art review remain open |
 
 Current acceptance belongs in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
@@ -28,8 +28,8 @@ Commitment is sampled when the shot is released: a kick taken within the window
 retains that dive through its flight.
 
 The keeper patrols along the line before a shot. Its position changes the
-distance and time needed to reach the ball. A visible manual-step command
-allows the same decisions without depending on a player's reaction speed.
+distance and time needed to reach the ball. A visible manual-step command advances preparation and ball flight in
+0.10-second increments and allows the same decisions without depending on a player's reaction speed.
 Waiting carries no automatic defeat: the cost is losing the one-use feint's
 commitment window. Shot power changes travel time and gravity drop. The target
 markers are calibrated at 85% power in calm air; they do not promise exact
@@ -137,12 +137,18 @@ Software rendering evidence does not establish gaming-GPU performance.
 
 ## Verification and publication
 
+[Exact local candidate 1ad5287 receipt](../docs/evidence/2026-11-05-goal-line/verification-1ad5287.json)
+and [inspected frames](../docs/evidence/2026-11-05-goal-line/README.md).
+`npm run check`, `npm run build` and the six Goal Line browser scenarios passed
+on the clean candidate. The full repository CI gate and public verification
+are separate release steps; their current state is recorded in PROJECT_STATUS.
+
 | Gate | Current evidence |
 | --- | --- |
-| Numerical engine | Implementation and independent review underway; executed outcomes recorded in PROJECT_STATUS |
-| Genuine-control browser completion / failure / save | **NOT TESTED** at the initial conversion checkpoint |
-| Actual 4K frame / zero GL error | **NOT TESTED** at the initial conversion checkpoint |
-| Accessibility / reflow / storage failures | **NOT TESTED** at the initial conversion checkpoint |
+| Numerical engine | **21/21 Goal Line tests passed**; all 10,000 distinct configurations complete through 50,000 public-command kicks. Full local JavaScript suite290/290 and backend52/52 passed |
+| Genuine-control browser completion / failure / save | **6/6 scenarios passed** at 1ad5287: real-control win/save/reload, keyboard failure/retry, rejected storage, final mastery, context loss and real time |
+| Actual 4K frame / zero GL error | **3840×2160 WebGL2, GL error 0**, with an inspected original frame at 1ad5287;1080p also reports1920×1080 |
+| Accessibility / reflow / storage failures | **Passed** in the scoped browser suite:320/390px, keyboard focus, WCAG2.1 A/AA automated audit without rule exclusions, corrupt legacy/save data and blocked writes |
 | Hardware / physical touch / screen reader | **NOT TESTED** |
 | Publication | New conversion **NOT DEPLOYED** at this checkpoint; existing legacy route remains public |
 

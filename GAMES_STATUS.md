@@ -12,7 +12,7 @@ Current acceptance and verification live in [PROJECT_STATUS.md](PROJECT_STATUS.m
 | game6/ | CAPACITOR CHARGE | New 3D RC commissioning campaign; published; 4K, control completion/save and fallback verified | In progress |
 | game7/ | BINARY FLASH | New 3D digital-register campaign; published; 4K, control completion/save and fallback verified | In progress |
 | game8/ | FUSE BOX | New 3D DC-cabinet conversion; published; 4K, control completion/save and fallback verified | In progress |
-| game9/ | GOAL LINE | New 3D keeper-reading/feint shootout on scoped branch; 10,000 numerical campaigns validated; browser/publication gate pending | In progress |
+| game9/ | GOAL LINE | New 3D keeper-reading/feint shootout;10,000 numerical campaigns and 6 scoped browser scenarios verified, including 4K; publication pending | In progress |
 | game10/ | APEX CIRCUIT | New 3D driving conversion; published; 4K, control completion/save and fallback verified | In progress |
 | game11/ | WORLD FOOTBALL | Playable 3D 11-a-side match; verified 4K and full-time UI win | In progress |
 | game12/ | CORTEX PRIME | Legacy 2D | In progress |
