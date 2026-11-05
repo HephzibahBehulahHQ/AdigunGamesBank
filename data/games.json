@@ -582,7 +582,7 @@
     {
       "id": "game9",
       "title": "GOAL LINE",
-      "description": "Read the keeper, aim your penalty and score to progress through competitive shootout stages.",
+      "description": "Read the moving keeper, sell a timed feint and redirect nine-zone ballistic shots across 10,000 five-kick training challenges.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game9/",
@@ -591,43 +591,44 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
-        "verified4K": false
+        "engine": "Three.js WebGL 2",
+        "is3D": true,
+        "verified4K": false,
+        "evidence": "Goal Line conversion in progress; actual 4K browser verification pending."
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "10,000 distinct keeper/timing/wind configurations; 50,000 kicks completed through public commands in numerical tests; not 10,000 human playtests",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch through labelled target, power and timing controls"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Complete visible commands and manual timing implemented; browser keyboard/reflow/axe verification pending. Physical screen-reader and touch qualification remain open."
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original procedural pitch, stadium, ball and capsule keeper; unchanged approved corporate artwork; Three.js MIT notice retained. See ASSETS.md and game9/README.md."
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "21 Goal Line tests passed locally; 10,000 complete campaigns and 50,000 kicks. Full local JavaScript suite: 290 passed. Exact release candidate gate pending.",
+        "integration": "52 backend tests passed locally; exact combined candidate verification pending.",
+        "browser": "Genuine controls, 4K, mobile, fallback, context loss, persistence and final mastery tests prepared; not yet executed."
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game9/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game9/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "previousVerifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game9/",
+        "previousVerifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
+        "status": "3D conversion on a scoped work branch; not yet published. Prior verification refers to the legacy route."
       },
       "blockers": [],
       "policy": {

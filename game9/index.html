@@ -1,3 +1,70 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06101e"><title>GOAL LINE | Hephzibah Behulah</title><style>
-:root{color-scheme:dark;--cyan:#55f5e5;--mint:#b1ffcf;--bg:#06101e;--panel:#102034;--muted:#a6becd}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#153b50,var(--bg) 60%);color:#eafaff;font:16px/1.5 system-ui,sans-serif;text-align:center}.brand{display:flex;justify-content:center;align-items:center;gap:10px;margin:12px auto;width:min(92%,500px);padding:8px;background:#071522;border:1px solid #55f5e544;border-radius:12px;color:#eafaff;text-decoration:none;font-weight:800;letter-spacing:.1em}.brand img{width:150px;max-height:44px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px}.wrap{width:min(960px,94%);margin:24px auto}.eyebrow{color:var(--cyan);letter-spacing:.2em;font:700 11px ui-monospace,monospace}h1{font-size:clamp(36px,7vw,66px);line-height:1;margin:8px}.lead{color:var(--muted)}.hud{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px}.pill{padding:8px 13px;border:1px solid #55f5e555;border-radius:99px;background:#081827}.arena{position:relative;max-width:650px;margin:18px auto;padding:24px;border:2px solid #d8ffec;border-radius:18px;background:repeating-linear-gradient(0deg,transparent 0 44px,#ffffff1c 45px 47px),repeating-linear-gradient(90deg,transparent 0 84px,#ffffff12 85px 87px),linear-gradient(135deg,#087858,#034d3c);box-shadow:0 0 34px #00ff9b24;overflow:hidden}.goal{position:relative;height:180px;max-width:420px;margin:auto;border:5px solid #e8fff5;border-bottom:0;background:repeating-linear-gradient(0deg,#ffffff22 0 2px,transparent 2px 20px),repeating-linear-gradient(90deg,#ffffff22 0 2px,transparent 2px 28px)}.keeper{position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);font-size:44px;filter:drop-shadow(0 4px 4px #0008);transition:left .22s ease}.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:15px auto;max-width:420px}.zone{min-height:45px;border:1px solid #ffffff77;border-radius:9px;background:#061d32aa;color:#eafaff;font-weight:750;cursor:pointer}.zone[aria-pressed=true]{background:#55f5e5;color:#06131b;box-shadow:0 0 18px #55f5e5}.actions button{padding:12px 22px;border:0;border-radius:10px;background:linear-gradient(90deg,var(--cyan),var(--mint));color:#06131b;font-weight:900;cursor:pointer}.actions button:disabled{opacity:.45;cursor:not-allowed}#msg{min-height:32px;color:var(--mint);font-weight:700}.foot{color:var(--muted);font-size:12px}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style></head><body><a class="brand" href="../" aria-label="Game Bank home"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a><main class="wrap"><p class="eyebrow">FOOTBALL · PENALTY SHOOTOUT</p><h1>GOAL LINE</h1><p class="lead">Read the keeper, pick a corner and time your shot. Score three of five penalties to clear each stage.</p><div class="hud"><span class="pill">Kicks <b id="kicks">0</b>/5</span><span class="pill">Goals <b id="goals">0</b></span><span class="pill">Match <b id="matches">0</b></span></div><section class="arena" aria-label="Penalty shootout field"><div class="goal"><div class="keeper" id="keeper" aria-label="Goalkeeper">🧤</div></div><div class="zones" id="zones" aria-label="Choose shot direction"></div></section><div class="actions"><button id="shoot" type="button" disabled>TAKE THE SHOT</button><button id="restart" type="button" hidden>RETRY MATCH</button></div><p id="msg" role="status" aria-live="polite">Select a target zone to set up your shot.</p><p class="foot">Use mouse, touch or keyboard. Every stage gets harder; progress saves in this browser.</p></main><script src="../assets/game-levels.js"></script><script src="../assets/game9.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B1220">
+  <meta name="description" content="Read the goalkeeper, create an opening, and strike. Goal Line is a five-kick football training shootout with real ball flight and 10,000 progression levels.">
+  <title>Goal Line • Adigun Games Bank</title>
+  <link rel="stylesheet" href="./goal-line.css">
+</head>
+<body>
+  <a class="skip-link" href="#play-controls">Skip to game controls</a>
+  <header class="site-header">
+    <a class="brand" href="../index.html"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="48" height="48"><span>Adigun Games Bank<small>Original games. A little more mastery.</small></span></a>
+    <a class="back-link" href="../index.html">All games <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="game-title">
+      <div><p class="eyebrow">FOOTBALL TRAINING / STRIKER CHALLENGE</p><h1 id="game-title">Goal Line<span>.</span></h1><p class="intro-copy">Read the movement. Sell the feint. Find the open net.</p></div>
+      <div class="challenge-badge"><span>FIVE KICKS</span><strong>One clear target</strong><small>You take every shot.</small></div>
+    </section>
+    <section class="game-layout" id="game" data-phase="ready" aria-label="Goal Line game">
+      <div class="pitch-column">
+        <div class="score-strip" aria-label="Shootout scoreboard">
+          <div><span>LEVEL</span><strong id="level-readout">1</strong><small id="tier-readout">Beginner</small></div>
+          <div><span>KICK</span><strong id="kick-readout">1 / 5</strong><small id="kicks-left">Five opportunities</small></div>
+          <div><span>GOALS</span><strong id="goals-readout">0</strong><small id="target-readout">Target: 3</small></div>
+        </div>
+        <div class="pitch-shell">
+          <canvas id="pitch" tabindex="0" aria-label="Goal Line 3D pitch. Arrow keys choose a target, W and S adjust power, F feints, T advances time, Space shoots, Escape pauses."></canvas>
+          <div class="pitch-caption"><span class="venue-tag">ADIGUN TRAINING GROUND</span><span id="pitch-clock">READ 0.00 s</span></div>
+          <div id="scene-fallback" class="scene-fallback" hidden><strong>Command pitch is ready</strong><p id="fallback-reason">The 3D view is unavailable. Use the target buttons and goalkeeper readout below to play the same shootout.</p></div>
+          <div id="pause-overlay" class="pause-overlay" hidden><strong>Play paused</strong><span>The keeper and ball are holding position.</span></div>
+        </div>
+        <div class="view-settings"><div><label for="quality">View quality</label><select id="quality"><option value="auto">Auto</option><option value="1080">1080p</option><option value="4k">4K UHD</option></select></div><span id="render-status">Loading 3D pitch…</span><button id="pause" type="button">Pause play</button></div>
+        <section class="scouting" aria-labelledby="scouting-title"><div class="section-label"><h2 id="scouting-title">Keeper scouting</h2><span class="stage-chip" id="keeper-stage">Patrolling</span></div><p id="keeper-readout">The keeper is moving across the goal.</p><p id="flight-readout" class="muted">Ball: 11.00 m from the goal line · 0.11 m high.</p><div class="keeper-track" aria-hidden="true"><span class="track-centre"></span><span id="keeper-marker"></span></div><div class="track-labels" aria-hidden="true"><span>Your left</span><span>Goal centre</span><span>Your right</span></div><p id="keeper-advice" class="muted">A feint can pull the keeper toward your selected zone. Change your target when the keeper commits.</p></section>
+        <section class="history-panel" aria-labelledby="history-title"><div class="section-label"><h2 id="history-title">Your five kicks</h2><span id="wind-readout">Calm conditions</span></div><ol id="history" class="shot-history"><li class="empty-history">Your first attempt starts here.</li></ol></section>
+      </div>
+      <aside class="controls-column" id="play-controls" aria-label="Shot controls">
+        <section class="control-card">
+          <div class="section-label"><h2>Build your shot</h2><span class="card-step">01 — AIM</span></div>
+          <p class="muted">Choose a zone in the goal. Your selection sets the launch angles; power and wind shape the final placement.</p>
+          <div class="aim-grid" id="aim-grid" role="group" aria-label="Nine target zones">
+            <button data-zone="top-left" aria-pressed="false" type="button"><span aria-hidden="true">↖</span>Top left</button><button data-zone="top-centre" aria-pressed="false" type="button"><span aria-hidden="true">↑</span>Top centre</button><button data-zone="top-right" aria-pressed="false" type="button"><span aria-hidden="true">↗</span>Top right</button>
+            <button data-zone="middle-left" aria-pressed="false" type="button"><span aria-hidden="true">←</span>Middle left</button><button data-zone="middle-centre" aria-pressed="false" type="button"><span aria-hidden="true">◎</span>Middle centre</button><button data-zone="middle-right" aria-pressed="false" type="button"><span aria-hidden="true">→</span>Middle right</button>
+            <button data-zone="low-left" aria-pressed="false" type="button"><span aria-hidden="true">↙</span>Low left</button><button data-zone="low-centre" aria-pressed="false" type="button"><span aria-hidden="true">↓</span>Low centre</button><button data-zone="low-right" aria-pressed="false" type="button"><span aria-hidden="true">↘</span>Low right</button>
+          </div>
+          <p id="aim-readout" class="selection-readout">Select your target zone.</p>
+          <div class="section-label power-title"><label for="power">Shot power</label><output id="power-readout" for="power">85%</output></div>
+          <input id="power" type="range" min="25" max="100" value="85" step="1" aria-describedby="power-help">
+          <div class="power-presets" role="group" aria-label="Shot power presets"><button type="button" data-power="65">Controlled · 65%</button><button type="button" data-power="85">Driven · 85%</button><button type="button" data-power="100">Full · 100%</button></div>
+          <p id="power-help" class="muted">85% is the calibrated strike. Less power drops the ball earlier; more power makes it arrive higher and faster.</p>
+        </section>
+        <section class="control-card timing-card">
+          <div class="section-label"><h2>Create an opening</h2><span class="card-step">02 — TIMING</span></div>
+          <label class="mode-toggle" for="live-time"><input id="live-time" type="checkbox"><span>Run the keeper in real time<small>Off: study each moment at your own pace.</small></span></label>
+          <div class="action-pair"><button id="feint" type="button" disabled>Feint toward target</button><button id="advance-time" type="button">Advance time · 0.10 s</button></div>
+          <p id="feint-readout" class="muted">One feint per kick. Bait a side, wait for the commitment, then redirect your shot.</p>
+          <button class="shoot-button" id="shoot" type="button" disabled>Strike the ball <span aria-hidden="true">↗</span></button>
+          <p class="keyboard-help">Keyboard on the pitch: arrows aim · W/S power · F feint · T time · Space strike · Esc pause</p>
+        </section>
+        <section class="result-card" aria-labelledby="result-title"><p class="eyebrow" id="result-eyebrow">READY WHEN YOU ARE</p><h2 id="result-title">Make room for a goal.</h2><p id="result-copy">Score at least 3 goals from five kicks to unlock the next training level.</p><p id="status" class="status" role="status" aria-live="polite" aria-atomic="true">Choose a target to begin.</p><div class="result-actions"><button id="next-kick" class="primary" type="button" hidden>Set up next kick</button><button id="next-level" class="primary" type="button" hidden>Play next level</button><button id="retry" type="button">Restart this level</button></div></section>
+      </aside>
+    </section>
+    <section class="campaign-panel" aria-labelledby="campaign-title"><div><p class="eyebrow">KEEP BUILDING</p><h2 id="campaign-title">The long game.</h2><p id="progress-readout">0 of 10,000 levels completed.</p><p id="save-readout" class="muted">Progress saves on this device after a successful five-kick round.</p></div><form id="level-form"><label for="level-select">Choose an unlocked level</label><div class="level-picker"><input id="level-select" type="number" min="1" max="1" value="1" inputmode="numeric" required><button type="submit">Load level</button></div><p id="level-limit" class="muted">Unlocked: level 1</p></form></section>
+    <details class="rules"><summary>How Goal Line works</summary><div><p>Every round has five striker kicks. All five must finish. Reach the round’s goal target to unlock one new level; later tiers ask for four, then five goals. There are 10,000 levels, ending with Professional Master.</p><p>This is a striker training drill. The goalkeeper patrols across the goal. A run-up feint draws a delayed commitment toward the zone you had selected. Study the keeper’s stage and position, then choose where and when to shoot. An early shot can still be tracked; a committed keeper has already chosen a side.</p><p>Study mode is the default. “Advance time” moves the keeper by exactly 0.10 seconds, and advances ball flight by the same amount after a strike. Turn real time on for continuous play. Pause and switching tabs both stop all simulation time.</p><p>Nine zones choose launch angles, not guaranteed destinations. Power changes the arc and arrival time; the crosswind on each kick changes horizontal flight. Shots can be saved by actual keeper contact, hit the frame, or miss.</p><p>All outcomes and progression use the same simulation with or without the 3D view. 4K UHD requests an actual 3840 × 2160 rendering buffer when your device supports it.</p></div></details>
+  </main>
+  <footer><span>© 2026 Hephzibah Behulah · Adigun Games Bank</span><nav aria-label="Footer"><a href="../index.html">Games home</a><a href="../docs/STANDARDS.md">Project standards</a></nav></footer>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

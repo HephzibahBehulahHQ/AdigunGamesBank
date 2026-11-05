@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 const SAVE_KEY = 'adigun.campaign.v1.goal-line';
-const phase = page => page.locator('#phase');
+const phase = page => page.locator('#game');
 const control = (page, name) => page.getByRole('button', { name, exact: true });
 const activate = (button, keyboard) => keyboard ? button.press('Enter') : button.click();
 
@@ -17,14 +17,21 @@ async function noGraphics(page) {
 }
 
 async function manualTiming(page) {
-  await page.getByRole('combobox', { name: 'Keeper timing', exact: true }).selectOption('manual');
+  await page.locator('#live-time').uncheck();
 }
 
 async function prepareGoal(page, keyboard = false) {
   await activate(control(page, 'Middle left'), keyboard);
-  await activate(control(page, 'Run-up feint'), keyboard);
-  for (let i = 0; i < 4; i++) await activate(control(page, 'Advance keeper 0.1 s'), keyboard);
+  await activate(control(page, 'Feint toward target'), keyboard);
+  for (let i = 0; i < 4; i++) await activate(control(page, 'Advance time · 0.10 s'), keyboard);
   await activate(control(page, 'Middle right'), keyboard);
+}
+
+async function resolveKick(page, keyboard = false) {
+  for (let step = 0; step < 60 && await phase(page).getAttribute('data-phase') === 'flight'; step++) {
+    await activate(control(page, 'Advance time · 0.10 s'), keyboard);
+  }
+  await expect(phase(page)).not.toHaveAttribute('data-phase', 'flight');
 }
 
 async function playFive(page, { keyboard = false, lose = false } = {}) {
@@ -32,12 +39,13 @@ async function playFive(page, { keyboard = false, lose = false } = {}) {
     await expect(phase(page)).toHaveAttribute('data-phase', 'ready');
     if (lose) await activate(control(page, 'Middle centre'), keyboard);
     else await prepareGoal(page, keyboard);
-    await activate(control(page, 'Shoot penalty'), keyboard);
+    await activate(control(page, 'Strike the ball'), keyboard);
+    await resolveKick(page, keyboard);
     await expect(phase(page)).toHaveAttribute('data-phase', kick === 4 ? lose ? 'lost' : 'won' : 'result', { timeout: 20000 });
     if (kick < 4) {
       // Partial success must never award the next challenge.
       expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
-      await activate(control(page, 'Next kick'), keyboard);
+      await activate(control(page, 'Set up next kick'), keyboard);
     }
   }
 }
@@ -57,7 +65,7 @@ test('Goal Line renders actual 4K, wins five physical kicks through controls, sa
   const canvas = page.locator('canvas');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2');
   await manualTiming(page);
-  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k');
+  await page.locator('#quality').selectOption('4k');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   const buffer = await canvas.evaluate(element => {
     const gl = element.getContext('webgl2');
@@ -66,18 +74,18 @@ test('Goal Line renders actual 4K, wins five physical kicks through controls, sa
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('goal-line-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
   await canvas.screenshot({ path: testInfo.outputPath('goal-line-4k.png') });
-  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
+  await page.locator('#quality').selectOption('auto');
   await page.setViewportSize({ width: 800, height: 1000 });
   await playFive(page);
-  await expect(page.locator('#goals')).toHaveText('5 / 5');
+  await expect(page.locator('#goals-readout')).toHaveText('5 / 5');
   await expect(page.locator('#history li')).toHaveCount(5);
-  await expect(page.locator('#save-status')).toContainText('saved on this device');
+  await expect(page.locator('#save-readout')).toContainText('saved on this device');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
   await page.screenshot({ path: testInfo.outputPath('goal-line-win.png'), fullPage: true });
-  await control(page, 'Next challenge').click();
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('2');
+  await control(page, 'Play next level').click();
+  await expect(page.locator('#level-select')).toHaveValue('2');
   await page.reload();
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('2');
+  await expect(page.locator('#level-select')).toHaveValue('2');
   await expect(phase(page)).toHaveAttribute('data-phase', 'ready');
   expect(errors).toEqual([]);
 });
@@ -93,36 +101,37 @@ test('Goal Line keeps visible keyboard controls without WebGL, pauses preparatio
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto('/game9/');
-  await expect(page.locator('#graphics-fallback')).toBeVisible();
+  await expect(page.locator('#scene-fallback')).toBeVisible();
   await expect(page.locator('canvas')).not.toHaveAttribute('data-renderer', 'WebGL2');
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('1');
+  await expect(page.locator('#level-select')).toHaveValue('1');
   await manualTiming(page);
   const zone = control(page, 'Middle left');
   await zone.press('Enter');
   const focus = await zone.evaluate(element => ({ active: document.activeElement === element, outline: getComputedStyle(element).outlineStyle, width: parseFloat(getComputedStyle(element).outlineWidth) }));
   expect(focus).toEqual({ active: true, outline: 'solid', width: 3 });
-  await control(page, 'Run-up feint').press('Enter');
-  await control(page, 'Advance keeper 0.1 s').press('Enter');
-  await control(page, 'Pause').press('Enter');
+  await control(page, 'Feint toward target').press('Enter');
+  await control(page, 'Advance time · 0.10 s').press('Enter');
+  await control(page, 'Pause play').press('Enter');
   await expect(phase(page)).toHaveAttribute('data-phase', 'paused');
-  await expect(control(page, 'Shoot penalty')).toBeDisabled();
-  await expect(control(page, 'Advance keeper 0.1 s')).toBeDisabled();
+  await expect(control(page, 'Strike the ball')).toBeDisabled();
+  await expect(control(page, 'Advance time · 0.10 s')).toBeDisabled();
   const paused = await page.locator('#keeper-readout').innerText();
   await page.waitForTimeout(350); // Observe frozen preparation, not a readiness delay.
   expect(await page.locator('#keeper-readout').innerText()).toBe(paused);
-  await control(page, 'Resume').press('Enter');
-  await control(page, 'Retry challenge').press('Enter');
+  await control(page, 'Resume play').press('Enter');
+  await control(page, 'Restart this level').press('Enter');
   // The malformed record is retained rather than falsely treated as progress.
   await page.evaluate(key => localStorage.removeItem(key), SAVE_KEY);
   await playFive(page, { keyboard: true, lose: true });
-  await expect(page.locator('#goals')).toHaveText('0 / 5');
-  await expect(control(page, 'Next challenge')).toBeHidden();
+  await expect(page.locator('#goals-readout')).toHaveText('0 / 5');
+  await expect(control(page, 'Play next level')).toBeHidden();
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
-  await control(page, 'Retry challenge').press('Enter');
+  await control(page, 'Restart this level').press('Enter');
   await prepareGoal(page, true);
-  await control(page, 'Shoot penalty').press('Enter');
+  await control(page, 'Strike the ball').press('Enter');
+  await resolveKick(page, true);
   await expect(phase(page)).toHaveAttribute('data-phase', 'result');
-  await expect(page.locator('#goals')).toHaveText('1 / 5');
+  await expect(page.locator('#goals-readout')).toHaveText('1 / 5');
   await reflowAndAxe(page, testInfo, 'goal-line-keyboard-320.png');
   const targets = await page.locator('[data-zone]').evaluateAll(elements => elements.map(element => ({ width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height })));
   expect(targets).toHaveLength(9);
@@ -136,13 +145,13 @@ test('Goal Line keeps visible keyboard campaign play when storage writes fail an
   await page.addInitScript(() => { Storage.prototype.setItem = function () { throw new DOMException('Test storage failure', 'QuotaExceededError'); }; });
   await page.goto('/game9/'); await manualTiming(page);
   await playFive(page, { keyboard: true });
-  await expect(page.locator('#save-status')).toContainText('session only');
-  await expect(page.locator('#save-status')).not.toContainText('saved on this device');
-  await control(page, 'Next challenge').press('Enter');
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('2');
+  await expect(page.locator('#save-readout')).toContainText('session only');
+  await expect(page.locator('#save-readout')).not.toContainText('saved on this device');
+  await control(page, 'Play next level').press('Enter');
+  await expect(page.locator('#level-select')).toHaveValue('2');
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
   await page.reload();
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('1');
+  await expect(page.locator('#level-select')).toHaveValue('1');
 });
 
 test('Goal Line final challenge honours its power limits, finishes mastery and reflows on mobile', async ({ page }, testInfo) => {
@@ -152,17 +161,18 @@ test('Goal Line final challenge honours its power limits, finishes mastery and r
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/game9/'); await manualTiming(page);
-  await expect(page.getByRole('spinbutton', { name: 'Challenge', exact: true })).toHaveValue('10000');
+  await expect(page.locator('#level-select')).toHaveValue('10000');
   for (let kick = 0; kick < 5; kick++) {
     const power = page.getByRole('slider', { name: 'Shot power', exact: true });
     expect(Number(await power.inputValue())).toBeLessThanOrEqual(Number(await power.getAttribute('max')));
     await prepareGoal(page);
-    await control(page, 'Shoot penalty').click();
+    await control(page, 'Strike the ball').click();
+    await resolveKick(page);
     await expect(phase(page)).toHaveAttribute('data-phase', kick === 4 ? 'won' : 'result');
-    if (kick < 4) await control(page, 'Next kick').click();
+    if (kick < 4) await control(page, 'Set up next kick').click();
   }
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 10000, unlocked: 10000 });
-  await expect(control(page, 'Next challenge')).toBeHidden();
+  await expect(control(page, 'Play next level')).toBeHidden();
   await page.setViewportSize({ width: 320, height: 900 });
   await reflowAndAxe(page, testInfo, 'goal-line-mastered-320.png');
 });
@@ -180,10 +190,11 @@ test('Goal Line survives actual WebGL context loss and preserves command scoring
     extension.loseContext(); return true;
   });
   expect(supported).toBe(true);
-  await expect(page.locator('#graphics-fallback')).toBeVisible();
+  await expect(page.locator('#scene-fallback')).toBeVisible();
   await expect(canvas).not.toHaveAttribute('data-renderer', 'WebGL2');
   expect(await page.locator('#keeper-readout').innerText()).toBe(before);
-  await control(page, 'Shoot penalty').click();
+  await control(page, 'Strike the ball').click();
+    await resolveKick(page);
   await expect(phase(page)).toHaveAttribute('data-phase', 'result');
-  await expect(page.locator('#goals')).toHaveText('1 / 5');
+  await expect(page.locator('#goals-readout')).toHaveText('1 / 5');
 });

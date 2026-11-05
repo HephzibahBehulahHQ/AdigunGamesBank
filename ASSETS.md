@@ -1,5 +1,7 @@
 # Asset record
 
+- `game9` (GOAL LINE): original procedural 3D training ground, goal/net, ball and capsule goalkeeper. Original game text and fictional venue; no real team/player likeness, external model, audio or sports dataset. Shares only existing pure ball/contact helpers with Penalty Pro; official corporate artwork and Three.js MIT notices remain unchanged.
+
 - `game1` (NEON PULSE): original procedural LED matrix, enclosure, circuit traces, target rings, fixings and materials. Original abstract signal-routing puzzles; no external fonts, models, texture images, audio or electrical-installation claims.
 - `game8` (FUSE BOX): original procedural DC cabinet, copper bus, breakers, cables and lamp/fan/motor load geometry. Original extra-low-voltage teaching challenges with explicitly simplified current/protection assumptions.
 - `game10` (APEX CIRCUIT): original procedural closed circuit, timing gates, fictional vehicle, track surroundings and materials. No real car manufacturer, sponsor, circuit likeness, external model, logo or motorsport data.
