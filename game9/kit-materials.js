@@ -32,8 +32,7 @@ function stripe(context, top, metres, color) {
   context.fillRect(0, row(top), SIZE, SIZE * metres / HEIGHT_METRES);
 }
 
-export function outfitMaterials(positions, role, skin) {
-  const away = role === 'press';
+export function outfitCoordinates(positions) {
   const uv = new Float32Array(positions.length / 3 * 2);
   for (let vertex = 0; vertex < positions.length / 3; vertex++) {
     const x = positions[vertex * 3];
@@ -43,6 +42,11 @@ export function outfitMaterials(positions, role, skin) {
     uv[vertex * 2] = THREE.MathUtils.clamp(0.5 + (z > 0.03 ? x : -x) / WIDTH_METRES, 0, 1);
     uv[vertex * 2 + 1] = y / HEIGHT_METRES;
   }
+  return uv;
+}
+
+export function outfitMaterials(role, skin) {
+  const away = role === 'press';
   const jersey = textile(away ? '#8f332c' : '#204778', '#96acbc', context => {
     context.fillStyle = away ? '#5e251d' : '#172e4b';
     context.fillRect(120, row(1.52), 96, row(0.96) - row(1.52));
@@ -69,15 +73,12 @@ export function outfitMaterials(positions, role, skin) {
     stripe(context, 0.357, 0.015, '#244470');
     stripe(context, 0.33, 0.012, '#244470');
   });
-  return {
-    uv,
-    palette: [
-      material(skin ? '#ffffff' : '#936349', { map: skin, roughness: 0.65, metalness: 0 }),
-      material('#ffffff', { map: jersey, roughness: 0.88, metalness: 0 }),
-      material('#ffffff', { map: shorts, roughness: 0.89, metalness: 0 }),
-      material('#ffffff', { map: socks, roughness: 0.92, metalness: 0 }),
-      material('#232327', { roughness: 0.45 }),
-      material('#c9c4b6', { roughness: 0.28 })
-    ]
-  };
+  return [
+    material(skin ? '#ffffff' : '#936349', { map: skin, roughness: 0.65, metalness: 0 }),
+    material('#ffffff', { map: jersey, roughness: 0.88, metalness: 0 }),
+    material('#ffffff', { map: shorts, roughness: 0.89, metalness: 0 }),
+    material('#ffffff', { map: socks, roughness: 0.92, metalness: 0 }),
+    material('#232327', { roughness: 0.45 }),
+    material('#c9c4b6', { roughness: 0.28 })
+  ];
 }
