@@ -593,7 +593,7 @@
       "rendering": {
         "engine": "Three.js / WebGL 2",
         "is3D": true,
-        "verified4K": false
+        "verified4K": true
       },
       "levels": {
         "target": 10000,
@@ -608,7 +608,7 @@
         "Touch"
       ],
       "accessibility": {
-        "status": "Keyboard and numerical command play available; audit pending"
+        "status": "Keyboard fallback and 320px WCAG A/AA automated checks passed"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
@@ -621,7 +621,7 @@
       "testing": {
         "unit": "Goal Line clearance engine suite",
         "integration": "All drills covered by the engine solver",
-        "browser": "Release verification pending"
+        "browser": "Keyboard completion, fallback, persistence and 3840 × 2160 WebGL 2 verified in CI 44919603061"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game9/",
