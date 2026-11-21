@@ -14,6 +14,12 @@ const clearButton = byId('clear');
 const canvas = byId('pitch');
 const quality = byId('quality');
 const cameraView = byId('camera-view');
+const cameraKey = 'adigun.goal-line.camera';
+try {
+  if (localStorage.getItem(cameraKey) === 'broadcast') cameraView.value = 'broadcast';
+} catch {
+  // The camera still works when the browser blocks storage.
+}
 const graphics = byId('graphics');
 const liveButton = byId('live');
 const movementHelp = byId('movement-help');
@@ -267,6 +273,9 @@ import('./pitch.js').then(async ({ createPitch }) => {
   update();
   const render = () => update();
   quality.addEventListener('change', render);
-  cameraView.addEventListener('change', render);
+  cameraView.addEventListener('change', () => {
+    try { localStorage.setItem(cameraKey, cameraView.value); } catch { /* Keep the current view. */ }
+    render();
+  });
   new ResizeObserver(render).observe(canvas);
 }).catch(fallback);

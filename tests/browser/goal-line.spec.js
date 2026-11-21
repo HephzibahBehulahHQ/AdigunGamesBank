@@ -76,6 +76,10 @@ test('Goal Line can switch cameras without changing the drill state', async ({ p
   await camera.selectOption('goal');
   await expect(canvas).toHaveAttribute('data-camera', 'goal');
   await expect(page.locator('#defender')).toHaveText('0.45 m right');
+  await camera.selectOption('broadcast');
+  await page.reload();
+  await expect(camera).toHaveValue('broadcast');
+  await expect(canvas).toHaveAttribute('data-camera', 'broadcast');
 });
 
 test('Goal Line rejects 16K when the device viewport limit is too small', async ({ page }) => {
