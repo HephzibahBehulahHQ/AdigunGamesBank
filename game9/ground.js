@@ -83,19 +83,36 @@ export function addGround(scene, renderer, { map, normalMap }) {
     scene.add(ground);
     stripes.push(ground);
   }
-  const marks = [[0, 0, 44, 0.112], [0, 5.5, 18.32, 0.112], [0, 16.5, 40.32, 0.112]];
+  const penaltyArea = 16.5;
+  const spotDistance = 11;
+  const arcRadius = 9.15;
+  const paintWidth = 0.112;
+  const paintHeight = -0.009;
+  const marks = [[0, 0, 44, paintWidth], [0, 5.5, 18.32, paintWidth], [0, penaltyArea, 40.32, paintWidth]];
   for (const side of [-1, 1]) {
-    marks.push([side * 22, 34, 0.112, 68], [side * 9.16, 2.75, 0.112, 5.5], [side * 20.16, 8.25, 0.112, 16.5]);
+    marks.push([side * 22, 34, paintWidth, 68], [side * 9.16, 2.75, paintWidth, 5.5],
+      [side * 20.16, penaltyArea / 2, paintWidth, penaltyArea]);
   }
-  const paintedLines = new THREE.InstancedMesh(new THREE.PlaneGeometry().rotateX(-Math.PI / 2),
-    material('#d6d6c8', { roughness: 0.94, metalness: 0, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
-    marks.length);
+  const paint = material('#d6d6c8', {
+    roughness: 0.94, metalness: 0, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+  });
+  const paintedLines = new THREE.InstancedMesh(new THREE.PlaneGeometry().rotateX(-Math.PI / 2), paint, marks.length);
   const transform = new THREE.Matrix4();
   for (const [index, [x, z, width, length]] of marks.entries()) {
-    paintedLines.setMatrixAt(index, transform.makeScale(width, 1, length).setPosition(x, -0.009, z));
+    paintedLines.setMatrixAt(index, transform.makeScale(width, 1, length).setPosition(x, paintHeight, z));
   }
   paintedLines.receiveShadow = true;
   scene.add(paintedLines);
+  const halfArc = Math.acos((penaltyArea - spotDistance) / arcRadius);
+  const arc = new THREE.RingGeometry(arcRadius - paintWidth / 2, arcRadius + paintWidth / 2,
+    48, 1, -Math.PI / 2 - halfArc, 2 * halfArc);
+  const spot = new THREE.CircleGeometry(0.11, 24);
+  for (const geometry of [arc, spot]) {
+    const paintMark = new THREE.Mesh(geometry.rotateX(-Math.PI / 2), paint);
+    paintMark.position.set(0, paintHeight, spotDistance);
+    paintMark.receiveShadow = true;
+    scene.add(paintMark);
+  }
   let heavy = false;
   return (isHeavy) => {
     if (isHeavy === heavy) return;
