@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Instancing the fixed steel and concrete training-ground pieces reduced one
+4K broadcast redraw from 181 to 61 WebGL draw calls. Both views were
+inspected. The new scene also completed five hardware-accelerated clearances
+in the 15,360 × 8,640 scene framebuffer without WebGL errors or context loss.
+
 [CI run 44939298561](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44939298561)
 on `04d855b` passed unit, API, accessibility and fallback checks. Its rendered
 gameplay step passed 47 cases and failed three Goal Line input cases. The
