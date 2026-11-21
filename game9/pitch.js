@@ -85,14 +85,16 @@ export async function createPitch(options) {
     else opponent.stride(-pressure.x);
   }
 
-  function receiveClearance(attempt, readiness) {
-    const ballX = -attempt.end.x;
-    const gap = ballX - receiver.mesh.position.x;
+  function controlClearance(attempt, readiness) {
+    const player = attempt.interception ? opponent : receiver;
+    const ball = attempt.interception?.ball ?? attempt.end;
+    const ballX = -ball.x;
+    const gap = ballX - player.mesh.position.x;
     // Step toward the ball, then extend the nearer boot to cushion it.
-    receiver.mesh.position.x += THREE.MathUtils.clamp(gap, -0.55, 0.55) * readiness;
+    player.mesh.position.x += THREE.MathUtils.clamp(gap, -0.55, 0.55) * readiness;
     const leg = gap < 0 ? 0 : 1;
-    const trap = new THREE.Vector3(ballX, 0.035, SAFETY_LINE + BALL_RADIUS * 0.55);
-    receiver.plantBoot(trap, 0, leg, readiness);
+    const trap = new THREE.Vector3(ballX, ball.y - BALL_RADIUS * 0.68, ball.z + BALL_RADIUS * 0.55);
+    player.plantBoot(trap, 0, leg, readiness);
   }
 
   function framePlay(z) {
@@ -122,6 +124,7 @@ export async function createPitch(options) {
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;
       const attempt = state.trajectory;
+      const controlled = state.result === 'cleared' || state.result === 'intercepted';
       const netHit = state.result === 'conceded' ? goalNetImpact(feed) : null;
       const concession = Boolean(netHit) && !playedConcession;
       playedConcession = Boolean(netHit);
@@ -161,7 +164,7 @@ export async function createPitch(options) {
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
         framePlayers(feed, sceneTime);
-        if (state.result === 'cleared') receiveClearance(attempt, 1);
+        if (controlled) controlClearance(attempt, 1);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
         // Camera and aim changes leave a settled scene's shadow casters in place.
@@ -250,9 +253,9 @@ export async function createPitch(options) {
             : attempt.delay + Math.min(seconds - windup, flight))
           : Math.max(0, (state.tick - 1 + elapsed) * STEP);
         framePlayers(feed, time);
-        if (kick && state.result === 'cleared') {
+        if (kick && controlled) {
           const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, duration - 0.24), duration);
-          if (readiness > 0) receiveClearance(attempt, readiness);
+          if (readiness > 0) controlClearance(attempt, readiness);
         }
         settledShadow = null;
         light.shadow.needsUpdate = true;

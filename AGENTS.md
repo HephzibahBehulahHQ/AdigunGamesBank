@@ -36,6 +36,10 @@ explicitly; do not silently follow a moving branch.
 - Use scoped work branches for incomplete or failing work. Integrate into
   `main` only after applicable release checks pass. An authorized deployment
   does not need another permission request.
+- Merge and deploy each small, independently releasable change as it passes
+  its checks. Push incomplete slices to the scoped development branch as work
+  progresses. Keep unrelated releasable changes moving when a title has a
+  release hold.
 
 ## Read and work narrowly
 
