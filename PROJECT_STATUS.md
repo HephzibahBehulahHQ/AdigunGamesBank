@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+A fixed four-sample shadow filter on the turf reduced median GPU
+scene-and-presentation time from 51.7 to 48.2 ms across paired five-clearance
+16K runs on Intel Arc 140T. Median observed completion intervals were
+59.9 and 59.4 ms. Both runs retained the full 15,360 × 8,640 scene buffer.
+
 The turf now uses Blinn–Phong lighting with the existing grass textures,
 normal detail and shadow reception. In matched five-clearance runs at
 15,360 × 8,640 on Intel Arc 140T, median GPU scene-and-presentation time

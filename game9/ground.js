@@ -27,9 +27,21 @@ export function addGround(scene, renderer, { map, normalMap }) {
   const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
   const heavyMowing = map ? ['#547453', '#60805a'] : ['#30492e', '#3a5134'];
   const surfaces = mowing.map(color => new THREE.MeshPhongMaterial({ color, ...turf }));
-  if (normalMap) {
-    for (const surface of surfaces) {
-      surface.onBeforeCompile = shader => {
+  // The turf spans most of the frame. Keep filtered shadow edges with four fixed depth comparisons.
+  const turfShadows = THREE.ShaderChunk.shadowmap_pars_fragment.replace(
+    /float phi = interleavedGradientNoise\( gl_FragCoord\.xy \) \* PI2;\s+shadow = \([\s\S]*?\) \* 0\.2;/,
+    `vec2 offset = radius * 0.5;
+    shadow = 0.25 * (
+      texture(shadowMap, vec3(shadowCoord.xy + vec2(-offset.x, -offset.y), shadowCoord.z)) +
+      texture(shadowMap, vec3(shadowCoord.xy + vec2(-offset.x,  offset.y), shadowCoord.z)) +
+      texture(shadowMap, vec3(shadowCoord.xy + vec2( offset.x, -offset.y), shadowCoord.z)) +
+      texture(shadowMap, vec3(shadowCoord.xy + vec2( offset.x,  offset.y), shadowCoord.z))
+    );`
+  );
+  for (const surface of surfaces) {
+    surface.onBeforeCompile = shader => {
+      shader.fragmentShader = shader.fragmentShader.replace('#include <shadowmap_pars_fragment>', turfShadows);
+      if (normalMap) {
         shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `
           if (vViewPosition.z < 18.0) {
             vec3 baseNormal = normal;
@@ -38,8 +50,8 @@ export function addGround(scene, renderer, { map, normalMap }) {
             normal = normalize(mix(baseNormal, normal, nearDetail));
           }
         `);
-      };
-    }
+      }
+    };
   }
   for (let stripe = 0; stripe < 16; stripe++) {
     const surface = new THREE.PlaneGeometry(width, stripeLength);
