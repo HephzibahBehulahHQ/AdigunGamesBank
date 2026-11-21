@@ -269,6 +269,8 @@ byId('load').addEventListener('click', () => {
 });
 
 function fallback() {
+  pitch?.dispose();
+  pitch = null;
   canvas.hidden = true;
   quality.disabled = true;
   cameraView.disabled = true;

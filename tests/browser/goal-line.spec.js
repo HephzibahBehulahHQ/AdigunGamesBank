@@ -111,6 +111,23 @@ test('Goal Line keeps visible keyboard controls and saves without WebGL', async 
   expect(graphicsRequests).toEqual([]);
 });
 
+test('Goal Line keeps the drill playable when WebGL is lost mid-play', async ({ page }) => {
+  await page.goto('/game9/');
+  const pitch = page.locator('#pitch');
+  await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 15000 });
+  await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+  const incoming = await page.locator('#ball').textContent();
+  await pitch.evaluate(canvas => canvas.getContext('webgl2').getExtension('WEBGL_lose_context').loseContext());
+  await expect(page.locator('#graphics')).toContainText('3D unavailable');
+  await expect(pitch).toBeHidden();
+  await expect(page.locator('#defender')).toHaveText('0.45 m right');
+  await expect(page.locator('#ball')).toHaveText(incoming);
+  await page.getByRole('button', { name: 'Hold', exact: true }).press('Enter');
+  await expect(page.locator('#ball')).not.toHaveText(incoming);
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+  await completeDrill(page);
+});
+
 test('Goal Line can switch cameras without changing the drill state', async ({ page }) => {
   await page.goto('/game9/');
   const canvas = page.locator('#pitch');

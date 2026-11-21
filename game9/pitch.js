@@ -123,6 +123,10 @@ export async function createPitch(options) {
   }
 
   return {
+    dispose() {
+      cancelAnimationFrame(frame);
+      stage.dispose();
+    },
     draw(state, feed, ball, angle, plannedContact, projection) {
       const newFeed = feed !== previousFeed;
       if (newFeed) ballMesh.quaternion.identity();
