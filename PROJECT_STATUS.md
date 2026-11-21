@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Disconnecting a controller that has sent input now pauses an active feed
+and clears its movement. Chrome's simulated controller test confirmed that
+ball and defender positions stay fixed after disconnect, that a held Menu
+button on reconnection leaves play paused, and that a fresh Menu press
+resumes it. The timed keyboard pause test also passed. Physical controller
+disconnect and reconnection were not tested.
+
 Player shin and boot rotations now reset on all axes when the rig returns
 to its base pose. A Chrome regression test reproduced retained rotation on
 the previous build and verified that the fixed receiver returns both joints

@@ -541,7 +541,7 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   ]);
 });
 
-test('Goal Line standard gamepad starts play, moves, aims and restarts', async ({ page }) => {
+test('Goal Line standard gamepad controls play and pauses on disconnect', async ({ page }) => {
   await disableWebGL(page);
   const start = new Date('2026-11-21T16:00:00Z');
   await page.clock.install({ time: start });
@@ -594,4 +594,31 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
   await expect(page.getByRole('button', { name: 'Start live ball' })).toBeEnabled();
   await expect(page.locator('#defender')).toHaveText('centre');
   await expect(loft).not.toBeChecked();
+  await press(9);
+  await page.clock.runFor(150);
+  await page.evaluate(() => {
+    const gamepad = window.goalLineTestPad;
+    gamepad.connected = false;
+    window.dispatchEvent(Object.assign(new Event('gamepaddisconnected'), { gamepad }));
+  });
+  await expect(page.locator('#message')).toContainText('Controller disconnected. Live ball paused.');
+  const ball = await page.locator('#ball').textContent();
+  const defender = await page.locator('#defender').textContent();
+  await page.clock.runFor(3000);
+  await expect(page.locator('#ball')).toHaveText(ball);
+  await expect(page.locator('#defender')).toHaveText(defender);
+  const resume = page.getByRole('button', { name: 'Resume live ball' });
+  await expect(resume).toBeEnabled();
+  await page.evaluate(() => {
+    const gamepad = window.goalLineTestPad;
+    gamepad.connected = true;
+    gamepad.buttons[9].pressed = true;
+    window.dispatchEvent(Object.assign(new Event('gamepadconnected'), { gamepad }));
+  });
+  await page.clock.runFor(100);
+  await expect(resume).toBeEnabled();
+  await page.evaluate(() => { window.goalLineTestPad.buttons[9].pressed = false; });
+  await page.clock.runFor(32);
+  await press(9);
+  await expect(page.getByRole('button', { name: 'Pause live ball' })).toBeEnabled();
 });

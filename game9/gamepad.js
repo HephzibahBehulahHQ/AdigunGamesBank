@@ -7,6 +7,16 @@ export function gamepadControls(actions) {
   let previous = new Set();
   let frame;
   let movement = 0;
+  let engaged = false;
+
+  function forgetPad(disconnected) {
+    const notify = disconnected && engaged;
+    movement = 0;
+    activeIndex = null;
+    previous.clear();
+    engaged = false;
+    if (notify) actions.disconnect();
+  }
 
   function currentPad() {
     try {
@@ -21,16 +31,16 @@ export function gamepadControls(actions) {
     frame = undefined;
     const pad = currentPad();
     if (!pad || document.hidden || !document.hasFocus()) {
-      movement = 0;
-      activeIndex = null;
-      previous.clear();
+      forgetPad(!pad);
       return;
     }
+    if (activeIndex !== null && activeIndex !== pad.index) forgetPad(true);
     const down = new Set(Object.values(buttons).filter(index => pad.buttons[index]?.pressed));
     const axis = pad.axes[0] ?? 0;
     movement = Math.abs(axis) > 0.26 ? Math.sign(axis) : 0;
     if (activeIndex === pad.index) {
       const pressed = index => down.has(index) && !previous.has(index);
+      engaged ||= movement !== 0 || [...down].some(pressed);
       if (pressed(buttons.live)) actions.live();
       if (pressed(buttons.left)) actions.aim(-1);
       if (pressed(buttons.right)) actions.aim(1);
@@ -50,7 +60,10 @@ export function gamepadControls(actions) {
     if (frame === undefined) read();
   }
   window.addEventListener('gamepadconnected', start);
-  window.addEventListener('gamepaddisconnected', start);
+  window.addEventListener('gamepaddisconnected', (event) => {
+    if (event.gamepad.index === activeIndex) forgetPad(true);
+    start();
+  });
   window.addEventListener('focus', start);
   document.addEventListener('visibilitychange', start);
   start();

@@ -44,7 +44,12 @@ const pad = gamepadControls({
   loft: toggleLoft,
   clear: () => clearButton.click(),
   advance: () => { if (!next.hidden) next.click(); },
-  reset: () => byId('retry').click()
+  reset: () => byId('retry').click(),
+  disconnect: () => {
+    if (timer === null) return;
+    setLive(false);
+    update('Controller disconnected. Live ball paused. ' + byDistance());
+  }
 });
 
 function setLive(enabled) {
