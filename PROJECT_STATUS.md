@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Two five-clearance Chrome runs on Intel Arc 140T compared the 16K RGBA8
+color target with a smaller RGB565 target. The RGB565 run reduced median
+scene-plus-presentation GPU time from 38.4 to 35.3 ms and the median
+observed completion interval from 46.4 to 43.3 ms. Both restored 4K
+without WebGL errors. RGB565 produced visible bands in the sky and color
+shifts in shaded areas, so the renderer keeps RGBA8. The rebuilt site
+matched the baseline SHA256 after removing the experiment.
+
 The player rigs reuse vectors, quaternions and leg-solver output during
 each boot placement. All 12 engine checks and 21 Chrome browser checks
 passed, including the 10,000-drill solver, the pose reset regression and
