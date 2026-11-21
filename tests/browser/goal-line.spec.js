@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { LEVEL_COUNT } from '../../shared/progression.js';
 import { makeDrill, planClearance, readContact, SAFETY_LINE, STEP } from '../../game9/clearance.js';
 
 async function completeDrill(page, level = 1) {
@@ -26,11 +27,29 @@ async function completeDrill(page, level = 1) {
       await page.keyboard.press('Enter');
     }
   }
-  await expect(page.locator('#message')).toContainText('Drill cleared');
+  const mastered = level === LEVEL_COUNT;
+  await expect(page.locator('#message')).toContainText(mastered ? 'Campaign complete' : 'Drill cleared');
+  if (mastered) {
+    await expect(page.getByRole('button', { name: 'Next drill' })).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Restart drill' })).toBeFocused();
+  }
   await page.reload();
-  await expect(page.locator('#level')).toHaveValue(String(level + 1));
+  await expect(page.locator('#level')).toHaveValue(String(Math.min(level + 1, LEVEL_COUNT)));
   await expect(page.locator('#campaign')).toContainText(`${level} cleared`);
+  if (mastered) await expect(page.locator('#campaign')).toContainText('Campaign complete');
 }
+
+test('Goal Line marks the campaign complete after the final drill', async ({ page }) => {
+  await page.addInitScript(level => {
+    const key = 'adigun.campaign.v1.goal-line';
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, JSON.stringify({ version: 1, completed: level - 1, unlocked: level }));
+    }
+  }, LEVEL_COUNT);
+  await page.goto('/game9/');
+  await expect(page.locator('#campaign')).not.toContainText('Campaign complete');
+  await completeDrill(page, LEVEL_COUNT);
+});
 
 test('Goal Line saves a complete final-tier drill and unlocks the next one', async ({ page }) => {
   await page.addInitScript(() => {

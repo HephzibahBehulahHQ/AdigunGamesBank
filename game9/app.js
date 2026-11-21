@@ -71,7 +71,9 @@ function update(message) {
   const position = state.result === 'conceded'
     ? goalNetRest(goalNetImpact(feed))
     : shot?.interception?.ball ?? shot?.end ?? ball;
-  byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
+  const completed = save.completed;
+  const mastery = completed === LEVEL_COUNT ? ' · Campaign complete' : '';
+  byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + completed + ' cleared' + mastery;
   const location = sideways(position.x) + ', ' + Math.abs(position.z).toFixed(2) + ' m ' + (position.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('ball').textContent = position.y > 0.12 ? location + ' · ' + position.y.toFixed(2) + ' m high' : location;
   byId('defender').textContent = sideways(state.defender);
@@ -230,7 +232,8 @@ clearButton.addEventListener('click', () => {
   if (successful) {
     const finished = state.index === state.feeds.length - 1;
     if (finished) save.complete(level);
-    update(finished ? 'Drill cleared. Progress saved on this device.' : 'Safe clearance. Prepare for the next ball.');
+    const result = level === LEVEL_COUNT ? 'Campaign complete. All 10,000 drills cleared.' : 'Drill cleared. Progress saved on this device.';
+    update(finished ? result : 'Safe clearance. Prepare for the next ball.');
     (next.hidden ? byId('retry') : next).focus();
     return;
   }
