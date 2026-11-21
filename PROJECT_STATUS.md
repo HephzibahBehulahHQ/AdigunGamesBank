@@ -4,6 +4,17 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The local WebGPU benchmark now drives Goal Line's actual browser controls
+through the timed feed and clearance. On Chrome 158 with Intel Arc 140T,
+`node scripts/check-goal-line-hardware.mjs` with `ADIGUN_HARDWARE_WEBGPU=1`
+passed `4k 1 heavy broadcast` and `16k 3 heavy broadcast`. The 16K canvas
+texture was 15,360 × 8,640, the inspected viewport showed the full pitch,
+and observed GPU completions were 116.1 ms median and 125.4 ms at the 95th
+percentile. The regular WebGL build passed four targeted Chrome checks for
+actual 4K, no-WebGL play, context restoration and timed input. WebGPU material
+parity and sustained 60 fps remain open. The next bounded step is profiling
+the WebGPU scene and output pass independently to locate the cost.
+
 The local stepped WebGPU scene probe now reuses Goal Line's pitch, rigs
 and clearance rules. Chrome 158 on the Intel adapter drew the pitch and
 completed a heavy-turf clearance at both 3840 × 2160 and 15,360 × 8,640.

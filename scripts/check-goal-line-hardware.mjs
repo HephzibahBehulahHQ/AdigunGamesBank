@@ -32,6 +32,7 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
+const webgpu = process.env.ADIGUN_HARDWARE_WEBGPU === '1';
 const angleBackend = process.env.ADIGUN_CHROME_ANGLE_BACKEND ?? '';
 const backendNames = { d3d11: /\bDirect3D11\b/i, vulkan: /\bVulkan\b/i };
 if (angleBackend && !Object.hasOwn(backendNames, angleBackend)) {
@@ -40,6 +41,9 @@ if (angleBackend && !Object.hasOwn(backendNames, angleBackend)) {
 const requireDirect = process.env.ADIGUN_HARDWARE_NATIVE_16K === '1';
 const fullscreen = requireDirect || process.env.ADIGUN_HARDWARE_FULLSCREEN === '1';
 const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
+if (webgpu && (angleBackend || profileGpu || captureBuffer)) {
+  throw new Error('ANGLE selection, WebGL phase profiling and buffer PNG capture are WebGL-only options.');
+}
 if (requireDirect && (mode !== '16k' || headless || profileGpu)) {
   throw new Error('Direct 16K verification requires a headful 16k run without offscreen GPU phase profiling.');
 }
@@ -49,10 +53,12 @@ if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
 }
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
+const threeRoot = path.resolve(import.meta.dirname, '..', 'node_modules', 'three', 'build');
+const threeModules = new Set(['three.core.js', 'three.module.js', 'three.tsl.js', 'three.webgpu.js']);
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
     camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
-    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend].filter(Boolean).join('-'));
+    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend, webgpu ? 'webgpu' : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -60,6 +66,18 @@ const mime = {
 const server = createServer(async (request, response) => {
   try {
     const route = decodeURIComponent(new URL(request.url, 'http://127.0.0.1').pathname);
+    if (webgpu && route === '/game9/pitch-backend.js') {
+      const backend = await readFile(new URL('./goal-line-webgpu-backend.mjs', import.meta.url));
+      return response.writeHead(200, { 'Content-Type': 'text/javascript' }).end(backend);
+    }
+    if (webgpu && route === '/vendor/three/three.module.js') {
+      return response.writeHead(200, { 'Content-Type': 'text/javascript' })
+        .end('export * from "/three/three.webgpu.js"; export { ShaderChunk, WebGLRenderer } from "/three/three.module.js";');
+    }
+    if (webgpu && route.startsWith('/three/') && threeModules.has(route.slice('/three/'.length))) {
+      const module = await readFile(path.join(threeRoot, route.slice('/three/'.length)));
+      return response.writeHead(200, { 'Content-Type': 'text/javascript' }).end(module);
+    }
     const file = path.resolve(root, '.' + route, route.endsWith('/') ? 'index.html' : '');
     if (!file.startsWith(root + path.sep)) {
       response.writeHead(404).end();
@@ -83,7 +101,7 @@ try {
   const args = angleBackend ? [`--use-angle=${angleBackend}`] : [];
   browser = await chromium.launch({ channel: 'chrome', headless, args });
   const page = await browser.newPage({ viewport: requireDirect ? null : { width: 1440, height: 900 } });
-  await page.addInitScript(({ profileGpu, gpuPhase, level, captureBuffer }) => {
+  await page.addInitScript(({ profileGpu, gpuPhase, level, captureBuffer, webGpuMode }) => {
     // Unlock the selected drill in the isolated test context.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
       version: 1, completed: level - 1, unlocked: level
@@ -92,6 +110,7 @@ try {
     window.goalLineCompletionTimes = [];
     window.goalLineGpuTimes = [];
     window.goalLineDepthAllocations = [];
+    window.goalLineWebGpuMode = webGpuMode;
     const allocateDepth = WebGL2RenderingContext.prototype.renderbufferStorage;
     WebGL2RenderingContext.prototype.renderbufferStorage = function (target, format, width, height) {
       if (width === 15360 && height === 8640 && (format === this.DEPTH_COMPONENT16 || format === this.DEPTH_COMPONENT24)) {
@@ -184,7 +203,7 @@ try {
       }
       return drawElements.apply(this, args);
     };
-  }, { profileGpu, gpuPhase, level, captureBuffer });
+  }, { profileGpu, gpuPhase, level, captureBuffer, webGpuMode: webgpu ? { mode, requested } : null });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -199,23 +218,30 @@ try {
     await graphics.selectOption(mode);
   }
   const readSurface = () => canvas.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    const density = devicePixelRatio || 1;
+    const viewport = {
+      fullscreen: document.fullscreenElement?.contains(element) ?? false,
+      canvasPhysicalSize: [Math.round(rect.width * density), Math.round(rect.height * density)],
+      viewportPhysicalSize: [Math.round(innerWidth * density), Math.round(innerHeight * density)],
+      camera: element.dataset.camera,
+    };
+    if (element.dataset.renderer === 'WebGPU') {
+      const surface = window.goalLineWebGpuSurface;
+      return { ...viewport, ...surface, renderBuffer: surface.drawingBuffer, renderSurface: 'drawing buffer' };
+    }
     if (element.dataset.renderer !== 'WebGL2') return null;
     const graphicsContext = element.getContext('webgl2');
     if (!graphicsContext) return null;
     const debug = graphicsContext.getExtension('WEBGL_debug_renderer_info');
-    const rect = element.getBoundingClientRect();
-    const density = devicePixelRatio || 1;
     return {
+      ...viewport,
       drawingBuffer: [graphicsContext.drawingBufferWidth, graphicsContext.drawingBufferHeight],
-      fullscreen: document.fullscreenElement?.contains(element) ?? false,
-      canvasPhysicalSize: [Math.round(rect.width * density), Math.round(rect.height * density)],
-      viewportPhysicalSize: [Math.round(innerWidth * density), Math.round(innerHeight * density)],
       canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
       sceneDepthBits: element.dataset.sceneDepthBits ? Number(element.dataset.sceneDepthBits) : null,
       direct16kAttempt: element.dataset.direct16kAttempt ?? null,
-      camera: element.dataset.camera,
       maxViewport: Array.from(graphicsContext.getParameter(graphicsContext.MAX_VIEWPORT_DIMS)),
       maxRenderbuffer: graphicsContext.getParameter(graphicsContext.MAX_RENDERBUFFER_SIZE),
       gpuTimerAvailable: graphicsContext.getSupportedExtensions()?.includes('EXT_disjoint_timer_query_webgl2') ?? false,
@@ -342,7 +368,7 @@ try {
       medianMs: percentile(frameIntervals, 0.5), p95Ms: percentile(frameIntervals, 0.95), p99Ms: percentile(frameIntervals, 0.99),
       longGapCount: longGaps.length,
       longestGaps: longGaps.sort((a, b) => b.durationMs - a.durationMs).slice(0, 8),
-      observedGpuCompletion: mode === '16k' ? {
+      observedGpuCompletion: mode === '16k' || webgpu ? {
         frames: completedFrames,
         medianMs: percentile(completionIntervals, 0.5),
         p95Ms: percentile(completionIntervals, 0.95),
@@ -375,7 +401,7 @@ try {
     if (!requireDirect && await canvas.isVisible()) {
       await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
     }
-    if (mode === '16k' && !workloadError && !after?.contextLost) {
+    if (mode === '16k' && !webgpu && !workloadError && !after?.contextLost) {
       await graphics.selectOption('4k');
       restored4K = await readSurface();
     }
@@ -385,15 +411,16 @@ try {
     mode, scenario, camera, level, requested, requestedBufferAllocated, requireDirect, softwareRenderer,
     before, after, restored4K, sample, bufferCapture, workloadError,
     browser: browser.version(), platform: process.platform, headless, angleBackend: angleBackend || null,
+    api: webgpu ? 'WebGPU' : 'WebGL2',
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
     capturedAt: new Date().toISOString()
   };
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
-  const restored = mode !== '16k' || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
+  const restored = mode !== '16k' || webgpu || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
     restored4K.renderSurface === 'drawing buffer' && restored4K.camera === camera && !restored4K.error && !restored4K.contextLost);
-  const measuredCompletion = mode !== '16k' || sample?.observedGpuCompletion?.medianMs > 0;
+  const measuredCompletion = (mode !== '16k' && !webgpu) || sample?.observedGpuCompletion?.medianMs > 0;
   if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;
 } finally {

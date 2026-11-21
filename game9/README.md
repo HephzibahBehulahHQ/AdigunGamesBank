@@ -96,6 +96,13 @@ with the real pitch, player rigs and game rules. Use `4k` for the other
 resolution. The scene probe opens a separate local view and saves its
 texture sizes and a viewport capture. The regular game still uses WebGL.
 
+Set `ADIGUN_HARDWARE_WEBGPU=1` when running
+`node scripts/check-goal-line-hardware.mjs 16k 3 heavy broadcast` to drive
+the actual game controls in the local WebGPU benchmark. This run fixes the
+canvas size for the session and records GPU completion intervals in a
+`-webgpu` report directory. WebGL-only material effects are still being
+ported. GPU completion intervals do not establish display scanout.
+
 ## Defender source and rebuild
 
 The sky uses a 2048 × 1024 version of the CC0 panorama

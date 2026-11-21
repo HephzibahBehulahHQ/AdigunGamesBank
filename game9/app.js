@@ -2,6 +2,7 @@ import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
 import { CLEARANCE_SPEED, MAX_CLEARANCE_SPEED, MIN_CLEARANCE_SPEED, STEP, advance, clear, createDrill, goalNetImpact, goalNetRest, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
 import { createPitchAudio } from './pitch-audio.js';
 import { gamepadControls } from './gamepad.js';
+import { createGamePitch } from './pitch-backend.js';
 
 const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
@@ -359,16 +360,12 @@ canvas.addEventListener('webglcontextrestored', () => {
 load(level);
 
 async function initializePitch() {
-  const context = canvas.getContext('webgl2', {
-    antialias: true, alpha: false, powerPreference: 'high-performance',
-  });
-  if (!context) {
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  pitch = await createGamePitch({ canvas, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
+  if (!pitch) {
     fallback();
     return;
   }
-  const { createPitch } = await import('./pitch.js');
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  pitch = await createPitch({ canvas, context, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
   canvas.hidden = false;
   quality.disabled = false;
   cameraView.disabled = false;
