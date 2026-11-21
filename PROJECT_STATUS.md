@@ -39,6 +39,17 @@ was visually inspected. This is a different browser launch mode from the
 previous baseline, and the textured candidate remains below the desired
 16K playability standard on the tested hardware.
 
+The 18:11 headless retest limited turf normal-map shading by camera depth.
+With the same 30-feed workload, it submitted 910 frames over 39.1 sampled
+seconds at 15,360 × 8,640, with no WebGL errors or context loss. Median, 95th-
+and 99th-percentile intervals were 41.7, 83.3 and 100.0 ms. The 907 × 510
+presentation frame was inspected. The long frames still limit 16K playability.
+
+The preceding renderer candidate `352d82ada323873dfaac9e399513d922637b1d5e`
+passed [CI 44927480746](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44927480746):
+273 JavaScript tests, 52 API tests and 75 browser checks, including the
+advanced pressure interception and successful retry. Publication was skipped.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

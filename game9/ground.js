@@ -25,6 +25,20 @@ export function addGround(scene, renderer, { map, normalMap }) {
   };
   const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
   const surfaces = mowing.map(color => material(color, turf));
+  if (normalMap) {
+    for (const surface of surfaces) {
+      surface.onBeforeCompile = shader => {
+        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `
+          if (vViewPosition.z < 18.0) {
+            vec3 baseNormal = normal;
+            ${THREE.ShaderChunk.normal_fragment_maps}
+            float nearDetail = 1.0 - smoothstep(12.0, 18.0, vViewPosition.z);
+            normal = normalize(mix(baseNormal, normal, nearDetail));
+          }
+        `);
+      };
+    }
+  }
   for (let stripe = 0; stripe < 16; stripe++) {
     const surface = new THREE.PlaneGeometry(width, stripeLength);
     const uv = surface.getAttribute('uv');
