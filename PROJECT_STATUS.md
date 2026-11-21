@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+A 10-clearance comparison on Intel Arc 140T tested skipping the 16K scene
+color clear when the sky covers the frame. The median observed completion
+interval was 58.5 ms with the change and 58.4 ms with the existing clear.
+The 95th percentile rose from 67.0 to 74.8 ms. The development renderer
+keeps the color clear.
+
 The full-play hardware workload now runs from the incoming feed through a
 successful clearance under pressure. Chrome 158 on Intel Arc 140T finished
 all 30 clearances at 15,360 × 8,640 with 1,310 observed GPU completions, a
