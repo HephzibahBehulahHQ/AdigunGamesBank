@@ -33,6 +33,8 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 const webgpu = process.env.ADIGUN_HARDWARE_WEBGPU === '1';
+const webGpuProfile = process.env.ADIGUN_PROFILE_WEBGPU === '1';
+if (webGpuProfile && !webgpu) throw new Error('WebGPU pass profiling requires ADIGUN_HARDWARE_WEBGPU=1.');
 const angleBackend = process.env.ADIGUN_CHROME_ANGLE_BACKEND ?? '';
 const backendNames = { d3d11: /\bDirect3D11\b/i, vulkan: /\bVulkan\b/i };
 if (angleBackend && !Object.hasOwn(backendNames, angleBackend)) {
@@ -58,7 +60,8 @@ const threeModules = new Set(['three.core.js', 'three.module.js', 'three.tsl.js'
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
     camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
-    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend, webgpu ? 'webgpu' : ''].filter(Boolean).join('-'));
+    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend,
+    webgpu ? 'webgpu' : '', webGpuProfile ? 'passes' : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -203,7 +206,8 @@ try {
       }
       return drawElements.apply(this, args);
     };
-  }, { profileGpu, gpuPhase, level, captureBuffer, webGpuMode: webgpu ? { mode, requested } : null });
+  }, { profileGpu, gpuPhase, level, captureBuffer,
+    webGpuMode: webgpu ? { mode, requested, profilePasses: webGpuProfile } : null });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -266,6 +270,7 @@ try {
   if (!workloadError && requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
     const frameIntervals = [];
     const completionIntervals = [];
+    const webGpuPasses = { scene: [], output: [], auxiliary: [] };
     const longGaps = [];
     let completedFrames = 0;
     let frameCount = 0;
@@ -282,6 +287,7 @@ try {
         for (let step = 0; step < Math.abs(speed - CLEARANCE_SPEED); step++) {
           await power.press(speed < CLEARANCE_SPEED ? 'ArrowLeft' : 'ArrowRight');
         }
+        if (webGpuProfile) await page.evaluate(() => window.goalLineReadWebGpuPasses?.());
         await page.evaluate(() => {
           window.goalLineDrawTimes.length = 0;
           window.goalLineCompletionTimes.length = 0;
@@ -343,6 +349,10 @@ try {
         }
         for (let i = 1; i < completions.length; i++) completionIntervals.push(completions[i] - completions[i - 1]);
         completedFrames += completions.length;
+        if (webGpuProfile) {
+          const passes = await page.evaluate(() => window.goalLineReadWebGpuPasses?.() ?? []);
+          for (const { phase, milliseconds } of passes) webGpuPasses[phase].push(milliseconds);
+        }
         frameCount += frames.length;
         if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
         after = await readSurface();
@@ -362,6 +372,10 @@ try {
     completionIntervals.sort((a, b) => a - b);
     const percentile = (intervals, fraction) => intervals[Math.ceil(intervals.length * fraction) - 1] ?? null;
     const gpuTimes = await page.evaluate(() => window.goalLineGpuTimes.sort((a, b) => a - b));
+    const webGpuPassTimings = webGpuProfile ? Object.fromEntries(Object.entries(webGpuPasses).map(([phase, values]) => {
+      values.sort((a, b) => a - b);
+      return [phase, { count: values.length, medianMs: percentile(values, 0.5), p95Ms: percentile(values, 0.95) }];
+    })) : null;
     sample = {
       completedRounds, requestedRounds: rounds, frames: frameCount,
       activeMilliseconds, wallMilliseconds: performance.now() - started,
@@ -379,6 +393,7 @@ try {
         medianMs: percentile(gpuTimes, 0.5),
         p95Ms: percentile(gpuTimes, 0.95),
       } : null,
+      webGpuPassTimings,
     };
     if (captureBuffer && !workloadError) {
       try {
@@ -421,7 +436,8 @@ try {
   const restored = mode !== '16k' || webgpu || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
     restored4K.renderSurface === 'drawing buffer' && restored4K.camera === camera && !restored4K.error && !restored4K.contextLost);
   const measuredCompletion = (mode !== '16k' && !webgpu) || sample?.observedGpuCompletion?.medianMs > 0;
-  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion ||
+  const measuredPasses = !webGpuProfile || (sample?.webGpuPassTimings?.scene.count && sample?.webGpuPassTimings?.output.count);
+  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion || !measuredPasses ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;
 } finally {
   await browser?.close();

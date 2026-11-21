@@ -102,6 +102,9 @@ the actual game controls in the local WebGPU benchmark. This run fixes the
 canvas size for the session and records GPU completion intervals in a
 `-webgpu` report directory. WebGL-only material effects are still being
 ported. GPU completion intervals do not establish display scanout.
+Add `ADIGUN_PROFILE_WEBGPU=1` for a separate timestamp-query run. Its
+`-passes` report shows the scene, output and auxiliary pass timings after
+setup. Chrome must expose the WebGPU `timestamp-query` feature.
 
 ## Defender source and rebuild
 

@@ -4,6 +4,16 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Separate WebGPU timestamp queries measured three live 16K broadcast
+clearances on Chrome 158 and Intel Arc 140T, with zero reported errors.
+`ADIGUN_HARDWARE_WEBGPU=1 ADIGUN_PROFILE_WEBGPU=1` with
+`node scripts/check-goal-line-hardware.mjs 16k 3 heavy broadcast` measured
+46.6 ms median for the scene, 19.9 ms for the output transform and 0.7 ms
+for auxiliary passes. Median observed GPU completion interval was 113.0 ms.
+The scene and output passes each exceeded the 16.7 ms budget on this GPU.
+The next comparison is the full-size output transform against an equivalent
+inline color transform while checking the rendered image for parity.
+
 The local WebGPU benchmark now drives Goal Line's actual browser controls
 through the timed feed and clearance. On Chrome 158 with Intel Arc 140T,
 `node scripts/check-goal-line-hardware.mjs` with `ADIGUN_HARDWARE_WEBGPU=1`
