@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The source-mesh builder now shapes the jersey away from fine anatomical
+contours and tapers the added volume at the collar and cuffs. The close-up
+showed a smoother hanging front panel. The garment remains skinned to the
+player rig without cloth simulation. Two asset builds matched, and three
+actual 4K lofted clearances completed without WebGL errors. The builder
+accepts an optional pinned source directory that survives a static rebuild.
+
 The player mesh now splits the body surface at the collar, sleeve and
 other kit boundaries, with interpolated skin weights and UVs. Removing
 the overlapping helper shell cleared the jagged sleeve and collar edges

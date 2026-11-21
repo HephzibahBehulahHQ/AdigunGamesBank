@@ -87,6 +87,8 @@ The rig and mesh come from the MakeHuman contributors under [CC0 1.0](https://ww
 
 The generator writes `defender.mesh.bin` with a JSON metadata header and
 typed arrays for the vertex positions, texture coordinates and skin weights.
+Pass a source directory as the first argument to keep the inputs outside
+`dist`, which is rebuilt by `node scripts/build.mjs`.
 
 | Local input | Pinned source |
 | --- | --- |

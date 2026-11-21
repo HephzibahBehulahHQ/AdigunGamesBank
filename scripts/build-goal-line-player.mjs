@@ -1,14 +1,17 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { packPlayerMesh } from '../game9/player-mesh.js';
 import { createHash } from 'node:crypto';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const inputs = [
   ['makehuman-base.obj', 'd26635e9326e3cca30778fd7b9c00062b03cce09'],
   ['makehuman-skeleton.json', 'b02cbecae00143856410d7561adf006d83bf9b3e'],
   ['makehuman-weights.json', '66185806afacf87749be8e5cf6dbf66496b2a6b0']
 ];
+const sourceDirectory = process.argv[2] ?? fileURLToPath(new URL('../dist', import.meta.url));
 const [obj, skeletonText, weightsText] = inputs.map(([name, expected]) => {
-  const bytes = readFileSync(new URL(`../dist/${name}`, import.meta.url));
+  const bytes = readFileSync(join(sourceDirectory, name));
   const sha = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
   if (sha !== expected) throw new Error(`Unexpected upstream asset revision for ${name}`);
   return bytes.toString('utf8');
@@ -46,15 +49,63 @@ const rig = names.map(name => {
 });
 
 // Split the body at the actual clothing boundaries instead of assigning whole faces by centroid.
+const jersey = { slot: 1, bottom: 0.5, top: 5.42, left: -2.72, right: 2.72 };
 const kitRegions = [
   { slot: 4, top: -7.55 },
   { slot: 3, bottom: -7.55, top: -4.8 },
   { slot: 2, bottom: -4.8, top: 0.5 },
-  { slot: 1, bottom: 0.5, top: 5.42, left: -2.72, right: 2.72 },
+  jersey,
   { slot: 0, bottom: 0.5, top: 5.42, right: -2.72 },
   { slot: 0, bottom: 0.5, top: 5.42, left: 2.72 },
   { slot: 0, bottom: 5.42 },
 ];
+
+function shapeJersey() {
+  const neighbours = new Map();
+  for (const { group: groupName, vertices } of faces) {
+    if (groupName !== 'body') continue;
+    for (const [index, vertex] of vertices.entries()) {
+      if (!neighbours.has(vertex)) neighbours.set(vertex, new Set());
+      neighbours.get(vertex).add(vertices[(index + 1) % vertices.length]);
+      neighbours.get(vertex).add(vertices[(index + vertices.length - 1) % vertices.length]);
+    }
+  }
+  const panels = [...neighbours].flatMap(([vertex, adjacent]) => {
+    const [x, y] = source[vertex];
+    const inset = Math.min(x - jersey.left, jersey.right - x, y - jersey.bottom, jersey.top - y);
+    if (inset <= 0) return [];
+    return [{ vertex, adjacent: [...adjacent], ease: Math.min(1, inset / 0.5) }];
+  });
+  let shaped = source.slice();
+  // Relax fine anatomical contours inside the shirt while preserving the cut edges and rig weights.
+  for (let pass = 0; pass < 6; pass++) {
+    const next = shaped.slice();
+    for (const { vertex, adjacent, ease } of panels) {
+      next[vertex] = shaped[vertex].map((value, axis) => {
+        if (axis === 1) return value;
+        const mean = adjacent.reduce((sum, neighbour) => sum + shaped[neighbour][axis], 0) / adjacent.length;
+        return value + (mean - value) * 0.60 * ease;
+      });
+    }
+    shaped = next;
+  }
+  for (const { vertex, ease } of panels) {
+    const [x, y, z] = shaped[vertex];
+    // Add a little garment ease across the torso, tapering to the original collar and cuffs.
+    const torso = Math.max(0, 1 - Math.abs(x) / 2.4) * ease;
+    const liftedDepth = z + Math.sign(z) * 0.12 * torso;
+    // The front panel hangs between the chest and hem instead of tracing each contour.
+    const front = Math.max(0, Math.min(1, (z - 0.65) / 0.55));
+    const chest = Math.max(0, 1 - ((y - 3.5) / 1.8) ** 2);
+    const hangingDepth = 1.53 + chest * 0.18;
+    const drape = Math.max(0, Math.min(1, (1.65 - Math.abs(x)) / 0.65)) * front * ease;
+    shaped[vertex] = [x * (1 + 0.045 * ease), y,
+      liftedDepth + Math.max(0, hangingDepth - liftedDepth) * drape];
+  }
+  return shaped;
+}
+
+const garmentPositions = shapeJersey();
 
 function intersection(a, b, axis, limit) {
   const fraction = (limit - a.position[axis]) / (b.position[axis] - a.position[axis]);
@@ -119,7 +170,7 @@ function emit(polygon, slot) {
 
 for (const { group: groupName, vertices, uvs } of faces) {
   const corners = vertices.map((vertex, index) => ({
-    key: String(vertex), position: source[vertex], uv: sourceUvs[uvs[index]], weights: byVertex[vertex],
+    key: String(vertex), position: garmentPositions[vertex], uv: sourceUvs[uvs[index]], weights: byVertex[vertex],
   }));
   if (groupName !== 'body') {
     emit(corners, 5);
