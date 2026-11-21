@@ -1,4 +1,5 @@
-import { THREE, material } from '../shared/three-stage.js';
+import { THREE } from '../shared/three-stage.js';
+import { outfitMaterials } from './kit-materials.js';
 
 export async function loadDefender() {
   const response = await fetch(new URL('./defender.mesh.json', import.meta.url));
@@ -15,14 +16,8 @@ export async function loadDefender() {
   });
   geometry.setIndex(data.sections.flat());
   geometry.computeVertexNormals();
-  const palette = [
-    material('#936349', { roughness: 0.65 }),
-    material('#224681', { roughness: 0.88 }),
-    material('#17212d', { roughness: 0.89 }),
-    material('#e8e7db', { roughness: 0.92 }),
-    material('#232327', { roughness: 0.45 }),
-    material('#c9c4b6', { roughness: 0.28 })
-  ];
+  const { uv, palette } = outfitMaterials(data.positions);
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   const mesh = new THREE.SkinnedMesh(geometry, palette);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
