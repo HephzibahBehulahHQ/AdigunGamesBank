@@ -115,6 +115,7 @@ export async function createPitch(options) {
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         framePlayers(feed, state.tick * STEP + endTime);
         defender.mesh.position.x = targetX;
+        defender.mesh.position.z = 0;
         defender.pose(0, 0, 0);
         stage.render();
         return;
@@ -129,14 +130,27 @@ export async function createPitch(options) {
       const duration = kick ? windup + flight : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
+      const kickAngle = kick ? -attempt.angle * Math.PI / 180 : 0;
+      const bootTarget = kick ? contactPoint.clone().add(
+        new THREE.Vector3(-Math.sin(kickAngle) * BALL_RADIUS, -0.04, -Math.cos(kickAngle) * BALL_RADIUS)
+      ) : null;
+      let previousSeconds = -1;
       function animate(now) {
-        const seconds = Math.max(0, (now - started) / 1000);
+        const realSeconds = Math.max(0, (now - started) / 1000);
+        const seconds = kick && previousSeconds < windup && realSeconds >= windup ? windup : realSeconds;
+        previousSeconds = seconds;
         const elapsed = Math.min(1, seconds / duration);
         const step = Math.sin(Math.PI * elapsed);
         defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
+        defender.mesh.position.z = 0;
         if (kick) {
           const strike = Math.max(0, 1 - Math.abs(seconds - windup) / 0.17);
           defender.pose(0, 0, strike, kickingLeg);
+          if (strike > 0) {
+            defender.mesh.position.x += (contactPoint.x - targetX) * strike * 0.36;
+            defender.mesh.position.z = contactPoint.z * strike * 0.26;
+            defender.plantBoot(bootTarget, kickAngle, kickingLeg, THREE.MathUtils.smoothstep(strike, 0.1, 1));
+          }
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
           } else {

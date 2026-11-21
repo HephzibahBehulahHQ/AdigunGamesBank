@@ -1,5 +1,6 @@
 import { THREE } from '../shared/three-stage.js';
 import { outfitMaterials } from './kit-materials.js';
+import { solveLeg } from './leg-reach.js';
 
 export async function loadPlayers() {
   const loader = new THREE.TextureLoader();
@@ -69,16 +70,35 @@ function createPlayer(data, role, skin, build) {
   mesh.scale.set(...build);
   mesh.normalizeSkinWeights();
   const joint = name => joints.find(item => item.name === name);
+  const rest = name => new THREE.Vector3(...data.rig.find(([id]) => id === name).slice(2));
   const spine = joint('spine03');
   const limbs = ['L', 'R'].map(side => ({
     upperArm: joint('upperarm01.' + side),
     lowerArm: joint('lowerarm01.' + side),
     thigh: joint('upperleg01.' + side),
     shin: joint('lowerleg01.' + side),
-    foot: joint('foot.' + side)
+    foot: joint('foot.' + side),
+    hip: rest('upperleg01.' + side),
+    upper: rest('lowerleg01.' + side).sub(rest('upperleg01.' + side)),
+    lower: rest('foot.' + side).sub(rest('lowerleg01.' + side)),
+    toe: rest('toe1-2.' + side).sub(rest('foot.' + side))
   }));
+  const vertical = new THREE.Vector3(0, 1, 0);
   return {
     mesh,
+    plantBoot(contact, angle, index, blend) {
+      const { hip, upper, lower, toe, thigh, shin, foot } = limbs[index];
+      const turn = new THREE.Quaternion().setFromAxisAngle(vertical, angle);
+      const ankleTarget = mesh.worldToLocal(contact.clone()).sub(toe.clone().applyQuaternion(turn));
+      const { knee, ankle } = solveLeg(hip, ankleTarget, upper.length(), lower.length());
+      const thighTurn = new THREE.Quaternion().setFromUnitVectors(upper.clone().normalize(), knee.clone().sub(hip).normalize());
+      const lowerDirection = ankle.clone().sub(knee).normalize().applyQuaternion(thighTurn.clone().invert());
+      const shinTurn = new THREE.Quaternion().setFromUnitVectors(lower.clone().normalize(), lowerDirection);
+      const footTurn = thighTurn.clone().multiply(shinTurn).invert().multiply(turn);
+      thigh.quaternion.slerp(thighTurn, blend);
+      shin.quaternion.slerp(shinTurn, blend);
+      foot.quaternion.slerp(footTurn, blend);
+    },
     pose(movement, step, kick, kickingLeg = 1) {
       spine.rotation.set(-0.19 + kick * 0.32, -movement * 0.14, -movement * 0.12);
       limbs.forEach(({ upperArm, lowerArm, thigh, shin, foot }, index) => {

@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { LEVEL_COUNT } from '../shared/progression.js';
+import { THREE } from '../shared/three-stage.js';
 import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, planClearance, readContact, receiverAt } from '../game9/clearance.js';
+import { solveLeg } from '../game9/leg-reach.js';
 
 export function playPlan(feed) {
   const tick = Math.round(feed.approachTime / STEP);
@@ -67,6 +69,20 @@ test('ground resistance stops an underpowered clearance short of the outlet', ()
   assert.equal(state.result, 'short');
   assert.ok(Math.abs(state.trajectory.end.z - (16 / 3.6)) < 1e-10);
   assert.ok(state.trajectory.travelTime > 2);
+});
+
+test('boot planting reaches a contact without stretching the limb', () => {
+  const hip = new THREE.Vector3(0.12, 0.89, 0);
+  const target = new THREE.Vector3(0.26, 0.10, 0.27);
+  const upper = 0.45;
+  const lower = 0.43;
+  const planted = solveLeg(hip, target, upper, lower);
+  assert.ok(planted.ankle.distanceTo(target) < 1e-9);
+  assert.ok(Math.abs(planted.knee.distanceTo(hip) - upper) < 1e-9);
+  assert.ok(Math.abs(planted.knee.distanceTo(planted.ankle) - lower) < 1e-9);
+  const far = solveLeg(hip, new THREE.Vector3(0.9, 0.06, 0.85), upper, lower);
+  assert.ok(far.ankle.distanceTo(hip) < upper + lower);
+  assert.ok(Math.abs(far.knee.distanceTo(far.ankle) - lower) < 1e-9);
 });
 
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {

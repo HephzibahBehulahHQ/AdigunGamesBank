@@ -79,6 +79,12 @@ actual 3840 × 2160 drawing buffer with no WebGL errors or context loss and
 the three rendered characters were inspected. All nine local Goal Line
 browser tests passed on this candidate.
 
+The clearance animation now solves the striking leg against the computed
+ball-contact position while preserving segment lengths. A paused Chrome
+frame with an actual 3840 × 2160 drawing buffer showed the boot and ball
+meeting on a successful clearance. All nine Goal Line browser checks and
+seven focused engine and leg-reach checks passed locally.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,
