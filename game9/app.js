@@ -277,9 +277,17 @@ function fallback() {
 canvas.addEventListener('stage-lost', fallback);
 load(level);
 
-import('./pitch.js').then(async ({ createPitch }) => {
+async function initializePitch() {
+  const context = canvas.getContext('webgl2', {
+    antialias: false, alpha: false, powerPreference: 'high-performance',
+  });
+  if (!context) {
+    fallback();
+    return;
+  }
+  const { createPitch } = await import('./pitch.js');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
+  pitch = await createPitch({ canvas, context, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
   update();
   const render = () => update();
   quality.addEventListener('change', render);
@@ -289,4 +297,6 @@ import('./pitch.js').then(async ({ createPitch }) => {
     render();
   });
   new ResizeObserver(render).observe(canvas);
-}).catch(fallback);
+}
+
+initializePitch().catch(fallback);

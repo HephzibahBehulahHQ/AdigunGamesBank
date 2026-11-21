@@ -3,10 +3,10 @@ import * as THREE from '../vendor/three/three.module.js';
 export { THREE };
 
 /** A real WebGL surface, with an optional measured 16K scene framebuffer. */
-export function createStage({ canvas, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true, enable16K = false }) {
+export function createStage({ canvas, context, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true, enable16K = false }) {
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: !enable16K, alpha: false, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, context, antialias: !enable16K, alpha: false, powerPreference: 'high-performance' });
   } catch {
     const message = 'This 3D game needs WebGL 2. Enable hardware acceleration or use a compatible browser.';
     if (status) status.textContent = message;

@@ -97,12 +97,18 @@ test('Goal Line renders actual 4K, recovers from failure and saves a complete ke
 
 test('Goal Line keeps visible keyboard controls and saves without WebGL', async ({ page }) => {
   await disableWebGL(page);
+  const graphicsRequests = [];
+  page.on('request', request => {
+    const path = new URL(request.url()).pathname;
+    if (/\/game9\/(pitch\.js|defender\.mesh\.bin|textures\/)|\/vendor\/three\//.test(path)) graphicsRequests.push(path);
+  });
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto('/game9/');
   await expect(page.locator('#graphics')).toContainText('3D unavailable');
   await expect(page.getByRole('combobox', { name: 'Camera' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Hold', exact: true })).toBeVisible();
   await completeDrill(page);
+  expect(graphicsRequests).toEqual([]);
 });
 
 test('Goal Line can switch cameras without changing the drill state', async ({ page }) => {
