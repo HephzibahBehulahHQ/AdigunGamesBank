@@ -236,7 +236,7 @@ test('Goal Line advanced pressure punishes a blocked lane and allows a wider ang
   await expect(page.locator('#message')).toContainText('The pressing player intercepted');
   await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
   await play(11);
-  await expect(page.locator('#projection')).not.toContainText('intercepted');
+  await expect(page.locator('#projection')).toContainText('On target');
   await kick.press('Enter');
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });

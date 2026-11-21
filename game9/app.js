@@ -79,9 +79,9 @@ function update(message) {
   byId('defender').textContent = sideways(state.defender);
   const outlet = ball.z <= 2.3 && !projection.short ? projection.receiver : receiverAt(feed, state.tick * STEP);
   byId('gate').textContent = sideways(outlet - safeEdge) + ' to ' + sideways(outlet + safeEdge);
-  const aimReading = projection.interception ? sideways(projection.end.x) + ' · intercepted'
+  const aimReading = projection.interception ? sideways(projection.interception.ball.x) + ' · intercepted'
     : projection.short ? 'Short · stops at ' + projection.end.z.toFixed(2) + ' m upfield'
-      : sideways(projection.end.x);
+      : (projection.atGate ? 'On target' : 'Misses outlet') + ' · ' + sideways(projection.end.x);
   byId('projection').textContent = !ready ? 'Ball finished'
     : ball.z <= 2.3 ? aimReading : 'Available inside contact zone';
   byId('surface').hidden = !feed.resistance;

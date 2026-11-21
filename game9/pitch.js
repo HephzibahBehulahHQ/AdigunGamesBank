@@ -145,10 +145,13 @@ export async function createPitch(options) {
       const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? restingBall ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
+        const shot = attempt ?? projection;
+        const safe = shot.atGate && !shot.interception;
+        trail.material.color.set(safe ? '#f1ffe2' : '#ffc287');
         const contact = attempt?.contact ?? plannedContact;
+        const destination = shot.interception?.ball ?? shot.end;
         for (let i = 0; i <= 12; i += 1) {
-          const previewEnd = projection.interception?.ball.z ?? projection.end.z;
-          const z = contact.z + ((attempt ? visibleBall.z : previewEnd) - contact.z) * i / 12;
+          const z = contact.z + (destination.z - contact.z) * i / 12;
           const point = clearanceAt(contact, attempt?.angle ?? angle, feed.drift, z);
           coords.set([-point.x, 0.045, z], i * 3);
         }
