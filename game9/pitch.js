@@ -3,7 +3,7 @@ import { BALL_RADIUS, SAFETY_LINE, clearanceAt } from './clearance.js';
 import { addGoal, addGround } from './ground.js';
 
 export function createPitch(options) {
-  const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11] });
+  const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
   scene.fog = new THREE.Fog('#9eabb2', 42, 96);

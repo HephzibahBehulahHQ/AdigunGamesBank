@@ -59,3 +59,21 @@ test('Goal Line keeps visible keyboard controls and saves without WebGL', async 
   await expect(page.getByRole('button', { name: 'Hold', exact: true })).toBeVisible();
   await completeDrill(page);
 });
+
+test('Goal Line rejects 16K when the device viewport limit is too small', async ({ page }) => {
+  await page.addInitScript(() => {
+    const getParameter = WebGL2RenderingContext.prototype.getParameter;
+    WebGL2RenderingContext.prototype.getParameter = function (parameter) {
+      if (parameter === this.MAX_VIEWPORT_DIMS) return new Int32Array([8192, 8192]);
+      return getParameter.call(this, parameter);
+    };
+  });
+  await page.goto('/game9/');
+  const pitch = page.locator('#pitch');
+  await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2');
+  const graphics = page.getByRole('combobox', { name: 'Graphics' });
+  await graphics.selectOption('16k');
+  await expect(graphics).toHaveValue('auto');
+  await expect(page.locator('#graphics')).toContainText('16K UHD unavailable on this device.');
+  await expect(pitch).not.toHaveAttribute('data-resolution', '15360x8640');
+});

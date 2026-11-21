@@ -3,10 +3,10 @@ import * as THREE from '../vendor/three/three.module.js';
 export { THREE };
 
 /** A real WebGL render surface. Resolution labels always describe its drawing buffer. */
-export function createStage({ canvas, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true }) {
+export function createStage({ canvas, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true, enable16K = false }) {
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: !enable16K, alpha: false, powerPreference: 'high-performance' });
   } catch {
     const message = 'This 3D game needs WebGL 2. Enable hardware acceleration or use a compatible browser.';
     if (status) status.textContent = message;
@@ -36,25 +36,39 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   let quality = 'auto', lost = false;
   const gl = renderer.getContext();
   const maxBuffer = Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), renderer.capabilities.maxTextureSize);
+  const [maxViewportWidth, maxViewportHeight] = gl.getParameter(gl.MAX_VIEWPORT_DIMS);
+  const modes = { '1080': [1920, '1080p'], '4k': [3840, '4K UHD'] };
+  if (enable16K) modes['16k'] = [15360, '16K UHD'];
+  const maxWidth = Math.min(maxBuffer, maxViewportWidth, Math.floor(maxViewportHeight * 16 / 9));
 
   function resize() {
+    if (lost) return;
     const rect = canvas.getBoundingClientRect();
     const density = Math.min(globalThis.devicePixelRatio || 1, 2);
-    let width = quality === '4k' ? 3840 : quality === '1080' ? 1920 : Math.max(320, Math.min(2560, Math.round(rect.width * density)));
-    if (width > maxBuffer) {
+    const adaptive = Math.min(maxWidth, Math.max(320, Math.min(2560, Math.round(rect.width * density))));
+    const requested = modes[quality];
+    let width = requested?.[0] ?? adaptive;
+    let height = Math.round(width * 9 / 16);
+    if (width <= maxWidth) renderer.setSize(width, height, false);
+    const rejected = width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
+    if (rejected) {
       quality = 'auto';
       if (qualitySelect) qualitySelect.value = 'auto';
-      width = Math.min(maxBuffer, Math.max(320, Math.round(rect.width)));
+      width = adaptive;
+      height = Math.round(width * 9 / 16);
+      renderer.setSize(width, height, false);
     }
-    const height = Math.round(width * 9 / 16);
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
+    camera.aspect = gl.drawingBufferHeight ? gl.drawingBufferWidth / gl.drawingBufferHeight : width / height;
     camera.updateProjectionMatrix();
     canvas.dataset.renderer = 'WebGL2';
     canvas.dataset.resolution = `${gl.drawingBufferWidth}x${gl.drawingBufferHeight}`;
-    if (status) status.textContent = `${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()} · WebGL 2 · ${quality === '4k' ? '4K UHD' : '3D'}`;
+    if (status) {
+      const prefix = rejected && requested ? `${requested[1]} unavailable on this device. ` : '';
+      const label = quality === '4k' || quality === '16k' ? modes[quality][1] : '3D';
+      status.textContent = `${prefix}${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()} · WebGL 2 · ${label}`;
+    }
   }
-  const setQuality = (value) => { quality = ['auto', '1080', '4k'].includes(value) ? value : 'auto'; resize(); };
+  const setQuality = (value) => { quality = Object.hasOwn(modes, value) ? value : 'auto'; resize(); };
   const onQuality = () => setQuality(qualitySelect.value);
   qualitySelect?.addEventListener('change', onQuality);
   const observer = new ResizeObserver(resize);
