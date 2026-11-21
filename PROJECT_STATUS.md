@@ -13,6 +13,15 @@ new character, production-quality kit and animation, and measured 16K
 qualification remain open. The evidence below belongs to the earlier
 gameplay candidate.
 
+Chrome 158 on Windows with hardware-accelerated Intel Arc 140T rendered
+an Apprentice drill using a complete 15,360 × 8,640 scene framebuffer on
+2026-11-21 at 17:56 Europe/Berlin. WebGL reported no error or context loss
+before and after the sampled play. The browser canvas displayed the result
+at 898 × 505 and the rendered frame was visually inspected. The 40 submitted
+frames had a 33.3 ms median interval and a 58.4 ms 95th-percentile interval.
+This was a short live-play sample. Native 16K display, sustained performance,
+and the production art gate remain unverified.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

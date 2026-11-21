@@ -2,7 +2,7 @@ import * as THREE from '../vendor/three/three.module.js';
 
 export { THREE };
 
-/** A real WebGL render surface. Resolution labels always describe its drawing buffer. */
+/** A real WebGL surface, with an optional measured 16K scene framebuffer. */
 export function createStage({ canvas, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true, enable16K = false }) {
   let renderer;
   try {
@@ -40,6 +40,54 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   const modes = { '1080': [1920, '1080p'], '4k': [3840, '4K UHD'] };
   if (enable16K) modes['16k'] = [15360, '16K UHD'];
   const maxWidth = Math.min(maxBuffer, maxViewportWidth, Math.floor(maxViewportHeight * 16 / 9));
+  let largeFrame = null;
+
+  function allocateLargeFrame(width, height) {
+    if (width > maxWidth) return null;
+    const framebuffer = new THREE.WebGLRenderTarget(width, height, {
+      colorSpace: THREE.LinearSRGBColorSpace,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      depthBuffer: true
+    });
+    renderer.setRenderTarget(framebuffer);
+    const complete = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+    const depth = complete && gl.getFramebufferAttachmentParameter(
+      gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
+    );
+    let allocatedWidth = 0, allocatedHeight = 0;
+    if (depth) {
+      const previous = gl.getParameter(gl.RENDERBUFFER_BINDING);
+      gl.bindRenderbuffer(gl.RENDERBUFFER, depth);
+      allocatedWidth = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_WIDTH);
+      allocatedHeight = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_HEIGHT);
+      gl.bindRenderbuffer(gl.RENDERBUFFER, previous);
+    }
+    renderer.setRenderTarget(null);
+    if (gl.getError() !== gl.NO_ERROR || allocatedWidth !== width || allocatedHeight !== height) {
+      framebuffer.dispose();
+      return null;
+    }
+    const presentation = new THREE.Scene();
+    const quad = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 2),
+      new THREE.MeshBasicMaterial({ map: framebuffer.texture, depthTest: false, depthWrite: false })
+    );
+    presentation.add(quad);
+    return {
+      framebuffer, presentation, quad,
+      camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+      resolution: `${allocatedWidth}x${allocatedHeight}`
+    };
+  }
+
+  function releaseLargeFrame() {
+    if (!largeFrame) return;
+    largeFrame.framebuffer.dispose();
+    largeFrame.quad.material.dispose();
+    largeFrame.quad.geometry.dispose();
+    largeFrame = null;
+  }
 
   function resize() {
     if (lost) return;
@@ -47,11 +95,15 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
     const density = Math.min(globalThis.devicePixelRatio || 1, 2);
     const adaptive = Math.min(maxWidth, Math.max(320, Math.min(2560, Math.round(rect.width * density))));
     const requested = modes[quality];
-    let width = requested?.[0] ?? adaptive;
+    const large = quality === '16k';
+    if (large) largeFrame ??= allocateLargeFrame(requested[0], 8640);
+    else releaseLargeFrame();
+    let width = large ? adaptive : requested?.[0] ?? adaptive;
     let height = Math.round(width * 9 / 16);
     if (width <= maxWidth) renderer.setSize(width, height, false);
-    const rejected = width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
+    const rejected = (large && !largeFrame) || width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
     if (rejected) {
+      releaseLargeFrame();
       quality = 'auto';
       if (qualitySelect) qualitySelect.value = 'auto';
       width = adaptive;
@@ -62,10 +114,14 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
     camera.updateProjectionMatrix();
     canvas.dataset.renderer = 'WebGL2';
     canvas.dataset.resolution = `${gl.drawingBufferWidth}x${gl.drawingBufferHeight}`;
+    canvas.dataset.renderResolution = largeFrame?.resolution ?? canvas.dataset.resolution;
+    canvas.dataset.renderSurface = largeFrame ? 'scene framebuffer' : 'drawing buffer';
     if (status) {
       const prefix = rejected && requested ? `${requested[1]} unavailable on this device. ` : '';
-      const label = quality === '4k' || quality === '16k' ? modes[quality][1] : '3D';
-      status.textContent = `${prefix}${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()} · WebGL 2 · ${label}`;
+      const presentation = `${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()}`;
+      status.textContent = largeFrame
+        ? `15,360 × 8,640 · 16K UHD scene framebuffer · ${presentation} canvas`
+        : `${prefix}${presentation} · WebGL 2 · ${quality === '4k' ? '4K UHD' : '3D'}`;
     }
   }
   const setQuality = (value) => { quality = Object.hasOwn(modes, value) ? value : 'auto'; resize(); };
@@ -82,10 +138,21 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   resize();
   return {
     renderer, scene, camera, light, setQuality,
-    render() { if (!lost) renderer.render(scene, camera); },
+    render() {
+      if (lost) return;
+      if (!largeFrame) {
+        renderer.render(scene, camera);
+        return;
+      }
+      renderer.setRenderTarget(largeFrame.framebuffer);
+      renderer.render(scene, camera);
+      renderer.setRenderTarget(null);
+      renderer.render(largeFrame.presentation, largeFrame.camera);
+    },
     dispose() {
       observer.disconnect(); qualitySelect?.removeEventListener('change', onQuality);
       canvas.removeEventListener('webglcontextlost', onLost);
+      releaseLargeFrame();
       scene.traverse((object) => {
         object.geometry?.dispose();
         const materials = object.material ? (Array.isArray(object.material) ? object.material : [object.material]) : [];
