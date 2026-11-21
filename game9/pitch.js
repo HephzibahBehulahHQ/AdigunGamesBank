@@ -1,5 +1,5 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, CLEARANCE_SPEED, SAFETY_LINE, STEP, clearanceAt, pressureAt, receiverAt } from './clearance.js';
+import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
@@ -81,7 +81,7 @@ export async function createPitch(options) {
   }
 
   return {
-    draw(state, feed, ball, angle, plannedContact) {
+    draw(state, feed, ball, angle, plannedContact, projection) {
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;
@@ -91,7 +91,8 @@ export async function createPitch(options) {
       if (trail.visible) {
         const contact = attempt?.contact ?? plannedContact;
         for (let i = 0; i <= 12; i += 1) {
-          const z = contact.z + ((attempt ? visibleBall.z : SAFETY_LINE) - contact.z) * i / 12;
+          const previewEnd = projection.interception?.ball.z ?? projection.end.z;
+          const z = contact.z + ((attempt ? visibleBall.z : previewEnd) - contact.z) * i / 12;
           const point = clearanceAt(contact, attempt?.angle ?? angle, feed.drift, z);
           coords.set([-point.x, 0.045, z], i * 3);
         }
@@ -111,7 +112,7 @@ export async function createPitch(options) {
         hasFrame = true;
         ballMesh.position.copy(targetBall);
         framePlay(ballMesh.position.z);
-        const endTime = attempt ? attempt.delay + (visibleBall.z - attempt.contact.z) / CLEARANCE_SPEED : 0;
+        const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         framePlayers(feed, state.tick * STEP + endTime);
         defender.mesh.position.x = targetX;
         defender.pose(0, 0, 0);
@@ -124,7 +125,7 @@ export async function createPitch(options) {
       const ballFrom = ballMesh.position.clone();
       const started = performance.now();
       const windup = kick ? Math.max(0.035, attempt.delay) : 0;
-      const flight = kick ? (visibleBall.z - attempt.contact.z) / CLEARANCE_SPEED : 0;
+      const flight = kick ? attempt.travelTime : 0;
       const duration = kick ? windup + flight : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
@@ -139,7 +140,7 @@ export async function createPitch(options) {
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
           } else {
-            const z = THREE.MathUtils.lerp(attempt.contact.z, visibleBall.z, Math.min(1, (seconds - windup) / flight));
+            const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, seconds - windup));
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
             ballMesh.position.set(-point.x, BALL_RADIUS, z);
           }

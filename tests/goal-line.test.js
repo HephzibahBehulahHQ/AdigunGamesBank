@@ -51,6 +51,22 @@ test('expert clearances target the receiver at the time the ball arrives', () =>
   const projection = planClearance(feed, readContact(feed, tick, state.defender), tick, targetAngle);
   assert.equal(projection.receiver, receiverAt(feed, projection.receiveTime));
   assert.notEqual(projection.receiver, receiverAt(feed, tick * STEP));
+  const fast = planClearance(feed, readContact(feed, tick, state.defender), tick, targetAngle, 22);
+  assert.ok(fast.receiveTime < projection.receiveTime);
+  assert.notEqual(fast.receiver, projection.receiver);
+});
+
+test('ground resistance stops an underpowered clearance short of the outlet', () => {
+  const state = createDrill(1);
+  const feed = state.feeds[0];
+  const { tick, moves, targetAngle } = playPlan(feed);
+  for (let i = 0; i < tick; i++) advance(state, i < Math.abs(moves) ? Math.sign(moves) : 0);
+  assert.equal(clear(state, targetAngle, 3), false);
+  assert.equal(state.result, 'ready');
+  assert.equal(clear(state, targetAngle, 4), false);
+  assert.equal(state.result, 'short');
+  assert.ok(Math.abs(state.trajectory.end.z - (16 / 3.6)) < 1e-10);
+  assert.ok(state.trajectory.travelTime > 2);
 });
 
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {

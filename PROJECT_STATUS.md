@@ -66,6 +66,12 @@ errors or context loss. Median, 95th- and 99th-percentile intervals were
 3840 × 2160 canvas successfully. The long-frame improvement does not
 establish a 60 fps 16K mode.
 
+Clearance power now affects rolling distance and the arrival time at the
+opponent and receiver. An underpowered ball can stop before the outlet.
+The all-drill engine solver and nine local Chrome browser tests passed,
+including power adjustment and short-pass recovery, timed reception,
+controller input through the browser test fixture, and actual 4K rendering.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

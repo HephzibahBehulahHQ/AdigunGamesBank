@@ -16,7 +16,7 @@ h1 { margin: 0 0 8px; font-size: clamp(2.75rem, 8vw, 5rem); line-height: 1; }
 dt { font-weight: 700; }
 dd { margin: 4px 0 0; color: #dbe5f3; overflow-wrap: anywhere; }
 #controls label { display: block; margin-top: 20px; }
-#angle { width: 100%; min-height: 44px; accent-color: var(--gold); }
+#controls input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--gold); }
 #controls > button { display: block; margin-bottom: 8px; width: 100%; }
 .movement button { flex: 1; }
 button, select, input, summary { min-height: 44px; }

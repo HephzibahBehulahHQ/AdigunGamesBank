@@ -5,6 +5,9 @@ export const SAFETY_LINE = 8;
 export const BALL_RADIUS = 0.11;
 export const STEP = 0.1;
 export const CLEARANCE_SPEED = 14;
+export const MIN_CLEARANCE_SPEED = 4;
+export const MAX_CLEARANCE_SPEED = 22;
+const ROLLING_DECELERATION = 1.8;
 const HALF_GOAL = 3.66;
 const DEFENDER_SPEED = 4.5;
 const CONTROL_REACH = 0.62;
@@ -67,6 +70,16 @@ export function clearanceAt(contact, angle, drift, z) {
   };
 }
 
+export function clearanceDistance(speed, time) {
+  const rollTime = Math.min(time, speed / ROLLING_DECELERATION);
+  return speed * rollTime - ROLLING_DECELERATION * rollTime ** 2 / 2;
+}
+
+function timeToDistance(distance, speed) {
+  const finalSpeed = Math.sqrt(Math.max(0, speed ** 2 - 2 * ROLLING_DECELERATION * distance));
+  return 2 * distance / (speed + finalSpeed);
+}
+
 export function readContact(feed, tick, defender) {
   const time = tick * STEP;
   const ball = incomingAt(feed, time);
@@ -80,7 +93,8 @@ export function readContact(feed, tick, defender) {
 export function pressureAt(feed, time) {
   const player = feed.pressure;
   if (!player) return null;
-  const tracksReceiver = receiverAt(feed, time + (SAFETY_LINE - player.z) / CLEARANCE_SPEED) - feed.channel;
+  const outletDelay = timeToDistance(SAFETY_LINE, CLEARANCE_SPEED) - timeToDistance(player.z, CLEARANCE_SPEED);
+  const tracksReceiver = receiverAt(feed, time + outletDelay) - feed.channel;
   const x = player.center + tracksReceiver * player.z / SAFETY_LINE + player.range * Math.sin(player.phase + player.speed * time);
   return { x, z: player.z };
 }
@@ -90,20 +104,28 @@ export function receiverAt(feed, time) {
   return feed.channel + (run ? run.range * Math.sin(run.phase + run.speed * time) : 0);
 }
 
-export function planClearance(feed, delivery, tick, angle) {
+export function planClearance(feed, delivery, tick, angle, speed = CLEARANCE_SPEED) {
   const { contact, delay } = delivery;
-  const end = clearanceAt(contact, angle, feed.drift, SAFETY_LINE);
+  const z = Math.min(SAFETY_LINE, contact.z + clearanceDistance(speed, speed / ROLLING_DECELERATION));
+  const end = clearanceAt(contact, angle, feed.drift, z);
   const launchTime = tick * STEP + delay;
-  const receiveTime = launchTime + (SAFETY_LINE - contact.z) / CLEARANCE_SPEED;
+  const travelTime = timeToDistance(z - contact.z, speed);
+  const receiveTime = launchTime + travelTime;
   const receiver = receiverAt(feed, receiveTime);
-  const atGate = Math.abs(end.x - receiver) <= feed.halfWidth - BALL_RADIUS;
+  const short = z < SAFETY_LINE;
+  const atGate = !short && Math.abs(end.x - receiver) <= feed.halfWidth - BALL_RADIUS;
   const pressure = feed.pressure;
-  if (!pressure) return { end, atGate, interception: null, receiver, receiveTime };
-  const time = launchTime + (pressure.z - contact.z) / CLEARANCE_SPEED;
+  const plan = { end, atGate, short, interception: null, receiver, receiveTime, speed, travelTime };
+  if (!pressure || z < pressure.z) return plan;
+  const pressTime = timeToDistance(pressure.z - contact.z, speed);
+  const time = launchTime + pressTime;
   const player = pressureAt(feed, time);
   const ball = clearanceAt(contact, angle, feed.drift, player.z);
-  const interception = Math.abs(ball.x - player.x) <= 0.42 + BALL_RADIUS ? { ball, time } : null;
-  return { end, atGate, interception, receiver, receiveTime };
+  if (Math.abs(ball.x - player.x) <= 0.42 + BALL_RADIUS) {
+    plan.interception = { ball, time };
+    plan.travelTime = pressTime;
+  }
+  return plan;
 }
 
 export function createDrill(level) {
@@ -118,17 +140,18 @@ export function advance(state, movement = 0) {
   if (ball.z <= LINE - BALL_RADIUS) state.result = 'conceded';
 }
 
-export function clear(state, angle) {
-  if (state.result !== 'ready' || !Number.isInteger(angle) || Math.abs(angle) > 60) return false;
+export function clear(state, angle, speed = CLEARANCE_SPEED) {
+  if (state.result !== 'ready' || !Number.isInteger(angle) || Math.abs(angle) > 60 ||
+      !Number.isInteger(speed) || speed < MIN_CLEARANCE_SPEED || speed > MAX_CLEARANCE_SPEED) return false;
   const feed = state.feeds[state.index];
   const delivery = readContact(feed, state.tick, state.defender);
   if (!delivery.reachable) {
     state.result = 'missed';
     return false;
   }
-  const plan = planClearance(feed, delivery, state.tick, angle);
+  const plan = planClearance(feed, delivery, state.tick, angle, speed);
   state.trajectory = { ...delivery, ...plan, angle, drift: feed.drift };
-  state.result = plan.interception ? 'intercepted' : plan.atGate ? 'cleared' : 'unsafe';
+  state.result = plan.interception ? 'intercepted' : plan.short ? 'short' : plan.atGate ? 'cleared' : 'unsafe';
   return state.result === 'cleared';
 }
 

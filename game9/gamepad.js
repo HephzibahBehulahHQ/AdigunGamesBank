@@ -1,6 +1,8 @@
 /** Standard Xbox-style mapping from the browser Gamepad API. */
 export function gamepadControls(actions) {
-  const buttons = { clear: 0, advance: 1, reset: 3, live: 9, left: 14, right: 15 };
+  const buttons = {
+    clear: 0, advance: 1, reset: 3, weaker: 4, stronger: 5, live: 9, left: 14, right: 15
+  };
   let activeIndex = null;
   let previous = new Set();
   let frame;
@@ -32,6 +34,8 @@ export function gamepadControls(actions) {
       if (pressed(buttons.live)) actions.live();
       if (pressed(buttons.left)) actions.aim(-1);
       if (pressed(buttons.right)) actions.aim(1);
+      if (pressed(buttons.weaker)) actions.power(-1);
+      if (pressed(buttons.stronger)) actions.power(1);
       if (pressed(buttons.clear)) actions.clear();
       if (pressed(buttons.advance)) actions.advance();
       if (pressed(buttons.reset)) actions.reset();
