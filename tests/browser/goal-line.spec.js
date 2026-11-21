@@ -107,6 +107,11 @@ test('Goal Line keeps visible keyboard controls and saves without WebGL', async 
   await expect(page.locator('#graphics')).toContainText('3D unavailable');
   await expect(page.getByRole('combobox', { name: 'Camera' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Hold', exact: true })).toBeVisible();
+  await expect(page.locator('#contact')).toHaveText('Wait for the ball to reach you.');
+  const left = page.getByRole('button', { name: 'Left', exact: true });
+  for (let step = 0; step < 3; step++) await left.press('Enter');
+  await expect(page.locator('#contact')).toHaveText('Move right to meet the ball.');
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
   await completeDrill(page);
   expect(graphicsRequests).toEqual([]);
 });

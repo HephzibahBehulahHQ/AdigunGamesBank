@@ -60,7 +60,7 @@ function sideways(x) {
 function update(message) {
   const feed = state.feeds[state.index];
   const delivery = readContact(feed, state.tick, state.defender);
-  const { ball, contact, inWindow, high, reachable } = delivery;
+  const { ball, contact, inWindow, high, aligned, reachable } = delivery;
   const aiming = Number(angle.value);
   const ready = state.result === 'ready';
   const finished = state.result === 'cleared' && state.index === state.feeds.length - 1;
@@ -91,8 +91,14 @@ function update(message) {
   byId('angle-value').textContent = aiming + '°';
   byId('speed-value').textContent = speed + ' m/s';
   const contactReading = byId('contact');
-  const contactText = !ready ? '' : reachable ? 'Ball in reach.'
-    : inWindow && high ? 'Ball too high. Wait for it to drop.' : 'Close the gap before clearing.';
+  const moveSide = contact.x < state.defender ? 'left' : 'right';
+  let contactText = '';
+  if (ready) {
+    if (reachable) contactText = 'Ball in reach.';
+    else if (inWindow && high) contactText = 'Ball too high. Wait for it to drop.';
+    else if (!aligned) contactText = `Move ${moveSide} to meet the ball.`;
+    else contactText = 'Wait for the ball to reach you.';
+  }
   if (contactReading.textContent !== contactText) {
     contactReading.textContent = contactText;
     if (timer !== null && ready && reachable) audio.play('ready', contact.x);

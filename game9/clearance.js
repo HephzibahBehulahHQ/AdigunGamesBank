@@ -125,8 +125,9 @@ export function readContact(feed, tick, defender) {
   const contact = delay > 0 ? incomingAt(feed, time + delay) : ball;
   const inWindow = ball.z <= CLEARANCE_WINDOW && ball.z >= LINE - BALL_RADIUS;
   const high = contact.y > VOLLEY_HEIGHT;
-  const reachable = inWindow && !high && Math.abs(contact.x - defender) <= CONTROL_REACH;
-  return { ball, contact, delay, inWindow, high, reachable };
+  const aligned = Math.abs(contact.x - defender) <= CONTROL_REACH;
+  const reachable = inWindow && !high && aligned;
+  return { ball, contact, delay, inWindow, high, aligned, reachable };
 }
 
 export function pressureAt(feed, time) {
