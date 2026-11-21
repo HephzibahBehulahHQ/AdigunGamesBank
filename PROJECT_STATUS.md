@@ -4,6 +4,15 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The turf shader now constructs its tangent basis only where the existing
+near-field normal map contributes. In matched Chrome runs of five heavy-turf
+clearances at 15,360 × 8,640 on Intel Arc 140T, median scene GPU time fell
+from 37.4 to 31.2 ms and the 95th percentile fell from 45.7 to 38.5 ms.
+Both runs restored 4K without WebGL errors. The captured viewport showed
+consistent turf appearance. The 16K scene still exceeds the 60 fps budget.
+All 12 Goal Line engine checks and 18 Chrome browser checks passed on the
+candidate, including actual 4K, context recovery and saved progression.
+
 Separate Chrome timer-query runs on Intel Arc 140T each completed three
 heavy-turf clearances at 15,360 × 8,640. Median GPU time was 34.7 ms from
 scene color clear to presentation clear, 8.6 ms for the presentation pass,

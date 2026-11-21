@@ -30,6 +30,8 @@ export function addGround(scene, renderer, { map, normalMap }) {
   const heavySurfaces = heavyMowing.map(color => new THREE.MeshPhongMaterial({
     color, ...turf, specular: '#161616', shininess: 13,
   }));
+  const tangentFrameStart = '#if defined( USE_NORMALMAP_TANGENTSPACE )';
+  const normalFragment = THREE.ShaderChunk.normal_fragment_begin.split(tangentFrameStart)[0];
   // The turf spans most of the frame. Keep filtered shadow edges with four fixed depth comparisons.
   const turfShadows = THREE.ShaderChunk.shadowmap_pars_fragment.replace(
     /float phi = interleavedGradientNoise\( gl_FragCoord\.xy \) \* PI2;\s+shadow = \([\s\S]*?\) \* 0\.2;/,
@@ -56,10 +58,15 @@ export function addGround(scene, renderer, { map, normalMap }) {
         `);
       }
       if (normalMap) {
+        // Every turf stripe has the same planar tangent basis across its vertices.
+        shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_begin>', normalFragment);
         shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `
           if (vViewPosition.z < 18.0) {
             vec3 baseNormal = normal;
-            ${THREE.ShaderChunk.normal_fragment_maps}
+            mat3 tbn = mat3(normalize(vTangent), normalize(vBitangent), normal);
+            vec3 mapN = texture2D(normalMap, vNormalMapUv).xyz * 2.0 - 1.0;
+            mapN.xy *= normalScale;
+            normal = normalize(tbn * mapN);
             float nearDetail = 1.0 - smoothstep(12.0, 18.0, vViewPosition.z);
             normal = normalize(mix(baseNormal, normal, nearDetail));
           }
