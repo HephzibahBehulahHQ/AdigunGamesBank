@@ -41,6 +41,17 @@ export function addGround(scene, renderer, { map, normalMap }) {
   for (const surface of surfaces) {
     surface.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace('#include <shadowmap_pars_fragment>', turfShadows);
+      if (map) {
+        shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
+          #include <map_fragment>
+          // The continuous turf UVs are in two-metre units across all mowing stripes.
+          vec2 pitchPoint = vec2(vMapUv.x * 2.0 - 24.0, -vMapUv.y * 2.0 - 5.5);
+          float wearDistance = length((pitchPoint - vec2(0.0, 0.50)) / vec2(3.5, 1.7));
+          float wear = 1.0 - smoothstep(0.15, 1.1, wearDistance);
+          float grassDetail = clamp(diffuseColor.g * 6.0, 0.35, 1.0);
+          diffuseColor.rgb *= mix(vec3(1.0), vec3(1.18, 0.76, 0.58), wear * grassDetail);
+        `);
+      }
       if (normalMap) {
         shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_maps>', `
           if (vViewPosition.z < 18.0) {
