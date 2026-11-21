@@ -32,16 +32,10 @@ export function addGround(scene, renderer, { map, normalMap }) {
   }));
   const tangentFrameStart = '#if defined( USE_NORMALMAP_TANGENTSPACE )';
   const normalFragment = THREE.ShaderChunk.normal_fragment_begin.split(tangentFrameStart)[0];
-  // The turf spans most of the frame. Keep filtered shadow edges with four fixed depth comparisons.
+  // Use the depth texture's comparison filter for the turf shadow edge.
   const turfShadows = THREE.ShaderChunk.shadowmap_pars_fragment.replace(
     /float phi = interleavedGradientNoise\( gl_FragCoord\.xy \) \* PI2;\s+shadow = \([\s\S]*?\) \* 0\.2;/,
-    `vec2 offset = radius * 0.5;
-    shadow = 0.25 * (
-      texture(shadowMap, vec3(shadowCoord.xy + vec2(-offset.x, -offset.y), shadowCoord.z)) +
-      texture(shadowMap, vec3(shadowCoord.xy + vec2(-offset.x,  offset.y), shadowCoord.z)) +
-      texture(shadowMap, vec3(shadowCoord.xy + vec2( offset.x, -offset.y), shadowCoord.z)) +
-      texture(shadowMap, vec3(shadowCoord.xy + vec2( offset.x,  offset.y), shadowCoord.z))
-    );`
+    'shadow = texture(shadowMap, shadowCoord.xyz);'
   );
   for (const surface of [...surfaces, ...heavySurfaces]) {
     surface.onBeforeCompile = shader => {

@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The turf now uses one hardware-filtered depth comparison per shadow lookup.
+In paired five-clearance Chrome runs at 16K on Intel Arc 140T, median scene
+GPU time fell from 39.7 to 35.6 ms and median observed GPU completion
+interval fell from 58.3 to 50.1 ms. Visible goal and player shadows remained
+in the captured viewport. Both runs restored 4K without WebGL errors or
+context loss. The actual 4K, camera-switching and heavy-turf browser checks
+passed on the candidate. The 60 fps requirement remains open.
+
 All 19 Goal Line browser tests passed against `dad8bde` in the existing
 Firefox 159.0 cache on Windows. The suite verified an actual 3840 × 2160
 WebGL drawing buffer, context recovery, saved progression through the final
