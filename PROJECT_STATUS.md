@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+At development revision `6f39857`, two Chrome runs of five heavy-turf
+clearances on Intel Arc 140T compared drawing the turf before and after
+the other opaque geometry, with the sky drawn last in both runs. Delaying
+turf increased median 16K scene GPU time from 34.1 to 49.6 ms and median
+observed GPU completion intervals from 50.0 to 65.7 ms. Both runs restored
+4K without errors or context loss. The experiment was reverted and the
+baseline build reproduced its SHA256.
+
 In paired Chrome runs of five heavy-turf clearances on Intel Arc 140T, a
 nine-sample presentation filter reduced median GPU presentation time from
 8.1 to 5.8 ms. Observed GPU completion intervals were 50.9 and 50.0 ms
