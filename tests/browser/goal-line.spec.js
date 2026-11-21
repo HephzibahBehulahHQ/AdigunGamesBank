@@ -292,6 +292,39 @@ test('Goal Line advanced pressure punishes a blocked lane and allows a wider ang
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });
 
+test('Goal Line can loft over the press if the ball drops for the receiver', async ({ page }) => {
+  await disableWebGL(page);
+  await page.addInitScript(() => localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+    version: 1, completed: 2000, unlocked: 2001,
+  })));
+  await page.goto('/game9/');
+  const right = page.getByRole('button', { name: 'Right', exact: true });
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  const loft = page.getByRole('checkbox', { name: 'Loft the clearance' });
+  const kick = page.getByRole('button', { name: 'Clear ball', exact: true });
+  async function approach() {
+    for (let step = 0; step < 3; step++) await right.press('Enter');
+    for (let step = 0; step < 19; step++) await hold.press('Enter');
+    for (let degree = 0; degree < 7; degree++) await aim.press('ArrowRight');
+  }
+  await approach();
+  await expect(page.locator('#projection')).toContainText('intercepted');
+  await loft.check();
+  await expect(page.locator('#projection')).toHaveText('Too high for the receiver');
+  await kick.press('Enter');
+  await expect(page.locator('#message')).toContainText('Clearance was too high');
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+  await expect(loft).not.toBeChecked();
+  await approach();
+  await loft.check();
+  const speed = page.getByRole('slider', { name: 'Kick speed' });
+  for (let step = 0; step < 8; step++) await speed.press('ArrowLeft');
+  await expect(page.locator('#projection')).toContainText('On target');
+  await kick.press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+});
+
 test('Goal Line expert receiver changes the outlet and accepts a timed clearance', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({

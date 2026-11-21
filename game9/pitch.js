@@ -149,9 +149,12 @@ export async function createPitch(options) {
         const contact = attempt?.contact ?? plannedContact;
         const destination = shot.interception?.ball ?? shot.end;
         for (let i = 0; i <= 12; i += 1) {
-          const z = contact.z + (destination.z - contact.z) * i / 12;
-          const point = clearanceAt(contact, attempt?.angle ?? angle, feed.drift, z);
-          coords.set([-point.x, 0.045, z], i * 3);
+          const time = shot.travelTime * i / 12;
+          const z = shot.lift ? Math.min(destination.z, contact.z + clearanceDistance(shot.speed, time, shot.resistance, shot.airtime))
+            : contact.z + (destination.z - contact.z) * i / 12;
+          const point = clearanceAt(contact, attempt?.angle ?? angle, shot.drift, z);
+          const height = shot.lift ? clearanceHeight(contact.y, time, shot.lift) : 0.045;
+          coords.set([-point.x, height, z], i * 3);
         }
         geometry.attributes.position.needsUpdate = true;
       }
@@ -233,9 +236,10 @@ export async function createPitch(options) {
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
           } else {
-            const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, seconds - windup, attempt.resistance));
+            const flightTime = seconds - windup;
+            const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, flightTime, attempt.resistance, attempt.airtime));
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
-            ballMesh.position.set(-point.x, clearanceHeight(attempt.contact.y, seconds - windup), z);
+            ballMesh.position.set(-point.x, clearanceHeight(attempt.contact.y, flightTime, attempt.lift), z);
           }
         } else if (concession) {
           defender.settle(targetX);

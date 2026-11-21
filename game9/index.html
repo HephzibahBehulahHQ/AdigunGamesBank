@@ -52,6 +52,7 @@
         <input id="angle" type="range" min="-60" max="60" value="0">
         <label for="kick-speed">Kick speed <output id="speed-value" for="kick-speed">14 m/s</output></label>
         <input id="kick-speed" type="range" min="4" max="22" value="14">
+        <label id="loft-control" hidden><input id="loft" type="checkbox"> Loft the clearance</label>
         <p id="contact" role="status" aria-atomic="true"></p>
         <button id="clear" class="primary" type="button" aria-keyshortcuts="F" aria-describedby="contact">Clear ball</button>
         <button id="next" type="button" hidden></button>
@@ -59,6 +60,7 @@
         <details><summary>Drill rules</summary>
           <p>Commit to a clearance once the ball is within 2.3 m of the line. An early kick meets the rolling ball 0.45 m from the line. Be within 0.62 m laterally at contact. Every ball must fully cross its gate 8 m upfield to unlock the next drill.</p>
           <p>From Apprentice onward, a pressing player can intercept the clearance. Read their position and adjust your aim to get around them without missing the gate.</p>
+          <p>A lofted clearance can go over the pressing player. Reduce kick speed so the ball drops low enough for the receiver at the outlet.</p>
           <p>From Skilled onward, some feeds bounce. Wait for a high ball to drop into the defender's reach before clearing it.</p>
           <p>From Expert onward, the receiving teammate moves along the outlet line. The outlet reading predicts the receiver's position when the ball arrives, once a clearance is available.</p>
           <p>Ground resistance slows the ball. A stronger clearance reaches the outlet sooner, changing when it passes the opponent. A weak clearance can stop before the outlet.</p>

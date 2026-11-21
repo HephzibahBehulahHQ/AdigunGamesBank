@@ -8,6 +8,7 @@ const save = campaign('goal-line');
 const levelInput = byId('level');
 const angle = byId('angle');
 const kickSpeed = byId('kick-speed');
+const loft = byId('loft');
 const buttons = [...document.querySelectorAll('[data-move]')];
 const next = byId('next');
 const clearButton = byId('clear');
@@ -66,7 +67,7 @@ function update(message) {
   const finished = state.result === 'cleared' && state.index === state.feeds.length - 1;
   const safeEdge = feed.halfWidth;
   const speed = Number(kickSpeed.value);
-  const projection = planClearance(feed, delivery, state.tick, aiming, speed);
+  const projection = planClearance(feed, delivery, state.tick, aiming, speed, loft.checked);
   const pressure = pressureAt(feed, state.tick * STEP);
   const shot = state.trajectory;
   const position = state.result === 'conceded'
@@ -82,6 +83,7 @@ function update(message) {
   byId('gate').textContent = sideways(outlet - safeEdge) + ' to ' + sideways(outlet + safeEdge);
   const aimReading = projection.interception ? sideways(projection.interception.ball.x) + ' · intercepted'
     : projection.short ? 'Short · stops at ' + projection.end.z.toFixed(2) + ' m upfield'
+      : projection.tooHigh ? 'Too high for the receiver'
       : (projection.atGate ? 'On target' : 'Misses outlet') + ' · ' + sideways(projection.end.x);
   byId('projection').textContent = !ready ? 'Ball finished'
     : ball.z <= 2.3 ? aimReading : 'Available inside contact zone';
@@ -116,7 +118,8 @@ function update(message) {
   movementHelp.textContent = live
     ? 'Hold A or D to move, or tap a direction. Tap Hold to stop moving.'
     : 'Each movement advances the ball by 0.1 seconds. Start the live ball for a timed clearance.';
-  angle.disabled = kickSpeed.disabled = clearButton.disabled = !ready;
+  angle.disabled = kickSpeed.disabled = loft.disabled = clearButton.disabled = !ready;
+  byId('loft-control').hidden = !feed.pressure;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
   pitch?.draw(state, feed, ball, aiming, contact, projection);
@@ -131,6 +134,7 @@ function load(levelNumber, moveFocus = false) {
   state = createDrill(levelNumber);
   angle.value = 0;
   kickSpeed.value = CLEARANCE_SPEED;
+  loft.checked = false;
   update('Ball 1 of ' + state.feeds.length + '. Move into its path.');
   if (moveFocus) buttons[1].focus();
 }
@@ -229,9 +233,10 @@ function byDistance() {
 
 angle.addEventListener('input', () => update());
 kickSpeed.addEventListener('input', () => update());
+loft.addEventListener('change', () => update());
 clearButton.addEventListener('click', () => {
   setLive(false);
-  const successful = clear(state, Number(angle.value), Number(kickSpeed.value));
+  const successful = clear(state, Number(angle.value), Number(kickSpeed.value), loft.checked);
   const shot = state.trajectory;
   if (shot) {
     const contactTime = Math.max(0.035, shot.delay);
@@ -252,6 +257,7 @@ clearButton.addEventListener('click', () => {
   const outcome = {
     missed: 'Missed contact.',
     short: 'Clearance fell short of the receiver.',
+    high: 'Clearance was too high for the receiver.',
     unsafe: 'Clearance missed the safe channel.',
     intercepted: 'The pressing player intercepted the clearance.'
   };
@@ -263,6 +269,7 @@ next.addEventListener('click', () => {
     lastFootstep = -Infinity;
     angle.value = 0;
     kickSpeed.value = CLEARANCE_SPEED;
+    loft.checked = false;
     update('Ball ' + (state.index + 1) + ' of ' + state.feeds.length + '. Move into its path.');
     buttons[1].focus();
   } else if (state.result === 'cleared' && level < LEVEL_COUNT) {

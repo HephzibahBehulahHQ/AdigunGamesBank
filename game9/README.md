@@ -18,6 +18,10 @@ From drill 8,001, selected feeds run on heavy turf. The Surface reading
 identifies these feeds. Clearances slow by 2.8 m/s² on heavy turf, which
 changes both the reach of low-power kicks and their arrival time.
 
+When a pressing player is present, **Loft the clearance** adds an aerial
+option. The ball can clear the opponent's reach, but it must drop low enough
+for the receiver. Lower the kick speed and check the projected outcome.
+
 ## Hardware checks
 
 On a machine with the repository's locked Playwright dependencies and Chrome
