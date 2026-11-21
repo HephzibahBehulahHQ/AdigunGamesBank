@@ -73,6 +73,8 @@ function createPlayer(data, role, skin, build) {
   const joint = name => joints.find(item => item.name === name);
   const rest = name => new THREE.Vector3(...data.rig.find(([id]) => id === name).slice(2));
   const spine = joint('spine03');
+  const head = joint('head');
+  const gaze = new THREE.Vector3();
   const limbs = ['L', 'R'].map(side => ({
     upperArm: joint('upperarm01.' + side),
     lowerArm: joint('lowerarm01.' + side),
@@ -92,6 +94,18 @@ function createPlayer(data, role, skin, build) {
   let previousX = null;
   return {
     mesh,
+    watchBall(ball) {
+      head.parent.worldToLocal(gaze.copy(ball)).sub(head.position);
+      const forward = Math.max(0.2, gaze.z);
+      const behind = 1 - THREE.MathUtils.smoothstep(-gaze.z, 0, 2);
+      const pitch = Math.atan2(-gaze.y, Math.hypot(gaze.x, forward));
+      const yaw = Math.atan2(gaze.x, forward);
+      head.rotation.set(
+        THREE.MathUtils.clamp(pitch, -0.25, 0.48) * behind,
+        THREE.MathUtils.clamp(yaw, -0.62, 0.62) * behind,
+        0, 'YXZ'
+      );
+    },
     settle(x) {
       previousX = mesh.position.x = x;
       gaitDistance = 0;

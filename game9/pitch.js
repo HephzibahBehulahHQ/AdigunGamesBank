@@ -97,6 +97,12 @@ export async function createPitch(options) {
     player.plantBoot(trap, 0, leg, readiness);
   }
 
+  function trackBall() {
+    defender.watchBall(ballMesh.position);
+    receiver.watchBall(ballMesh.position);
+    if (opponent?.mesh.visible) opponent.watchBall(ballMesh.position);
+  }
+
   function framePlay(z) {
     const wide = motion.matches ? 1 : THREE.MathUtils.smoothstep(z, 3, 25);
     const broadcast = options.view() === 'broadcast';
@@ -164,6 +170,7 @@ export async function createPitch(options) {
         if (controlled) controlClearance(attempt, 1);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
+        trackBall();
         // Camera and aim changes leave a settled scene's shadow casters in place.
         if (!settledShadow || settledShadow.feed !== feed || settledShadow.time !== sceneTime || travel || movement) {
           light.shadow.needsUpdate = true;
@@ -254,6 +261,7 @@ export async function createPitch(options) {
           const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, duration - 0.24), duration);
           if (readiness > 0) controlClearance(attempt, readiness);
         }
+        trackBall();
         settledShadow = null;
         light.shadow.needsUpdate = true;
         stage.render();
