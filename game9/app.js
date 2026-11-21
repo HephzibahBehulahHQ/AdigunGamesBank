@@ -89,8 +89,10 @@ function update(message) {
   if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';
   byId('speed-value').textContent = speed + ' m/s';
-  byId('contact').textContent = reachable && ready ? 'Ball in reach.'
-    : inWindow && high && ready ? 'Ball too high. Wait for it to drop.' : 'Close the gap before clearing.';
+  const contactReading = byId('contact');
+  const contactText = !ready ? '' : reachable ? 'Ball in reach.'
+    : inWindow && high ? 'Ball too high. Wait for it to drop.' : 'Close the gap before clearing.';
+  if (contactReading.textContent !== contactText) contactReading.textContent = contactText;
   if (message !== undefined) byId('message').textContent = message;
   levelInput.max = save.unlocked;
   const live = timer !== null;

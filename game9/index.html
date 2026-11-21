@@ -52,8 +52,8 @@
         <input id="angle" type="range" min="-60" max="60" value="0">
         <label for="kick-speed">Kick speed <output id="speed-value" for="kick-speed">14 m/s</output></label>
         <input id="kick-speed" type="range" min="4" max="22" value="14">
-        <p id="contact"></p>
-        <button id="clear" class="primary" type="button" aria-keyshortcuts="F">Clear ball</button>
+        <p id="contact" role="status" aria-atomic="true"></p>
+        <button id="clear" class="primary" type="button" aria-keyshortcuts="F" aria-describedby="contact">Clear ball</button>
         <button id="next" type="button" hidden></button>
         <button id="retry" type="button">Restart drill</button>
         <details><summary>Drill rules</summary>

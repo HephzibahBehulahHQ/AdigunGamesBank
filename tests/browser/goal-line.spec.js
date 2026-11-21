@@ -11,6 +11,7 @@ async function completeDrill(page, level = 1) {
     for (let i = 0; i < Math.abs(moves); i++) await move.press('Enter');
     for (let i = Math.abs(moves); i < tick; i++) await page.getByRole('button', { name: 'Hold', exact: true }).press('Enter');
     await expect(page.locator('#contact')).toHaveText('Ball in reach.');
+    await expect(page.getByRole('button', { name: 'Clear ball', exact: true })).toHaveAccessibleDescription('Ball in reach.');
     const contact = readContact(feed, tick, moves * 0.45);
     const aim = Array.from({ length: 121 }, (_, angle) => angle - 60).find(angle => {
       const shot = planClearance(feed, contact, tick, angle);
