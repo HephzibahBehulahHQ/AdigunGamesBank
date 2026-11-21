@@ -1,30 +1,49 @@
 import { test, expect } from '@playwright/test';
-import { makeDrill, STEP } from '../../game9/clearance.js';
+import { makeDrill, planClearance, readContact, SAFETY_LINE, STEP } from '../../game9/clearance.js';
 
-async function completeDrill(page) {
-  for (const [index, feed] of makeDrill(1).entries()) {
+async function completeDrill(page, level = 1) {
+  const feeds = makeDrill(level);
+  for (const [index, feed] of feeds.entries()) {
     const tick = Math.round(feed.approachTime / STEP);
     const moves = Math.round(feed.crossing / 0.45);
     const move = page.getByRole('button', { name: moves < 0 ? 'Left' : 'Right', exact: true });
     for (let i = 0; i < Math.abs(moves); i++) await move.press('Enter');
     for (let i = Math.abs(moves); i < tick; i++) await page.getByRole('button', { name: 'Hold', exact: true }).press('Enter');
     await expect(page.locator('#contact')).toHaveText('Ball in reach.');
-    const aim = Math.round(Math.atan((feed.channel - feed.crossing - 8 * feed.drift) / 8) * 180 / Math.PI);
+    const contact = readContact(feed, tick, moves * 0.45);
+    const aim = Array.from({ length: 121 }, (_, angle) => angle - 60).find(angle => {
+      const shot = planClearance(feed, contact, tick, angle);
+      return shot.atGate && !shot.interception;
+    });
+    expect(aim).toBeDefined();
     const slider = page.getByRole('slider', { name: 'Clearance angle' });
     await slider.focus();
     for (let i = 0; i < Math.abs(aim); i++) await page.keyboard.press(aim < 0 ? 'ArrowLeft' : 'ArrowRight');
     await page.getByRole('button', { name: 'Clear ball', exact: true }).press('Enter');
-    if (index < 2) {
+    if (index < feeds.length - 1) {
       await expect(page.locator('#message')).toContainText('Safe clearance');
-      await expect(page.locator('#ball')).toContainText('8.00 m from goal line');
+      await expect(page.locator('#ball')).toContainText(`${SAFETY_LINE.toFixed(2)} m from goal line`);
       await page.keyboard.press('Enter');
     }
   }
   await expect(page.locator('#message')).toContainText('Drill cleared');
   await page.reload();
-  await expect(page.locator('#level')).toHaveValue('2');
-  await expect(page.locator('#campaign')).toContainText('1 cleared');
+  await expect(page.locator('#level')).toHaveValue(String(level + 1));
+  await expect(page.locator('#campaign')).toContainText(`${level} cleared`);
 }
+
+test('Goal Line saves a complete final-tier drill and unlocks the next one', async ({ page }) => {
+  await page.addInitScript(() => {
+    const key = 'adigun.campaign.v1.goal-line';
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, JSON.stringify({ version: 1, completed: 8001, unlocked: 8002 }));
+    }
+  });
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  await expect(page.locator('#level')).toHaveValue('8002');
+  await completeDrill(page, 8002);
+});
 
 test('Goal Line renders actual 4K, recovers from failure and saves a complete keyboard drill', async ({ page }, info) => {
   await page.goto('/game9/');
