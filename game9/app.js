@@ -1,6 +1,7 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
 import { CLEARANCE_SPEED, STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact } from './clearance.js';
 import { createPitchAudio } from './pitch-audio.js';
+import { gamepadControls } from './gamepad.js';
 
 const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
@@ -23,11 +24,18 @@ let pitch;
 let timer = null;
 let direction = 0;
 let lastFootstep = -Infinity;
+const pad = gamepadControls({
+  live: () => liveButton.click(),
+  aim: (change) => adjustAim(change),
+  clear: () => clearButton.click(),
+  advance: () => { if (!next.hidden) next.click(); },
+  reset: () => byId('retry').click()
+});
 
 function setLive(enabled) {
   if (timer !== null) clearInterval(timer);
   timer = enabled ? setInterval(() => {
-    const movement = keys.size ? Number(keys.has('d')) - Number(keys.has('a')) : direction;
+    const movement = keys.size ? Number(keys.has('d')) - Number(keys.has('a')) : pad.movement || direction;
     move(movement);
   }, STEP * 1000) : null;
   keys.clear();
@@ -124,6 +132,12 @@ function toggleLive() {
   update(timer === null ? 'Live ball paused. ' + byDistance() : 'Live ball in play.');
 }
 
+function adjustAim(change) {
+  if (angle.disabled) return;
+  angle.value = Math.min(60, Math.max(-60, Number(angle.value) + change));
+  update();
+}
+
 liveButton.addEventListener('click', toggleLive);
 sound.addEventListener('click', async () => {
   sound.disabled = true;
@@ -136,7 +150,7 @@ sound.addEventListener('click', async () => {
     sound.disabled = false;
   }
 });
-window.addEventListener('keydown', (event) => {
+byId('controls').addEventListener('keydown', (event) => {
   if (timer === null || event.altKey || event.ctrlKey || event.metaKey || event.target.matches('input, select, textarea, [contenteditable]')) return;
   const key = event.key.toLowerCase();
   if (key === 'a' || key === 'd') {
@@ -144,6 +158,14 @@ window.addEventListener('keydown', (event) => {
     keys.add(key);
   }
   if (key === 'escape') toggleLive();
+  if (key === 'q' || key === 'e') {
+    event.preventDefault();
+    adjustAim(key === 'q' ? -1 : 1);
+  }
+  if (key === 'f' && !event.repeat) {
+    event.preventDefault();
+    clearButton.click();
+  }
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
 document.addEventListener('visibilitychange', () => {

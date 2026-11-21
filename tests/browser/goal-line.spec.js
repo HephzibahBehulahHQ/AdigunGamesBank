@@ -85,6 +85,9 @@ test('Goal Line runs a timed feed with held keys, pauses and resets cleanly', as
   await page.goto('/game9/');
   const live = page.getByRole('button', { name: 'Start live ball' });
   await live.press('Enter');
+  await page.keyboard.press('q');
+  await expect(page.getByRole('slider', { name: 'Clearance angle' })).toHaveValue('-1');
+  await page.keyboard.press('e');
   await page.keyboard.down('d');
   await page.clock.runFor(300);
   await page.keyboard.up('d');
@@ -162,4 +165,41 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   for (let i = 0; i < 3; i++) await right.press('Enter');
   await expect(page.locator('#defender')).toHaveText('3.15 m right');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toHaveLength(1);
+});
+
+test('Goal Line standard gamepad starts play, moves, aims and restarts', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.goalLineTestPad = {
+      connected: true, index: 0, mapping: 'standard', axes: [0],
+      buttons: Array.from({ length: 17 }, () => ({ pressed: false }))
+    };
+    window.goalLinePadPolls = 0;
+    Object.defineProperty(navigator, 'getGamepads', {
+      value: () => {
+        window.goalLinePadPolls++;
+        return [window.goalLineTestPad];
+      }
+    });
+  });
+  await page.goto('/game9/');
+  await page.waitForFunction(() => window.goalLinePadPolls >= 2);
+  async function press(index) {
+    const sampled = await page.evaluate(button => {
+      window.goalLineTestPad.buttons[button].pressed = true;
+      return window.goalLinePadPolls;
+    }, index);
+    await page.waitForFunction(previous => window.goalLinePadPolls > previous, sampled);
+    await page.evaluate(button => { window.goalLineTestPad.buttons[button].pressed = false; }, index);
+  }
+  await press(9);
+  await expect(page.getByRole('button', { name: 'Pause live ball' })).toBeVisible();
+  await press(15);
+  await expect(page.getByRole('slider', { name: 'Clearance angle' })).toHaveValue('1');
+  await page.evaluate(() => { window.goalLineTestPad.axes[0] = -0.9; });
+  await expect(page.locator('#defender')).toContainText('left');
+  await press(0);
+  await expect(page.locator('#message')).toContainText('Missed contact.');
+  await press(3);
+  await expect(page.getByRole('button', { name: 'Start live ball' })).toBeEnabled();
+  await expect(page.locator('#defender')).toHaveText('centre');
 });
