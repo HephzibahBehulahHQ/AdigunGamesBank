@@ -1,4 +1,4 @@
-import { THREE, box, material } from '../shared/three-stage.js';
+import { THREE, material } from '../shared/three-stage.js';
 import { GOAL_HALF_WIDTH, GOAL_POST_RADIUS, NET_DEPTH } from './clearance.js';
 
 export async function loadTurf() {
@@ -83,19 +83,19 @@ export function addGround(scene, renderer, { map, normalMap }) {
     scene.add(ground);
     stripes.push(ground);
   }
-  const paint = '#d6d6c8';
-  const paintMaterial = { roughness: 0.94, metalness: 0 };
-  function marking(x, z, width, length) {
-    return box(scene, [width, 0.003, length], [x, -0.007, z], paint, paintMaterial);
-  }
-  marking(0, 0, 44, 0.112);
-  marking(0, 5.5, 18.32, 0.112);
-  marking(0, 16.5, 40.32, 0.112);
+  const marks = [[0, 0, 44, 0.112], [0, 5.5, 18.32, 0.112], [0, 16.5, 40.32, 0.112]];
   for (const side of [-1, 1]) {
-    marking(side * 22, 34, 0.112, 68);
-    marking(side * 9.16, 2.75, 0.112, 5.5);
-    marking(side * 20.16, 8.25, 0.112, 16.5);
+    marks.push([side * 22, 34, 0.112, 68], [side * 9.16, 2.75, 0.112, 5.5], [side * 20.16, 8.25, 0.112, 16.5]);
   }
+  const paintedLines = new THREE.InstancedMesh(new THREE.PlaneGeometry().rotateX(-Math.PI / 2),
+    material('#d6d6c8', { roughness: 0.94, metalness: 0, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
+    marks.length);
+  const transform = new THREE.Matrix4();
+  for (const [index, [x, z, width, length]] of marks.entries()) {
+    paintedLines.setMatrixAt(index, transform.makeScale(width, 1, length).setPosition(x, -0.009, z));
+  }
+  paintedLines.receiveShadow = true;
+  scene.add(paintedLines);
   let heavy = false;
   return (isHeavy) => {
     if (isHeavy === heavy) return;
