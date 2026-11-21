@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The ball animation now blends ground roll into backspin on lofted kicks
+and slower forward spin on bouncing feeds. Chrome verified both signs of
+rotation during a playable drill. The 12 engine tests, including the
+10,000-drill solver, and three targeted Chrome tests passed. Three lofted
+16K-scene receptions on Intel Arc 140T finished without WebGL errors and
+restored actual 4K. Median observed 16K GPU completion was 56.6 ms.
+
 All 22 Goal Line browser checks passed on build `73bf832` in Chrome,
 Firefox 159 and the pinned Windows WebKit 26.0. They cover actual 4K,
 context recovery, accessibility, the final saved drill, touch and controller

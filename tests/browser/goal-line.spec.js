@@ -401,6 +401,35 @@ test('Goal Line advanced pressure punishes a blocked lane and allows a wider ang
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });
 
+test('Goal Line shows forward roll on the turf and backspin on a loft', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+    version: 1, completed: 5091, unlocked: 5092,
+  })));
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.evaluate(async () => {
+    const { THREE } = await import('/shared/three-stage.js');
+    const rotate = THREE.Group.prototype.rotateOnWorldAxis;
+    window.goalLineSpinSigns = [];
+    THREE.Group.prototype.rotateOnWorldAxis = function (axis, angle) {
+      window.goalLineSpinSigns.push(Math.sign(angle));
+      return rotate.call(this, axis, angle);
+    };
+  });
+  await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  for (let step = 1; step < 20; step++) await hold.press('Enter');
+  await expect.poll(() => page.evaluate(() => window.goalLineSpinSigns)).toContain(1);
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  for (let degree = 0; degree < 28; degree++) await aim.press('ArrowLeft');
+  const power = page.getByRole('slider', { name: 'Kick speed' });
+  for (let speed = 14; speed > 6; speed--) await power.press('ArrowLeft');
+  await page.getByRole('checkbox', { name: 'Loft the clearance' }).check();
+  await page.getByRole('button', { name: 'Clear ball' }).press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+  await expect.poll(() => page.evaluate(() => window.goalLineSpinSigns)).toContain(-1);
+});
+
 test('Goal Line can loft over the press if the ball drops for the receiver', async ({ page }) => {
   await disableWebGL(page);
   await page.addInitScript(() => localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({

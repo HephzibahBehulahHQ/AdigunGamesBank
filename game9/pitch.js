@@ -231,6 +231,7 @@ export async function createPitch(options) {
       let previousSeconds = -1;
       function animate(now) {
         const previousX = ballMesh.position.x;
+        const previousY = ballMesh.position.y;
         const previousZ = ballMesh.position.z;
         const realSeconds = THREE.MathUtils.clamp((now - started) / 1000, 0, duration);
         const seconds = kick && previousSeconds < windup && realSeconds >= windup ? windup : realSeconds;
@@ -292,7 +293,12 @@ export async function createPitch(options) {
         const distance = Math.hypot(dx, dz);
         if (distance > 0) {
           rollingAxis.set(dz / distance, 0, -dx / distance);
-          ballMesh.rotateOnWorldAxis(rollingAxis, distance / BALL_RADIUS);
+          const height = (previousY + ballMesh.position.y) / 2;
+          const air = THREE.MathUtils.smoothstep(height, BALL_RADIUS, BALL_RADIUS + 0.055);
+          // A loft carries backspin. A bouncing feed keeps some of its forward spin in the air.
+          const flightSpin = kick && attempt.lift && seconds >= windup ? -0.32 : 0.43;
+          const spin = THREE.MathUtils.lerp(1, flightSpin, air);
+          ballMesh.rotateOnWorldAxis(rollingAxis, distance * spin / BALL_RADIUS);
         }
         framePlay(ballMesh.position.z);
         const time = kick
