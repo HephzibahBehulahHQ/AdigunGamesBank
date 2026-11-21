@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+On the `5ff76a8` local build, Chrome completed three 16K-to-4K switches.
+Each 16K entry allocated one full-resolution depth renderbuffer. Switching
+cameras and resizing the viewport kept the same buffer, and every return to
+4K deleted it and restored a 3840 × 2160 drawing buffer without WebGL errors.
+
 Directly attaching the 16-bit depth renderbuffer removed an extra
 full-resolution depth allocation at 16K startup. Chrome on Intel Arc 140T
 reported a 24-bit then a 16-bit allocation on the previous code and one
