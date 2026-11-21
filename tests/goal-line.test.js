@@ -3,7 +3,7 @@ import test from 'node:test';
 import { LEVEL_COUNT } from '../shared/progression.js';
 import { THREE } from '../shared/three-stage.js';
 import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, planClearance, readContact, receiverAt } from '../game9/clearance.js';
-import { solveLeg } from '../game9/leg-reach.js';
+import { lateralStep, solveLeg } from '../game9/leg-reach.js';
 
 export function playPlan(feed) {
   const tick = Math.round(feed.approachTime / STEP);
@@ -83,6 +83,19 @@ test('boot planting reaches a contact without stretching the limb', () => {
   const far = solveLeg(hip, new THREE.Vector3(0.9, 0.06, 0.85), upper, lower);
   assert.ok(far.ankle.distanceTo(hip) < upper + lower);
   assert.ok(Math.abs(far.knee.distanceTo(far.ankle) - lower) < 1e-9);
+});
+
+test('a supporting toe stays fixed in world space while the other boot travels', () => {
+  const stride = 0.78;
+  const first = lateralStep(0, stride, 0);
+  const after = lateralStep(0.4, stride, 0);
+  assert.equal(after.advancing, false);
+  assert.ok(Math.abs(first.offset - (0.4 + after.offset)) < 1e-9);
+  assert.equal(after.lift, 0);
+  assert.ok(lateralStep(0.4, stride, 1).lift > 0);
+  const next = lateralStep(stride + 0.2, stride, 1);
+  assert.equal(next.advancing, false);
+  assert.equal(next.lift, 0);
 });
 
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {

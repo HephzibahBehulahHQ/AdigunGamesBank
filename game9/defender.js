@@ -1,6 +1,6 @@
 import { THREE } from '../shared/three-stage.js';
 import { outfitMaterials } from './kit-materials.js';
-import { solveLeg } from './leg-reach.js';
+import { lateralStep, solveLeg } from './leg-reach.js';
 
 export async function loadPlayers() {
   const loader = new THREE.TextureLoader();
@@ -84,8 +84,40 @@ function createPlayer(data, role, skin, build) {
     toe: rest('toe1-2.' + side).sub(rest('foot.' + side))
   }));
   const vertical = new THREE.Vector3(0, 1, 0);
+  const facing = role === 'defend' ? 1 : -1;
+  const stepLength = role === 'defend' ? 0.78 : 0.28;
+  let movementDirection = 0;
+  let gaitDistance = 0;
+  let previousX = null;
   return {
     mesh,
+    settle(x) {
+      previousX = mesh.position.x = x;
+      gaitDistance = 0;
+      movementDirection = 0;
+      this.pose(0, 0, 0);
+    },
+    stride(x) {
+      const delta = previousX === null ? 0 : x - previousX;
+      if (Math.abs(delta) > 0.8 || Math.abs(delta) < 0.0001) {
+        this.settle(x);
+        return;
+      }
+      const direction = Math.sign(delta);
+      if (direction !== movementDirection) gaitDistance = 0;
+      gaitDistance += Math.abs(delta);
+      movementDirection = direction;
+      previousX = mesh.position.x = x;
+      const weightShift = Math.sin(gaitDistance * Math.PI / stepLength);
+      this.pose(direction * facing, weightShift * 0.65, 0);
+      for (let side = 0; side < 2; side++) {
+        const path = lateralStep(gaitDistance, stepLength, side);
+        const offset = (side === 0 ? 1 : -1) * facing * 0.18 + direction * path.offset;
+        const forward = facing * (0.13 + (path.advancing ? path.lift : 0));
+        const toe = new THREE.Vector3(x + offset, 0.035 + path.lift, mesh.position.z + forward);
+        this.plantBoot(toe, 0, side, 1);
+      }
+    },
     plantBoot(contact, angle, index, blend) {
       const { hip, upper, lower, toe, thigh, shin, foot } = limbs[index];
       const turn = new THREE.Quaternion().setFromAxisAngle(vertical, angle);

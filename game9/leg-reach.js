@@ -17,3 +17,17 @@ export function solveLeg(hip, requestedAnkle, upper, lower) {
     ankle: hip.clone().addScaledVector(direction, reach)
   };
 }
+
+/** Toe offsets over one gait cycle. During the first half relative travel cancels root travel. */
+export function lateralStep(distance, stride, foot) {
+  const cycle = 2 * stride;
+  const phase = ((distance + foot * stride) % cycle) / cycle;
+  if (phase < 0.5) return { offset: stride * (0.5 - 2 * phase), lift: 0, advancing: false };
+  const swing = (phase - 0.5) * 2;
+  const eased = swing ** 2 * (3 - 2 * swing);
+  return {
+    offset: stride * (eased - 0.5),
+    lift: 0.09 * (stride / 0.8) * Math.sin(Math.PI * swing),
+    advancing: true
+  };
+}

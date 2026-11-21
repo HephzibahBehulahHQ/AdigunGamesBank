@@ -49,9 +49,8 @@ export async function createPitch(options) {
 
   function framePlayers(feed, time) {
     const outlet = -receiverAt(feed, time);
-    const movement = Math.sign(outlet - receiver.mesh.position.x);
-    receiver.mesh.position.x = outlet;
-    receiver.pose(movement, motion.matches || !feed.receiver ? 0 : 0.35, 0);
+    if (motion.matches || !feed.receiver) receiver.settle(outlet);
+    else receiver.stride(outlet);
     gate.position.x = outlet;
     const pressure = pressureAt(feed, time);
     if (!pressure) {
@@ -63,11 +62,10 @@ export async function createPitch(options) {
       opponent.mesh.rotation.y = Math.PI;
       scene.add(opponent.mesh);
     }
-    const pressDirection = Math.sign(-pressure.x - opponent.mesh.position.x);
-    opponent.mesh.position.x = -pressure.x;
     opponent.mesh.position.z = pressure.z;
     opponent.mesh.visible = true;
-    opponent.pose(pressDirection, motion.matches ? 0 : 0.35, 0);
+    if (motion.matches) opponent.settle(-pressure.x);
+    else opponent.stride(-pressure.x);
   }
 
   function framePlay(z) {
@@ -114,9 +112,8 @@ export async function createPitch(options) {
         framePlay(ballMesh.position.z);
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         framePlayers(feed, state.tick * STEP + endTime);
-        defender.mesh.position.x = targetX;
         defender.mesh.position.z = 0;
-        defender.pose(0, 0, 0);
+        defender.settle(targetX);
         stage.render();
         return;
       }
@@ -140,7 +137,6 @@ export async function createPitch(options) {
         const seconds = kick && previousSeconds < windup && realSeconds >= windup ? windup : realSeconds;
         previousSeconds = seconds;
         const elapsed = Math.min(1, seconds / duration);
-        const step = Math.sin(Math.PI * elapsed);
         defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
         defender.mesh.position.z = 0;
         if (kick) {
@@ -159,7 +155,7 @@ export async function createPitch(options) {
             ballMesh.position.set(-point.x, BALL_RADIUS, z);
           }
         } else {
-          defender.pose(movement, step, 0);
+          defender.stride(defender.mesh.position.x);
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;

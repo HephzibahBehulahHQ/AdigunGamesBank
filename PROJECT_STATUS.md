@@ -85,6 +85,16 @@ frame with an actual 3840 × 2160 drawing buffer showed the boot and ball
 meeting on a successful clearance. All nine Goal Line browser checks and
 seven focused engine and leg-reach checks passed locally.
 
+Lateral movement now uses a distance-based gait. The supporting boot stays
+on the pitch while the other swings through the sidestep. Local Chrome
+verification inspected a frame during the move using an actual
+3840 × 2160 drawing buffer. The eight focused engine and geometry checks
+passed, including a fixed support-foot check and all 10,000 drills.
+
+The preceding frame-queue candidate `04b8bf590cbda4fc30795c87fc3e843b88293fbe`
+passed [CI 44930121559](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44930121559),
+including 52 API and 78 browser checks. Publication was skipped.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,
