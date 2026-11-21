@@ -214,6 +214,39 @@ test('Goal Line kick speed controls rolling range and resets on retry', async ({
   await expect(speed).toHaveValue('14');
 });
 
+test('Goal Line heavy turf stops a soft clearance and rewards more power', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+      version: 1, completed: 8001, unlocked: 8002
+    }));
+  });
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  await expect(page.locator('#surface')).toHaveText('SurfaceHeavy turf slows the clearance.');
+  const left = page.getByRole('button', { name: 'Left', exact: true });
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  const speed = page.getByRole('slider', { name: 'Kick speed' });
+  const kick = page.getByRole('button', { name: 'Clear ball', exact: true });
+
+  async function clearAt(power) {
+    for (let step = 0; step < 3; step++) await left.press('Enter');
+    for (let step = 0; step < 15; step++) await hold.press('Enter');
+    await expect(page.locator('#contact')).toHaveText('Ball in reach.');
+    for (let degree = 0; degree < 28; degree++) await aim.press('ArrowLeft');
+    for (let current = 14; current > power; current--) await speed.press('ArrowLeft');
+    await kick.press('Enter');
+  }
+
+  await clearAt(6);
+  await expect(page.locator('#message')).toContainText('Clearance fell short');
+  await expect(page.locator('#ball')).toContainText('6.43 m from goal line');
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+  await clearAt(10);
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+  await expect(page.locator('#ball')).toContainText('8.00 m from goal line');
+});
+
 test('Goal Line audio starts on request and mutes without interrupting play', async ({ page }) => {
   await page.addInitScript(() => {
     window.goalLineAudioSources = [];
