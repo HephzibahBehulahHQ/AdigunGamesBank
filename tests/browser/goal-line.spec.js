@@ -210,6 +210,25 @@ test('Goal Line resets shin and boot angles after a reaching pose', async ({ pag
   expect(poses.reset).toEqual(poses.neutral);
 });
 
+test('Goal Line eyes follow the ball and center when it goes behind the player', async ({ page }) => {
+  await page.goto('/game9/');
+  const gaze = await page.evaluate(async () => {
+    const [{ loadPlayers }, { THREE }] = await Promise.all([
+      import('/game9/defender.js'), import('/shared/three-stage.js'),
+    ]);
+    const { defender } = await loadPlayers();
+    const eyes = ['eye.L', 'eye.R'].map(name => defender.mesh.skeleton.getBoneByName(name));
+    const sample = (x, z) => {
+      defender.watchBall(new THREE.Vector3(x, 1.65, z));
+      return eyes.map(eye => eye.rotation.y);
+    };
+    return { right: sample(10, 2), left: sample(-10, 2), behind: sample(0, -4) };
+  });
+  for (const angle of gaze.right) expect(angle).toBeGreaterThan(0.05);
+  for (const angle of gaze.left) expect(angle).toBeLessThan(-0.05);
+  for (const angle of gaze.behind) expect(angle).toBeCloseTo(0);
+});
+
 test('Goal Line can enter and exit full screen during a drill', async ({ page }) => {
   await page.goto('/game9/');
   await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');

@@ -80,6 +80,7 @@ function createPlayer(rig, geometry, role, skin, build) {
   const rest = name => new THREE.Vector3(...rig.find(([id]) => id === name).slice(2));
   const spine = joint('spine03');
   const head = joint('head');
+  const eyes = [joint('eye.L'), joint('eye.R')];
   const gaze = new THREE.Vector3();
   const limbs = ['L', 'R'].map(side => ({
     upperArm: joint('upperarm01.' + side),
@@ -120,6 +121,16 @@ function createPlayer(rig, geometry, role, skin, build) {
         THREE.MathUtils.clamp(yaw, -0.62, 0.62) * behind,
         0, 'YXZ'
       );
+      for (const eye of eyes) {
+        eye.parent.worldToLocal(gaze.copy(ball)).sub(eye.position);
+        const gazeForward = Math.max(0.16, gaze.z);
+        const centered = 1 - THREE.MathUtils.smoothstep(-gaze.z, 0, 0.8);
+        eye.rotation.set(
+          THREE.MathUtils.clamp(Math.atan2(-gaze.y, Math.hypot(gaze.x, gazeForward)), -0.18, 0.23) * centered,
+          THREE.MathUtils.clamp(Math.atan2(gaze.x, gazeForward), -0.24, 0.24) * centered,
+          0, 'YXZ'
+        );
+      }
     },
     settle(x) {
       previousX = mesh.position.x = x;

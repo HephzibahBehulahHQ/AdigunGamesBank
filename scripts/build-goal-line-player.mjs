@@ -197,8 +197,9 @@ function emit(polygon, slot) {
 }
 
 for (const { group: groupName, vertices, uvs } of faces) {
+  const eyeWeights = groupName === 'body' ? null : [[names.indexOf(groupName === 'helper-l-eye' ? 'eye.L' : 'eye.R'), 1]];
   const corners = vertices.map((vertex, index) => ({
-    key: String(vertex), position: garmentPositions[vertex], uv: sourceUvs[uvs[index]], weights: byVertex[vertex],
+    key: String(vertex), position: garmentPositions[vertex], uv: sourceUvs[uvs[index]], weights: eyeWeights ?? byVertex[vertex],
   }));
   if (groupName !== 'body') {
     emit(corners, 5);

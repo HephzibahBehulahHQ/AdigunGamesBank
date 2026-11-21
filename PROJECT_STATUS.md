@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Each eyeball now has rigid weights to its own joint. The two joints track
+the ball within a small range and return to center when the ball moves
+behind the player. Packed weights verified the attachments on both sides.
+Four targeted Chrome checks passed for gaze, pose reset, lofted reception
+and actual 4K with context recovery.
+
 The player mesh now includes an articulated close-cropped scalp section
 with role-specific hair colors. The eye material paints irises and pupils
 around the source rig's eye centers. Chrome close-ups showed the hairline
