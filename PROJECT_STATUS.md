@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Re-encoding the 1024 × 1024 turf diffuse and normal maps reduced their
+combined transfer size from 2.66 MB to 1.18 MB. In five local Chrome 158
+cold-load checks at simulated 20 Mbps and 40 ms latency, median WebGL
+readiness fell from the previous run's 3,254 ms to 2,638 ms. Controls were
+ready within 347 ms on all five loads.
+
 Five cold-load checks of `d12ebc3` on headless Chrome 158 for Windows met
 Goal Line's 3,000 ms actionable-controls target. A loopback static server
 served the build with the browser cache disabled and a simulated 20 Mbps
