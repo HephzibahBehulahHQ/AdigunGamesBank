@@ -187,6 +187,23 @@ test('Goal Line restores 3D without resetting the current feed', async ({ page }
   })).toEqual([3840, 2160, false, 0]);
 });
 
+test('Goal Line can enter and exit full screen during a drill', async ({ page }) => {
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  const enter = page.getByRole('button', { name: 'Enter full screen' });
+  await enter.press('Enter');
+  const exit = page.getByRole('button', { name: 'Exit full screen' });
+  await expect(exit).toBeVisible();
+  expect(await page.evaluate(() => document.fullscreenElement?.id)).toBe('game');
+  const ball = await page.locator('#ball').textContent();
+  await page.getByRole('button', { name: 'Hold', exact: true }).press('Enter');
+  await expect(page.locator('#ball')).not.toHaveText(ball);
+  const advancedBall = await page.locator('#ball').textContent();
+  await exit.press('Enter');
+  await expect(enter).toBeVisible();
+  await expect(page.locator('#ball')).toHaveText(advancedBall);
+});
+
 test('Goal Line can switch cameras without changing the drill state', async ({ page }) => {
   await page.goto('/game9/');
   const canvas = page.locator('#pitch');

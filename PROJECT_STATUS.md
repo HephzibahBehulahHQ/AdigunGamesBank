@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Goal Line now offers a browser full-screen view that expands the game
+layout and keeps the drill controls available. All 20 Chrome browser
+checks passed, including keyboard entry and exit, a play step in full
+screen and preservation of the advanced ball position on exit. Full screen
+uses the existing graphics modes. Native 16K output remains unverified.
+
 The Chrome hardware benchmark can now time the directional shadow pass
 separately. On Intel Arc 140T, five heavy-turf clearances at 16K yielded
 128 shadow-refresh samples, with a 1.0 ms median and 2.0 ms 95th percentile.

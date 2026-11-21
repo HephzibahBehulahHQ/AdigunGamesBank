@@ -24,6 +24,8 @@ try {
 }
 const graphics = byId('graphics');
 const liveButton = byId('live');
+const game = byId('game');
+const fullscreen = byId('fullscreen');
 const movementHelp = byId('movement-help');
 const sound = byId('sound');
 const audio = createPitchAudio();
@@ -197,6 +199,18 @@ function toggleLoft() {
 }
 
 liveButton.addEventListener('click', toggleLive);
+fullscreen.hidden = !document.fullscreenEnabled;
+fullscreen.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement === game) await document.exitFullscreen();
+    else await game.requestFullscreen();
+  } catch {
+    byId('message').textContent = 'Full screen is unavailable in this browser window.';
+  }
+});
+document.addEventListener('fullscreenchange', () => {
+  fullscreen.textContent = document.fullscreenElement === game ? 'Exit full screen' : 'Enter full screen';
+});
 sound.addEventListener('click', async () => {
   sound.disabled = true;
   try {
