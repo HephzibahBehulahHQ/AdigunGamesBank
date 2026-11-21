@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+**Release held under the updated owner acceptance standard.** Development
+continues on the scoped branch. The ground and goal now use original turf
+colour and relief textures, painted pitch markings, cylindrical goal posts,
+netting and shadows. The human character, animation and measured 16K
+qualification remain open. The evidence below belongs to the earlier
+gameplay candidate.
+
 Goal Line (game9) is integrated on main at `292d658ea79a21968fdc5668116e43abedaf4486`. The original 3D clearance drill uses timed interception, directional clearance and a saved 10,000-drill campaign. The catalog now contains fifteen local 3D implementations, one API-dependent 3D client and eight legacy 2D titles in source. Historical publication counts below describe the previous release.
 
 - [Exact gameplay candidate CI](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44919603061) passed on 2026-11-21 at 16:44 Europe/Berlin: 271 JavaScript, 52 API and 72 browser checks (19 accessibility/reflow, 16 contract/fallback and 37 rendered gameplay). The local static build and release integrity checks passed. The engine solver completed every distinct drill through public commands.
