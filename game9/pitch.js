@@ -218,7 +218,7 @@ export async function createPitch(options) {
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
           } else {
-            const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, seconds - windup));
+            const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, seconds - windup, attempt.resistance));
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
             ballMesh.position.set(-point.x, clearanceHeight(attempt.contact.y, seconds - windup), z);
           }

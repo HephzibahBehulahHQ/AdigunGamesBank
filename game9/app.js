@@ -82,6 +82,7 @@ function update(message) {
       : sideways(projection.end.x);
   byId('projection').textContent = !ready ? 'Ball finished'
     : ball.z <= 2.3 ? aimReading : 'Available inside contact zone';
+  byId('surface').hidden = !feed.resistance;
   byId('pressing').hidden = pressure === null;
   if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';

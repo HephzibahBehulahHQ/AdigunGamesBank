@@ -71,6 +71,17 @@ test('ground resistance stops an underpowered clearance short of the outlet', ()
   assert.ok(state.trajectory.travelTime > 2);
 });
 
+test('heavy turf requires more power to reach the outlet', () => {
+  const feed = Array.from({ length: 20 }, (_, index) => createDrill(8001 + index).feeds)
+    .flat().find(ball => ball.resistance);
+  assert.ok(feed, 'the final tier includes heavy turf');
+  const { tick, moves, targetAngle } = playPlan(feed);
+  const contact = readContact(feed, tick, moves * 0.45);
+  assert.equal(planClearance({ ...feed, resistance: undefined }, contact, tick, targetAngle, 6).short, false);
+  assert.equal(planClearance(feed, contact, tick, targetAngle, 6).short, true);
+  assert.equal(planClearance(feed, contact, tick, targetAngle, 8).short, false);
+});
+
 test('boot planting reaches a contact without stretching the limb', () => {
   const hip = new THREE.Vector3(0.12, 0.89, 0);
   const target = new THREE.Vector3(0.26, 0.10, 0.27);

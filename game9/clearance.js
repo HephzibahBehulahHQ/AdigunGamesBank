@@ -60,6 +60,7 @@ export function makeDrill(level) {
         restitution: 0.46 + 0.11 * random()
       };
     }
+    if (level > 8000 && random() < 0.5) feed.resistance = 2.8;
     return feed;
   });
 }
@@ -103,17 +104,17 @@ export function clearanceAt(contact, angle, drift, z) {
   };
 }
 
-export function clearanceDistance(speed, time) {
-  const rollTime = Math.min(time, speed / ROLLING_DECELERATION);
-  return speed * rollTime - ROLLING_DECELERATION * rollTime ** 2 / 2;
+export function clearanceDistance(speed, time, resistance = ROLLING_DECELERATION) {
+  const rollTime = Math.min(time, speed / resistance);
+  return speed * rollTime - resistance * rollTime ** 2 / 2;
 }
 
 export function clearanceHeight(height, time) {
   return Math.max(BALL_RADIUS, height - GRAVITY * time ** 2 / 2);
 }
 
-function timeToDistance(distance, speed) {
-  const finalSpeed = Math.sqrt(Math.max(0, speed ** 2 - 2 * ROLLING_DECELERATION * distance));
+function timeToDistance(distance, speed, resistance = ROLLING_DECELERATION) {
+  const finalSpeed = Math.sqrt(Math.max(0, speed ** 2 - 2 * resistance * distance));
   return 2 * distance / (speed + finalSpeed);
 }
 
@@ -131,7 +132,8 @@ export function readContact(feed, tick, defender) {
 export function pressureAt(feed, time) {
   const player = feed.pressure;
   if (!player) return null;
-  const outletDelay = timeToDistance(SAFETY_LINE, CLEARANCE_SPEED) - timeToDistance(player.z, CLEARANCE_SPEED);
+  const outletDelay = timeToDistance(SAFETY_LINE, CLEARANCE_SPEED, feed.resistance) -
+    timeToDistance(player.z, CLEARANCE_SPEED, feed.resistance);
   const tracksReceiver = receiverAt(feed, time + outletDelay) - feed.channel;
   const x = player.center + tracksReceiver * player.z / SAFETY_LINE + player.range * Math.sin(player.phase + player.speed * time);
   return { x, z: player.z };
@@ -144,18 +146,19 @@ export function receiverAt(feed, time) {
 
 export function planClearance(feed, delivery, tick, angle, speed = CLEARANCE_SPEED) {
   const { contact, delay } = delivery;
-  const z = Math.min(SAFETY_LINE, contact.z + clearanceDistance(speed, speed / ROLLING_DECELERATION));
+  const resistance = feed.resistance ?? ROLLING_DECELERATION;
+  const z = Math.min(SAFETY_LINE, contact.z + clearanceDistance(speed, speed / resistance, resistance));
   const launchTime = tick * STEP + delay;
-  const travelTime = timeToDistance(z - contact.z, speed);
+  const travelTime = timeToDistance(z - contact.z, speed, resistance);
   const end = { ...clearanceAt(contact, angle, feed.drift, z), y: clearanceHeight(contact.y, travelTime) };
   const receiveTime = launchTime + travelTime;
   const receiver = receiverAt(feed, receiveTime);
   const short = z < SAFETY_LINE;
   const atGate = !short && Math.abs(end.x - receiver) <= feed.halfWidth - BALL_RADIUS;
   const pressure = feed.pressure;
-  const plan = { end, atGate, short, interception: null, receiver, receiveTime, speed, travelTime };
+  const plan = { end, atGate, short, interception: null, receiver, receiveTime, speed, travelTime, resistance };
   if (!pressure || z < pressure.z) return plan;
-  const pressTime = timeToDistance(pressure.z - contact.z, speed);
+  const pressTime = timeToDistance(pressure.z - contact.z, speed, resistance);
   const time = launchTime + pressTime;
   const player = pressureAt(feed, time);
   const ball = { ...clearanceAt(contact, angle, feed.drift, player.z), y: clearanceHeight(contact.y, pressTime) };

@@ -14,6 +14,10 @@ Goal Line is an original browser football clearance drill for Adigun Game Bank. 
 - **Deployment** — GitHub Pages route `/AdigunGamesBank/game9/`. The conversion remains in progress until applicable release gates pass.
 - **Standards** — HB-AI-ENGINEERING-001 v2.0 at the repository pin. Navy, Royal Blue, Metallic Gold and Ivory from the pinned design system.
 
+From drill 8,001, selected feeds run on heavy turf. The Surface reading
+identifies these feeds. Clearances slow by 2.8 m/s² on heavy turf, which
+changes both the reach of low-power kicks and their arrival time.
+
 ## Hardware checks
 
 On a machine with the repository's locked Playwright dependencies and Chrome
