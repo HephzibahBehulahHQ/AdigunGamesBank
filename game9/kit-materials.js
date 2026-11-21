@@ -32,7 +32,7 @@ function stripe(context, top, metres, color) {
   context.fillRect(0, row(top), SIZE, SIZE * metres / HEIGHT_METRES);
 }
 
-export function outfitMaterials(positions) {
+export function outfitMaterials(positions, away = false) {
   const uv = new Float32Array(positions.length / 3 * 2);
   for (let vertex = 0; vertex < positions.length / 3; vertex++) {
     const x = positions[vertex * 3];
@@ -42,8 +42,8 @@ export function outfitMaterials(positions) {
     uv[vertex * 2] = THREE.MathUtils.clamp(0.5 + (z > 0.03 ? x : -x) / WIDTH_METRES, 0, 1);
     uv[vertex * 2 + 1] = y / HEIGHT_METRES;
   }
-  const jersey = textile('#204778', '#96acbc', context => {
-    context.fillStyle = '#172e4b';
+  const jersey = textile(away ? '#8f332c' : '#204778', '#96acbc', context => {
+    context.fillStyle = away ? '#5e251d' : '#172e4b';
     context.fillRect(120, row(1.52), 96, row(0.96) - row(1.52));
     context.fillRect(SIZE - 216, row(1.52), 96, row(0.96) - row(1.52));
     stripe(context, 1.51, 0.027, '#d9c58d');
@@ -53,9 +53,10 @@ export function outfitMaterials(positions) {
     context.font = '800 150px system-ui';
     context.lineWidth = 5;
     context.strokeStyle = '#172237';
-    context.strokeText('4', SIZE / 2, row(1.28));
+    const number = away ? '9' : '4';
+    context.strokeText(number, SIZE / 2, row(1.28));
     context.fillStyle = '#f3ebd5';
-    context.fillText('4', SIZE / 2, row(1.28));
+    context.fillText(number, SIZE / 2, row(1.28));
     context.font = '700 28px system-ui';
     context.fillText('ADIGUN', SIZE / 2, row(1.43));
   });

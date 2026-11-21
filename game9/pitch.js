@@ -1,12 +1,12 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, SAFETY_LINE, clearanceAt } from './clearance.js';
+import { BALL_RADIUS, CLEARANCE_SPEED, SAFETY_LINE, STEP, clearanceAt, pressureAt } from './clearance.js';
 import { addGoal, addGround } from './ground.js';
-import { loadDefender } from './defender.js';
+import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
 import { addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
-  const defender = await loadDefender();
+  const { defender, createOpponent } = await loadPlayers();
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
@@ -41,6 +41,25 @@ export async function createPitch(options) {
   let playedAttempt = null;
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
+  let opponent;
+
+  function framePressure(feed, time) {
+    const pressure = pressureAt(feed, time);
+    if (!pressure) {
+      if (opponent) opponent.mesh.visible = false;
+      return;
+    }
+    if (!opponent) {
+      opponent = createOpponent();
+      opponent.mesh.rotation.y = Math.PI;
+      scene.add(opponent.mesh);
+    }
+    const movement = Math.sign(-pressure.x - opponent.mesh.position.x);
+    opponent.mesh.position.x = -pressure.x;
+    opponent.mesh.position.z = pressure.z;
+    opponent.mesh.visible = true;
+    opponent.pose(movement, motion.matches ? 0 : 0.35, 0);
+  }
 
   function framePlay(z) {
     const wide = motion.matches ? 1 : THREE.MathUtils.smoothstep(z, 3, 25);
@@ -59,12 +78,12 @@ export async function createPitch(options) {
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;
       const attempt = state.trajectory;
-      const visibleBall = attempt?.end ?? ball;
+      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
         const contact = attempt?.contact ?? plannedContact;
         for (let i = 0; i <= 12; i += 1) {
-          const z = contact.z + (SAFETY_LINE - contact.z) * i / 12;
+          const z = contact.z + ((attempt ? visibleBall.z : SAFETY_LINE) - contact.z) * i / 12;
           const point = clearanceAt(contact, attempt?.angle ?? angle, feed.drift, z);
           coords.set([-point.x, 0.045, z], i * 3);
         }
@@ -84,6 +103,8 @@ export async function createPitch(options) {
         hasFrame = true;
         ballMesh.position.copy(targetBall);
         framePlay(ballMesh.position.z);
+        const endTime = attempt ? attempt.delay + (visibleBall.z - attempt.contact.z) / CLEARANCE_SPEED : 0;
+        framePressure(feed, state.tick * STEP + endTime);
         defender.mesh.position.x = targetX;
         defender.pose(0, 0, 0);
         stage.render();
@@ -95,7 +116,7 @@ export async function createPitch(options) {
       const ballFrom = ballMesh.position.clone();
       const started = performance.now();
       const windup = kick ? Math.max(0.035, attempt.delay) : 0;
-      const flight = kick ? (attempt.end.z - attempt.contact.z) / 14 : 0;
+      const flight = kick ? (visibleBall.z - attempt.contact.z) / CLEARANCE_SPEED : 0;
       const duration = kick ? windup + flight : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
@@ -110,7 +131,7 @@ export async function createPitch(options) {
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
           } else {
-            const z = THREE.MathUtils.lerp(attempt.contact.z, attempt.end.z, Math.min(1, (seconds - windup) / flight));
+            const z = THREE.MathUtils.lerp(attempt.contact.z, visibleBall.z, Math.min(1, (seconds - windup) / flight));
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
             ballMesh.position.set(-point.x, BALL_RADIUS, z);
           }
@@ -120,6 +141,8 @@ export async function createPitch(options) {
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);
+        const pressureTime = state.tick * STEP + (kick ? Math.min(seconds, attempt.delay + flight) : 0);
+        framePressure(feed, pressureTime);
         stage.render();
         frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
       }

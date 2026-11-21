@@ -4,6 +4,7 @@ export const LINE = 0;
 export const SAFETY_LINE = 8;
 export const BALL_RADIUS = 0.11;
 export const STEP = 0.1;
+export const CLEARANCE_SPEED = 14;
 const HALF_GOAL = 3.66;
 const DEFENDER_SPEED = 4.5;
 const CONTROL_REACH = 0.62;
@@ -17,7 +18,7 @@ export function makeDrill(level) {
   return Array.from({ length: 3 + Math.floor(difficulty * 3) }, () => {
     const pace = Math.round(9 + difficulty * 13 + random() * 5);
     const approachTime = Math.round((2.2 - difficulty * 0.9 + random() * 0.4) / STEP) * STEP;
-    return {
+    const feed = {
       pace,
       approachTime,
       crossing: (random() * 2 - 1) * (2.1 + difficulty),
@@ -26,6 +27,20 @@ export function makeDrill(level) {
       halfWidth: 1.15 - difficulty * 0.55,
       drift: (random() * 2 - 1) * difficulty * 0.17
     };
+    if (level > 2000) {
+      const z = 5.35 + random() * 0.65;
+      const centerLine = feed.crossing + z / SAFETY_LINE * (feed.channel - feed.crossing) +
+        feed.drift * z * (z / SAFETY_LINE - 1);
+      const side = random() < 0.5 ? -1 : 1;
+      feed.pressure = {
+        z,
+        center: centerLine + side * (0.57 + random() * 0.10),
+        phase: random() * Math.PI * 2,
+        speed: 1.8 + 2.8 * difficulty,
+        range: 0.075 + 0.085 * difficulty
+      };
+    }
+    return feed;
   });
 }
 
@@ -55,6 +70,25 @@ export function readContact(feed, tick, defender) {
   return { ball, contact, delay, reachable };
 }
 
+export function pressureAt(feed, time) {
+  const player = feed.pressure;
+  if (!player) return null;
+  return { x: player.center + player.range * Math.sin(player.phase + player.speed * time), z: player.z };
+}
+
+export function planClearance(feed, delivery, tick, angle) {
+  const { contact, delay } = delivery;
+  const end = clearanceAt(contact, angle, feed.drift, SAFETY_LINE);
+  const atGate = Math.abs(end.x - feed.channel) <= feed.halfWidth - BALL_RADIUS;
+  const pressure = feed.pressure;
+  if (!pressure) return { end, atGate, interception: null };
+  const time = tick * STEP + delay + (pressure.z - contact.z) / CLEARANCE_SPEED;
+  const player = pressureAt(feed, time);
+  const ball = clearanceAt(contact, angle, feed.drift, player.z);
+  const interception = Math.abs(ball.x - player.x) <= 0.42 + BALL_RADIUS ? { ball, time } : null;
+  return { end, atGate, interception };
+}
+
 export function createDrill(level) {
   return { feeds: makeDrill(level), index: 0, tick: 0, defender: 0, result: 'ready', trajectory: null };
 }
@@ -75,11 +109,10 @@ export function clear(state, angle) {
     state.result = 'missed';
     return false;
   }
-  const end = clearanceAt(delivery.contact, angle, feed.drift, SAFETY_LINE);
-  state.trajectory = { ...delivery, end, angle, drift: feed.drift };
-  const safe = Math.abs(end.x - feed.channel) <= feed.halfWidth - BALL_RADIUS;
-  state.result = safe ? 'cleared' : 'unsafe';
-  return safe;
+  const plan = planClearance(feed, delivery, state.tick, angle);
+  state.trajectory = { ...delivery, ...plan, angle, drift: feed.drift };
+  state.result = plan.interception ? 'intercepted' : plan.atGate ? 'cleared' : 'unsafe';
+  return state.result === 'cleared';
 }
 
 export function nextFeed(state) {

@@ -1,5 +1,5 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { STEP, SAFETY_LINE, advance, clear, clearanceAt, createDrill, incomingAt, nextFeed, readContact } from './clearance.js';
+import { STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact } from './clearance.js';
 
 const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
@@ -37,17 +37,22 @@ function sideways(x) {
 
 function update(message) {
   const feed = state.feeds[state.index];
-  const { ball, contact, reachable } = readContact(feed, state.tick, state.defender);
+  const delivery = readContact(feed, state.tick, state.defender);
+  const { ball, contact, reachable } = delivery;
   const aiming = Number(angle.value);
   const ready = state.result === 'ready';
   const finished = state.result === 'cleared' && state.index === state.feeds.length - 1;
   const safeEdge = feed.halfWidth;
-  const projection = clearanceAt(contact, aiming, feed.drift, SAFETY_LINE);
+  const projection = planClearance(feed, delivery, state.tick, aiming);
+  const pressure = pressureAt(feed, state.tick * STEP);
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
   byId('ball').textContent = sideways(ball.x) + ', ' + Math.abs(ball.z).toFixed(2) + ' m ' + (ball.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('defender').textContent = sideways(state.defender);
   byId('gate').textContent = sideways(feed.channel - safeEdge) + ' to ' + sideways(feed.channel + safeEdge);
-  byId('projection').textContent = ball.z <= 2.3 ? sideways(projection.x) : 'Available inside contact zone';
+  const interception = projection.interception ? ' · intercepted' : '';
+  byId('projection').textContent = ball.z <= 2.3 ? sideways(projection.end.x) + interception : 'Available inside contact zone';
+  byId('pressing').hidden = pressure === null;
+  if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';
   byId('contact').textContent = reachable && ready
     ? 'Ball in reach.' : 'Close the gap before clearing.';
@@ -140,7 +145,12 @@ clearButton.addEventListener('click', () => {
     (next.hidden ? byId('retry') : next).focus();
     return;
   }
-  update(state.result === 'missed' ? 'Missed contact. Restart the drill.' : 'Clearance missed the safe channel. Restart the drill.');
+  const outcome = {
+    missed: 'Missed contact.',
+    unsafe: 'Clearance missed the safe channel.',
+    intercepted: 'The pressing player intercepted the clearance.'
+  };
+  update(outcome[state.result] + ' Restart the drill.');
   byId('retry').focus();
 });
 next.addEventListener('click', () => {

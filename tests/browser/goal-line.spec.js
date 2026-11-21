@@ -101,3 +101,33 @@ test('Goal Line runs a timed feed with held keys, pauses and resets cleanly', as
   await expect(page.locator('#defender')).toHaveText('centre');
   await expect(live).toBeEnabled();
 });
+
+test('Goal Line advanced pressure punishes a blocked lane and allows a wider angle', async ({ page }) => {
+  // Seed progression only. Interception and retry run through the actual game controls.
+  await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+      version: 1, completed: 2000, unlocked: 2001
+    }));
+  });
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  await expect(page.locator('#pressing')).toBeVisible();
+  const right = page.getByRole('button', { name: 'Right', exact: true });
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  const kick = page.getByRole('button', { name: 'Clear ball' });
+  async function play(angle) {
+    for (let i = 0; i < 3; i++) await right.press('Enter');
+    for (let i = 0; i < 19; i++) await hold.press('Enter');
+    for (let i = 0; i < angle; i++) await aim.press('ArrowRight');
+  }
+  await play(7);
+  await expect(page.locator('#projection')).toContainText('intercepted');
+  await kick.press('Enter');
+  await expect(page.locator('#message')).toContainText('The pressing player intercepted');
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+  await play(11);
+  await expect(page.locator('#projection')).not.toContainText('intercepted');
+  await kick.press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+});

@@ -1,10 +1,14 @@
 import { THREE } from '../shared/three-stage.js';
 import { outfitMaterials } from './kit-materials.js';
 
-export async function loadDefender() {
+export async function loadPlayers() {
   const response = await fetch(new URL('./defender.mesh.json', import.meta.url));
   if (!response.ok) throw new Error('Could not load the Goal Line defender mesh.');
   const data = await response.json();
+  return { defender: createPlayer(data), createOpponent: () => createPlayer(data, true) };
+}
+
+function createPlayer(data, away = false) {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(data.positions, 3));
   geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(data.skinIndices, 4));
@@ -16,7 +20,7 @@ export async function loadDefender() {
   });
   geometry.setIndex(data.sections.flat());
   geometry.computeVertexNormals();
-  const { uv, palette } = outfitMaterials(data.positions);
+  const { uv, palette } = outfitMaterials(data.positions, away);
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   const mesh = new THREE.SkinnedMesh(geometry, palette);
   mesh.castShadow = true;
