@@ -30,8 +30,12 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
-const fullscreen = process.env.ADIGUN_HARDWARE_FULLSCREEN === '1';
+const requireDirect = process.env.ADIGUN_HARDWARE_NATIVE_16K === '1';
+const fullscreen = requireDirect || process.env.ADIGUN_HARDWARE_FULLSCREEN === '1';
 const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
+if (requireDirect && (mode !== '16k' || headless || profileGpu)) {
+  throw new Error('Direct 16K verification requires a headful 16k run without offscreen GPU phase profiling.');
+}
 const gpuPhase = process.env.ADIGUN_GPU_PHASE ?? 'combined';
 if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
   throw new Error('Choose combined, shadow, scene or presentation for ADIGUN_GPU_PHASE.');
@@ -40,7 +44,8 @@ if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
-    camera === 'goal' ? '' : camera, fullscreen ? 'fullscreen' : '', profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
+    camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
+    profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -69,7 +74,7 @@ await new Promise((resolve, reject) => {
 let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const page = await browser.newPage({ viewport: requireDirect ? null : { width: 1440, height: 900 } });
   await page.addInitScript(({ profileGpu, gpuPhase, level }) => {
     // Unlock the selected drill in the isolated test context.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
@@ -184,9 +189,13 @@ try {
     const graphicsContext = element.getContext('webgl2');
     if (!graphicsContext) return null;
     const debug = graphicsContext.getExtension('WEBGL_debug_renderer_info');
+    const rect = element.getBoundingClientRect();
+    const density = devicePixelRatio || 1;
     return {
       drawingBuffer: [graphicsContext.drawingBufferWidth, graphicsContext.drawingBufferHeight],
       fullscreen: document.fullscreenElement?.contains(element) ?? false,
+      canvasPhysicalSize: [Math.round(rect.width * density), Math.round(rect.height * density)],
+      viewportPhysicalSize: [Math.round(innerWidth * density), Math.round(innerHeight * density)],
       canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
@@ -201,11 +210,14 @@ try {
   });
   const before = await readSurface();
   const requestedBufferAllocated = before?.renderBuffer.every((dimension, index) => dimension === requested[index]) ?? false;
+  const hasDirectBuffer = surface => surface?.fullscreen && surface.renderSurface === 'drawing buffer' &&
+    surface.drawingBuffer.every((dimension, index) => dimension === requested[index] &&
+      surface.canvasPhysicalSize[index] >= dimension && surface.viewportPhysicalSize[index] >= dimension);
   let after = null;
   let restored4K = null;
   let sample = null;
-  let workloadError = null;
-  if (requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
+  let workloadError = requireDirect && !hasDirectBuffer(before) ? 'Direct 16K drawing buffer was not allocated.' : null;
+  if (!workloadError && requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
     const frameIntervals = [];
     const completionIntervals = [];
     const longGaps = [];
@@ -289,6 +301,7 @@ try {
         if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
         after = await readSurface();
         if (!after || after.contextLost || after.error || after.camera !== camera || after.fullscreen !== fullscreen ||
+            (requireDirect && !hasDirectBuffer(after)) ||
             after.renderBuffer.some((dimension, index) => dimension !== requested[index])) {
           throw new Error(`Render target failed in round ${round + 1}.`);
         }
@@ -321,7 +334,9 @@ try {
         p95Ms: percentile(gpuTimes, 0.95),
       } : null,
     };
-    if (await canvas.isVisible()) await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
+    if (!requireDirect && await canvas.isVisible()) {
+      await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
+    }
     if (mode === '16k' && !workloadError && !after?.contextLost) {
       await graphics.selectOption('4k');
       restored4K = await readSurface();
@@ -329,7 +344,8 @@ try {
   }
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
-    mode, scenario, camera, level, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
+    mode, scenario, camera, level, requested, requestedBufferAllocated, requireDirect, softwareRenderer,
+    before, after, restored4K, sample, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),

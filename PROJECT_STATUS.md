@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The strict direct-16K Chrome benchmark now uses the actual browser window
+and checks both the drawing buffer and physical viewport size. On the local
+Windows display it exited with the expected failure receipt. WebGL allocated
+the 15,360 × 8,640 scene, but the 970 × 546 drawing buffer could only show
+its downsampled output. The ordinary one-clearance 16K scene benchmark
+passed separately. Direct-buffer performance and scanout remain unverified.
+
 The renderer can request a direct 16K WebGL drawing buffer when the
 full-screen canvas has at least 15,360 × 8,640 physical pixels and WebGL
 reports compatible limits. Local Chrome verified the smaller-display path

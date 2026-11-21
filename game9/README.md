@@ -41,6 +41,11 @@ Set `ADIGUN_HARDWARE_FULLSCREEN=1` to run in browser full screen, with a
 drawing buffer. The report distinguishes that buffer from a 16K scene
 presented through a smaller canvas. Display scanout requires separate
 verification on the display hardware.
+Set `ADIGUN_HARDWARE_NATIVE_16K=1` for a strict direct-buffer run. It uses
+the actual window size, enters full screen, and fails with a `-native`
+report if the 16K drawing buffer or physical viewport is too small.
+Run it headful without GPU phase profiling. The strict run skips the
+viewport screenshot to avoid reading back a full 16K image.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The
