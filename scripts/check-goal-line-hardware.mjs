@@ -49,13 +49,47 @@ let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.addInitScript(() => {
+  await page.addInitScript(profileGpu => {
     // Unlock one advanced drill in the isolated test context to exercise both players.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
       version: 1, completed: 2000, unlocked: 2001
     }));
     window.goalLineDrawTimes = [];
     window.goalLineCompletionTimes = [];
+    window.goalLineGpuTimes = [];
+    if (profileGpu) {
+      const clear = WebGL2RenderingContext.prototype.clear;
+      const fenceSync = WebGL2RenderingContext.prototype.fenceSync;
+      let timer, query;
+      let active = false;
+      WebGL2RenderingContext.prototype.clear = function (mask) {
+        if ((mask & this.COLOR_BUFFER_BIT) && this.getParameter(this.VIEWPORT)[2] === 15360) {
+          timer ??= this.getExtension('EXT_disjoint_timer_query_webgl2') ?? false;
+          if (timer && query && !active && this.getQueryParameter(query, this.QUERY_RESULT_AVAILABLE)) {
+            if (!this.getParameter(timer.GPU_DISJOINT_EXT)) {
+              window.goalLineGpuTimes.push(this.getQueryParameter(query, this.QUERY_RESULT) / 1e6);
+            }
+            this.deleteQuery(query);
+            query = null;
+          }
+          if (timer && !query) {
+            query = this.createQuery();
+            if (query) {
+              this.beginQuery(timer.TIME_ELAPSED_EXT, query);
+              active = true;
+            }
+          }
+        }
+        return clear.call(this, mask);
+      };
+      WebGL2RenderingContext.prototype.fenceSync = function (...args) {
+        if (active) {
+          this.endQuery(timer.TIME_ELAPSED_EXT);
+          active = false;
+        }
+        return fenceSync.apply(this, args);
+      };
+    }
     const observed = new WeakSet();
     const waitForSync = WebGL2RenderingContext.prototype.clientWaitSync;
     WebGL2RenderingContext.prototype.clientWaitSync = function (sync, ...args) {
@@ -76,7 +110,7 @@ try {
       }
       return drawElements.apply(this, args);
     };
-  });
+  }, mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1');
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -93,6 +127,7 @@ try {
       renderSurface: element.dataset.renderSurface,
       maxViewport: Array.from(graphicsContext.getParameter(graphicsContext.MAX_VIEWPORT_DIMS)),
       maxRenderbuffer: graphicsContext.getParameter(graphicsContext.MAX_RENDERBUFFER_SIZE),
+      gpuTimerAvailable: graphicsContext.getSupportedExtensions()?.includes('EXT_disjoint_timer_query_webgl2') ?? false,
       renderer: graphicsContext.getParameter(debug?.UNMASKED_RENDERER_WEBGL ?? graphicsContext.RENDERER),
       error: graphicsContext.getError(),
       contextLost: graphicsContext.isContextLost()
@@ -159,6 +194,7 @@ try {
     frameIntervals.sort((a, b) => a - b);
     completionIntervals.sort((a, b) => a - b);
     const percentile = (intervals, fraction) => intervals[Math.ceil(intervals.length * fraction) - 1] ?? null;
+    const gpuTimes = await page.evaluate(() => window.goalLineGpuTimes.sort((a, b) => a - b));
     sample = {
       completedRounds, requestedRounds: rounds, frames: frameCount,
       activeMilliseconds, wallMilliseconds: performance.now() - started,
@@ -167,6 +203,11 @@ try {
         frames: completedFrames,
         medianMs: percentile(completionIntervals, 0.5),
         p95Ms: percentile(completionIntervals, 0.95),
+      } : null,
+      gpuRenderTime: gpuTimes.length ? {
+        frames: gpuTimes.length,
+        medianMs: percentile(gpuTimes, 0.5),
+        p95Ms: percentile(gpuTimes, 0.95),
       } : null,
     };
     if (await canvas.isVisible()) await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });

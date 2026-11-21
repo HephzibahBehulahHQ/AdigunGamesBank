@@ -34,6 +34,10 @@ The 16K report also counts GPU fences the browser observed as completed
 and reports the intervals between those observations. Fence observations
 measure when the browser checked for finished work and do not measure
 display scanout or exact GPU execution time.
+Set `ADIGUN_PROFILE_GPU=1` for a separate 16K timing run. Where Chrome exposes
+the WebGL timer extension, the report includes GPU elapsed time from the
+scene color clear through the presentation draw, including setup frames.
+It excludes the shadow pass, which occurs before the color clear.
 Files are written under `test-results/goal-line-hardware-16k/`
 or the corresponding 4K directory. The viewport screenshot shows the scene;
 the render buffer dimensions and framebuffer completeness come from WebGL. A fallback, lost context,

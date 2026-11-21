@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+An optional WebGL timer-query run on Intel Arc 140T and Chrome 158 measured
+132 samples at 15,360 × 8,640 over three full clearances and setup. The GPU
+interval from scene color clear through presentation draw had a 60.0 ms
+median and a 69.1 ms 95th percentile, excluding the shadow pass. During play,
+the browser observed GPU completion intervals of 74.8 ms median and 83.3 ms
+at the 95th percentile. This points to rendering work as the main limit on
+the tested GPU. The 16K release gate remains open.
+
 All 14 Goal Line browser checks passed locally on Windows using the cached
 Firefox 159.0 executable against development revision `c959bcd`. Coverage
 included the measured 3840 × 2160 WebGL 2 drawing buffer, keyboard play
