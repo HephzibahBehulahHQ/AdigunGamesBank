@@ -1,7 +1,9 @@
-import { THREE, box, createStage, material } from '../shared/three-stage.js';
+import { THREE, box, createStage } from '../shared/three-stage.js';
 import { BALL_RADIUS, SAFETY_LINE, clearanceAt } from './clearance.js';
 import { addGoal, addGround } from './ground.js';
 import { loadDefender } from './defender.js';
+import { createFootball } from './football.js';
+import { addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
   const defender = await loadDefender();
@@ -17,6 +19,7 @@ export async function createPitch(options) {
   light.shadow.camera.updateProjectionMatrix();
   addGround(scene, renderer);
   addGoal(scene);
+  addTrainingGround(scene);
   const gate = new THREE.Group();
   scene.add(gate);
   const left = box(gate, [0.11, 0.8, 0.11], [0, 0.4, 0], '#f2c45f');
@@ -24,8 +27,7 @@ export async function createPitch(options) {
   const stripe = box(gate, [1, 0.025, 0.18], [0, 0.01, 0], '#f2c45f');
   gate.position.z = SAFETY_LINE;
   scene.add(defender.mesh);
-  const ballMesh = new THREE.Mesh(new THREE.SphereGeometry(BALL_RADIUS, 18, 14), material('#fff7dc'));
-  ballMesh.castShadow = true;
+  const ballMesh = createFootball();
   scene.add(ballMesh);
   const coords = new Float32Array(13 * 3);
   const geometry = new THREE.BufferGeometry();
@@ -39,6 +41,16 @@ export async function createPitch(options) {
   let playedAttempt = null;
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
+
+  function framePlay(z) {
+    const wide = motion.matches ? 1 : THREE.MathUtils.smoothstep(z, 3, 25);
+    camera.position.set(
+      THREE.MathUtils.lerp(-4.5, -1.5, wide),
+      THREE.MathUtils.lerp(5.9, 13, wide),
+      THREE.MathUtils.lerp(-6.7, -12.7, wide)
+    );
+    camera.lookAt(0, 0.3, THREE.MathUtils.lerp(4.1, 9.5, wide));
+  }
 
   return {
     draw(state, feed, ball, angle) {
@@ -58,7 +70,6 @@ export async function createPitch(options) {
         }
         geometry.attributes.position.needsUpdate = true;
       }
-      camera.lookAt(0, 0, 7 + Math.max(0, visibleBall.z - 14) * 0.2);
       const previousTarget = targetX;
       targetX = -state.defender;
       const movement = Math.sign(targetX - previousTarget);
@@ -72,6 +83,7 @@ export async function createPitch(options) {
         frame = undefined;
         hasFrame = true;
         ballMesh.position.copy(targetBall);
+        framePlay(ballMesh.position.z);
         defender.mesh.position.x = targetX;
         defender.pose(0, 0, 0);
         stage.render();
@@ -95,6 +107,7 @@ export async function createPitch(options) {
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
+        framePlay(ballMesh.position.z);
         stage.render();
         frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
       }
