@@ -49,16 +49,22 @@ const rig = names.map(name => {
 });
 
 // Split the body at the actual clothing boundaries instead of assigning whole faces by centroid.
-const jersey = { slot: 1, bottom: 0.5, top: 5.42, left: -2.72, right: 2.72 };
+const jersey = { slot: 1, bottom: 0.5, left: -2.72, right: 2.72, collar: -1 };
 const kitRegions = [
   { slot: 4, top: -7.55 },
   { slot: 3, bottom: -7.55, top: -4.8 },
   { slot: 2, bottom: -4.8, top: 0.5 },
   jersey,
-  { slot: 0, bottom: 0.5, top: 5.42, right: -2.72 },
-  { slot: 0, bottom: 0.5, top: 5.42, left: 2.72 },
-  { slot: 0, bottom: 5.42 },
+  { slot: 0, bottom: jersey.bottom, right: jersey.left },
+  { slot: 0, bottom: jersey.bottom, left: jersey.right },
+  { ...jersey, slot: 0, collar: 1 },
 ];
+
+function collarHeight(x, z) {
+  const shoulderRise = Math.min(1.30, 1.15 * x ** 2);
+  const backRise = 0.28 * Math.max(0, Math.min(1, (0.30 - z) / 0.75));
+  return 5.20 + shoulderRise + backRise;
+}
 
 function shapeJersey() {
   const neighbours = new Map();
@@ -71,8 +77,8 @@ function shapeJersey() {
     }
   }
   const panels = [...neighbours].flatMap(([vertex, adjacent]) => {
-    const [x, y] = source[vertex];
-    const inset = Math.min(x - jersey.left, jersey.right - x, y - jersey.bottom, jersey.top - y);
+    const [x, y, z] = source[vertex];
+    const inset = Math.min(x - jersey.left, jersey.right - x, y - jersey.bottom, collarHeight(x, z) - y);
     if (inset <= 0) return [];
     return [{ vertex, adjacent: [...adjacent], ease: Math.min(1, inset / 0.5) }];
   });
@@ -107,31 +113,39 @@ function shapeJersey() {
 
 const garmentPositions = shapeJersey();
 
-function intersection(a, b, axis, limit) {
-  const fraction = (limit - a.position[axis]) / (b.position[axis] - a.position[axis]);
+function intersection(a, b, fraction, boundary) {
   if (fraction <= 0) return a;
   if (fraction >= 1) return b;
   const interpolate = (start, end) => start + (end - start) * fraction;
-  const position = a.position.map((value, index) => index === axis ? limit : interpolate(value, b.position[index]));
+  const position = a.position.map((value, index) => interpolate(value, b.position[index]));
   const uv = a.uv.map((value, index) => interpolate(value, b.uv[index]));
   const influence = new Map(a.weights.map(([bone, weight]) => [bone, weight * (1 - fraction)]));
   for (const [bone, weight] of b.weights) influence.set(bone, (influence.get(bone) ?? 0) + weight * fraction);
   // A shared source edge produces the same normal seam even on opposite sides of an atlas seam.
-  const key = `${[a.key, b.key].sort().join('|')}:${axis}:${limit}`;
+  const key = `${[a.key, b.key].sort().join('|')}:${boundary}`;
   return { key, position, uv, weights: [...influence] };
 }
 
-function clip(polygon, axis, limit, keepGreater) {
-  if (limit === undefined || !polygon.length) return polygon;
-  const inside = corner => keepGreater ? corner.position[axis] >= limit : corner.position[axis] <= limit;
+function clipBoundary(polygon, distance, boundary) {
+  if (!polygon.length) return polygon;
   const result = [];
   let previous = polygon.at(-1);
+  let previousDistance = distance(previous.position);
   for (const corner of polygon) {
-    if (inside(corner) !== inside(previous)) result.push(intersection(previous, corner, axis, limit));
-    if (inside(corner)) result.push(corner);
+    const currentDistance = distance(corner.position);
+    if ((currentDistance >= 0) !== (previousDistance >= 0)) {
+      result.push(intersection(previous, corner, previousDistance / (previousDistance - currentDistance), boundary));
+    }
+    if (currentDistance >= 0) result.push(corner);
     previous = corner;
+    previousDistance = currentDistance;
   }
   return result;
+}
+
+function clip(polygon, axis, limit, keepGreater) {
+  if (limit === undefined) return polygon;
+  return clipBoundary(polygon, point => (point[axis] - limit) * (keepGreater ? 1 : -1), `${axis}:${limit}`);
 }
 const visibleVertices = new Map();
 const positions = [];
@@ -178,11 +192,13 @@ for (const { group: groupName, vertices, uvs } of faces) {
   }
   for (let index = 1; index < corners.length - 1; index++) {
     const triangle = [corners[0], corners[index], corners[index + 1]];
-    for (const { slot, bottom, top, left, right } of kitRegions) {
+    for (const { slot, bottom, top, left, right, collar } of kitRegions) {
       let polygon = clip(triangle, 1, bottom, true);
       polygon = clip(polygon, 1, top, false);
       polygon = clip(polygon, 0, left, true);
-      emit(clip(polygon, 0, right, false), slot);
+      polygon = clip(polygon, 0, right, false);
+      if (collar) polygon = clipBoundary(polygon, ([x, y, z]) => (y - collarHeight(x, z)) * collar, 'collar');
+      emit(polygon, slot);
     }
   }
 }

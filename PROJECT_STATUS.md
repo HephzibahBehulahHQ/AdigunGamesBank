@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The jersey now has a rounded neckline with a lower front and higher back,
+and the shirt covers the shoulders. The visible neckline comes from shared
+mesh cuts between the skin and fabric sections. A Chrome close-up verified
+the new silhouette. Two mesh builds matched, three actual 4K broadcast
+clearances completed, and the 4K, pose reset and camera checks passed.
+
 The source-mesh builder now shapes the jersey away from fine anatomical
 contours and tapers the added volume at the collar and cuffs. The close-up
 showed a smoother hanging front panel. The garment remains skinned to the
