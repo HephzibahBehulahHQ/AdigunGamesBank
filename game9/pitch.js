@@ -87,7 +87,7 @@ export async function createPitch(options) {
       camera.position.set(
         THREE.MathUtils.lerp(-11.2, -20.5, wide),
         THREE.MathUtils.lerp(3.45, 7.5, wide),
-        THREE.MathUtils.lerp(-4.3, -6.5, wide)
+        THREE.MathUtils.lerp(3.2, 2, wide)
       );
       camera.lookAt(0.65, 1.02, THREE.MathUtils.lerp(4.4, 11.7, wide));
       return;
