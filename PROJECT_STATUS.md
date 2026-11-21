@@ -13,6 +13,18 @@ new character, production-quality kit and animation, and measured 16K
 qualification remain open. The evidence below belongs to the earlier
 gameplay candidate.
 
+The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
+passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
+on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,
+52 API tests and 74 browser checks (19 accessibility and reflow, 16 contract
+and fallback, and 39 rendered gameplay). Goal Line coverage includes all
+10,000 drills through the solver, live held-key movement with pause and reset,
+early contact projection, keyboard completion, persistence, graphics fallback,
+16K device-limit rejection and an actual 3840 × 2160 WebGL 2 buffer. The current
+Chrome preview independently showed held movement, pausing and a successful
+early clearance at 4K. The supported-hardware 16K gate and production art gate
+remain open. Pages publication was skipped on the development branch.
+
 Goal Line (game9) is integrated on main at `292d658ea79a21968fdc5668116e43abedaf4486`. The original 3D clearance drill uses timed interception, directional clearance and a saved 10,000-drill campaign. The catalog now contains fifteen local 3D implementations, one API-dependent 3D client and eight legacy 2D titles in source. Historical publication counts below describe the previous release.
 
 - [Exact gameplay candidate CI](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44919603061) passed on 2026-11-21 at 16:44 Europe/Berlin: 271 JavaScript, 52 API and 72 browser checks (19 accessibility/reflow, 16 contract/fallback and 37 rendered gameplay). The local static build and release integrity checks passed. The engine solver completed every distinct drill through public commands.
