@@ -32,7 +32,7 @@ export async function createPitch(options) {
   light.shadow.camera.right = light.shadow.camera.top = 26;
   light.shadow.camera.updateProjectionMatrix();
   light.shadow.autoUpdate = false;
-  addGround(scene, renderer, turf);
+  const setHeavyTurf = addGround(scene, renderer, turf);
   const net = addGoal(scene);
   addTrainingGround(scene);
   const gate = new THREE.Group();
@@ -120,6 +120,7 @@ export async function createPitch(options) {
 
   return {
     draw(state, feed, ball, angle, plannedContact, projection) {
+      setHeavyTurf(Boolean(feed.resistance));
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;

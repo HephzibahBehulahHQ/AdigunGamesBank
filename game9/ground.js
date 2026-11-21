@@ -25,6 +25,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
     map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34), metalness: 0, roughness: 0.92
   };
   const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
+  const heavyMowing = map ? ['#547453', '#60805a'] : ['#30492e', '#3a5134'];
   const surfaces = mowing.map(color => material(color, turf));
   if (normalMap) {
     for (const surface of surfaces) {
@@ -67,6 +68,16 @@ export function addGround(scene, renderer, { map, normalMap }) {
     marking(side * 9.16, 2.75, 0.112, 5.5);
     marking(side * 20.16, 8.25, 0.112, 16.5);
   }
+  let heavy = false;
+  return (isHeavy) => {
+    if (isHeavy === heavy) return;
+    heavy = isHeavy;
+    const colors = heavy ? heavyMowing : mowing;
+    for (const [index, surface] of surfaces.entries()) {
+      surface.color.set(colors[index]);
+      surface.roughness = heavy ? 0.79 : turf.roughness;
+    }
+  };
 }
 
 export function addGoal(scene) {
