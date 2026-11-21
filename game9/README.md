@@ -32,6 +32,9 @@ from the incoming feed through a successful clearance under pressure. The
 report records the GPU renderer, WebGL limits,
 actual render and display buffer sizes before and after play, and median and 95th-percentile
 frame intervals. Restart gaps are excluded from the interval percentiles.
+Intervals of at least 100 ms remain in the percentiles. The report lists
+the longest intervals with the phase of play and any browser focus or
+visibility changes observed during each interval.
 The 16K report also counts GPU fences the browser observed as completed
 and reports the intervals between those observations. Fence observations
 measure when the browser checked for finished work and do not measure

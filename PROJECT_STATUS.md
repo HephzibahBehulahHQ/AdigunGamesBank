@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The benchmark now records draw gaps of at least 100 ms with phase of play
+and browser focus or visibility events. Follow-up 4K heavy-turf runs of ten
+and five clearances had 16.8 and 16.7 ms 99th-percentile intervals. The
+earlier one-second gap did not recur. The longest follow-up gap was 108.1 ms
+during approach, with no browser event recorded inside it.
+
 [CI run 44941189856](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44941189856)
 passed verification on `e666242`, including the repaired input tests. Its
 publication job was skipped. Separately, the hardware benchmark now supports

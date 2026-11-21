@@ -66,6 +66,15 @@ try {
     window.goalLineDrawTimes = [];
     window.goalLineCompletionTimes = [];
     window.goalLineGpuTimes = [];
+    window.goalLineBrowserEvents = [];
+    function recordBrowserEvent(event) {
+      window.goalLineBrowserEvents.push({
+        event: event.type, timeMs: document.timeline.currentTime, visibility: document.visibilityState,
+      });
+    }
+    document.addEventListener('visibilitychange', recordBrowserEvent);
+    window.addEventListener('blur', recordBrowserEvent);
+    window.addEventListener('focus', recordBrowserEvent);
     if (profileGpu) {
       const clear = WebGL2RenderingContext.prototype.clear;
       const fenceSync = WebGL2RenderingContext.prototype.fenceSync;
@@ -151,6 +160,7 @@ try {
   if (requestedBufferAllocated) {
     const frameIntervals = [];
     const completionIntervals = [];
+    const longGaps = [];
     let completedFrames = 0;
     let frameCount = 0;
     let activeMilliseconds = 0;
@@ -164,6 +174,8 @@ try {
         await page.evaluate(() => {
           window.goalLineDrawTimes.length = 0;
           window.goalLineCompletionTimes.length = 0;
+          window.goalLineBrowserEvents.length = 0;
+          window.goalLineKickTime = null;
         });
         await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
         await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
@@ -180,6 +192,7 @@ try {
             if (ball.textContent.includes(`, ${distance} m from goal line`)) {
               observer.disconnect();
               clearTimeout(deadline);
+              window.goalLineKickTime = document.timeline.currentTime;
               document.querySelector('#clear').click();
               resolve();
             }
@@ -200,8 +213,23 @@ try {
           return performance.now() - window.goalLineClearanceObservedAt >= duration;
         }, clearanceMilliseconds + 100, { timeout: 5000 });
         await page.evaluate(() => { delete window.goalLineClearanceObservedAt; });
-        const [frames, completions] = await page.evaluate(() => [window.goalLineDrawTimes, window.goalLineCompletionTimes]);
-        for (let i = 1; i < frames.length; i++) frameIntervals.push(frames[i] - frames[i - 1]);
+        const { frames, completions, kickTime, browserEvents } = await page.evaluate(() => ({
+          frames: window.goalLineDrawTimes, completions: window.goalLineCompletionTimes,
+          kickTime: window.goalLineKickTime, browserEvents: window.goalLineBrowserEvents,
+        }));
+        for (let i = 1; i < frames.length; i++) {
+          const start = frames[i - 1];
+          const end = frames[i];
+          const durationMs = end - start;
+          frameIntervals.push(durationMs);
+          if (durationMs >= 100) {
+            longGaps.push({
+              round: round + 1, durationMs, afterFirstDrawMs: start - frames[0],
+              phase: end < kickTime ? 'approach' : start >= kickTime ? 'clearance' : 'contact',
+              browserEvents: browserEvents.filter(event => event.timeMs >= start && event.timeMs <= end),
+            });
+          }
+        }
         for (let i = 1; i < completions.length; i++) completionIntervals.push(completions[i] - completions[i - 1]);
         completedFrames += completions.length;
         frameCount += frames.length;
@@ -226,6 +254,8 @@ try {
       completedRounds, requestedRounds: rounds, frames: frameCount,
       activeMilliseconds, wallMilliseconds: performance.now() - started,
       medianMs: percentile(frameIntervals, 0.5), p95Ms: percentile(frameIntervals, 0.95), p99Ms: percentile(frameIntervals, 0.99),
+      longGapCount: longGaps.length,
+      longestGaps: longGaps.sort((a, b) => b.durationMs - a.durationMs).slice(0, 8),
       observedGpuCompletion: mode === '16k' ? {
         frames: completedFrames,
         medianMs: percentile(completionIntervals, 0.5),
