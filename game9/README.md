@@ -25,6 +25,10 @@ uses an isolated save for an Apprentice drill, and samples frames that submit
 draw calls during live play. The report records the GPU renderer, WebGL limits,
 actual render and display buffer sizes before and after play, and median and 95th-percentile
 frame intervals. Restart gaps are excluded from the interval percentiles.
+The 16K report also counts GPU fences the browser observed as completed
+and reports the intervals between those observations. Fence observations
+measure when the browser checked for finished work and do not measure
+display scanout or exact GPU execution time.
 Files are written under `test-results/goal-line-hardware-16k/`
 or the corresponding 4K directory. The viewport screenshot shows the scene;
 the render buffer dimensions and framebuffer completeness come from WebGL. A fallback, lost context,

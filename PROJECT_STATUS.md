@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The hardware benchmark now records 16K GPU fence observations separately
+from draw submissions. Chrome 158 on Intel Arc 140T completed 30 live feeds
+with 616 observed frame completions, a median observation interval of 65.5 ms
+and a 95th percentile of 75 ms. A separate three-feed run retained a
+3840 × 2160 drawing buffer with an 8.3 ms median submission interval.
+Both runs completed without graphics errors or context loss.
+
 Drawing the sky after opaque pitch geometry reduced 16K frame intervals in
 a local comparison on Intel Arc 140T with Chrome 158. Both builds completed
 10 live feeds at 15,360 × 8,640 without WebGL errors or context loss. The

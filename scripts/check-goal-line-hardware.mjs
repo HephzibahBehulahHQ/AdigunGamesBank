@@ -49,6 +49,17 @@ try {
       version: 1, completed: 2000, unlocked: 2001
     }));
     window.goalLineDrawTimes = [];
+    window.goalLineCompletionTimes = [];
+    const observed = new WeakSet();
+    const waitForSync = WebGL2RenderingContext.prototype.clientWaitSync;
+    WebGL2RenderingContext.prototype.clientWaitSync = function (sync, ...args) {
+      const result = waitForSync.call(this, sync, ...args);
+      if ((result === this.ALREADY_SIGNALED || result === this.CONDITION_SATISFIED) && !observed.has(sync)) {
+        observed.add(sync);
+        window.goalLineCompletionTimes.push(performance.now());
+      }
+      return result;
+    };
     let lastFrame = null;
     const drawElements = WebGL2RenderingContext.prototype.drawElements;
     WebGL2RenderingContext.prototype.drawElements = function (...args) {
@@ -89,6 +100,8 @@ try {
   let workloadError = null;
   if (requestedBufferAllocated) {
     const frameIntervals = [];
+    const completionIntervals = [];
+    let completedFrames = 0;
     let frameCount = 0;
     let activeMilliseconds = 0;
     let completedRounds = 0;
@@ -96,7 +109,10 @@ try {
     try {
       for (let round = 0; round < rounds; round++) {
         if (round) await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
-        await page.evaluate(() => { window.goalLineDrawTimes.length = 0; });
+        await page.evaluate(() => {
+          window.goalLineDrawTimes.length = 0;
+          window.goalLineCompletionTimes.length = 0;
+        });
         await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
         await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
         await page.keyboard.down(round % 2 ? 'a' : 'd');
@@ -106,8 +122,10 @@ try {
           Number(document.querySelector('#ball').textContent.match(/, ([\d.]+) m from goal line/)?.[1]) < 12,
         undefined, { timeout: 5000 });
         await page.keyboard.press('Escape');
-        const frames = await page.evaluate(() => window.goalLineDrawTimes);
+        const [frames, completions] = await page.evaluate(() => [window.goalLineDrawTimes, window.goalLineCompletionTimes]);
         for (let i = 1; i < frames.length; i++) frameIntervals.push(frames[i] - frames[i - 1]);
+        for (let i = 1; i < completions.length; i++) completionIntervals.push(completions[i] - completions[i - 1]);
+        completedFrames += completions.length;
         frameCount += frames.length;
         if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
         after = await readSurface();
@@ -125,11 +143,17 @@ try {
     }
     after = await readSurface();
     frameIntervals.sort((a, b) => a - b);
-    const percentile = fraction => frameIntervals[Math.ceil(frameIntervals.length * fraction) - 1] ?? null;
+    completionIntervals.sort((a, b) => a - b);
+    const percentile = (intervals, fraction) => intervals[Math.ceil(intervals.length * fraction) - 1] ?? null;
     sample = {
       completedRounds, requestedRounds: rounds, frames: frameCount,
       activeMilliseconds, wallMilliseconds: performance.now() - started,
-      medianMs: percentile(0.5), p95Ms: percentile(0.95), p99Ms: percentile(0.99)
+      medianMs: percentile(frameIntervals, 0.5), p95Ms: percentile(frameIntervals, 0.95), p99Ms: percentile(frameIntervals, 0.99),
+      observedGpuCompletion: mode === '16k' ? {
+        frames: completedFrames,
+        medianMs: percentile(completionIntervals, 0.5),
+        p95Ms: percentile(completionIntervals, 0.95),
+      } : null,
     };
     if (await canvas.isVisible()) await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
     if (mode === '16k' && !workloadError && !after?.contextLost) {
@@ -148,7 +172,8 @@ try {
   console.log(JSON.stringify(report, null, 2));
   const restored = mode !== '16k' || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
     restored4K.renderSurface === 'drawing buffer' && !restored4K.error && !restored4K.contextLost);
-  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored ||
+  const measuredCompletion = mode !== '16k' || sample?.observedGpuCompletion?.medianMs > 0;
+  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;
 } finally {
   await browser?.close();
