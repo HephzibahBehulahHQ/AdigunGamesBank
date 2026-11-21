@@ -1,4 +1,4 @@
-import { WebGPURenderer, UnsignedByteType } from '/three/three.webgpu.js';
+import { DirectRenderPipeline, WebGPURenderer, UnsignedByteType } from '/three/three.webgpu.js';
 import { THREE, createStageScene } from '/shared/three-stage.js';
 import { createPitch } from '/game9/pitch.js';
 
@@ -9,7 +9,7 @@ export function createGamePitch(options) {
 
 async function createBenchmarkStage(options) {
   const { canvas, qualitySelect, status } = options;
-  const { mode, requested, profilePasses } = window.goalLineWebGpuMode;
+  const { mode, requested, profilePasses, inlineOutput } = window.goalLineWebGpuMode;
   const [width, height] = requested;
   const adapter = await navigator.gpu?.requestAdapter({ powerPreference: 'high-performance' });
   if (!adapter || adapter.info.isFallbackAdapter || adapter.limits.maxTextureDimension2D < width) {
@@ -36,6 +36,7 @@ async function createBenchmarkStage(options) {
   renderer.toneMappingExposure = 1.15;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
+  const pipeline = inlineOutput ? new DirectRenderPipeline(renderer) : renderer;
   const stage = createStageScene(options);
   const surface = {
     renderer: [adapter.info.vendor, adapter.info.architecture, adapter.info.description].filter(Boolean).join(' '),
@@ -89,7 +90,7 @@ async function createBenchmarkStage(options) {
     pending = false;
     drawing = true;
     try {
-      renderer.render(stage.scene, stage.camera);
+      pipeline.render(stage.scene, stage.camera);
       window.goalLineDrawTimes.push(performance.now());
       device.queue.onSubmittedWorkDone().then(() => {
         if (disposed) return;
@@ -109,6 +110,7 @@ async function createBenchmarkStage(options) {
     render() { pending = true; paint(); },
     dispose() {
       disposed = true;
+      if (pipeline !== renderer) pipeline.dispose();
       renderer.dispose();
       device.destroy();
     },

@@ -105,6 +105,9 @@ ported. GPU completion intervals do not establish display scanout.
 Add `ADIGUN_PROFILE_WEBGPU=1` for a separate timestamp-query run. Its
 `-passes` report shows the scene, output and auxiliary pass timings after
 setup. Chrome must expose the WebGPU `timestamp-query` feature.
+For comparison only, add `ADIGUN_WEBGPU_INLINE_OUTPUT=1` to apply the
+output color transform inside the scene pass. It writes a separate
+`-inline` report and leaves the default benchmark pipeline available.
 
 ## Defender source and rebuild
 

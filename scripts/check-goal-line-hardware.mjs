@@ -34,7 +34,9 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 const webgpu = process.env.ADIGUN_HARDWARE_WEBGPU === '1';
 const webGpuProfile = process.env.ADIGUN_PROFILE_WEBGPU === '1';
+const inlineOutput = process.env.ADIGUN_WEBGPU_INLINE_OUTPUT === '1';
 if (webGpuProfile && !webgpu) throw new Error('WebGPU pass profiling requires ADIGUN_HARDWARE_WEBGPU=1.');
+if (inlineOutput && !webgpu) throw new Error('Inline output requires ADIGUN_HARDWARE_WEBGPU=1.');
 const angleBackend = process.env.ADIGUN_CHROME_ANGLE_BACKEND ?? '';
 const backendNames = { d3d11: /\bDirect3D11\b/i, vulkan: /\bVulkan\b/i };
 if (angleBackend && !Object.hasOwn(backendNames, angleBackend)) {
@@ -61,7 +63,7 @@ const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
     camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
     profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend,
-    webgpu ? 'webgpu' : '', webGpuProfile ? 'passes' : ''].filter(Boolean).join('-'));
+    webgpu ? 'webgpu' : '', webGpuProfile ? 'passes' : '', inlineOutput ? 'inline' : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -207,7 +209,7 @@ try {
       return drawElements.apply(this, args);
     };
   }, { profileGpu, gpuPhase, level, captureBuffer,
-    webGpuMode: webgpu ? { mode, requested, profilePasses: webGpuProfile } : null });
+    webGpuMode: webgpu ? { mode, requested, profilePasses: webGpuProfile, inlineOutput } : null });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -426,7 +428,7 @@ try {
     mode, scenario, camera, level, requested, requestedBufferAllocated, requireDirect, softwareRenderer,
     before, after, restored4K, sample, bufferCapture, workloadError,
     browser: browser.version(), platform: process.platform, headless, angleBackend: angleBackend || null,
-    api: webgpu ? 'WebGPU' : 'WebGL2',
+    api: webgpu ? 'WebGPU' : 'WebGL2', inlineOutput,
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
     capturedAt: new Date().toISOString()
@@ -436,7 +438,9 @@ try {
   const restored = mode !== '16k' || webgpu || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
     restored4K.renderSurface === 'drawing buffer' && restored4K.camera === camera && !restored4K.error && !restored4K.contextLost);
   const measuredCompletion = (mode !== '16k' && !webgpu) || sample?.observedGpuCompletion?.medianMs > 0;
-  const measuredPasses = !webGpuProfile || (sample?.webGpuPassTimings?.scene.count && sample?.webGpuPassTimings?.output.count);
+  const passTimings = sample?.webGpuPassTimings;
+  const measuredPasses = !webGpuProfile || (passTimings?.scene.count > 0 &&
+    (inlineOutput ? passTimings.output.count === 0 : passTimings.output.count > 0));
   if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion || !measuredPasses ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;
 } finally {

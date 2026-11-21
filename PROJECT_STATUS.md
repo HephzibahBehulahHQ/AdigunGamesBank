@@ -4,6 +4,18 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Two matched three-clearance Chrome 158 runs at 16K on Intel Arc 140T
+compared Three.js's separate output pass and its inline color transform.
+The separate path measured 47.9 ms for the scene and 20.4 ms for output.
+The inline version removed the output pass but increased median scene
+time to 85.8 ms. Median observed GPU completion intervals were 114.1 ms
+and 129.2 ms respectively. Both rendered the full 16K texture without
+reported errors. The inspected viewport colors were broadly similar. The
+default keeps the separate pass. `ADIGUN_WEBGPU_INLINE_OUTPUT=1` reproduces
+the comparison with WebGPU pass profiling. Next, assess the cost of
+sampling and color conversion inside the separate pass without changing
+display resolution or tonal intent.
+
 Separate WebGPU timestamp queries measured three live 16K broadcast
 clearances on Chrome 158 and Intel Arc 140T, with zero reported errors.
 `ADIGUN_HARDWARE_WEBGPU=1 ADIGUN_PROFILE_WEBGPU=1` with
