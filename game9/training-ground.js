@@ -61,14 +61,18 @@ function addDugout(structure, z) {
 
 export function addTrainingGround(scene) {
   box(scene, [82, 0.16, 102], [0, -0.15, 33], '#6a706d', concrete);
+  const endRailZ = -10.6;
+  const farRailZ = 69.5;
+  const railLength = farRailZ - endRailZ;
+  const railCenterZ = (endRailZ + farRailZ) / 2;
   const batches = new Map([[concrete, []], [steel, []]]);
   function structure(size, position, color, finish) {
     batches.get(finish).push({ size, position, color });
   }
   for (const side of [-1, 1]) {
     const railX = side * 25.2;
-    structure([0.2, 0.46, 79], [railX, 0.23, 30], '#999e9b', concrete);
-    structure([0.06, 0.06, 79], [railX, 1.15, 30], '#7a8891', steel);
+    structure([0.2, 0.46, railLength], [railX, 0.23, railCenterZ], '#999e9b', concrete);
+    structure([0.06, 0.06, railLength], [railX, 1.15, railCenterZ], '#7a8891', steel);
     for (let z = -8; z < 70; z += 3) {
       structure([0.06, 0.75, 0.06], [railX, 0.77, z], '#77848b', steel);
     }
@@ -84,6 +88,12 @@ export function addTrainingGround(scene) {
       structure([0.15, 4.75, 0.15], [side * 33, 2.38, z], '#687577', steel);
       structure([5.65, 0.13, 0.17], [side * 30.45, 4.57, z], '#687577', steel);
     }
+  }
+  structure([50.6, 0.46, 0.20], [0, 0.23, endRailZ], '#999e9b', concrete);
+  structure([50.6, 0.06, 0.06], [0, 1.15, endRailZ], '#7a8891', steel);
+  for (let post = 0; post <= 18; post++) {
+    const x = -25.2 + post * 2.8;
+    structure([0.06, 0.75, 0.06], [x, 0.77, endRailZ], '#77848b', steel);
   }
   for (const x of [-28, 28]) {
     for (const z of [-4, 48]) {
@@ -108,6 +118,11 @@ export function addTrainingGround(scene) {
     mesh.castShadow = mesh.receiveShadow = true;
     scene.add(mesh);
   }
+  // Continue the terrain behind the venue apron so the broadcast view has a horizon.
+  const verge = new THREE.Mesh(new THREE.PlaneGeometry(220, 120).rotateX(-Math.PI / 2),
+    new THREE.MeshLambertMaterial({ color: '#68765b' }));
+  verge.position.set(0, -0.24, -65);
+  scene.add(verge);
 }
 
 function addSeats(scene, side) {

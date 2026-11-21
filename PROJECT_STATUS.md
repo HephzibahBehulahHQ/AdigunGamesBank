@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The training venue now has a connected railing behind the goal and terrain
+beyond the apron. The 4K broadcast capture shows the new boundary and
+horizon. Chrome on Intel Arc 140T completed three broadcast heavy-turf
+clearances each at 4K and 16K without WebGL errors or context loss. Median
+4K draw submission was 8.3 ms and median observed 16K GPU completion was
+50.0 ms. The actual 4K and camera-switch browser tests passed. The 16K
+60 fps requirement remains open.
+
 The hardware benchmark now selects and verifies the broadcast camera.
 Chrome on Intel Arc 140T completed five heavy-turf clearances per mode.
 At 3840 × 2160 the median draw submission interval was 8.3 ms and the
