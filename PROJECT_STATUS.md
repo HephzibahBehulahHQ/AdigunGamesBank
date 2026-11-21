@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The 4K Chrome hardware benchmark can now save the drawing buffer after
+timing, separately from the viewport screenshot. Two broadcast runs on
+Intel Arc 140T captured a verified 3840 × 2160 PNG. The inspected preview
+showed the pitch markings, goal net and players. The capture measures
+WebGL output and does not certify physical display scanout.
+
 The sky panorama follows camera position and renders at the far depth,
 so camera translation no longer moves the distant backdrop. The pitch
 camera now clips at 110 m. The 4K and downsampled 16K broadcast captures

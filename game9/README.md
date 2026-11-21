@@ -46,6 +46,10 @@ the actual window size, enters full screen, and fails with a `-native`
 report if the 16K drawing buffer or physical viewport is too small.
 Run it headful without GPU phase profiling. The strict run skips the
 viewport screenshot to avoid reading back a full 16K image.
+Set `ADIGUN_CAPTURE_4K_BUFFER=1` on a `4k` run to save
+`drawing-buffer.png` after the timed workload. The script verifies the
+PNG dimensions independently of the smaller viewport screenshot and adds
+`-buffer` to the report directory.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The

@@ -24,6 +24,8 @@ const clearanceMilliseconds = Math.ceil((Math.max(0.035, delivery.delay) + clear
 
 const mode = process.argv[2] ?? '16k';
 if (mode !== '4k' && mode !== '16k') throw new Error('Choose 4k or 16k.');
+const captureBuffer = process.env.ADIGUN_CAPTURE_4K_BUFFER === '1';
+if (captureBuffer && mode !== '4k') throw new Error('Drawing-buffer PNG capture requires a 4k run.');
 const requested = mode === '4k' ? [3840, 2160] : [15360, 8640];
 const rounds = Number(process.argv[3] ?? 1);
 if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
@@ -45,7 +47,7 @@ const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
     camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
-    profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
+    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -75,7 +77,7 @@ let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless });
   const page = await browser.newPage({ viewport: requireDirect ? null : { width: 1440, height: 900 } });
-  await page.addInitScript(({ profileGpu, gpuPhase, level }) => {
+  await page.addInitScript(({ profileGpu, gpuPhase, level, captureBuffer }) => {
     // Unlock the selected drill in the isolated test context.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
       version: 1, completed: level - 1, unlocked: level
@@ -169,9 +171,14 @@ try {
         lastFrame = frameTime;
         window.goalLineDrawTimes.push(frameTime);
       }
+      if (captureBuffer && window.goalLineCapturePending && this.canvas.id === 'pitch') {
+        window.goalLineCapturePending = false;
+        // Snapshot after the frame's draw calls and before compositing clears the buffer.
+        queueMicrotask(() => { window.goalLineBufferPng = this.canvas.toDataURL('image/png'); });
+      }
       return drawElements.apply(this, args);
     };
-  }, { profileGpu, gpuPhase, level });
+  }, { profileGpu, gpuPhase, level, captureBuffer });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -216,6 +223,7 @@ try {
   let after = null;
   let restored4K = null;
   let sample = null;
+  let bufferCapture = null;
   let workloadError = requireDirect && !hasDirectBuffer(before) ? 'Direct 16K drawing buffer was not allocated.' : null;
   if (!workloadError && requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
     const frameIntervals = [];
@@ -334,6 +342,24 @@ try {
         p95Ms: percentile(gpuTimes, 0.95),
       } : null,
     };
+    if (captureBuffer && !workloadError) {
+      try {
+        await page.evaluate(() => { window.goalLineCapturePending = true; });
+        await graphics.selectOption('4k');
+        await page.waitForFunction(() => window.goalLineBufferPng, undefined, { timeout: 5000 });
+        const dataUrl = await page.evaluate(() => window.goalLineBufferPng);
+        const prefix = 'data:image/png;base64,';
+        if (!dataUrl.startsWith(prefix)) throw new Error('The drawing buffer did not produce a PNG.');
+        const png = Buffer.from(dataUrl.slice(prefix.length), 'base64');
+        const dimensions = [png.readUInt32BE(16), png.readUInt32BE(20)];
+        if (dimensions.some((size, index) => size !== requested[index])) throw new Error('Unexpected drawing-buffer PNG size.');
+        const file = 'drawing-buffer.png';
+        await writeFile(path.join(output, file), png);
+        bufferCapture = { file, dimensions, bytes: png.length };
+      } catch (error) {
+        workloadError = `Drawing-buffer PNG capture failed. ${error}`;
+      }
+    }
     if (!requireDirect && await canvas.isVisible()) {
       await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
     }
@@ -345,7 +371,7 @@ try {
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
     mode, scenario, camera, level, requested, requestedBufferAllocated, requireDirect, softwareRenderer,
-    before, after, restored4K, sample, workloadError,
+    before, after, restored4K, sample, bufferCapture, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
