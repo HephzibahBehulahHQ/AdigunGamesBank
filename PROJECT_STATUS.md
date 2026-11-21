@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The 16K framebuffer now verifies a 16-bit depth attachment and uses a nearer
+clipping plane of 1.25 m to preserve precision on the pitch. In paired
+three-clearance heavy-turf trials on Intel Arc 140T, median GPU scene and
+presentation time moved from 45.3 to 42.4 ms. An additional five-clearance
+run completed without errors or context loss and restored the 4K buffer.
+
 The benchmark now records draw gaps of at least 100 ms with phase of play
 and browser focus or visibility events. Follow-up 4K heavy-turf runs of ten
 and five clearances had 16.8 and 16.7 ms 99th-percentile intervals. The
