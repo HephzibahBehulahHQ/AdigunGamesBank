@@ -101,6 +101,7 @@ test('Goal Line saves a complete final-tier drill and unlocks the next one', asy
     }
   });
   await page.goto('/game9/');
+  await expect(page.locator('#message')).toContainText('Ball 1 of 5. Heavy turf slows the clearance.');
   await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
   await expect(page.locator('#level')).toHaveValue('8002');
   await completeDrill(page, 8002);
@@ -432,6 +433,7 @@ test('Goal Line teaches the player to wait for a skipping feed to drop', async (
     }));
   });
   await page.goto('/game9/');
+  await expect(page.locator('#message')).toContainText('This feed bounces.');
   await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
   const left = page.getByRole('button', { name: 'Left', exact: true });
   const hold = page.getByRole('button', { name: 'Hold', exact: true });
@@ -491,6 +493,8 @@ test('Goal Line heavy turf stops a soft clearance and rewards more power', async
   await clearAt(10);
   await expect(page.locator('#message')).toContainText('Safe clearance');
   await expect(page.locator('#ball')).toContainText('8.00 m from goal line');
+  await page.getByRole('button', { name: 'Next ball' }).press('Enter');
+  await expect(page.locator('#message')).toContainText('Ball 2 of 5. The receiver is moving.');
 });
 
 test('Goal Line audio starts on request and mutes without interrupting play', async ({ page }) => {

@@ -139,17 +139,27 @@ function update(message) {
   pitch?.draw(state, feed, ball, aiming, contact, projection);
 }
 
-function load(levelNumber, moveFocus = false) {
-  setLive(false);
-  audio.stop();
+function prepareFeed() {
   lastFootstep = -Infinity;
-  level = levelNumber;
-  levelInput.value = levelNumber;
-  state = createDrill(levelNumber);
   angle.value = 0;
   kickSpeed.value = CLEARANCE_SPEED;
   loft.checked = false;
-  update('Ball 1 of ' + state.feeds.length + '. Move into its path.');
+  const feed = state.feeds[state.index];
+  let cue = 'Move into the ball’s path and wait until it is in reach.';
+  if (feed.bounces) cue = 'This feed bounces. If it is too high, wait for it to drop.';
+  else if (feed.resistance) cue = 'Heavy turf slows the clearance. Increase kick speed if the projection is short.';
+  else if (feed.receiver) cue = 'The receiver is moving. Check the projected outlet before clearing.';
+  else if (feed.pressure) cue = 'A player is pressing. Use the projected clearance to find a lane around them.';
+  update(`Ball ${state.index + 1} of ${state.feeds.length}. ${cue}`);
+}
+
+function load(levelNumber, moveFocus = false) {
+  setLive(false);
+  audio.stop();
+  level = levelNumber;
+  levelInput.value = levelNumber;
+  state = createDrill(levelNumber);
+  prepareFeed();
   if (moveFocus) buttons[1].focus();
 }
 
@@ -304,11 +314,7 @@ clearButton.addEventListener('click', () => {
 });
 next.addEventListener('click', () => {
   if (nextFeed(state)) {
-    lastFootstep = -Infinity;
-    angle.value = 0;
-    kickSpeed.value = CLEARANCE_SPEED;
-    loft.checked = false;
-    update('Ball ' + (state.index + 1) + ' of ' + state.feeds.length + '. Move into its path.');
+    prepareFeed();
     buttons[1].focus();
   } else if (state.result === 'cleared' && level < LEVEL_COUNT) {
     load(level + 1, true);

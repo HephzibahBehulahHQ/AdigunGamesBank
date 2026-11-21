@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Each incoming feed now opens with a short cue for its actual conditions.
+Chrome verified the bounce cue, the heavy-turf cue and the change to a
+moving-receiver cue on the next ball. All 21 Goal Line browser checks
+passed, including actual 4K, keyboard play and saved campaign completion.
+
 Two five-clearance Chrome runs on Intel Arc 140T compared the 16K RGBA8
 color target with a smaller RGB565 target. The RGB565 run reduced median
 scene-plus-presentation GPU time from 38.4 to 35.3 ms and the median
