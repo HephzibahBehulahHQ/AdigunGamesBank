@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Five cold-load checks of `d12ebc3` on headless Chrome 158 for Windows met
+Goal Line's 3,000 ms actionable-controls target. A loopback static server
+served the build with the browser cache disabled and a simulated 20 Mbps
+connection with 40 ms latency. Controls initialized in 246–1,405 ms
+(median 267 ms), and each run accepted a keyboard Hold command. WebGL
+became ready in 3,203–4,364 ms (median 3,254 ms). This measures the local
+development build under simulated networking.
+
 A fixed four-sample shadow filter on the turf reduced median GPU
 scene-and-presentation time from 51.7 to 48.2 ms across paired five-clearance
 16K runs on Intel Arc 140T. Median observed completion intervals were
