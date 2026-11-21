@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Standard turf now uses matte Lambert lighting with the existing texture,
+normal detail and shadow filter. Heavy turf keeps the specular lighting.
+In three-clearance Chrome runs on Intel Arc 140T, median GPU scene and
+presentation time at 15,360 × 8,640 fell from 50.5 to 47.2 ms. One earlier
+trial ended when the browser closed before it could write a report.
+
 Instancing the fixed steel and concrete training-ground pieces reduced one
 4K broadcast redraw from 181 to 61 WebGL draw calls. Both views were
 inspected. The new scene also completed five hardware-accelerated clearances

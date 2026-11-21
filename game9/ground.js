@@ -22,11 +22,14 @@ export function addGround(scene, renderer, { map, normalMap }) {
     texture.anisotropy = Math.min(texture === normalMap ? 2 : 4, anisotropy);
   }
   const turf = {
-    map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34), specular: '#161616', shininess: 7,
+    map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34),
   };
   const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
   const heavyMowing = map ? ['#547453', '#60805a'] : ['#30492e', '#3a5134'];
-  const surfaces = mowing.map(color => new THREE.MeshPhongMaterial({ color, ...turf }));
+  const surfaces = mowing.map(color => new THREE.MeshLambertMaterial({ color, ...turf }));
+  const heavySurfaces = heavyMowing.map(color => new THREE.MeshPhongMaterial({
+    color, ...turf, specular: '#161616', shininess: 13,
+  }));
   // The turf spans most of the frame. Keep filtered shadow edges with four fixed depth comparisons.
   const turfShadows = THREE.ShaderChunk.shadowmap_pars_fragment.replace(
     /float phi = interleavedGradientNoise\( gl_FragCoord\.xy \) \* PI2;\s+shadow = \([\s\S]*?\) \* 0\.2;/,
@@ -38,7 +41,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
       texture(shadowMap, vec3(shadowCoord.xy + vec2( offset.x,  offset.y), shadowCoord.z))
     );`
   );
-  for (const surface of surfaces) {
+  for (const surface of [...surfaces, ...heavySurfaces]) {
     surface.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace('#include <shadowmap_pars_fragment>', turfShadows);
       if (map) {
@@ -64,6 +67,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
       }
     };
   }
+  const stripes = [];
   for (let stripe = 0; stripe < 16; stripe++) {
     const surface = new THREE.PlaneGeometry(width, stripeLength);
     const uv = surface.getAttribute('uv');
@@ -77,6 +81,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
     ground.position.set(0, -0.012, -8 + stripe * stripeLength);
     ground.receiveShadow = true;
     scene.add(ground);
+    stripes.push(ground);
   }
   const paint = '#d6d6c8';
   const paintMaterial = { roughness: 0.94, metalness: 0 };
@@ -95,11 +100,8 @@ export function addGround(scene, renderer, { map, normalMap }) {
   return (isHeavy) => {
     if (isHeavy === heavy) return;
     heavy = isHeavy;
-    const colors = heavy ? heavyMowing : mowing;
-    for (const [index, surface] of surfaces.entries()) {
-      surface.color.set(colors[index]);
-      surface.shininess = heavy ? 13 : turf.shininess;
-    }
+    const materials = heavy ? heavySurfaces : surfaces;
+    stripes.forEach((stripe, index) => { stripe.material = materials[index % 2]; });
   };
 }
 
