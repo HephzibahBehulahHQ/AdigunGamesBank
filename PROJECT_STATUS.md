@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Heavy-turf highlights now fade between 22 and 30 m of camera depth. In
+two five-clearance broadcast runs on Intel Arc 140T, median 16K scene GPU
+time fell from 29.1 to 27.0 ms and median observed GPU completion fell
+from 43.5 to 40.3 ms. Both captures retained visible turf detail and both
+runs restored actual 4K without WebGL errors. The affected 4K, camera and
+heavy-turf Chrome checks passed. Sustained 60 fps remains unverified.
+
 The original 32-panel football now tapers its panel edges into recessed
 seams. A close-up Chrome render verified continuous seams and a rounded
 silhouette. Three actual 4K lofted receptions completed on Intel Arc 140T

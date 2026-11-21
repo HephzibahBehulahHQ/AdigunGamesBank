@@ -37,9 +37,21 @@ export function addGround(scene, renderer, { map, normalMap }) {
     /float phi = interleavedGradientNoise\( gl_FragCoord\.xy \) \* PI2;\s+shadow = \([\s\S]*?\) \* 0\.2;/,
     'shadow = texture(shadowMap, shadowCoord.xyz);'
   );
+  const turfHighlights = THREE.ShaderChunk.lights_phong_pars_fragment.replace(
+    /reflectedLight\.directSpecular \+= [^;]+;/,
+    `if (geometryPosition.z > -30.0) {
+      float detail = smoothstep(-30.0, -22.0, geometryPosition.z);
+      reflectedLight.directSpecular += detail * irradiance * BRDF_BlinnPhong(
+        directLight.direction, geometryViewDir, geometryNormal, material.specularColor, material.specularShininess
+      ) * material.specularStrength;
+    }`
+  );
   for (const surface of [...surfaces, ...heavySurfaces]) {
     surface.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace('#include <shadowmap_pars_fragment>', turfShadows);
+      if (surface.isMeshPhongMaterial) {
+        shader.fragmentShader = shader.fragmentShader.replace('#include <lights_phong_pars_fragment>', turfHighlights);
+      }
       if (map) {
         shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
           #include <map_fragment>
