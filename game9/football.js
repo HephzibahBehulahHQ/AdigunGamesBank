@@ -46,29 +46,39 @@ export function createFootball() {
   function panels(polygons, surface) {
     const coords = [];
     const normals = [];
-    function triangle(a, b, c, depth) {
+    function triangle(a, b, c, depth, aRadius = BALL_RADIUS, bRadius = BALL_RADIUS, cRadius = BALL_RADIUS) {
       if (depth === 0) {
-        for (const point of [a, b, c]) {
+        for (const [point, radius] of [[a, aRadius], [b, bRadius], [c, cRadius]]) {
           const unit = point.clone().normalize();
           normals.push(...unit);
-          coords.push(...unit.multiplyScalar(BALL_RADIUS));
+          coords.push(...unit.multiplyScalar(radius));
         }
         return;
       }
       const ab = a.clone().lerp(b, 0.5);
       const bc = b.clone().lerp(c, 0.5);
       const ca = c.clone().lerp(a, 0.5);
-      triangle(a, ab, ca, depth - 1);
-      triangle(ab, b, bc, depth - 1);
-      triangle(ca, bc, c, depth - 1);
-      triangle(ab, bc, ca, depth - 1);
+      const abRadius = (aRadius + bRadius) / 2;
+      const bcRadius = (bRadius + cRadius) / 2;
+      const caRadius = (cRadius + aRadius) / 2;
+      triangle(a, ab, ca, depth - 1, aRadius, abRadius, caRadius);
+      triangle(ab, b, bc, depth - 1, abRadius, bRadius, bcRadius);
+      triangle(ca, bc, c, depth - 1, caRadius, bcRadius, cRadius);
+      triangle(ab, bc, ca, depth - 1, abRadius, bcRadius, caRadius);
     }
     for (const polygon of polygons) {
       const center = polygon.reduce((sum, point) => sum.add(point), new THREE.Vector3()).divideScalar(polygon.length);
       const rim = polygon.map(point => point.clone().lerp(center, 0.022));
       const winding = rim[0].clone().sub(center).cross(rim[1].clone().sub(center)).dot(center);
       if (winding < 0) rim.reverse();
-      for (let index = 0; index < rim.length; index++) triangle(center, rim[index], rim[(index + 1) % rim.length], 2);
+      const shoulder = rim.map(point => point.clone().lerp(center, 0.12));
+      const seamRadius = BALL_RADIUS * 0.994;
+      for (let index = 0; index < rim.length; index++) {
+        const next = (index + 1) % rim.length;
+        triangle(center, shoulder[index], shoulder[next], 2);
+        triangle(shoulder[index], rim[index], rim[next], 2, BALL_RADIUS, seamRadius, seamRadius);
+        triangle(shoulder[index], rim[next], shoulder[next], 2, BALL_RADIUS, seamRadius, BALL_RADIUS);
+      }
     }
     const mesh = new THREE.BufferGeometry();
     mesh.setAttribute('position', new THREE.Float32BufferAttribute(coords, 3));

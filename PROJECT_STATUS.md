@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The original 32-panel football now tapers its panel edges into recessed
+seams. A close-up Chrome render verified continuous seams and a rounded
+silhouette. Three actual 4K lofted receptions completed on Intel Arc 140T
+without WebGL errors or context loss. The simulation ball radius is unchanged.
+
 WebKit 26.0 passed 19 of 21 Goal Line browser tests on `84140b8`, including
 actual 4K, WebGL recovery and campaign persistence. The touch test exposed
 uneven slider tap behavior, and this Windows WebKit build lacks Web Audio.
