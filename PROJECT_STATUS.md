@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The player mesh now includes an articulated close-cropped scalp section
+with role-specific hair colors. The eye material paints irises and pupils
+around the source rig's eye centers. Chrome close-ups showed the hairline
+and pupils, and three actual 4K broadcast clearances completed without
+WebGL errors. This pass models a cropped silhouette rather than individual
+hair strands, and the eyes do not animate independently.
+
 The jersey now has a rounded neckline with a lower front and higher back,
 and the shirt covers the shoulders. The visible neckline comes from shared
 mesh cuts between the skin and fabric sections. A Chrome close-up verified

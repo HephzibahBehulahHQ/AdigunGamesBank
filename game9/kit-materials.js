@@ -63,8 +63,38 @@ export function outfitCoordinates(positions) {
   return uv;
 }
 
-export function outfitMaterials(role, skin) {
+function createEyeMaterial(role, center) {
+  const eyes = material('#c9c4b6', { roughness: 0.28 });
+  eyes.onBeforeCompile = shader => {
+    shader.uniforms.goalLineEyeCenter = { value: new THREE.Vector3(...center) };
+    shader.uniforms.goalLineIrisColor = { value: new THREE.Color(role === 'press' ? '#6c543e' : '#49301f') };
+    const position = 'varying vec3 vEyePosition;\n';
+    shader.vertexShader = position + shader.vertexShader.replace('#include <begin_vertex>', `
+      #include <begin_vertex>
+      vEyePosition = position;
+    `);
+    shader.fragmentShader = position + `
+      uniform vec3 goalLineEyeCenter;
+      uniform vec3 goalLineIrisColor;
+    ` + shader.fragmentShader.replace('#include <color_fragment>', `
+      #include <color_fragment>
+      vec2 irisPoint = vec2(abs(vEyePosition.x), vEyePosition.y) - goalLineEyeCenter.xy;
+      float radius = length(irisPoint);
+      float edge = max(fwidth(radius), 0.00015);
+      float front = step(goalLineEyeCenter.z, vEyePosition.z);
+      float iris = front * (1.0 - smoothstep(0.0056 - edge, 0.0056 + edge, radius));
+      float pupil = 1.0 - smoothstep(0.0025 - edge, 0.0025 + edge, radius);
+      float rim = smoothstep(0.0047, 0.0056, radius);
+      vec3 pigment = mix(goalLineIrisColor, vec3(0.007), max(pupil, rim * 0.82));
+      diffuseColor.rgb = mix(diffuseColor.rgb, pigment, iris);
+    `);
+  };
+  return eyes;
+}
+
+export function outfitMaterials(role, skin, eyeCenter) {
   const away = role === 'press';
+  const hair = away ? '#302219' : role === 'receive' ? '#1c1817' : '#191512';
   const jersey = textile(away ? '#8f332c' : '#204778', '#96acbc', context => {
     context.fillStyle = away ? '#5e251d' : '#172e4b';
     context.fillRect(120, row(1.52), 96, row(0.96) - row(1.52));
@@ -97,6 +127,7 @@ export function outfitMaterials(role, skin) {
     material('#ffffff', { map: shorts, bumpMap: weave, bumpScale: 0.00030, roughness: 0.89, metalness: 0 }),
     material('#ffffff', { map: socks, roughness: 0.92, metalness: 0 }),
     material('#232327', { roughness: 0.45 }),
-    material('#c9c4b6', { roughness: 0.28 })
+    createEyeMaterial(role, eyeCenter),
+    material(hair, { roughness: 0.85, metalness: 0 })
   ];
 }

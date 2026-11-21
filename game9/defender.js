@@ -57,7 +57,8 @@ function createPlayerGeometry(data) {
 }
 
 function createPlayer(rig, geometry, role, skin, build) {
-  const mesh = new THREE.SkinnedMesh(geometry, outfitMaterials(role, skin));
+  const eyeCenter = rig.find(([name]) => name === 'eye.L').slice(2);
+  const mesh = new THREE.SkinnedMesh(geometry, outfitMaterials(role, skin, eyeCenter));
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   mesh.frustumCulled = false;

@@ -113,6 +113,13 @@ function shapeJersey() {
 
 const garmentPositions = shapeJersey();
 
+function hairline([x, y, z]) {
+  const front = Math.max(0, Math.min(1, (z * 0.108 + 0.02) / 0.15));
+  const temple = Math.max(0, Math.min(1, (Math.abs(x * 0.108) - 0.04) / 0.04));
+  const height = 1.642 + front * 0.092 + temple * (1 - front * 0.7) * 0.048;
+  return (y + 8.22) * 0.108 - height;
+}
+
 function intersection(a, b, fraction, boundary) {
   if (fraction <= 0) return a;
   if (fraction >= 1) return b;
@@ -153,7 +160,7 @@ const skinUvs = [];
 const normalGroups = new Map();
 const skinIndices = [];
 const skinWeights = [];
-const sections = Array.from({ length: 6 }, () => []);
+const sections = Array.from({ length: 7 }, () => []);
 function packedIndex(corner, slot) {
   const uv = slot === 0 ? corner.uv.map(round) : [0, 0];
   const key = slot === 0 ? `${corner.key}/${uv.join(',')}` : corner.key;
@@ -162,7 +169,14 @@ function packedIndex(corner, slot) {
   visibleVertices.set(key, packed);
   if (!normalGroups.has(corner.key)) normalGroups.set(corner.key, []);
   normalGroups.get(corner.key).push(packed);
-  positions.push(...toMetres(corner.position));
+  const metres = toMetres(corner.position);
+  if (slot === 6) {
+    const lift = 0.003 * Math.max(0, Math.min(1, hairline(corner.position) / 0.025));
+    const outward = [metres[0], metres[1] - 1.68, metres[2] - 0.059];
+    const radius = Math.hypot(...outward);
+    if (radius > 0) for (let axis = 0; axis < 3; axis++) metres[axis] += lift * outward[axis] / radius;
+  }
+  positions.push(...metres);
   skinUvs.push(...uv);
   const top = corner.weights.slice().sort((a, b) => b[1] - a[1]).slice(0, 4);
   if (!top.length) throw new Error(`Missing rig weights for vertex ${corner.key}`);
@@ -198,7 +212,10 @@ for (const { group: groupName, vertices, uvs } of faces) {
       polygon = clip(polygon, 0, left, true);
       polygon = clip(polygon, 0, right, false);
       if (collar) polygon = clipBoundary(polygon, ([x, y, z]) => (y - collarHeight(x, z)) * collar, 'collar');
-      emit(polygon, slot);
+      if (slot === 0) {
+        emit(clipBoundary(polygon, hairline, 'hairline'), 6);
+        emit(clipBoundary(polygon, point => -hairline(point), 'hairline'), 0);
+      } else emit(polygon, slot);
     }
   }
 }
