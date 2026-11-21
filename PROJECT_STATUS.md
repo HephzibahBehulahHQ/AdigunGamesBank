@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The player rigs reuse vectors, quaternions and leg-solver output during
+each boot placement. All 12 engine checks and 21 Chrome browser checks
+passed, including the 10,000-drill solver, the pose reset regression and
+actual 4K. The allocation change was verified in code. Its impact on frame
+time has not been measured separately.
+
 Disconnecting a controller that has sent input now pauses an active feed
 and clears its movement. Chrome's simulated controller test confirmed that
 ball and defender positions stay fixed after disconnect, that a held Menu

@@ -92,6 +92,15 @@ function createPlayer(rig, geometry, role, skin, build) {
     toe: rest('toe1-2.' + side).sub(rest('foot.' + side))
   }));
   const vertical = new THREE.Vector3(0, 1, 0);
+  const stepToe = new THREE.Vector3();
+  const ankleTarget = new THREE.Vector3();
+  const restDirection = new THREE.Vector3();
+  const targetDirection = new THREE.Vector3();
+  const solution = { knee: new THREE.Vector3(), ankle: new THREE.Vector3() };
+  const turn = new THREE.Quaternion();
+  const thighTurn = new THREE.Quaternion();
+  const shinTurn = new THREE.Quaternion();
+  const footTurn = new THREE.Quaternion();
   const facing = role === 'defend' ? 1 : -1;
   const stepLength = role === 'defend' ? 0.78 : 0.28;
   let movementDirection = 0;
@@ -134,19 +143,20 @@ function createPlayer(rig, geometry, role, skin, build) {
         const path = lateralStep(gaitDistance, stepLength, side);
         const offset = (side === 0 ? 1 : -1) * facing * 0.18 + direction * path.offset;
         const forward = facing * (0.13 + (path.advancing ? path.lift : 0));
-        const toe = new THREE.Vector3(x + offset, 0.035 + path.lift, mesh.position.z + forward);
-        this.plantBoot(toe, 0, side, 1);
+        stepToe.set(x + offset, 0.035 + path.lift, mesh.position.z + forward);
+        this.plantBoot(stepToe, 0, side, 1);
       }
     },
     plantBoot(contact, angle, index, blend) {
       const { hip, upper, lower, toe, thigh, shin, foot } = limbs[index];
-      const turn = new THREE.Quaternion().setFromAxisAngle(vertical, angle);
-      const ankleTarget = mesh.worldToLocal(contact.clone()).sub(toe.clone().applyQuaternion(turn));
-      const { knee, ankle } = solveLeg(hip, ankleTarget, upper.length(), lower.length());
-      const thighTurn = new THREE.Quaternion().setFromUnitVectors(upper.clone().normalize(), knee.clone().sub(hip).normalize());
-      const lowerDirection = ankle.clone().sub(knee).normalize().applyQuaternion(thighTurn.clone().invert());
-      const shinTurn = new THREE.Quaternion().setFromUnitVectors(lower.clone().normalize(), lowerDirection);
-      const footTurn = thighTurn.clone().multiply(shinTurn).invert().multiply(turn);
+      turn.setFromAxisAngle(vertical, angle);
+      mesh.worldToLocal(ankleTarget.copy(contact)).sub(restDirection.copy(toe).applyQuaternion(turn));
+      const { knee, ankle } = solveLeg(hip, ankleTarget, upper.length(), lower.length(), solution);
+      thighTurn.setFromUnitVectors(restDirection.copy(upper).normalize(), targetDirection.copy(knee).sub(hip).normalize());
+      footTurn.copy(thighTurn).invert();
+      targetDirection.copy(ankle).sub(knee).normalize().applyQuaternion(footTurn);
+      shinTurn.setFromUnitVectors(restDirection.copy(lower).normalize(), targetDirection);
+      footTurn.copy(thighTurn).multiply(shinTurn).invert().multiply(turn);
       thigh.quaternion.slerp(thighTurn, blend);
       shin.quaternion.slerp(shinTurn, blend);
       foot.quaternion.slerp(footTurn, blend);

@@ -1,21 +1,21 @@
 import { THREE } from '../shared/three-stage.js';
 
 /** Two-segment leg solve in model coordinates, biased towards a forward knee. */
-export function solveLeg(hip, requestedAnkle, upper, lower) {
-  const direction = requestedAnkle.clone().sub(hip);
+export function solveLeg(hip, requestedAnkle, upper, lower, result = {
+  knee: new THREE.Vector3(), ankle: new THREE.Vector3(),
+}) {
+  const direction = result.ankle.copy(requestedAnkle).sub(hip);
   const length = direction.length();
   if (length < 1e-6) direction.set(0, -1, 0);
   else direction.divideScalar(length);
   const reach = THREE.MathUtils.clamp(length, Math.abs(upper - lower) + 0.0001, upper + lower - 0.0001);
   const along = (upper ** 2 - lower ** 2 + reach ** 2) / (2 * reach);
   const lift = Math.sqrt(Math.max(0, upper ** 2 - along ** 2));
-  const bend = new THREE.Vector3(0, 0, 1).projectOnPlane(direction);
+  const bend = result.knee.set(0, 0, 1).projectOnPlane(direction);
   if (bend.lengthSq() < 1e-5) bend.set(1, 0, 0).projectOnPlane(direction);
-  bend.normalize();
-  return {
-    knee: hip.clone().addScaledVector(direction, along).addScaledVector(bend, lift),
-    ankle: hip.clone().addScaledVector(direction, reach)
-  };
+  bend.normalize().multiplyScalar(lift).addScaledVector(direction, along).add(hip);
+  direction.multiplyScalar(reach).add(hip);
+  return result;
 }
 
 /** Toe offsets over one gait cycle. During the first half relative travel cancels root travel. */
