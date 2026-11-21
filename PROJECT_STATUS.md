@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The sky panorama follows camera position and renders at the far depth,
+so camera translation no longer moves the distant backdrop. The pitch
+camera now clips at 110 m. The 4K and downsampled 16K broadcast captures
+showed the panorama behind the venue geometry. Three heavy-turf clearances
+in each mode completed without WebGL errors or context loss. Chrome also
+passed actual 4K, camera switching and context restoration checks.
+
 The football panels now have object-space grain that affects color and
 roughness and fades once the features approach pixel size. The Chrome
 close-up showed the texture and recessed seams without shader errors.

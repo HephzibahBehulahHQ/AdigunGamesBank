@@ -14,12 +14,25 @@ export async function createPitch(options) {
   ]);
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
+  camera.far = 110;
+  camera.updateProjectionMatrix();
   scene.background = new THREE.Color('#9eabb2');
+  let dome;
   if (sky) {
     sky.colorSpace = THREE.SRGBColorSpace;
-    const dome = new THREE.Mesh(new THREE.SphereGeometry(220, 64, 32), new THREE.MeshBasicMaterial({
+    const skyMaterial = new THREE.MeshBasicMaterial({
       map: sky, side: THREE.BackSide, depthWrite: false, fog: false,
-    }));
+    });
+    // Put the panorama behind all geometry while keeping its apparent distance infinite.
+    skyMaterial.onBeforeCompile = shader => {
+      shader.vertexShader = shader.vertexShader.replace('#include <project_vertex>', `
+        #include <project_vertex>
+        gl_Position.z = gl_Position.w;
+      `);
+    };
+    dome = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 32), skyMaterial);
+    dome.frustumCulled = false;
+    dome.position.copy(camera.position);
     // Let opaque pitch geometry reject sky fragments before sampling the panorama.
     dome.renderOrder = 1;
     scene.add(dome);
@@ -119,14 +132,15 @@ export async function createPitch(options) {
         THREE.MathUtils.lerp(3.2, 2, wide)
       );
       camera.lookAt(0.65, 1.02, THREE.MathUtils.lerp(4.4, 11.7, wide));
-      return;
+    } else {
+      camera.position.set(
+        THREE.MathUtils.lerp(-4.5, -1.5, wide),
+        THREE.MathUtils.lerp(5.9, 13, wide),
+        THREE.MathUtils.lerp(-6.7, -12.7, wide)
+      );
+      camera.lookAt(0, 0.3, THREE.MathUtils.lerp(4.1, 9.5, wide));
     }
-    camera.position.set(
-      THREE.MathUtils.lerp(-4.5, -1.5, wide),
-      THREE.MathUtils.lerp(5.9, 13, wide),
-      THREE.MathUtils.lerp(-6.7, -12.7, wide)
-    );
-    camera.lookAt(0, 0.3, THREE.MathUtils.lerp(4.1, 9.5, wide));
+    dome?.position.copy(camera.position);
   }
 
   return {
