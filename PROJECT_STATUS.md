@@ -59,6 +59,13 @@ framebuffer through all 30 sampled Apprentice feeds on the Intel Arc 140T.
 It submitted 732 frames over 39.4 sampled seconds with no WebGL errors or
 context loss. Median and 95th-percentile intervals were 50.2 and 108.3 ms.
 
+At 18:25 Europe/Berlin the same 30-feed test with one 16K frame in flight
+retained the 15,360 × 8,640 GPU framebuffer and completed without WebGL
+errors or context loss. Median, 95th- and 99th-percentile intervals were
+50.1, 66.7 and 74.8 ms. A follow-up switched back to an actual
+3840 × 2160 canvas successfully. The long-frame improvement does not
+establish a 60 fps 16K mode.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

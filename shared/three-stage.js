@@ -41,6 +41,8 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   if (enable16K) modes['16k'] = [15360, '16K UHD'];
   const maxWidth = Math.min(maxBuffer, maxViewportWidth, Math.floor(maxViewportHeight * 16 / 9));
   let largeFrame = null;
+  let largeFrameFence = null;
+  let deferredPaint;
 
   function allocateLargeFrame(width, height) {
     if (width > maxWidth) return null;
@@ -99,11 +101,41 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   }
 
   function releaseLargeFrame() {
+    cancelAnimationFrame(deferredPaint);
+    deferredPaint = undefined;
+    if (largeFrameFence) gl.deleteSync(largeFrameFence);
+    largeFrameFence = null;
     if (!largeFrame) return;
     largeFrame.framebuffer.dispose();
     largeFrame.quad.material.dispose();
     largeFrame.quad.geometry.dispose();
     largeFrame = null;
+  }
+
+  function paintLargeFrame() {
+    if (lost || !largeFrame) return;
+    if (largeFrameFence) {
+      const state = gl.clientWaitSync(largeFrameFence, 0, 0);
+      if (state === gl.TIMEOUT_EXPIRED) {
+        if (deferredPaint === undefined) {
+          deferredPaint = requestAnimationFrame(() => {
+            deferredPaint = undefined;
+            paintLargeFrame();
+          });
+        }
+        return;
+      }
+      gl.deleteSync(largeFrameFence);
+    }
+    cancelAnimationFrame(deferredPaint);
+    deferredPaint = undefined;
+    renderer.setRenderTarget(largeFrame.framebuffer);
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(null);
+    renderer.render(largeFrame.presentation, largeFrame.camera);
+    // Coalesce updates until the graphics device finishes the previous large frame.
+    largeFrameFence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+    gl.flush();
   }
 
   function resize() {
@@ -148,6 +180,7 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   observer.observe(canvas);
   const onLost = (event) => {
     event.preventDefault(); lost = true;
+    releaseLargeFrame();
     if (status) status.textContent = 'Graphics connection lost. Your saved progress is safe. Reload to resume.';
     canvas.dispatchEvent(new CustomEvent('stage-lost'));
   };
@@ -161,10 +194,7 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
         renderer.render(scene, camera);
         return;
       }
-      renderer.setRenderTarget(largeFrame.framebuffer);
-      renderer.render(scene, camera);
-      renderer.setRenderTarget(null);
-      renderer.render(largeFrame.presentation, largeFrame.camera);
+      paintLargeFrame();
     },
     dispose() {
       observer.disconnect(); qualitySelect?.removeEventListener('change', onQuality);

@@ -84,6 +84,7 @@ try {
   const before = await readSurface();
   const requestedBufferAllocated = before?.renderBuffer.every((dimension, index) => dimension === requested[index]) ?? false;
   let after = null;
+  let restored4K = null;
   let sample = null;
   let workloadError = null;
   if (requestedBufferAllocated) {
@@ -131,17 +132,23 @@ try {
       medianMs: percentile(0.5), p95Ms: percentile(0.95), p99Ms: percentile(0.99)
     };
     if (await canvas.isVisible()) await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
+    if (mode === '16k' && !workloadError && !after?.contextLost) {
+      await graphics.selectOption('4k');
+      restored4K = await readSurface();
+    }
   }
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
-    mode, requested, requestedBufferAllocated, softwareRenderer, before, after, sample, workloadError,
+    mode, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     capturedAt: new Date().toISOString()
   };
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
-  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs ||
+  const restored = mode !== '16k' || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
+    restored4K.renderSurface === 'drawing buffer' && !restored4K.error && !restored4K.contextLost);
+  if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;
 } finally {
   await browser?.close();
