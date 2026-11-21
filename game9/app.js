@@ -7,6 +7,8 @@ const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
 const levelInput = byId('level');
 const angle = byId('angle');
+const aimLeft = byId('aim-left');
+const aimRight = byId('aim-right');
 const kickSpeed = byId('kick-speed');
 const loft = byId('loft');
 const loftControl = byId('loft-control');
@@ -133,6 +135,8 @@ function update(message) {
     ? 'Hold A or D to move, or tap a direction. Tap Hold to stop moving.'
     : 'Each movement advances the ball by 0.1 seconds. Start the live ball for a timed clearance.';
   angle.disabled = kickSpeed.disabled = loft.disabled = clearButton.disabled = !ready;
+  aimLeft.disabled = !ready || aiming <= -60;
+  aimRight.disabled = !ready || aiming >= 60;
   loftControl.hidden = !feed.pressure;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
@@ -280,6 +284,8 @@ function byDistance() {
 }
 
 angle.addEventListener('input', () => update());
+aimLeft.addEventListener('click', () => adjustAim(-1));
+aimRight.addEventListener('click', () => adjustAim(1));
 kickSpeed.addEventListener('input', () => update());
 loft.addEventListener('change', () => update());
 clearButton.addEventListener('click', () => {

@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+WebKit 26.0 passed 19 of 21 Goal Line browser tests on `84140b8`, including
+actual 4K, WebGL recovery and campaign persistence. The touch test exposed
+uneven slider tap behavior, and this Windows WebKit build lacks Web Audio.
+The new one-degree aim buttons let touch players refine their clearance.
+Targeted reruns passed in WebKit for touch play, the 320 px Axe check and
+play without audio. Chrome passed the corresponding touch, accessibility
+and sound checks. Physical touch and Safari hardware were not tested.
+
 The skip link and its destination are explicitly focusable. The 320 px
 reduced-motion accessibility check now passes in the pinned WebKit 26.0
 and system Chrome. WebKit also passed actual 3840 × 2160 WebGL rendering

@@ -50,7 +50,11 @@
           <button data-move="1" type="button">Right</button>
         </div>
         <label for="angle">Clearance angle <output id="angle-value" for="angle" aria-hidden="true">0°</output></label>
-        <input id="angle" type="range" min="-60" max="60" value="0" aria-valuetext="Straight ahead">
+        <div class="aim-control">
+          <button id="aim-left" type="button">Aim left</button>
+          <input id="angle" type="range" min="-60" max="60" value="0" aria-valuetext="Straight ahead">
+          <button id="aim-right" type="button">Aim right</button>
+        </div>
         <label for="kick-speed">Kick speed <output id="speed-value" for="kick-speed" aria-hidden="true">14 m/s</output></label>
         <input id="kick-speed" type="range" min="4" max="22" value="14" aria-valuetext="14 meters per second">
         <label id="loft-control" hidden><input id="loft" type="checkbox" aria-keyshortcuts="V"> Loft the clearance</label>

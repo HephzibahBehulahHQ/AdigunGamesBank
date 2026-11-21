@@ -273,6 +273,15 @@ test.describe('Goal Line touch controls', () => {
       const slider = page.getByRole('slider', { name: 'Clearance angle' });
       const { width, height } = await slider.boundingBox();
       await slider.tap({ position: { x: width * (aim + 60) / 120, y: height / 2 } });
+      const currentAngle = Number(await slider.inputValue());
+      const contact = readContact(feed, tick, moves * 0.45);
+      const safeAngles = Array.from({ length: 121 }, (_, index) => index - 60)
+        .filter(angle => planClearance(feed, contact, tick, angle).atGate);
+      const closest = safeAngles.reduce((best, angle) =>
+        Math.abs(angle - currentAngle) < Math.abs(best - currentAngle) ? angle : best);
+      const nudge = page.getByRole('button', { name: closest < currentAngle ? 'Aim left' : 'Aim right' });
+      for (let step = 0; step < Math.abs(closest - currentAngle); step++) await nudge.tap();
+      await expect(slider).toHaveValue(String(closest));
       await kick.tap();
       if (index < feeds.length - 1) {
         await expect(page.locator('#message')).toContainText('Safe clearance');
@@ -519,6 +528,13 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   await right.press('Enter');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([]);
   await sound.click();
+  if (!await page.evaluate(() => typeof AudioContext === 'function')) {
+    await expect(page.locator('#message')).toContainText('Audio is unavailable');
+    await expect(sound).toHaveAttribute('aria-pressed', 'false');
+    await right.press('Enter');
+    await expect(page.locator('#defender')).toHaveText('0.90 m right');
+    return;
+  }
   await expect(sound).toHaveAttribute('aria-pressed', 'true');
   for (let i = 0; i < 3; i++) await right.press('Enter');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([
