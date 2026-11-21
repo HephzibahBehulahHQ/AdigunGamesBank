@@ -50,6 +50,22 @@ owns final verification.
 
 ## Product honesty and release gates
 
+- The owner requires production-quality games for an adult audience. Each
+  release must deliver responsive, fully realized gameplay with convincing
+  human characters where the setting calls for them, realistic environments,
+  animation, materials, lighting, and visual detail. Generic mechanics,
+  cartoon stand-ins, toy presentation, and placeholder geometry or art fail
+  release acceptance.
+- Use GTA VI as a reference for the requested realism and presentation quality.
+  Design original games and use original or appropriately licensed characters,
+  animations, assets, environments, audio, and game content.
+- The owner requested “16HK,” interpreted as a 16K UHD presentation target
+  (15,360 × 8,640). Verify the actual render buffer, an inspected frame, and
+  measured performance on named supported hardware before claiming 16K.
+  Record 4K and other measured modes separately from 16K qualification.
+- Goal Line remains a development checkpoint until it meets this quality bar.
+  Keep its current block-geometry build out of the public release.
+
 - A game is playable only when its controls, rules, progression, failure and
   completion states work. Never substitute a promotional screen or quiz shell
   for a requested simulation or match.
