@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+A second 10-clearance comparison tested discarding the 16K depth attachment
+before presenting the color texture. On Intel Arc 140T, the median observed
+completion interval was 83.1 ms with the discard and 67.1 ms with the
+existing renderer. Both runs completed without WebGL errors or context loss.
+The renderer keeps its existing depth attachment handling.
+
 A 10-clearance comparison on Intel Arc 140T tested skipping the 16K scene
 color clear when the sky covers the frame. The median observed completion
 interval was 58.5 ms with the change and 58.4 ms with the existing clear.
