@@ -330,6 +330,7 @@ test('Goal Line heavy turf stops a soft clearance and rewards more power', async
 });
 
 test('Goal Line audio starts on request and mutes without interrupting play', async ({ page }) => {
+  await disableWebGL(page);
   await page.addInitScript(() => {
     window.goalLineAudioSources = [];
     const start = AudioBufferSourceNode.prototype.start;
@@ -359,6 +360,21 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   for (let i = 0; i < 3; i++) await right.press('Enter');
   await expect(page.locator('#defender')).toHaveText('3.15 m right');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toHaveLength(1);
+
+  await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+  await sound.click();
+  await expect(sound).toHaveAttribute('aria-pressed', 'true');
+  const start = new Date('2026-11-21T16:00:00Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000));
+  await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
+  await page.clock.runFor(2300);
+  await expect(page.locator('#contact')).toHaveText('Ball in reach.');
+  await page.clock.runFor(100);
+  expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([
+    expect.objectContaining({ duration: expect.closeTo(0.11, 3) }),
+    expect.objectContaining({ duration: expect.closeTo(0.16, 3), audibleSignal: true })
+  ]);
 });
 
 test('Goal Line standard gamepad starts play, moves, aims and restarts', async ({ page }) => {

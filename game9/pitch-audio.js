@@ -4,7 +4,8 @@ const sounds = {
   step: { duration: 0.11, weight: 0.15, pitch: 87, decay: 34, grit: 0.43 },
   kick: { duration: 0.19, weight: 0.65, pitch: 117, decay: 25, grit: 0.37 },
   touch: { duration: 0.13, weight: 0.34, pitch: 103, decay: 30, grit: 0.53 },
-  net: { duration: 0.34, weight: 0.09, pitch: 51, decay: 16, grit: 0.66 }
+  net: { duration: 0.34, weight: 0.09, pitch: 51, decay: 16, grit: 0.66 },
+  ready: { duration: 0.16, weight: 0.45, pitch: 620, decay: 18, grit: 0 }
 };
 
 function makeSounds(context) {

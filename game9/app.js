@@ -92,7 +92,10 @@ function update(message) {
   const contactReading = byId('contact');
   const contactText = !ready ? '' : reachable ? 'Ball in reach.'
     : inWindow && high ? 'Ball too high. Wait for it to drop.' : 'Close the gap before clearing.';
-  if (contactReading.textContent !== contactText) contactReading.textContent = contactText;
+  if (contactReading.textContent !== contactText) {
+    contactReading.textContent = contactText;
+    if (timer !== null && ready && reachable) audio.play('ready', contact.x);
+  }
   if (message !== undefined) byId('message').textContent = message;
   levelInput.max = save.unlocked;
   const live = timer !== null;
