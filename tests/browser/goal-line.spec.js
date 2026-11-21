@@ -506,6 +506,7 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
       const sample = this.buffer.getChannelData(0);
       window.goalLineAudioSources.push({
         duration: this.buffer.duration,
+        startsAt: args[0],
         audibleSignal: sample.some(value => Math.abs(value) > 0.01)
       });
       return start.apply(this, args);
@@ -543,6 +544,18 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
     expect.objectContaining({ duration: expect.closeTo(0.11, 3) }),
     expect.objectContaining({ duration: expect.closeTo(0.16, 3), audibleSignal: true })
   ]);
+  const aim = page.getByRole('slider', { name: 'Clearance angle', exact: true });
+  for (let degree = 0; degree < 23; degree++) await aim.press('ArrowRight');
+  await page.getByRole('button', { name: 'Clear ball' }).press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+  const contacts = await page.evaluate(() => window.goalLineAudioSources.slice(2));
+  expect(contacts).toEqual([
+    expect.objectContaining({ duration: expect.closeTo(0.19, 3), audibleSignal: true }),
+    expect.objectContaining({ duration: expect.closeTo(0.15, 3), audibleSignal: true })
+  ]);
+  const feed = makeDrill(1)[0];
+  const shot = planClearance(feed, readContact(feed, 24, 0), 24, 23);
+  expect(contacts[1].startsAt - contacts[0].startsAt).toBeCloseTo(shot.travelTime, 1);
 });
 
 test('Goal Line standard gamepad controls play and pauses on disconnect', async ({ page }) => {

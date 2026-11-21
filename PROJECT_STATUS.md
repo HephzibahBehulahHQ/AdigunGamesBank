@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Successful clearances now schedule a distinct receiver touch cue at the
+projected arrival point. Starting another ball or restarting cancels
+pending audio from the previous feed. Chrome verified a non-silent cue
+with the expected travel delay after the kick. The targeted audio,
+interception, loft and final-tier drill checks passed.
+
 Each incoming feed now opens with a short cue for its actual conditions.
 Chrome verified the bounce cue, the heavy-turf cue and the change to a
 moving-receiver cue on the next ball. All 21 Goal Line browser checks

@@ -140,6 +140,7 @@ function update(message) {
 }
 
 function prepareFeed() {
+  audio.stop();
   lastFootstep = -Infinity;
   angle.value = 0;
   kickSpeed.value = CLEARANCE_SPEED;
@@ -155,7 +156,6 @@ function prepareFeed() {
 
 function load(levelNumber, moveFocus = false) {
   setLive(false);
-  audio.stop();
   level = levelNumber;
   levelInput.value = levelNumber;
   state = createDrill(levelNumber);
@@ -292,6 +292,8 @@ clearButton.addEventListener('click', () => {
     if (shot.interception) {
       const ball = shot.interception.ball;
       audio.play('touch', ball.x, contactTime + shot.travelTime, 0.7);
+    } else if (successful) {
+      audio.play('receive', shot.end.x, contactTime + shot.travelTime);
     }
   }
   if (successful) {
