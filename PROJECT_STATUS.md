@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Two five-clearance Chrome runs at 16K on Intel Arc 140T compared the
+existing turf shader with separate materials that computed goalmouth wear
+only on the two stripes intersecting the wear ellipse. Median scene GPU
+time was 34.1 ms with the existing shader and 34.4 ms with the two-stripe
+variant. Both runs restored 4K without graphics errors or context loss.
+The experiment was reverted and the baseline build hash was reproduced.
+
 At development revision `6f39857`, two Chrome runs of five heavy-turf
 clearances on Intel Arc 140T compared drawing the turf before and after
 the other opaque geometry, with the sky drawn last in both runs. Delaying
