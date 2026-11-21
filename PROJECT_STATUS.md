@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+All 19 Goal Line browser tests passed against `dad8bde` in the existing
+Firefox 159.0 cache on Windows. The suite verified an actual 3840 × 2160
+WebGL drawing buffer, context recovery, saved progression through the final
+drill, and the advanced-drill accessibility check at 320 px with reduced
+motion. This was a headless browser check. Firefox hardware frame pacing
+and native 16K presentation were not measured. GitHub `main` remained at
+`2ac20c4` when the development revision was verified.
+
 Goal Line requests antialiasing for the WebGL drawing buffer. Chrome on
 Intel Arc 140T granted it, and the paired 4K broadcast captures showed
 smoother rails and goal edges. Across three heavy-turf clearances per
