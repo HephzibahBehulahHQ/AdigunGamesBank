@@ -29,6 +29,7 @@ const keys = new Set();
 let level = save.unlocked;
 let state;
 let pitch;
+let detachPitchControls;
 let timer = null;
 let direction = 0;
 let lastFootstep = -Infinity;
@@ -269,6 +270,8 @@ byId('load').addEventListener('click', () => {
 });
 
 function fallback() {
+  detachPitchControls?.();
+  detachPitchControls = null;
   pitch?.dispose();
   pitch = null;
   canvas.hidden = true;
@@ -277,6 +280,12 @@ function fallback() {
   graphics.textContent = '3D unavailable. Use the drill controls and position readings to play.';
 }
 canvas.addEventListener('stage-lost', fallback);
+canvas.addEventListener('webglcontextrestored', () => {
+  if (pitch || !canvas.hidden) return;
+  graphics.textContent = 'Restoring pitch…';
+  quality.value = 'auto';
+  initializePitch().catch(fallback);
+});
 load(level);
 
 async function initializePitch() {
@@ -290,15 +299,26 @@ async function initializePitch() {
   const { createPitch } = await import('./pitch.js');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   pitch = await createPitch({ canvas, context, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
+  canvas.hidden = false;
+  quality.disabled = false;
+  cameraView.disabled = false;
   update();
   const render = () => update();
   quality.addEventListener('change', render);
   motion.addEventListener('change', render);
-  cameraView.addEventListener('change', () => {
+  function changeCamera() {
     try { localStorage.setItem(cameraKey, cameraView.value); } catch { /* Keep the current view. */ }
     render();
-  });
-  new ResizeObserver(render).observe(canvas);
+  }
+  cameraView.addEventListener('change', changeCamera);
+  const resize = new ResizeObserver(render);
+  resize.observe(canvas);
+  detachPitchControls = () => {
+    resize.disconnect();
+    quality.removeEventListener('change', render);
+    motion.removeEventListener('change', render);
+    cameraView.removeEventListener('change', changeCamera);
+  };
 }
 
 initializePitch().catch(fallback);

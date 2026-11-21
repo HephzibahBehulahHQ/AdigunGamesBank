@@ -128,6 +128,29 @@ test('Goal Line keeps the drill playable when WebGL is lost mid-play', async ({ 
   await completeDrill(page);
 });
 
+test('Goal Line restores 3D without resetting the current feed', async ({ page }) => {
+  await page.goto('/game9/');
+  const pitch = page.locator('#pitch');
+  await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 15000 });
+  await page.getByRole('combobox', { name: 'Camera' }).selectOption('broadcast');
+  const glLoss = await pitch.evaluateHandle(canvas => canvas.getContext('webgl2').getExtension('WEBGL_lose_context'));
+  await glLoss.evaluate(extension => extension.loseContext());
+  await expect(pitch).toBeHidden();
+  await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+  const position = await page.locator('#ball').textContent();
+  await glLoss.evaluate(extension => extension.restoreContext());
+  await expect(pitch).toBeVisible({ timeout: 15000 });
+  await expect(pitch).toHaveAttribute('data-camera', 'broadcast');
+  await expect(page.locator('#defender')).toHaveText('0.45 m right');
+  await expect(page.locator('#ball')).toHaveText(position);
+  await page.getByRole('combobox', { name: 'Graphics' }).selectOption('4k');
+  await expect(pitch).toHaveAttribute('data-resolution', '3840x2160');
+  expect(await pitch.evaluate(canvas => {
+    const gl = canvas.getContext('webgl2');
+    return [gl.drawingBufferWidth, gl.drawingBufferHeight, gl.isContextLost(), gl.getError()];
+  })).toEqual([3840, 2160, false, 0]);
+});
+
 test('Goal Line can switch cameras without changing the drill state', async ({ page }) => {
   await page.goto('/game9/');
   const canvas = page.locator('#pitch');
