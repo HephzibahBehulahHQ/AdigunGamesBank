@@ -101,7 +101,7 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
   }
 
   function releaseLargeFrame() {
-    cancelAnimationFrame(deferredPaint);
+    clearTimeout(deferredPaint);
     deferredPaint = undefined;
     if (largeFrameFence) gl.deleteSync(largeFrameFence);
     largeFrameFence = null;
@@ -118,16 +118,17 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
       const state = gl.clientWaitSync(largeFrameFence, 0, 0);
       if (state === gl.TIMEOUT_EXPIRED) {
         if (deferredPaint === undefined) {
-          deferredPaint = requestAnimationFrame(() => {
+          // Check only while a newer frame is waiting, without waiting for another display refresh.
+          deferredPaint = setTimeout(() => {
             deferredPaint = undefined;
             paintLargeFrame();
-          });
+          }, 4);
         }
         return;
       }
       gl.deleteSync(largeFrameFence);
     }
-    cancelAnimationFrame(deferredPaint);
+    clearTimeout(deferredPaint);
     deferredPaint = undefined;
     renderer.setRenderTarget(largeFrame.framebuffer);
     renderer.render(scene, camera);

@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The 16K renderer now checks the GPU fence on a short timer only while a
+newer frame is waiting. In paired five-clearance runs on Intel Arc 140T,
+median observed completion changed from 58.3 to 51.4 ms, with a 66.8 ms
+95th percentile in both. The subsequent 30-clearance timer run measured
+58.1 ms median and 66.8 ms at the 95th percentile, with no WebGL errors or
+context loss and successful restoration to a 3840 × 2160 drawing buffer.
+
 Chrome 158 touch emulation at 360 × 800 verified that Goal Line fits the
 viewport and can be played entirely with taps. The test triggered a missed
 clearance, restarted, aimed and cleared all three balls, then verified that
