@@ -4,6 +4,16 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+[CI run 44941189856](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44941189856)
+passed verification on `e666242`, including the repaired input tests. Its
+publication job was skipped. Separately, the hardware benchmark now supports
+drill 8,002 with heavy turf, a moving receiver and defensive pressure. On
+Intel Arc 140T, five heavy-turf 16K clearances had a median observed GPU
+completion interval of 50.1 ms and a 95th percentile of 58.6 ms. Three
+heavy-turf 4K clearances retained the full drawing buffer without graphics
+errors, with an 8.3 ms median submission interval and a 1,000 ms 99th
+percentile. Both resolutions used the local development build.
+
 Standard turf now uses matte Lambert lighting with the existing texture,
 normal detail and shadow filter. Heavy turf keeps the specular lighting.
 In three-clearance Chrome runs on Intel Arc 140T, median GPU scene and

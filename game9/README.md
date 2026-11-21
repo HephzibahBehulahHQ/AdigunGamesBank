@@ -24,6 +24,8 @@ On a machine with the repository's locked Playwright dependencies and Chrome
 installed, run `npm run build`, then
 `node scripts/check-goal-line-hardware.mjs 16k 30`. Use `4k` to check the 4K mode.
 The optional second argument is the number of live feeds to sample.
+Add `heavy` as the third argument to use drill 8,002, which combines heavy
+turf, a moving receiver and an opponent. Those reports use a `-heavy` suffix.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The

@@ -4,9 +4,17 @@ import path from 'node:path';
 import { chromium } from '@playwright/test';
 import { makeDrill, planClearance, readContact } from '../game9/clearance.js';
 
-const feed = makeDrill(2001)[0];
-const delivery = readContact(feed, 22, 1.35);
-const clearance = planClearance(feed, delivery, 22, 11);
+const scenario = process.argv[4] ?? 'standard';
+if (scenario !== 'standard' && scenario !== 'heavy') throw new Error('Choose standard or heavy turf.');
+const { level, tick, defender, angle } = scenario === 'heavy'
+  ? { level: 8002, tick: 18, defender: -1.35, angle: -24 }
+  : { level: 2001, tick: 22, defender: 1.35, angle: 11 };
+const moveSide = defender < 0 ? 'left' : 'right';
+const moveTarget = `${Math.abs(defender).toFixed(2)} m ${moveSide}`;
+const feed = makeDrill(level)[0];
+const delivery = readContact(feed, tick, defender);
+const clearance = planClearance(feed, delivery, tick, angle);
+if (!delivery.reachable || !clearance.atGate || clearance.interception) throw new Error('The benchmark clearance fixture is invalid.');
 const clearanceMilliseconds = Math.ceil((Math.max(0.035, delivery.delay) + clearance.travelTime) * 1000);
 
 const mode = process.argv[2] ?? '16k';
@@ -19,7 +27,8 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
-const output = path.resolve(import.meta.dirname, '..', 'test-results', `goal-line-hardware-${mode}`);
+const output = path.resolve(import.meta.dirname, '..', 'test-results',
+  `goal-line-hardware-${mode}${scenario === 'heavy' ? '-heavy' : ''}`);
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -49,10 +58,10 @@ let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.addInitScript(profileGpu => {
-    // Unlock one advanced drill in the isolated test context to exercise both players.
+  await page.addInitScript(({ profileGpu, level }) => {
+    // Unlock the selected drill in the isolated test context.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
-      version: 1, completed: 2000, unlocked: 2001
+      version: 1, completed: level - 1, unlocked: level
     }));
     window.goalLineDrawTimes = [];
     window.goalLineCompletionTimes = [];
@@ -110,7 +119,7 @@ try {
       }
       return drawElements.apply(this, args);
     };
-  }, mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1');
+  }, { profileGpu: mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1', level });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -151,7 +160,7 @@ try {
       for (let round = 0; round < rounds; round++) {
         if (round) await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
         const aim = page.getByRole('slider', { name: 'Clearance angle' });
-        for (let step = 0; step < 11; step++) await aim.press('ArrowRight');
+        for (let step = 0; step < Math.abs(angle); step++) await aim.press(angle < 0 ? 'ArrowLeft' : 'ArrowRight');
         await page.evaluate(() => {
           window.goalLineDrawTimes.length = 0;
           window.goalLineCompletionTimes.length = 0;
@@ -159,12 +168,12 @@ try {
         await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
         await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
         // React inside the page so a busy renderer cannot make Playwright miss a single live tick.
-        const contact = page.evaluate(distance => new Promise((resolve, reject) => {
+        const contact = page.evaluate(({ distance, moveTarget }) => new Promise((resolve, reject) => {
           const defender = document.querySelector('#defender');
           const ball = document.querySelector('#ball');
           let moved = false;
           const observer = new MutationObserver(() => {
-            if (!moved && defender.textContent === '1.35 m right') {
+            if (!moved && defender.textContent === moveTarget) {
               moved = true;
               document.querySelector('[data-move="0"]').click();
             }
@@ -181,9 +190,9 @@ try {
           }, 5000);
           observer.observe(defender, { childList: true });
           observer.observe(ball, { childList: true });
-        }), delivery.ball.z.toFixed(2));
-        await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
-        await contact;
+        }), { distance: delivery.ball.z.toFixed(2), moveTarget });
+        const moveName = defender < 0 ? 'Left' : 'Right';
+        await Promise.all([contact, page.getByRole('button', { name: moveName, exact: true }).press('Enter')]);
         const message = await page.locator('#message').textContent();
         if (!message?.includes('Safe clearance')) throw new Error(`Round ${round + 1}: ${message}`);
         await page.waitForFunction(duration => {
@@ -236,7 +245,7 @@ try {
   }
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
-    mode, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
+    mode, scenario, level, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     capturedAt: new Date().toISOString()
