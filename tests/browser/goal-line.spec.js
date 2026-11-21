@@ -275,9 +275,18 @@ test.describe('Goal Line touch controls', () => {
     await expect(page.locator('#graphics')).toContainText('3D unavailable');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
     const kick = page.getByRole('button', { name: 'Clear ball', exact: true });
+    const speed = page.getByRole('slider', { name: 'Kick speed', exact: true });
+    const slower = page.getByRole('button', { name: 'Slower', exact: true });
+    const faster = page.getByRole('button', { name: 'Faster', exact: true });
+    await slower.tap();
+    await expect(speed).toHaveAttribute('aria-valuetext', '13 meters per second');
+    await faster.tap();
+    await expect(speed).toHaveValue('14');
     await kick.tap();
+    await expect(slower).toBeDisabled();
     await expect(page.locator('#message')).toContainText('Missed contact');
     await page.getByRole('button', { name: 'Restart drill' }).tap();
+    await expect(faster).toBeEnabled();
 
     const feeds = makeDrill(1);
     for (const [index, feed] of feeds.entries()) {

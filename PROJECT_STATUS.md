@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Goal Line now has one-step Slower and Faster controls for kick speed.
+Chrome and WebKit passed three targeted checks each for touch play and
+persistence, the 320 px reduced-motion accessibility scan, and kick-speed
+behavior. The touch check verified the displayed and accessible values,
+and confirmed that finished feeds disable the controls until retry.
+
 The ball animation now blends ground roll into backspin on lofted kicks
 and slower forward spin on bouncing feeds. Chrome verified both signs of
 rotation during a playable drill. The 12 engine tests, including the

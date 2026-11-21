@@ -10,6 +10,8 @@ const angle = byId('angle');
 const aimLeft = byId('aim-left');
 const aimRight = byId('aim-right');
 const kickSpeed = byId('kick-speed');
+const powerDown = byId('power-down');
+const powerUp = byId('power-up');
 const loft = byId('loft');
 const loftControl = byId('loft-control');
 const buttons = [...document.querySelectorAll('[data-move]')];
@@ -137,6 +139,7 @@ function update(message) {
   angle.disabled = kickSpeed.disabled = loft.disabled = clearButton.disabled = !ready;
   aimLeft.disabled = !ready || aiming <= -60;
   aimRight.disabled = !ready || aiming >= 60;
+  powerDown.disabled = powerUp.disabled = !ready;
   loftControl.hidden = !feed.pressure;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
@@ -287,6 +290,8 @@ angle.addEventListener('input', () => update());
 aimLeft.addEventListener('click', () => adjustAim(-1));
 aimRight.addEventListener('click', () => adjustAim(1));
 kickSpeed.addEventListener('input', () => update());
+powerDown.addEventListener('click', () => adjustPower(-1));
+powerUp.addEventListener('click', () => adjustPower(1));
 loft.addEventListener('change', () => update());
 clearButton.addEventListener('click', () => {
   setLive(false);
