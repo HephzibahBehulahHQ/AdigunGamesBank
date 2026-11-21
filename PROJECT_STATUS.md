@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Drawing the sky after opaque pitch geometry reduced 16K frame intervals in
+a local comparison on Intel Arc 140T with Chrome 158. Both builds completed
+10 live feeds at 15,360 × 8,640 without WebGL errors or context loss. The
+median interval dropped from 60.0 to 50.0 ms and the 95th percentile from
+70.1 to 60.1 ms. Both runs presented on an 898 × 505 canvas and could
+switch back to a native 3840 × 2160 drawing buffer. The 16K release gate
+remains open.
+
 The development build now offers a sideline broadcast view alongside the
 goal camera. The camera switch preserves the live drill state. The training
 ground includes touchline dugouts and a licensed photographic sky.

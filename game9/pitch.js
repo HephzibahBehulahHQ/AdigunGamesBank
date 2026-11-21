@@ -17,8 +17,12 @@ export async function createPitch(options) {
   scene.background = new THREE.Color('#9eabb2');
   if (sky) {
     sky.colorSpace = THREE.SRGBColorSpace;
-    sky.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = sky;
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(220, 64, 32), new THREE.MeshBasicMaterial({
+      map: sky, side: THREE.BackSide, depthWrite: false, fog: false,
+    }));
+    // Let opaque pitch geometry reject sky fragments before sampling the panorama.
+    dome.renderOrder = 1;
+    scene.add(dome);
   }
   scene.fog = new THREE.Fog('#9eabb2', 42, 96);
   light.position.set(-12, 19, 5);
