@@ -1,5 +1,5 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { STEP, SAFETY_LINE, advance, clear, clearanceAt, createDrill, incomingAt, nextFeed } from './clearance.js';
+import { STEP, SAFETY_LINE, advance, clear, clearanceAt, createDrill, incomingAt, nextFeed, readContact } from './clearance.js';
 
 const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
@@ -37,19 +37,19 @@ function sideways(x) {
 
 function update(message) {
   const feed = state.feeds[state.index];
-  const ball = incomingAt(feed, state.tick * STEP);
+  const { ball, contact, reachable } = readContact(feed, state.tick, state.defender);
   const aiming = Number(angle.value);
   const ready = state.result === 'ready';
   const finished = state.result === 'cleared' && state.index === state.feeds.length - 1;
   const safeEdge = feed.halfWidth;
-  const projection = clearanceAt(ball, aiming, feed.drift, SAFETY_LINE);
+  const projection = clearanceAt(contact, aiming, feed.drift, SAFETY_LINE);
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
   byId('ball').textContent = sideways(ball.x) + ', ' + Math.abs(ball.z).toFixed(2) + ' m ' + (ball.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('defender').textContent = sideways(state.defender);
   byId('gate').textContent = sideways(feed.channel - safeEdge) + ' to ' + sideways(feed.channel + safeEdge);
   byId('projection').textContent = ball.z <= 2.3 ? sideways(projection.x) : 'Available inside contact zone';
   byId('angle-value').textContent = aiming + '°';
-  byId('contact').textContent = Math.abs(ball.x - state.defender) <= 0.62 && ball.z <= 2.3 && ready
+  byId('contact').textContent = reachable && ready
     ? 'Ball in reach.' : 'Close the gap before clearing.';
   if (message !== undefined) byId('message').textContent = message;
   levelInput.max = save.unlocked;
@@ -67,7 +67,7 @@ function update(message) {
   angle.disabled = clearButton.disabled = !ready;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
-  pitch?.draw(state, feed, ball, aiming);
+  pitch?.draw(state, feed, ball, aiming, contact);
 }
 
 function load(levelNumber, moveFocus = false) {

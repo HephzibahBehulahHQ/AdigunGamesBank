@@ -53,7 +53,7 @@ export async function createPitch(options) {
   }
 
   return {
-    draw(state, feed, ball, angle) {
+    draw(state, feed, ball, angle, plannedContact) {
       gate.position.x = -feed.channel;
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
@@ -62,7 +62,7 @@ export async function createPitch(options) {
       const visibleBall = attempt?.end ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
-        const contact = attempt?.contact ?? ball;
+        const contact = attempt?.contact ?? plannedContact;
         for (let i = 0; i <= 12; i += 1) {
           const z = contact.z + (SAFETY_LINE - contact.z) * i / 12;
           const point = clearanceAt(contact, attempt?.angle ?? angle, feed.drift, z);
@@ -94,16 +94,28 @@ export async function createPitch(options) {
       const from = defender.mesh.position.x;
       const ballFrom = ballMesh.position.clone();
       const started = performance.now();
+      const windup = kick ? Math.max(0.035, attempt.delay) : 0;
+      const flight = kick ? (attempt.end.z - attempt.contact.z) / 14 : 0;
+      const duration = kick ? windup + flight : 0.095;
+      const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
+      const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
       function animate(now) {
-        const elapsed = Math.min(1, (now - started) / (kick ? 340 : 95));
+        const seconds = Math.max(0, (now - started) / 1000);
+        const elapsed = Math.min(1, seconds / duration);
         const step = Math.sin(Math.PI * elapsed);
         defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
-        defender.pose(movement, step, kick ? step : 0);
         if (kick) {
-          const z = THREE.MathUtils.lerp(attempt.contact.z, attempt.end.z, elapsed);
-          const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
-          ballMesh.position.set(-point.x, BALL_RADIUS, z);
+          const strike = Math.max(0, 1 - Math.abs(seconds - windup) / 0.17);
+          defender.pose(0, 0, strike, kickingLeg);
+          if (seconds < windup) {
+            ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
+          } else {
+            const z = THREE.MathUtils.lerp(attempt.contact.z, attempt.end.z, Math.min(1, (seconds - windup) / flight));
+            const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
+            ballMesh.position.set(-point.x, BALL_RADIUS, z);
+          }
         } else {
+          defender.pose(movement, step, 0);
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;

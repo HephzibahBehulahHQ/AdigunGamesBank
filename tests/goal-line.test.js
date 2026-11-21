@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { LEVEL_COUNT } from '../shared/progression.js';
-import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed } from '../game9/clearance.js';
+import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, readContact } from '../game9/clearance.js';
 
 export function playPlan(feed) {
   const tick = Math.round(feed.approachTime / STEP);
@@ -41,4 +41,21 @@ test('premature contact, a missed channel and a conceded goal end play', () => {
   for (let i = 0; i <= tick; i++) advance(conceded);
   assert.equal(conceded.result, 'conceded');
   assert.equal(nextFeed(conceded), false);
+});
+
+test('an early clearance meets the rolling ball near the goal line before redirecting it', () => {
+  const state = createDrill(1);
+  const feed = state.feeds[0];
+  const { tick, moves } = playPlan(feed);
+  for (let i = 0; i < tick - 2; i++) advance(state, i < Math.abs(moves) ? Math.sign(moves) : 0);
+  const delivery = readContact(feed, state.tick, state.defender);
+  assert.equal(delivery.reachable, true);
+  assert.ok(delivery.delay > 0);
+  assert.ok(Math.abs(delivery.contact.z - 0.45) < 1e-10);
+  assert.ok(Math.abs(delivery.delay * feed.pace - (delivery.ball.z - delivery.contact.z)) < 1e-10);
+  const run = SAFETY_LINE - delivery.contact.z;
+  const aim = Math.round(Math.atan((feed.channel - delivery.contact.x - feed.drift * run ** 2 / SAFETY_LINE) / run) * 180 / Math.PI);
+  assert.equal(clear(state, aim), true);
+  assert.deepEqual(state.trajectory.contact, delivery.contact);
+  assert.equal(state.trajectory.end.z, SAFETY_LINE);
 });

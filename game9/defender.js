@@ -52,12 +52,12 @@ export async function loadDefender() {
   }));
   return {
     mesh,
-    pose(movement, step, kick) {
+    pose(movement, step, kick, kickingLeg = 1) {
       spine.rotation.set(-0.19 + kick * 0.32, -movement * 0.14, -movement * 0.12);
       limbs.forEach(({ upperArm, lowerArm, thigh, shin, foot }, index) => {
         const side = index === 0 ? 1 : -1;
         const stride = step * movement * side;
-        const strike = index === 1 ? kick : 0;
+        const strike = index === kickingLeg ? kick : 0;
         upperArm.rotation.set(-0.18 + stride * 0.18, side * 0.11, -side * (0.38 + kick * 0.15));
         lowerArm.rotation.set(-0.21 - kick * 0.27, 0, -side * 0.23);
         thigh.rotation.set(-0.29 - strike * 0.92, 0, side * 0.10 + stride * 0.26);

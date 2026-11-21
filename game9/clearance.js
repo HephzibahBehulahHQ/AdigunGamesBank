@@ -7,6 +7,8 @@ export const STEP = 0.1;
 const HALF_GOAL = 3.66;
 const DEFENDER_SPEED = 4.5;
 const CONTROL_REACH = 0.62;
+const CLEARANCE_WINDOW = 2.3;
+const PLANT_DISTANCE = 0.45;
 
 export function makeDrill(level) {
   level = validLevel(level);
@@ -43,6 +45,16 @@ export function clearanceAt(contact, angle, drift, z) {
   };
 }
 
+export function readContact(feed, tick, defender) {
+  const time = tick * STEP;
+  const ball = incomingAt(feed, time);
+  const delay = Math.max(0, (ball.z - PLANT_DISTANCE) / feed.pace);
+  const contact = delay > 0 ? incomingAt(feed, time + delay) : ball;
+  const reachable = ball.z <= CLEARANCE_WINDOW && ball.z >= LINE - BALL_RADIUS &&
+    Math.abs(contact.x - defender) <= CONTROL_REACH;
+  return { ball, contact, delay, reachable };
+}
+
 export function createDrill(level) {
   return { feeds: makeDrill(level), index: 0, tick: 0, defender: 0, result: 'ready', trajectory: null };
 }
@@ -58,13 +70,13 @@ export function advance(state, movement = 0) {
 export function clear(state, angle) {
   if (state.result !== 'ready' || !Number.isInteger(angle) || Math.abs(angle) > 60) return false;
   const feed = state.feeds[state.index];
-  const ball = incomingAt(feed, state.tick * STEP);
-  if (ball.z > 2.3 || ball.z < LINE - BALL_RADIUS || Math.abs(ball.x - state.defender) > CONTROL_REACH) {
+  const delivery = readContact(feed, state.tick, state.defender);
+  if (!delivery.reachable) {
     state.result = 'missed';
     return false;
   }
-  const end = clearanceAt(ball, angle, feed.drift, SAFETY_LINE);
-  state.trajectory = { contact: ball, end, angle, drift: feed.drift };
+  const end = clearanceAt(delivery.contact, angle, feed.drift, SAFETY_LINE);
+  state.trajectory = { ...delivery, end, angle, drift: feed.drift };
   const safe = Math.abs(end.x - feed.channel) <= feed.halfWidth - BALL_RADIUS;
   state.result = safe ? 'cleared' : 'unsafe';
   return safe;
