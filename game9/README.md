@@ -49,6 +49,10 @@ Set `ADIGUN_PROFILE_GPU=1` for a separate 16K timing run. Where Chrome exposes
 the WebGL timer extension, the report includes GPU elapsed time from the
 scene color clear through the presentation draw, including setup frames.
 It excludes the shadow pass, which occurs before the color clear.
+Set `ADIGUN_GPU_PHASE=scene` to end timing before the presentation clear,
+or `ADIGUN_GPU_PHASE=presentation` to time from that clear through the
+presentation draw. Profiled runs append `-gpu-combined`, `-gpu-scene` or
+`-gpu-presentation` to the report directory.
 Files are written under `test-results/goal-line-hardware-16k/`
 or the corresponding 4K directory. The viewport screenshot shows the scene;
 the render buffer dimensions and framebuffer completeness come from WebGL. A fallback, lost context,

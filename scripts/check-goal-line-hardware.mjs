@@ -28,10 +28,15 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
+const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
+const gpuPhase = process.env.ADIGUN_GPU_PHASE ?? 'combined';
+if (!['combined', 'scene', 'presentation'].includes(gpuPhase)) {
+  throw new Error('Choose combined, scene or presentation for ADIGUN_GPU_PHASE.');
+}
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
-  `goal-line-hardware-${mode}${scenario === 'standard' ? '' : '-' + scenario}`);
+  `goal-line-hardware-${mode}${scenario === 'standard' ? '' : '-' + scenario}${profileGpu ? '-gpu-' + gpuPhase : ''}`);
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -61,7 +66,7 @@ let browser;
 try {
   browser = await chromium.launch({ channel: 'chrome', headless });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.addInitScript(({ profileGpu, level }) => {
+  await page.addInitScript(({ profileGpu, gpuPhase, level }) => {
     // Unlock the selected drill in the isolated test context.
     localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
       version: 1, completed: level - 1, unlocked: level
@@ -91,8 +96,24 @@ try {
       const fenceSync = WebGL2RenderingContext.prototype.fenceSync;
       let timer, query;
       let active = false;
+      let largeSceneStarted = false;
+      function endTiming(gl) {
+        if (!active) return;
+        gl.endQuery(timer.TIME_ELAPSED_EXT);
+        active = false;
+      }
+      function beginTiming(gl) {
+        if (!timer || query) return;
+        query = gl.createQuery();
+        if (!query) return;
+        gl.beginQuery(timer.TIME_ELAPSED_EXT, query);
+        active = true;
+      }
       WebGL2RenderingContext.prototype.clear = function (mask) {
-        if ((mask & this.COLOR_BUFFER_BIT) && this.getParameter(this.VIEWPORT)[2] === 15360) {
+        if (!(mask & this.COLOR_BUFFER_BIT)) return clear.call(this, mask);
+        const offscreen = this.getParameter(this.DRAW_FRAMEBUFFER_BINDING) !== null;
+        if (offscreen && this.getParameter(this.VIEWPORT)[2] === 15360) {
+          largeSceneStarted = true;
           timer ??= this.getExtension('EXT_disjoint_timer_query_webgl2') ?? false;
           if (timer && query && !active && this.getQueryParameter(query, this.QUERY_RESULT_AVAILABLE)) {
             if (!this.getParameter(timer.GPU_DISJOINT_EXT)) {
@@ -101,21 +122,16 @@ try {
             this.deleteQuery(query);
             query = null;
           }
-          if (timer && !query) {
-            query = this.createQuery();
-            if (query) {
-              this.beginQuery(timer.TIME_ELAPSED_EXT, query);
-              active = true;
-            }
-          }
+          if (gpuPhase !== 'presentation') beginTiming(this);
+        } else if (largeSceneStarted && !offscreen) {
+          if (gpuPhase === 'scene') endTiming(this);
+          if (gpuPhase === 'presentation') beginTiming(this);
         }
         return clear.call(this, mask);
       };
       WebGL2RenderingContext.prototype.fenceSync = function (...args) {
-        if (active) {
-          this.endQuery(timer.TIME_ELAPSED_EXT);
-          active = false;
-        }
+        endTiming(this);
+        largeSceneStarted = false;
         return fenceSync.apply(this, args);
       };
     }
@@ -139,7 +155,7 @@ try {
       }
       return drawElements.apply(this, args);
     };
-  }, { profileGpu: mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1', level });
+  }, { profileGpu, gpuPhase, level });
   await page.goto(`http://127.0.0.1:${server.address().port}/game9/`);
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
@@ -278,6 +294,7 @@ try {
         p95Ms: percentile(completionIntervals, 0.95),
       } : null,
       gpuRenderTime: gpuTimes.length ? {
+        phase: gpuPhase,
         frames: gpuTimes.length,
         medianMs: percentile(gpuTimes, 0.5),
         p95Ms: percentile(gpuTimes, 0.95),

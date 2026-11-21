@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Separate Chrome timer-query runs on Intel Arc 140T each completed three
+heavy-turf clearances at 15,360 × 8,640. Median GPU time was 34.7 ms from
+scene color clear to presentation clear, 8.6 ms for the presentation pass,
+and 50.1 ms in the combined run. These independent runs exclude the shadow
+pass and include setup frames. The scene pass alone exceeds the frame budget
+of 16.7 ms at 60 fps.
+
 Chrome completed three aerial receptions at 4K and ten at 16K on Intel Arc
 140T without WebGL errors or context loss. Frame intervals were 8.3 ms
 median and 16.6 ms at the 95th percentile at 4K, and 58.2 ms median and
