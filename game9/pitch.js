@@ -31,6 +31,7 @@ export async function createPitch(options) {
   light.shadow.camera.left = light.shadow.camera.bottom = -26;
   light.shadow.camera.right = light.shadow.camera.top = 26;
   light.shadow.camera.updateProjectionMatrix();
+  light.shadow.autoUpdate = false;
   addGround(scene, renderer, turf);
   const net = addGoal(scene);
   addTrainingGround(scene);
@@ -56,6 +57,7 @@ export async function createPitch(options) {
   let playedConcession = false;
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
+  let settledShadow = null;
   let opponent;
   const receiver = createReceiver();
   receiver.mesh.rotation.y = Math.PI;
@@ -146,9 +148,15 @@ export async function createPitch(options) {
         ballMesh.position.copy(targetBall);
         framePlay(ballMesh.position.z);
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
-        framePlayers(feed, state.tick * STEP + endTime);
+        const sceneTime = state.tick * STEP + endTime;
+        framePlayers(feed, sceneTime);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
+        // Camera and aim changes leave a settled scene's shadow casters in place.
+        if (!settledShadow || settledShadow.feed !== feed || settledShadow.time !== sceneTime || travel || movement) {
+          light.shadow.needsUpdate = true;
+          settledShadow = { feed, time: sceneTime };
+        }
         stage.render();
         return;
       }
@@ -228,6 +236,8 @@ export async function createPitch(options) {
             : attempt.delay + Math.min(seconds - windup, flight))
           : Math.max(0, (state.tick - 1 + elapsed) * STEP);
         framePlayers(feed, time);
+        settledShadow = null;
+        light.shadow.needsUpdate = true;
         stage.render();
         frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
       }
