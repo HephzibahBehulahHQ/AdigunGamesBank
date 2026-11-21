@@ -32,8 +32,8 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
 const gpuPhase = process.env.ADIGUN_GPU_PHASE ?? 'combined';
-if (!['combined', 'scene', 'presentation'].includes(gpuPhase)) {
-  throw new Error('Choose combined, scene or presentation for ADIGUN_GPU_PHASE.');
+if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
+  throw new Error('Choose combined, shadow, scene or presentation for ADIGUN_GPU_PHASE.');
 }
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
@@ -113,10 +113,12 @@ try {
         active = true;
       }
       WebGL2RenderingContext.prototype.clear = function (mask) {
-        if (!(mask & this.COLOR_BUFFER_BIT)) return clear.call(this, mask);
+        if (!(mask & (this.COLOR_BUFFER_BIT | this.DEPTH_BUFFER_BIT))) return clear.call(this, mask);
         const offscreen = this.getParameter(this.DRAW_FRAMEBUFFER_BINDING) !== null;
-        if (offscreen && this.getParameter(this.VIEWPORT)[2] === 15360) {
+        const viewport = offscreen ? this.getParameter(this.VIEWPORT) : null;
+        if (viewport?.[2] === 15360 && (mask & this.COLOR_BUFFER_BIT)) {
           largeSceneStarted = true;
+          if (gpuPhase === 'shadow') endTiming(this);
           timer ??= this.getExtension('EXT_disjoint_timer_query_webgl2') ?? false;
           if (timer && query && !active && this.getQueryParameter(query, this.QUERY_RESULT_AVAILABLE)) {
             if (!this.getParameter(timer.GPU_DISJOINT_EXT)) {
@@ -125,8 +127,13 @@ try {
             this.deleteQuery(query);
             query = null;
           }
-          if (gpuPhase !== 'presentation') beginTiming(this);
-        } else if (largeSceneStarted && !offscreen) {
+          if (gpuPhase === 'scene' || gpuPhase === 'combined') beginTiming(this);
+        } else if (gpuPhase === 'shadow' && viewport?.[2] === 2048 && viewport[3] === 2048 &&
+                   (mask & this.DEPTH_BUFFER_BIT) && this.canvas.dataset.renderResolution === '15360x8640') {
+          // The pitch uses one 2048² directional shadow target before the 16K scene clear.
+          timer ??= this.getExtension('EXT_disjoint_timer_query_webgl2') ?? false;
+          beginTiming(this);
+        } else if (largeSceneStarted && !offscreen && (mask & this.COLOR_BUFFER_BIT)) {
           if (gpuPhase === 'scene') endTiming(this);
           if (gpuPhase === 'presentation') beginTiming(this);
         }

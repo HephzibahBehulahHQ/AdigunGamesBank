@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The Chrome hardware benchmark can now time the directional shadow pass
+separately. On Intel Arc 140T, five heavy-turf clearances at 16K yielded
+128 shadow-refresh samples, with a 1.0 ms median and 2.0 ms 95th percentile.
+The existing combined timing mode passed a separate one-clearance check
+with a 42.0 ms median from scene color clear through presentation. Both runs
+restored 4K without WebGL errors. Shadow-map refresh savings alone cannot
+close the gap to the 16.7 ms frame budget on this hardware.
+
 The turf now uses one hardware-filtered depth comparison per shadow lookup.
 In paired five-clearance Chrome runs at 16K on Intel Arc 140T, median scene
 GPU time fell from 39.7 to 35.6 ms and median observed GPU completion
