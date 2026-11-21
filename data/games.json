@@ -582,7 +582,7 @@
     {
       "id": "game9",
       "title": "GOAL LINE",
-      "description": "Read the keeper, aim your penalty and score to progress through competitive shootout stages.",
+      "description": "Intercept incoming balls at the goalmouth and redirect them through safe clearance gates in 10,000 3D drills.",
       "genre": "sports",
       "division": "Artificial Intelligence",
       "path": "game9/",
@@ -591,43 +591,44 @@
       ],
       "status": "In progress",
       "rendering": {
-        "engine": "DOM / Canvas 2D",
-        "is3D": false,
+        "engine": "Three.js / WebGL 2",
+        "is3D": true,
         "verified4K": false
       },
       "levels": {
         "target": 10000,
-        "implemented": null,
-        "method": "Legacy progression requires redesign and verification",
+        "implemented": 10000,
+        "method": "Deterministic rolling-ball feeds, contact timing and clearance channels",
         "tierStart": "Beginner",
         "tierEnd": "Professional Master"
       },
       "controls": [
         "Keyboard",
-        "Mouse / touch where implemented"
+        "Mouse",
+        "Touch"
       ],
       "accessibility": {
-        "status": "Needs per-game audit"
+        "status": "Keyboard and numerical command play available; audit pending"
       },
       "performance": {
         "initialLoadTargetMs": 3000,
         "measured": null,
-        "lazy3DAssets": false
+        "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Legacy asset review incomplete"
+        "status": "Original geometry, official corporate identity and MIT-licensed Three.js"
       },
       "testing": {
-        "unit": "Historical tests exist for game15–21; see PROJECT_STATUS.md",
-        "integration": "NOT TESTED against new quality bar",
-        "browser": "NOT TESTED against new quality bar"
+        "unit": "Goal Line clearance engine suite",
+        "integration": "All drills covered by the engine solver",
+        "browser": "Release verification pending"
       },
       "deployment": {
         "pagesPath": "/AdigunGamesBank/game9/",
-        "verifiedUrl": "https://adigungamesbank.hephzibahbehulah.com/game9/",
-        "verifiedCommit": "b3844bff8775b509ddda6f9002726bf4ec1dc89b",
-        "evidence": "docs/evidence/2026-11-04-ark/deployment-b3844bf.json",
-        "verifiedAt": "2026-11-04T18:41:10+00:00"
+        "verifiedUrl": null,
+        "verifiedCommit": null,
+        "evidence": null,
+        "verifiedAt": null
       },
       "blockers": [],
       "policy": {

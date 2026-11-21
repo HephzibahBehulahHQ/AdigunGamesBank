@@ -1,3 +1,60 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06101e"><title>GOAL LINE | Hephzibah Behulah</title><style>
-:root{color-scheme:dark;--cyan:#55f5e5;--mint:#b1ffcf;--bg:#06101e;--panel:#102034;--muted:#a6becd}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#153b50,var(--bg) 60%);color:#eafaff;font:16px/1.5 system-ui,sans-serif;text-align:center}.brand{display:flex;justify-content:center;align-items:center;gap:10px;margin:12px auto;width:min(92%,500px);padding:8px;background:#071522;border:1px solid #55f5e544;border-radius:12px;color:#eafaff;text-decoration:none;font-weight:800;letter-spacing:.1em}.brand img{width:150px;max-height:44px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px}.wrap{width:min(960px,94%);margin:24px auto}.eyebrow{color:var(--cyan);letter-spacing:.2em;font:700 11px ui-monospace,monospace}h1{font-size:clamp(36px,7vw,66px);line-height:1;margin:8px}.lead{color:var(--muted)}.hud{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px}.pill{padding:8px 13px;border:1px solid #55f5e555;border-radius:99px;background:#081827}.arena{position:relative;max-width:650px;margin:18px auto;padding:24px;border:2px solid #d8ffec;border-radius:18px;background:repeating-linear-gradient(0deg,transparent 0 44px,#ffffff1c 45px 47px),repeating-linear-gradient(90deg,transparent 0 84px,#ffffff12 85px 87px),linear-gradient(135deg,#087858,#034d3c);box-shadow:0 0 34px #00ff9b24;overflow:hidden}.goal{position:relative;height:180px;max-width:420px;margin:auto;border:5px solid #e8fff5;border-bottom:0;background:repeating-linear-gradient(0deg,#ffffff22 0 2px,transparent 2px 20px),repeating-linear-gradient(90deg,#ffffff22 0 2px,transparent 2px 28px)}.keeper{position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);font-size:44px;filter:drop-shadow(0 4px 4px #0008);transition:left .22s ease}.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:15px auto;max-width:420px}.zone{min-height:45px;border:1px solid #ffffff77;border-radius:9px;background:#061d32aa;color:#eafaff;font-weight:750;cursor:pointer}.zone[aria-pressed=true]{background:#55f5e5;color:#06131b;box-shadow:0 0 18px #55f5e5}.actions button{padding:12px 22px;border:0;border-radius:10px;background:linear-gradient(90deg,var(--cyan),var(--mint));color:#06131b;font-weight:900;cursor:pointer}.actions button:disabled{opacity:.45;cursor:not-allowed}#msg{min-height:32px;color:var(--mint);font-weight:700}.foot{color:var(--muted);font-size:12px}@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style></head><body><a class="brand" href="../" aria-label="Game Bank home"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a><main class="wrap"><p class="eyebrow">FOOTBALL · PENALTY SHOOTOUT</p><h1>GOAL LINE</h1><p class="lead">Read the keeper, pick a corner and time your shot. Score three of five penalties to clear each stage.</p><div class="hud"><span class="pill">Kicks <b id="kicks">0</b>/5</span><span class="pill">Goals <b id="goals">0</b></span><span class="pill">Match <b id="matches">0</b></span></div><section class="arena" aria-label="Penalty shootout field"><div class="goal"><div class="keeper" id="keeper" aria-label="Goalkeeper">🧤</div></div><div class="zones" id="zones" aria-label="Choose shot direction"></div></section><div class="actions"><button id="shoot" type="button" disabled>TAKE THE SHOT</button><button id="restart" type="button" hidden>RETRY MATCH</button></div><p id="msg" role="status" aria-live="polite">Select a target zone to set up your shot.</p><p class="foot">Use mouse, touch or keyboard. Every stage gets harder; progress saves in this browser.</p></main><script src="../assets/game-levels.js"></script><script src="../assets/game9.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B1220">
+  <title>Goal Line · Adigun Game Bank</title>
+  <link rel="stylesheet" href="goal-line.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#controls">Skip to drill controls</a>
+  <header class="game-header">
+    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" width="150" height="54" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK</span></a>
+    <a href="../">All games</a>
+  </header>
+  <main>
+    <h1>Goal Line</h1>
+    <p class="intro">Protect the goal. Meet the incoming ball and direct your clearance through the marked gate.</p>
+    <div class="toolbar">
+      <label for="level">Drill</label><input id="level" type="number" min="1" max="1" value="1" required>
+      <button id="load" type="button">Load drill</button>
+      <label for="quality">Graphics</label><select id="quality"><option value="auto">Adaptive 3D</option><option value="1080">1080p</option><option value="4k">4K UHD</option></select>
+    </div>
+    <p id="campaign"></p>
+    <div class="layout">
+      <section aria-label="Pitch and drill status">
+        <div class="viewport"><canvas id="pitch" aria-hidden="true"></canvas></div>
+        <p id="graphics" role="status">Loading pitch…</p>
+        <p id="message" class="message" role="status"></p>
+        <dl class="readings">
+          <div><dt>Ball</dt><dd id="ball"></dd></div>
+          <div><dt>Defender</dt><dd id="defender"></dd></div>
+          <div><dt>Clearance gate</dt><dd id="gate"></dd></div>
+          <div><dt>Projected clearance</dt><dd id="projection"></dd></div>
+        </dl>
+      </section>
+      <section id="controls" class="panel" aria-labelledby="control-title">
+        <h2 id="control-title">Defend the line</h2>
+        <p>Each movement advances the ball by 0.1 seconds. Move across the goalmouth or hold your position.</p>
+        <div class="movement" role="group" aria-label="Advance ball">
+          <button data-move="-1" type="button">Left</button>
+          <button data-move="0" type="button">Hold</button>
+          <button data-move="1" type="button">Right</button>
+        </div>
+        <label for="angle">Clearance angle <output id="angle-value" for="angle">0°</output></label>
+        <input id="angle" type="range" min="-60" max="60" value="0">
+        <p id="contact"></p>
+        <button id="clear" class="primary" type="button">Clear ball</button>
+        <button id="next" type="button" hidden></button>
+        <button id="retry" type="button">Restart drill</button>
+        <details><summary>Drill rules</summary>
+          <p>Make contact within 2.3 m of the line and within 0.62 m laterally. A clearance counts when the entire ball crosses the gate 8 m upfield. Every ball must be cleared to unlock the next drill.</p>
+          <p>Use Tab and Enter for the buttons and arrow keys on the angle slider. All readings are in metres. Negative angles aim left.</p>
+        </details>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

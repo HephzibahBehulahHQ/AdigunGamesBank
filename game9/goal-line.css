@@ -1,0 +1,25 @@
+@import url('../shared/game.css');
+
+[hidden] { display: none !important; }
+.game-header { flex-wrap: wrap; }
+.game-header a { min-height: 44px; display: inline-flex; align-items: center; }
+.identity { flex-wrap: wrap; }
+h1 { margin: 0 0 8px; font-size: clamp(2.75rem, 8vw, 5rem); line-height: 1; }
+.intro { color: var(--muted); }
+.toolbar, .movement { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.toolbar input { width: 5.5rem; }
+.layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; }
+.viewport canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.viewport:has(canvas[hidden]) { display: none; }
+.readings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.readings div { padding: 12px; border: 1px solid #475569; background: #142238; border-radius: 8px; }
+dt { font-weight: 700; }
+dd { margin: 4px 0 0; color: #dbe5f3; overflow-wrap: anywhere; }
+#controls label { display: block; margin-top: 20px; }
+#angle { width: 100%; min-height: 44px; accent-color: var(--gold); }
+#controls > button { display: block; margin-bottom: 8px; width: 100%; }
+.movement button { flex: 1; }
+button, select, input, summary { min-height: 44px; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (max-width: 780px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 380px) { main { padding-inline: 12px; } }
