@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+An isolated Chrome diagnostic emulated a qualifying viewport and exercised
+the real WebGL allocation on Intel Arc 140T. Chrome granted 7680 × 4320 for
+the direct 15,360 × 8,640 request. A resize issued no second native request,
+and the fallback kept the full 16K scene without losing context. The
+hardware report now records the granted allocation. Ordinary full-screen
+4K also passed. The emulated run did not qualify as native output.
+
 Goal Line's optional sound now includes a quiet, original stereo wind
 loop. It continues between balls and fades out on mute or when the tab is
 hidden. Chrome and Firefox verified loop startup, muting, feed transitions

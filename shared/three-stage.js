@@ -43,6 +43,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
   let largeFrame = null;
   let largeFrameFence = null;
   let deferredPaint;
+  let direct16KRejected = false;
 
   function allocateLargeFrame(width, height) {
     if (width > maxWidth) return null;
@@ -153,7 +154,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     const adaptive = Math.min(maxWidth, Math.max(320, Math.min(2560, Math.round(rect.width * Math.min(density, 2)))));
     const requested = modes[quality];
     const large = quality === '16k';
-    const direct = large && requested[0] <= maxWidth && document.fullscreenElement?.contains(canvas) &&
+    const direct = large && !direct16KRejected && requested[0] <= maxWidth && document.fullscreenElement?.contains(canvas) &&
       rect.width * density >= requested[0] && Math.min(rect.height, globalThis.innerHeight) * density >= 8640;
     if (!large || (direct && largeFrame)) releaseLargeFrame();
     let width = large && !direct ? adaptive : requested?.[0] ?? adaptive;
@@ -161,10 +162,15 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     if (width <= maxWidth && (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height)) {
       renderer.setSize(width, height, false);
     }
-    if (direct && (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height) && !gl.isContextLost()) {
-      width = adaptive;
-      height = Math.round(width * 9 / 16);
-      renderer.setSize(width, height, false);
+    if (direct) {
+      canvas.dataset.direct16kAttempt = `${gl.drawingBufferWidth}x${gl.drawingBufferHeight}`;
+      if ((gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height) && !gl.isContextLost()) {
+        // A viewport resize should not repeat a native allocation the browser already reduced.
+        direct16KRejected = true;
+        width = adaptive;
+        height = Math.round(width * 9 / 16);
+        renderer.setSize(width, height, false);
+      }
     }
     if (large && width !== requested[0]) largeFrame ??= allocateLargeFrame(requested[0], 8640);
     const rejected = (large && !largeFrame && gl.drawingBufferWidth !== requested[0]) ||
@@ -193,7 +199,15 @@ export function createStage({ canvas, context, qualitySelect, status, position =
         : `${prefix}${presentation} · WebGL 2 · ${modes[quality]?.[1] ?? '3D'}`;
     }
   }
-  const setQuality = (value) => { quality = Object.hasOwn(modes, value) ? value : 'auto'; resize(); };
+  const setQuality = (value) => {
+    const next = Object.hasOwn(modes, value) ? value : 'auto';
+    if (next !== quality) {
+      direct16KRejected = false;
+      delete canvas.dataset.direct16kAttempt;
+    }
+    quality = next;
+    resize();
+  };
   const onQuality = () => setQuality(qualitySelect.value);
   qualitySelect?.addEventListener('change', onQuality);
   const observer = new ResizeObserver(resize);

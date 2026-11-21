@@ -191,7 +191,8 @@ try {
   await page.waitForFunction(() => document.querySelector('#pitch').dataset.renderer || document.querySelector('#pitch').hidden);
   if (await graphics.isEnabled()) {
     if (fullscreen) {
-      await page.getByRole('button', { name: 'Enter full screen' }).click();
+      await page.bringToFront();
+      await page.getByRole('button', { name: 'Enter full screen' }).press('Enter');
       await page.waitForFunction(() => document.fullscreenElement?.id === 'game');
     }
     await page.getByRole('combobox', { name: 'Camera' }).selectOption(camera);
@@ -212,6 +213,7 @@ try {
       canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
+      direct16kAttempt: element.dataset.direct16kAttempt ?? null,
       camera: element.dataset.camera,
       maxViewport: Array.from(graphicsContext.getParameter(graphicsContext.MAX_VIEWPORT_DIMS)),
       maxRenderbuffer: graphicsContext.getParameter(graphicsContext.MAX_RENDERBUFFER_SIZE),

@@ -44,6 +44,9 @@ verification on the display hardware.
 Set `ADIGUN_HARDWARE_NATIVE_16K=1` for a strict direct-buffer run. It uses
 the actual window size, enters full screen, and fails with a `-native`
 report if the 16K drawing buffer or physical viewport is too small.
+If Chrome reduces a direct allocation, `direct16kAttempt` records the
+granted size. The game keeps the scene framebuffer and only retries direct
+allocation after a graphics mode change.
 Run it headful without GPU phase profiling. The strict run skips the
 viewport screenshot to avoid reading back a full 16K image.
 Set `ADIGUN_CAPTURE_4K_BUFFER=1` on a `4k` run to save
