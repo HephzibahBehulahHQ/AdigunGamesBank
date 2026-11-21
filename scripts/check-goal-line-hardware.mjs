@@ -213,6 +213,7 @@ try {
       canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
+      sceneDepthBits: element.dataset.sceneDepthBits ? Number(element.dataset.sceneDepthBits) : null,
       direct16kAttempt: element.dataset.direct16kAttempt ?? null,
       camera: element.dataset.camera,
       maxViewport: Array.from(graphicsContext.getParameter(graphicsContext.MAX_VIEWPORT_DIMS)),

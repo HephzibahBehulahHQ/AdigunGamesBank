@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Firefox reduced the direct 16K drawing-buffer request to 7680 × 4320 in
+the isolated viewport diagnostic. Its complete offscreen 16K framebuffer
+reported 24 depth bits for the 16-bit request. Goal Line now accepts that
+attachment and reports the granted precision. Firefox completed one heavy
+turf clearance with a 15,360 × 8,640 scene and restored actual 4K. Chrome
+passed the corresponding check with a 16-bit scene attachment. Neither
+check establishes native 16K display output or sustained 60 fps.
+
 An isolated Chrome diagnostic emulated a qualifying viewport and exercised
 the real WebGL allocation on Intel Arc 140T. Chrome granted 7680 × 4320 for
 the direct 15,360 × 8,640 request. A resize issued no second native request,

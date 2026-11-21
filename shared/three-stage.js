@@ -53,7 +53,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
       magFilter: THREE.LinearFilter,
       depthBuffer: false
     });
-    // Attach the verified 16-bit buffer directly, without allocating the renderer's default depth surface.
+    // Request 16-bit depth directly, without allocating the renderer's default depth surface.
     const depth = gl.createRenderbuffer();
     if (!depth) {
       framebuffer.dispose();
@@ -70,7 +70,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     gl.bindRenderbuffer(gl.RENDERBUFFER, previous);
     const finalized = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
     renderer.setRenderTarget(null);
-    if (gl.getError() !== gl.NO_ERROR || !finalized || depthBits !== 16 || allocatedWidth !== width || allocatedHeight !== height) {
+    if (gl.getError() !== gl.NO_ERROR || !finalized || depthBits < 16 || allocatedWidth !== width || allocatedHeight !== height) {
       gl.deleteRenderbuffer(depth);
       framebuffer.dispose();
       return null;
@@ -99,7 +99,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     );
     presentation.add(quad);
     return {
-      framebuffer, depth, presentation, quad,
+      framebuffer, depth, depthBits, presentation, quad,
       camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
       resolution: `${allocatedWidth}x${allocatedHeight}`
     };
@@ -191,6 +191,8 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     canvas.dataset.resolution = `${gl.drawingBufferWidth}x${gl.drawingBufferHeight}`;
     canvas.dataset.renderResolution = largeFrame?.resolution ?? canvas.dataset.resolution;
     canvas.dataset.renderSurface = largeFrame ? 'scene framebuffer' : 'drawing buffer';
+    if (largeFrame) canvas.dataset.sceneDepthBits = String(largeFrame.depthBits);
+    else delete canvas.dataset.sceneDepthBits;
     if (status) {
       const prefix = rejected && requested ? `${requested[1]} unavailable on this device. ` : '';
       const presentation = `${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()}`;
