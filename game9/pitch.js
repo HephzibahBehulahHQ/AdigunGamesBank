@@ -1,12 +1,12 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
 import { BALL_RADIUS, CLEARANCE_SPEED, SAFETY_LINE, STEP, clearanceAt, pressureAt } from './clearance.js';
-import { addGoal, addGround } from './ground.js';
+import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
 import { addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
-  const { defender, createOpponent } = await loadPlayers();
+  const [{ defender, createOpponent }, turf] = await Promise.all([loadPlayers(), loadTurf()]);
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
@@ -17,7 +17,7 @@ export async function createPitch(options) {
   light.shadow.camera.left = light.shadow.camera.bottom = -26;
   light.shadow.camera.right = light.shadow.camera.top = 26;
   light.shadow.camera.updateProjectionMatrix();
-  addGround(scene, renderer);
+  addGround(scene, renderer, turf);
   addGoal(scene);
   addTrainingGround(scene);
   const gate = new THREE.Group();

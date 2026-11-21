@@ -616,7 +616,7 @@
         "lazy3DAssets": true
       },
       "assetRights": {
-        "status": "Original pitch and poses, CC0 MakeHuman defender mesh and rig, official corporate identity and MIT-licensed Three.js"
+        "status": "Original pitch and poses, CC0 MakeHuman defender mesh and rig, CC0 Poly Haven turf maps, official corporate identity and MIT-licensed Three.js"
       },
       "testing": {
         "unit": "Goal Line clearance engine suite",

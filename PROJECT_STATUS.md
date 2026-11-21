@@ -31,6 +31,14 @@ intervals of 8.3, 8.5 and 16.5 ms. These figures exclude restart gaps. The kit
 and pressure opponent rendered in both modes. Native 16K display and the
 production art gate remain unverified.
 
+The 18:08 headless Chrome check with photographed turf and vertex tangents
+completed 30 feeds at 15,360 × 8,640 with no reported WebGL errors or context
+loss. It submitted 727 frames over 39.0 sampled seconds. Median, 95th- and
+99th-percentile intervals were 58.3, 108.3 and 116.8 ms. The rendered frame
+was visually inspected. This is a different browser launch mode from the
+previous baseline, and the textured candidate remains below the desired
+16K playability standard on the tested hardware.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

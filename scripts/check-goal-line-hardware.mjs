@@ -10,6 +10,7 @@ const rounds = Number(process.argv[3] ?? 1);
 if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
+const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results', `goal-line-hardware-${mode}`);
@@ -40,7 +41,7 @@ await new Promise((resolve, reject) => {
 
 let browser;
 try {
-  browser = await chromium.launch({ channel: 'chrome', headless: false });
+  browser = await chromium.launch({ channel: 'chrome', headless });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.addInitScript(() => {
     // Unlock one advanced drill in the isolated test context to exercise both players.
@@ -134,7 +135,7 @@ try {
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
     mode, requested, requestedBufferAllocated, softwareRenderer, before, after, sample, workloadError,
-    browser: browser.version(), platform: process.platform,
+    browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     capturedAt: new Date().toISOString()
   };

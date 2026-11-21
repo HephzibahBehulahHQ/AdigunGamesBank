@@ -1,56 +1,39 @@
 import { THREE, box, material } from '../shared/three-stage.js';
-import { randomFor } from '../shared/progression.js';
 
-function turfTextures() {
-  // One repeat covers four metres. The same blades affect colour and surface relief.
-  const size = 512;
-  const color = document.createElement('canvas');
-  const height = document.createElement('canvas');
-  color.width = color.height = height.width = height.height = size;
-  const grass = color.getContext('2d');
-  const relief = height.getContext('2d');
-  grass.fillStyle = '#32462b';
-  grass.fillRect(0, 0, size, size);
-  relief.fillStyle = '#242424';
-  relief.fillRect(0, 0, size, size);
-  const random = randomFor(913);
-  for (let blade = 0; blade < 18000; blade++) {
-    const x = random() * size;
-    const y = random() * size;
-    const tone = Math.round(35 + random() * 45);
-    const length = 1 + random() * 3.4;
-    const lean = (random() - 0.5) * 3;
-    grass.fillStyle = `rgb(${tone - 9}, ${tone + 22}, ${tone - 15})`;
-    relief.fillStyle = `rgb(${tone + 82}, ${tone + 82}, ${tone + 82})`;
-    for (const context of [grass, relief]) {
-      context.beginPath();
-      context.moveTo(x, y);
-      context.lineTo(x + lean, y - length);
-      context.lineTo(x + 0.75, y);
-      context.fill();
-    }
-  }
-  const map = new THREE.CanvasTexture(color);
-  const bumpMap = new THREE.CanvasTexture(height);
-  map.colorSpace = THREE.SRGBColorSpace;
-  for (const texture of [map, bumpMap]) texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  return { map, bumpMap };
+export async function loadTurf() {
+  const loader = new THREE.TextureLoader();
+  const sources = ['grounds-diffuse.jpg', 'grounds-normal.jpg'];
+  const results = await Promise.allSettled(sources.map(name =>
+    loader.loadAsync(new URL(`./textures/${name}`, import.meta.url).href)
+  ));
+  const [map, normalMap] = results.map(result => result.value ?? null);
+  if (map) map.colorSpace = THREE.SRGBColorSpace;
+  return { map, normalMap };
 }
 
-export function addGround(scene, renderer) {
-  const { map, bumpMap } = turfTextures();
-  map.anisotropy = bumpMap.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+export function addGround(scene, renderer, { map, normalMap }) {
   const width = 48;
   const stripeLength = 5;
-  map.repeat.set(width / 4, stripeLength / 4);
-  bumpMap.repeat.copy(map.repeat);
-  const surface = new THREE.PlaneGeometry(width, stripeLength);
+  const anisotropy = renderer.capabilities.getMaxAnisotropy();
+  for (const texture of [map, normalMap]) {
+    if (!texture) continue;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.anisotropy = Math.min(texture === normalMap ? 2 : 4, anisotropy);
+  }
   const turf = {
-    map, bumpMap, bumpScale: 0.026, metalness: 0, roughness: 0.92
+    map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34), metalness: 0, roughness: 0.92
   };
-  const mowing = [material('#c5d2ad', turf), material('#f4f4d6', turf)];
+  const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
+  const surfaces = mowing.map(color => material(color, turf));
   for (let stripe = 0; stripe < 16; stripe++) {
-    const ground = new THREE.Mesh(surface, mowing[stripe % 2]);
+    const surface = new THREE.PlaneGeometry(width, stripeLength);
+    const uv = surface.getAttribute('uv');
+    // Keep the photographed two-metre sample continuous across mowing stripes.
+    for (let vertex = 0; vertex < uv.count; vertex++) {
+      uv.setXY(vertex, uv.getX(vertex) * width / 2, (uv.getY(vertex) - stripe) * stripeLength / 2);
+    }
+    if (normalMap) surface.computeTangents();
+    const ground = new THREE.Mesh(surface, surfaces[stripe % 2]);
     ground.rotation.x = -Math.PI / 2;
     ground.position.set(0, -0.012, -8 + stripe * stripeLength);
     ground.receiveShadow = true;
