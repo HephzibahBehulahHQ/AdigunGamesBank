@@ -4,6 +4,15 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The player mesh now splits the body surface at the collar, sleeve and
+other kit boundaries, with interpolated skin weights and UVs. Removing
+the overlapping helper shell cleared the jagged sleeve and collar edges
+in the inspected Chrome close-up. The kit still closely follows the body
+shape and needs separate garment drape for production close-ups. Two
+rebuilds from the pinned source assets matched. Three actual 4K broadcast
+clearances completed, and four Chrome checks passed for actual 4K, pose
+reset, camera switching and lofted reception.
+
 Player shirts and shorts now share a fine fabric height map that ships
 with the game code. A Chrome close-up verified the weave under pitch
 lighting and exposed visible jagged edges at some garment boundaries.
