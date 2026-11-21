@@ -69,9 +69,26 @@ export function createStage({ canvas, qualitySelect, status, position = [12, 15,
       return null;
     }
     const presentation = new THREE.Scene();
+    const presentationMaterial = new THREE.MeshBasicMaterial({
+      map: framebuffer.texture, depthTest: false, depthWrite: false
+    });
+    // Integrate a display-pixel footprint so thin scene lines survive the downsample.
+    presentationMaterial.onBeforeCompile = shader => {
+      shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
+        vec2 footprint = vec2(length(dFdx(vMapUv)), length(dFdy(vMapUv)));
+        vec4 filtered = vec4(0.0);
+        for (int y = 0; y < 4; y++) {
+          for (int x = 0; x < 4; x++) {
+            vec2 offset = (vec2(float(x), float(y)) - 1.5) * footprint * 0.25;
+            filtered += texture2D(map, vMapUv + offset);
+          }
+        }
+        diffuseColor *= filtered * 0.0625;
+      `);
+    };
     const quad = new THREE.Mesh(
       new THREE.PlaneGeometry(2, 2),
-      new THREE.MeshBasicMaterial({ map: framebuffer.texture, depthTest: false, depthWrite: false })
+      presentationMaterial
     );
     presentation.add(quad);
     return {

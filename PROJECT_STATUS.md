@@ -15,10 +15,13 @@ gameplay candidate.
 
 Chrome 158 on Windows with hardware-accelerated Intel Arc 140T rendered
 an Apprentice drill using a complete 15,360 × 8,640 scene framebuffer on
-2026-11-21 at 17:56 Europe/Berlin. WebGL reported no error or context loss
+2026-11-21 at 17:57 Europe/Berlin. WebGL reported no error or context loss
 before and after the sampled play. The browser canvas displayed the result
-at 898 × 505 and the rendered frame was visually inspected. The 40 submitted
-frames had a 33.3 ms median interval and a 58.4 ms 95th-percentile interval.
+at 898 × 505 and the rendered frame was visually inspected. The 36 submitted
+frames had a 41.7 ms median interval and a 50.2 ms 95th-percentile interval.
+At 17:58, the same hardware and workload retained an actual
+3840 × 2160 drawing buffer and submitted 147 frames with an 8.3 ms median
+interval and an 8.5 ms 95th-percentile interval.
 This was a short live-play sample. Native 16K display, sustained performance,
 and the production art gate remain unverified.
 
