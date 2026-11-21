@@ -131,3 +131,35 @@ test('Goal Line advanced pressure punishes a blocked lane and allows a wider ang
   await kick.press('Enter');
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });
+
+test('Goal Line audio starts on request and mutes without interrupting play', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.goalLineAudioSources = [];
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function (...args) {
+      const sample = this.buffer.getChannelData(0);
+      window.goalLineAudioSources.push({
+        duration: this.buffer.duration,
+        audibleSignal: sample.some(value => Math.abs(value) > 0.01)
+      });
+      return start.apply(this, args);
+    };
+  });
+  await page.goto('/game9/');
+  const sound = page.getByRole('button', { name: 'Sound', exact: true });
+  const right = page.getByRole('button', { name: 'Right', exact: true });
+  await expect(sound).toHaveAttribute('aria-pressed', 'false');
+  await right.press('Enter');
+  expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([]);
+  await sound.click();
+  await expect(sound).toHaveAttribute('aria-pressed', 'true');
+  for (let i = 0; i < 3; i++) await right.press('Enter');
+  expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([
+    expect.objectContaining({ audibleSignal: true })
+  ]);
+  await sound.click();
+  await expect(sound).toHaveAttribute('aria-pressed', 'false');
+  for (let i = 0; i < 3; i++) await right.press('Enter');
+  await expect(page.locator('#defender')).toHaveText('3.15 m right');
+  expect(await page.evaluate(() => window.goalLineAudioSources)).toHaveLength(1);
+});

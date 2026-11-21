@@ -1,5 +1,6 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact } from './clearance.js';
+import { CLEARANCE_SPEED, STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact } from './clearance.js';
+import { createPitchAudio } from './pitch-audio.js';
 
 const byId = (id) => document.getElementById(id);
 const save = campaign('goal-line');
@@ -13,12 +14,15 @@ const quality = byId('quality');
 const graphics = byId('graphics');
 const liveButton = byId('live');
 const movementHelp = byId('movement-help');
+const sound = byId('sound');
+const audio = createPitchAudio();
 const keys = new Set();
 let level = save.unlocked;
 let state;
 let pitch;
 let timer = null;
 let direction = 0;
+let lastFootstep = -Infinity;
 
 function setLive(enabled) {
   if (timer !== null) clearInterval(timer);
@@ -77,6 +81,8 @@ function update(message) {
 
 function load(levelNumber, moveFocus = false) {
   setLive(false);
+  audio.stop();
+  lastFootstep = -Infinity;
   level = levelNumber;
   levelInput.value = levelNumber;
   state = createDrill(levelNumber);
@@ -86,9 +92,15 @@ function load(levelNumber, moveFocus = false) {
 }
 
 function move(direction) {
+  const before = state.defender;
   advance(state, direction);
+  if (state.defender !== before && state.tick - lastFootstep >= 3) {
+    audio.play('step', state.defender);
+    lastFootstep = state.tick;
+  }
   if (state.result === 'conceded') {
     setLive(false);
+    audio.play('net', incomingAt(state.feeds[state.index], state.tick * STEP).x);
     update('Goal conceded. Restart the drill to try again.');
     byId('retry').focus();
     return;
@@ -113,6 +125,17 @@ function toggleLive() {
 }
 
 liveButton.addEventListener('click', toggleLive);
+sound.addEventListener('click', async () => {
+  sound.disabled = true;
+  try {
+    const enabled = await audio.toggle();
+    sound.setAttribute('aria-pressed', enabled);
+  } catch {
+    update('Audio is unavailable. The drill controls remain active.');
+  } finally {
+    sound.disabled = false;
+  }
+});
 window.addEventListener('keydown', (event) => {
   if (timer === null || event.altKey || event.ctrlKey || event.metaKey || event.target.matches('input, select, textarea, [contenteditable]')) return;
   const key = event.key.toLowerCase();
@@ -138,7 +161,17 @@ function byDistance() {
 angle.addEventListener('input', () => update());
 clearButton.addEventListener('click', () => {
   setLive(false);
-  if (clear(state, Number(angle.value))) {
+  const successful = clear(state, Number(angle.value));
+  const shot = state.trajectory;
+  if (shot) {
+    const contactTime = Math.max(0.035, shot.delay);
+    audio.play('kick', shot.contact.x, contactTime);
+    if (shot.interception) {
+      const ball = shot.interception.ball;
+      audio.play('touch', ball.x, contactTime + (ball.z - shot.contact.z) / CLEARANCE_SPEED, 0.7);
+    }
+  }
+  if (successful) {
     const finished = state.index === state.feeds.length - 1;
     if (finished) save.complete(level);
     update(finished ? 'Drill cleared. Progress saved on this device.' : 'Safe clearance. Prepare for the next ball.');
@@ -155,6 +188,7 @@ clearButton.addEventListener('click', () => {
 });
 next.addEventListener('click', () => {
   if (nextFeed(state)) {
+    lastFootstep = -Infinity;
     angle.value = 0;
     update('Ball ' + (state.index + 1) + ' of ' + state.feeds.length + '. Move into its path.');
     buttons[1].focus();
