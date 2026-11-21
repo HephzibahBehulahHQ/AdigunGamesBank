@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The turf now uses Blinn–Phong lighting with the existing grass textures,
+normal detail and shadow reception. In matched five-clearance runs at
+15,360 × 8,640 on Intel Arc 140T, median GPU scene-and-presentation time
+was 41.9 ms with the new material and 46.2 ms with the previous material.
+Median observed completion improved from 58.3 to 50.0 ms. Both runs
+completed without WebGL errors or context loss. Sustained 16K performance
+remains below the release target.
+
 An optional WebGL timer-query run on Intel Arc 140T and Chrome 158 measured
 132 samples at 15,360 × 8,640 over three full clearances and setup. The GPU
 interval from scene color clear through presentation draw had a 60.0 ms

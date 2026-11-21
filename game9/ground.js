@@ -22,11 +22,11 @@ export function addGround(scene, renderer, { map, normalMap }) {
     texture.anisotropy = Math.min(texture === normalMap ? 2 : 4, anisotropy);
   }
   const turf = {
-    map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34), metalness: 0, roughness: 0.92
+    map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34), specular: '#161616', shininess: 7,
   };
   const mowing = map ? ['#6b8859', '#799466'] : ['#3f5935', '#4b633d'];
   const heavyMowing = map ? ['#547453', '#60805a'] : ['#30492e', '#3a5134'];
-  const surfaces = mowing.map(color => material(color, turf));
+  const surfaces = mowing.map(color => new THREE.MeshPhongMaterial({ color, ...turf }));
   if (normalMap) {
     for (const surface of surfaces) {
       surface.onBeforeCompile = shader => {
@@ -75,7 +75,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
     const colors = heavy ? heavyMowing : mowing;
     for (const [index, surface] of surfaces.entries()) {
       surface.color.set(colors[index]);
-      surface.roughness = heavy ? 0.79 : turf.roughness;
+      surface.shininess = heavy ? 13 : turf.shininess;
     }
   };
 }
