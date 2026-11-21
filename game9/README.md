@@ -35,6 +35,12 @@ a `-loft` suffix.
 Add `broadcast` as the fourth argument, for example
 `node scripts/check-goal-line-hardware.mjs 16k 5 heavy broadcast`, to use
 the broadcast camera. Its reports append `-broadcast` to the scenario.
+Set `ADIGUN_HARDWARE_FULLSCREEN=1` to run in browser full screen, with a
+`-fullscreen` report suffix. On a full-screen viewport large enough for
+15,360 × 8,640 physical pixels, the renderer can request a direct 16K
+drawing buffer. The report distinguishes that buffer from a 16K scene
+presented through a smaller canvas. Display scanout requires separate
+verification on the display hardware.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The

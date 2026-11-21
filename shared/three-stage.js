@@ -118,7 +118,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
   }
 
   function paintLargeFrame() {
-    if (lost || !largeFrame) return;
+    if (lost || quality !== '16k') return;
     if (largeFrameFence) {
       const state = gl.clientWaitSync(largeFrameFence, 0, 0);
       if (state === gl.TIMEOUT_EXPIRED) {
@@ -135,10 +135,12 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     }
     clearTimeout(deferredPaint);
     deferredPaint = undefined;
-    renderer.setRenderTarget(largeFrame.framebuffer);
+    if (largeFrame) renderer.setRenderTarget(largeFrame.framebuffer);
     renderer.render(scene, camera);
-    renderer.setRenderTarget(null);
-    renderer.render(largeFrame.presentation, largeFrame.camera);
+    if (largeFrame) {
+      renderer.setRenderTarget(null);
+      renderer.render(largeFrame.presentation, largeFrame.camera);
+    }
     // Coalesce updates until the graphics device finishes the previous large frame.
     largeFrameFence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
     gl.flush();
@@ -147,18 +149,26 @@ export function createStage({ canvas, context, qualitySelect, status, position =
   function resize() {
     if (lost) return;
     const rect = canvas.getBoundingClientRect();
-    const density = Math.min(globalThis.devicePixelRatio || 1, 2);
-    const adaptive = Math.min(maxWidth, Math.max(320, Math.min(2560, Math.round(rect.width * density))));
+    const density = globalThis.devicePixelRatio || 1;
+    const adaptive = Math.min(maxWidth, Math.max(320, Math.min(2560, Math.round(rect.width * Math.min(density, 2)))));
     const requested = modes[quality];
     const large = quality === '16k';
-    if (large) largeFrame ??= allocateLargeFrame(requested[0], 8640);
-    else releaseLargeFrame();
-    let width = large ? adaptive : requested?.[0] ?? adaptive;
+    const direct = large && requested[0] <= maxWidth && document.fullscreenElement?.contains(canvas) &&
+      rect.width * density >= requested[0] && Math.min(rect.height, globalThis.innerHeight) * density >= 8640;
+    if (!large || (direct && largeFrame)) releaseLargeFrame();
+    let width = large && !direct ? adaptive : requested?.[0] ?? adaptive;
     let height = Math.round(width * 9 / 16);
     if (width <= maxWidth && (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height)) {
       renderer.setSize(width, height, false);
     }
-    const rejected = (large && !largeFrame) || width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
+    if (direct && (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height) && !gl.isContextLost()) {
+      width = adaptive;
+      height = Math.round(width * 9 / 16);
+      renderer.setSize(width, height, false);
+    }
+    if (large && width !== requested[0]) largeFrame ??= allocateLargeFrame(requested[0], 8640);
+    const rejected = (large && !largeFrame && gl.drawingBufferWidth !== requested[0]) ||
+      width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
     if (rejected) {
       releaseLargeFrame();
       quality = 'auto';
@@ -180,7 +190,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
       const presentation = `${gl.drawingBufferWidth.toLocaleString()} × ${gl.drawingBufferHeight.toLocaleString()}`;
       status.textContent = largeFrame
         ? `15,360 × 8,640 · 16K UHD scene framebuffer · ${presentation} canvas`
-        : `${prefix}${presentation} · WebGL 2 · ${quality === '4k' ? '4K UHD' : '3D'}`;
+        : `${prefix}${presentation} · WebGL 2 · ${modes[quality]?.[1] ?? '3D'}`;
     }
   }
   const setQuality = (value) => { quality = Object.hasOwn(modes, value) ? value : 'auto'; resize(); };
@@ -200,7 +210,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     renderer, scene, camera, light, setQuality,
     render() {
       if (lost) return;
-      if (!largeFrame) {
+      if (quality !== '16k') {
         renderer.render(scene, camera);
         return;
       }

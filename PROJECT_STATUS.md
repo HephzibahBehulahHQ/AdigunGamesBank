@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The renderer can request a direct 16K WebGL drawing buffer when the
+full-screen canvas has at least 15,360 × 8,640 physical pixels and WebGL
+reports compatible limits. Local Chrome verified the smaller-display path
+through three broadcast clearances with a 15,360 × 8,640 scene on a
+1425 × 802 full-screen canvas. It restored actual 4K without WebGL errors.
+The affected browser checks for full screen, actual 4K and unsupported 16K
+passed. Direct 16K allocation, native scanout and 60 fps remain unverified.
+
 Goal Line now offers a browser full-screen view that expands the game
 layout and keeps the drill controls available. All 20 Chrome browser
 checks passed, including keyboard entry and exit, a play step in full

@@ -30,6 +30,7 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
+const fullscreen = process.env.ADIGUN_HARDWARE_FULLSCREEN === '1';
 const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
 const gpuPhase = process.env.ADIGUN_GPU_PHASE ?? 'combined';
 if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
@@ -39,7 +40,7 @@ if (!['combined', 'shadow', 'scene', 'presentation'].includes(gpuPhase)) {
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
-    camera === 'goal' ? '' : camera, profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
+    camera === 'goal' ? '' : camera, fullscreen ? 'fullscreen' : '', profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -171,6 +172,10 @@ try {
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
   await page.waitForFunction(() => document.querySelector('#pitch').dataset.renderer || document.querySelector('#pitch').hidden);
   if (await graphics.isEnabled()) {
+    if (fullscreen) {
+      await page.getByRole('button', { name: 'Enter full screen' }).click();
+      await page.waitForFunction(() => document.fullscreenElement?.id === 'game');
+    }
     await page.getByRole('combobox', { name: 'Camera' }).selectOption(camera);
     await graphics.selectOption(mode);
   }
@@ -181,6 +186,7 @@ try {
     const debug = graphicsContext.getExtension('WEBGL_debug_renderer_info');
     return {
       drawingBuffer: [graphicsContext.drawingBufferWidth, graphicsContext.drawingBufferHeight],
+      fullscreen: document.fullscreenElement?.contains(element) ?? false,
       canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
@@ -199,7 +205,7 @@ try {
   let restored4K = null;
   let sample = null;
   let workloadError = null;
-  if (requestedBufferAllocated && before.camera === camera) {
+  if (requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
     const frameIntervals = [];
     const completionIntervals = [];
     const longGaps = [];
@@ -282,7 +288,7 @@ try {
         frameCount += frames.length;
         if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
         after = await readSurface();
-        if (!after || after.contextLost || after.error || after.camera !== camera ||
+        if (!after || after.contextLost || after.error || after.camera !== camera || after.fullscreen !== fullscreen ||
             after.renderBuffer.some((dimension, index) => dimension !== requested[index])) {
           throw new Error(`Render target failed in round ${round + 1}.`);
         }
