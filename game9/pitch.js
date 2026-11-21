@@ -85,6 +85,16 @@ export async function createPitch(options) {
     else opponent.stride(-pressure.x);
   }
 
+  function receiveClearance(attempt, readiness) {
+    const ballX = -attempt.end.x;
+    const gap = ballX - receiver.mesh.position.x;
+    // Step toward the ball, then extend the nearer boot to cushion it.
+    receiver.mesh.position.x += THREE.MathUtils.clamp(gap, -0.55, 0.55) * readiness;
+    const leg = gap < 0 ? 0 : 1;
+    const trap = new THREE.Vector3(ballX, 0.035, SAFETY_LINE + BALL_RADIUS * 0.55);
+    receiver.plantBoot(trap, 0, leg, readiness);
+  }
+
   function framePlay(z) {
     const wide = motion.matches ? 1 : THREE.MathUtils.smoothstep(z, 3, 25);
     const broadcast = options.view() === 'broadcast';
@@ -151,6 +161,7 @@ export async function createPitch(options) {
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
         framePlayers(feed, sceneTime);
+        if (state.result === 'cleared') receiveClearance(attempt, 1);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
         // Camera and aim changes leave a settled scene's shadow casters in place.
@@ -239,6 +250,10 @@ export async function createPitch(options) {
             : attempt.delay + Math.min(seconds - windup, flight))
           : Math.max(0, (state.tick - 1 + elapsed) * STEP);
         framePlayers(feed, time);
+        if (kick && state.result === 'cleared') {
+          const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, duration - 0.24), duration);
+          if (readiness > 0) receiveClearance(attempt, readiness);
+        }
         settledShadow = null;
         light.shadow.needsUpdate = true;
         stage.render();
