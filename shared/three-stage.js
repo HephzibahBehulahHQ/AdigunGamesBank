@@ -83,13 +83,13 @@ export function createStage({ canvas, context, qualitySelect, status, position =
       shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', `
         vec2 footprint = vec2(length(dFdx(vMapUv)), length(dFdy(vMapUv)));
         vec4 filtered = vec4(0.0);
-        for (int y = 0; y < 4; y++) {
-          for (int x = 0; x < 4; x++) {
-            vec2 offset = (vec2(float(x), float(y)) - 1.5) * footprint * 0.25;
+        for (int y = -1; y <= 1; y++) {
+          for (int x = -1; x <= 1; x++) {
+            vec2 offset = vec2(float(x), float(y)) * footprint / 3.0;
             filtered += texture2D(map, vMapUv + offset);
           }
         }
-        diffuseColor *= filtered * 0.0625;
+        diffuseColor *= filtered / 9.0;
       `);
     };
     const quad = new THREE.Mesh(

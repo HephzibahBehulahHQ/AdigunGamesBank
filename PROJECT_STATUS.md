@@ -4,6 +4,16 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+In paired Chrome runs of five heavy-turf clearances on Intel Arc 140T, a
+nine-sample presentation filter reduced median GPU presentation time from
+8.1 to 5.8 ms. Observed GPU completion intervals were 50.9 and 50.0 ms
+median, and 71.4 and 61.5 ms at the 95th percentile. Both filters rendered
+the scene at 15,360 × 8,640, presented at 898 × 505 and returned to 4K
+without WebGL errors or context loss. Pitch markings and the goal net
+remained visible in both captures, with slightly less distinct individual
+net strands in the nine-sample capture. The 60 fps 16K gate remains open.
+All 18 Goal Line Chrome browser checks passed on the nine-sample build.
+
 The turf shader now constructs its tangent basis only where the existing
 near-field normal map contributes. In matched Chrome runs of five heavy-turf
 clearances at 15,360 × 8,640 on Intel Arc 140T, median scene GPU time fell
