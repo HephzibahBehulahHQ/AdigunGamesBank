@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Three matched five-clearance heavy-turf runs at 16K compared goalmouth wear
+implementations on Intel Arc 140T. Median GPU scene and presentation times
+were 43.9 ms for the existing shader, 46.6 ms for a bounds check in that
+shader and 48.3 ms for vertex colors on subdivided turf. All three retained
+the full scene buffer without WebGL errors or context loss. The renderer
+keeps the existing wear shader.
+
 The 16K framebuffer now verifies a 16-bit depth attachment and uses a nearer
 clipping plane of 1.25 m to preserve precision on the pitch. In paired
 three-clearance heavy-turf trials on Intel Arc 140T, median GPU scene and
