@@ -7,8 +7,10 @@ export const STEP = 0.1;
 export const CLEARANCE_SPEED = 14;
 export const MIN_CLEARANCE_SPEED = 4;
 export const MAX_CLEARANCE_SPEED = 22;
+export const GOAL_HALF_WIDTH = 3.66;
+export const GOAL_POST_RADIUS = 0.06;
+export const NET_DEPTH = 1.8;
 const ROLLING_DECELERATION = 1.8;
-const HALF_GOAL = 3.66;
 const DEFENDER_SPEED = 4.5;
 const CONTROL_REACH = 0.62;
 const CLEARANCE_WINDOW = 2.3;
@@ -60,6 +62,17 @@ export function incomingAt(feed, time) {
     x: feed.origin + (feed.crossing - feed.origin) * fraction,
     z: feed.pace * (feed.approachTime - time)
   };
+}
+
+export function goalNetImpact(feed) {
+  const horizontal = (feed.crossing - feed.origin) / feed.approachTime;
+  const side = Math.sign(horizontal);
+  const sideEdge = GOAL_HALF_WIDTH + GOAL_POST_RADIUS - BALL_RADIUS;
+  const sideDelay = horizontal ? (side * sideEdge - feed.crossing) / horizontal : Infinity;
+  const backDelay = (NET_DEPTH - BALL_RADIUS) / feed.pace;
+  const panel = sideDelay < backDelay ? 'side' : 'back';
+  const time = feed.approachTime + Math.min(backDelay, sideDelay);
+  return { ...incomingAt(feed, time), time, panel, side };
 }
 
 export function clearanceAt(contact, angle, drift, z) {
@@ -135,7 +148,7 @@ export function createDrill(level) {
 export function advance(state, movement = 0) {
   if (state.result !== 'ready') return;
   state.tick += 1;
-  state.defender = Math.max(-HALF_GOAL, Math.min(HALF_GOAL, state.defender + Math.sign(movement) * DEFENDER_SPEED * STEP));
+  state.defender = Math.max(-GOAL_HALF_WIDTH, Math.min(GOAL_HALF_WIDTH, state.defender + Math.sign(movement) * DEFENDER_SPEED * STEP));
   const ball = incomingAt(state.feeds[state.index], state.tick * STEP);
   if (ball.z <= LINE - BALL_RADIUS) state.result = 'conceded';
 }

@@ -91,6 +91,11 @@ verification inspected a frame during the move using an actual
 3840 × 2160 drawing buffer. The eight focused engine and geometry checks
 passed, including a fixed support-foot check and all 10,000 drills.
 
+After a conceded goal, the ball now reaches the first net panel it contacts
+and the cords deform around that point. A Chrome run at an actual
+3840 × 2160 drawing buffer captured the ball against the back net. The nine
+standard browser checks and the separate visual impact check passed locally.
+
 The preceding frame-queue candidate `04b8bf590cbda4fc30795c87fc3e843b88293fbe`
 passed [CI 44930121559](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44930121559),
 including 52 API and 78 browser checks. Publication was skipped.

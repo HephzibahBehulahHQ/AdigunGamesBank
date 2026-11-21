@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { LEVEL_COUNT } from '../shared/progression.js';
 import { THREE } from '../shared/three-stage.js';
-import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, planClearance, readContact, receiverAt } from '../game9/clearance.js';
+import { BALL_RADIUS, GOAL_HALF_WIDTH, GOAL_POST_RADIUS, NET_DEPTH, STEP, SAFETY_LINE, advance, clear, createDrill, goalNetImpact, incomingAt, nextFeed, planClearance, readContact, receiverAt } from '../game9/clearance.js';
 import { lateralStep, solveLeg } from '../game9/leg-reach.js';
 
 export function playPlan(feed) {
@@ -96,6 +96,16 @@ test('a supporting toe stays fixed in world space while the other boot travels',
   const next = lateralStep(stride + 0.2, stride, 1);
   assert.equal(next.advancing, false);
   assert.equal(next.lift, 0);
+});
+
+test('the ball meets the first net panel after fully crossing the goal line', () => {
+  const direct = goalNetImpact({ crossing: 0, origin: 0, approachTime: 1, pace: 10 });
+  assert.equal(direct.panel, 'back');
+  assert.ok(Math.abs(direct.z + NET_DEPTH - BALL_RADIUS) < 1e-9);
+  const angled = goalNetImpact({ crossing: 3.1, origin: -4.9, approachTime: 1, pace: 10 });
+  assert.equal(angled.panel, 'side');
+  assert.ok(Math.abs(angled.x - GOAL_HALF_WIDTH - GOAL_POST_RADIUS + BALL_RADIUS) < 1e-9);
+  assert.ok(angled.z > direct.z && angled.z < -BALL_RADIUS);
 });
 
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {

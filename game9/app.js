@@ -1,5 +1,5 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { CLEARANCE_SPEED, MAX_CLEARANCE_SPEED, MIN_CLEARANCE_SPEED, STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
+import { CLEARANCE_SPEED, MAX_CLEARANCE_SPEED, MIN_CLEARANCE_SPEED, STEP, advance, clear, createDrill, goalNetImpact, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
 import { createPitchAudio } from './pitch-audio.js';
 import { gamepadControls } from './gamepad.js';
 
@@ -60,8 +60,9 @@ function update(message) {
   const speed = Number(kickSpeed.value);
   const projection = planClearance(feed, delivery, state.tick, aiming, speed);
   const pressure = pressureAt(feed, state.tick * STEP);
+  const position = state.result === 'conceded' ? goalNetImpact(feed) : ball;
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
-  byId('ball').textContent = sideways(ball.x) + ', ' + Math.abs(ball.z).toFixed(2) + ' m ' + (ball.z < 0 ? 'behind' : 'from') + ' goal line';
+  byId('ball').textContent = sideways(position.x) + ', ' + Math.abs(position.z).toFixed(2) + ' m ' + (position.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('defender').textContent = sideways(state.defender);
   const outlet = ball.z <= 2.3 && !projection.short ? projection.receiver : receiverAt(feed, state.tick * STEP);
   byId('gate').textContent = sideways(outlet - safeEdge) + ' to ' + sideways(outlet + safeEdge);
@@ -116,7 +117,8 @@ function move(direction) {
   }
   if (state.result === 'conceded') {
     setLive(false);
-    audio.play('net', incomingAt(state.feeds[state.index], state.tick * STEP).x);
+    const impact = goalNetImpact(state.feeds[state.index]);
+    audio.play('net', impact.x, Math.max(0, impact.time - (state.tick - 1) * STEP));
     update('Goal conceded. Restart the drill to try again.');
     byId('retry').focus();
     return;

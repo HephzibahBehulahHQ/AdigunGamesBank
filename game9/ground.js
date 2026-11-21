@@ -1,4 +1,5 @@
 import { THREE, box, material } from '../shared/three-stage.js';
+import { BALL_RADIUS, GOAL_HALF_WIDTH, GOAL_POST_RADIUS, NET_DEPTH } from './clearance.js';
 
 export async function loadTurf() {
   const loader = new THREE.TextureLoader();
@@ -69,9 +70,8 @@ export function addGround(scene, renderer, { map, normalMap }) {
 }
 
 export function addGoal(scene) {
-  const halfWidth = 3.66;
   const height = 2.44;
-  const radius = 0.06;
+  const radius = GOAL_POST_RADIUS;
   const frame = material('#e2e4de', { roughness: 0.34, metalness: 0.18 });
   function pipe(start, end) {
     const a = new THREE.Vector3(...start);
@@ -83,15 +83,23 @@ export function addGoal(scene) {
     mesh.castShadow = true;
     scene.add(mesh);
   }
-  const post = halfWidth + radius;
+  const post = GOAL_HALF_WIDTH + radius;
   const bar = height + radius;
   for (const x of [-post, post]) pipe([x, 0, 0], [x, bar, 0]);
   pipe([-post, bar, 0], [post, bar, 0]);
   const cords = [];
-  const depth = 1.8;
+  const depth = NET_DEPTH;
   const rowCount = 20;
   const columns = 60;
-  function strand(a, b) { cords.push(...a, ...b); }
+  function strand(a, b) {
+    const length = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
+    const count = Math.ceil(length / 0.24);
+    for (let i = 0; i < count; i++) {
+      for (const t of [i / count, (i + 1) / count]) {
+        cords.push(...a.map((value, axis) => THREE.MathUtils.lerp(value, b[axis], t)));
+      }
+    }
+  }
   for (let row = 0; row <= rowCount; row++) {
     const y = bar * row / rowCount;
     strand([-post, y, -depth], [post, y, -depth]);
@@ -108,8 +116,36 @@ export function addGoal(scene) {
     for (const x of [-post, post]) strand([x, 0, z], [x, bar, z]);
   }
   const net = new THREE.BufferGeometry();
-  net.setAttribute('position', new THREE.Float32BufferAttribute(cords, 3));
+  const rest = Float32Array.from(cords);
+  const positions = new THREE.BufferAttribute(rest.slice(), 3).setUsage(THREE.DynamicDrawUsage);
+  net.setAttribute('position', positions);
   scene.add(new THREE.LineSegments(net, new THREE.LineBasicMaterial({
     color: '#e0e3dc', opacity: 0.42, transparent: true
   })));
+  let displaced = false;
+  return {
+    settle() {
+      if (!displaced) return;
+      positions.array.set(rest);
+      positions.needsUpdate = true;
+      displaced = false;
+    },
+    impact(hit, seconds) {
+      const displacement = 0.34 * Math.exp(-seconds * 6) * Math.sin(seconds * 15);
+      for (let i = 0; i < rest.length; i += 3) {
+        const x = rest[i];
+        const y = rest[i + 1];
+        const z = rest[i + 2];
+        if (hit.panel === 'back' && Math.abs(z + depth) < 0.001) {
+          const falloff = Math.exp(-((x + hit.x) ** 2 + (y - BALL_RADIUS) ** 2) * 1.7);
+          positions.array[i + 2] = z - displacement * falloff * (1 - Math.abs(x) / post);
+        } else if (hit.panel === 'side' && Math.abs(x + hit.side * post) < 0.001) {
+          const falloff = Math.exp(-((z - hit.z) ** 2 + (y - BALL_RADIUS) ** 2) * 1.7);
+          positions.array[i] = x - hit.side * displacement * falloff * Math.sin(Math.PI * -z / depth);
+        }
+      }
+      displaced = true;
+      positions.needsUpdate = true;
+    }
+  };
 }

@@ -1,5 +1,5 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, pressureAt, receiverAt } from './clearance.js';
+import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, goalNetImpact, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
@@ -18,7 +18,7 @@ export async function createPitch(options) {
   light.shadow.camera.right = light.shadow.camera.top = 26;
   light.shadow.camera.updateProjectionMatrix();
   addGround(scene, renderer, turf);
-  addGoal(scene);
+  const net = addGoal(scene);
   addTrainingGround(scene);
   const gate = new THREE.Group();
   scene.add(gate);
@@ -39,6 +39,7 @@ export async function createPitch(options) {
   let frame;
   let targetX = 0;
   let playedAttempt = null;
+  let playedConcession = false;
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
   let opponent;
@@ -84,7 +85,11 @@ export async function createPitch(options) {
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;
       const attempt = state.trajectory;
-      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? ball;
+      const netHit = state.result === 'conceded' ? goalNetImpact(feed) : null;
+      const concession = Boolean(netHit) && !playedConcession;
+      playedConcession = Boolean(netHit);
+      if (!netHit) net.settle();
+      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? netHit ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
         const contact = attempt?.contact ?? plannedContact;
@@ -104,7 +109,7 @@ export async function createPitch(options) {
       const nextBall = new THREE.Vector3(-visibleBall.x, BALL_RADIUS, visibleBall.z);
       const travel = !nextBall.equals(targetBall);
       targetBall = nextBall;
-      if (!hasFrame || motion.matches || (!travel && !movement && !kick && frame === undefined)) {
+      if (!hasFrame || motion.matches || (!travel && !movement && !kick && !concession && frame === undefined)) {
         cancelAnimationFrame(frame);
         frame = undefined;
         hasFrame = true;
@@ -117,14 +122,15 @@ export async function createPitch(options) {
         stage.render();
         return;
       }
-      if (!travel && !movement && !kick) return;
+      if (!travel && !movement && !kick && !concession) return;
       cancelAnimationFrame(frame);
       const from = defender.mesh.position.x;
       const ballFrom = ballMesh.position.clone();
       const started = performance.now();
       const windup = kick ? Math.max(0.035, attempt.delay) : 0;
       const flight = kick ? attempt.travelTime : 0;
-      const duration = kick ? windup + flight : 0.095;
+      const netTransit = concession ? Math.max(0.045, (ballFrom.z - netHit.z) / feed.pace) : 0;
+      const duration = concession ? netTransit + 0.65 : kick ? windup + flight : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
       const kickAngle = kick ? -attempt.angle * Math.PI / 180 : 0;
@@ -154,6 +160,11 @@ export async function createPitch(options) {
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
             ballMesh.position.set(-point.x, BALL_RADIUS, z);
           }
+        } else if (concession) {
+          defender.settle(targetX);
+          ballMesh.position.lerpVectors(ballFrom, targetBall, Math.min(1, seconds / netTransit));
+          if (elapsed === 1) net.settle();
+          else if (seconds >= netTransit) net.impact(netHit, seconds - netTransit);
         } else {
           defender.stride(defender.mesh.position.x);
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
