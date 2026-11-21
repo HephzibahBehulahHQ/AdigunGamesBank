@@ -9,7 +9,7 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#controls">Skip to drill controls</a>
+  <a class="skip-link" href="#controls" tabindex="0">Skip to drill controls</a>
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" width="150" height="54" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK</span></a>
     <a href="../">All games</a>
@@ -40,7 +40,7 @@
           <div id="pressing" hidden><dt>Pressing player</dt><dd id="pressure-position"></dd></div>
         </dl>
       </section>
-      <section id="controls" class="panel" aria-labelledby="control-title">
+      <section id="controls" class="panel" aria-labelledby="control-title" tabindex="-1">
         <h2 id="control-title">Defend the line</h2>
         <button id="live" type="button">Start live ball</button>
         <p id="movement-help">Each movement advances the ball by 0.1 seconds. Start the live ball for a timed clearance.</p>

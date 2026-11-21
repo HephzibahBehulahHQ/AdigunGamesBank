@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The skip link and its destination are explicitly focusable. The 320 px
+reduced-motion accessibility check now passes in the pinned WebKit 26.0
+and system Chrome. WebKit also passed actual 3840 × 2160 WebGL rendering
+and the keyboard-only graphics fallback on the preceding build. The
+existing WebKit cache was protocol-incompatible. The pinned browser and
+its Windows helper were installed in ignored `test-results` without
+changing the repository lockfile. Safari hardware performance was not tested.
+
 Reducing turf diffuse anisotropy from 4× to 2× lowered median 16K scene
 GPU time from 29.2 to 27.9 ms in two five-clearance broadcast runs on
 Intel Arc 140T. Median observed GPU completion interval fell from 43.5
