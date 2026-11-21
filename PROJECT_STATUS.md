@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The receiving and pressing players now use a fixed support-foot target
+from the start of the reach as their other boot moves toward the ball.
+The same stance calculation runs in reduced motion and at the animation
+endpoint. All 12 engine tests passed, including the 10,000-drill solver.
+Four targeted Chrome tests passed for actual 4K, interception, lofted and
+moving-receiver play. The actual 4K hardware run finished three lofted
+receptions with a 10.0 ms median draw submission interval and no errors.
+
 The strict direct-16K Chrome benchmark now uses the actual browser window
 and checks both the drawing buffer and physical viewport size. On the local
 Windows display it exited with the expected failure receipt. WebGL allocated

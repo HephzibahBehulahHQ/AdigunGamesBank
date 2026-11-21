@@ -83,15 +83,22 @@ export async function createPitch(options) {
     else opponent.stride(-pressure.x);
   }
 
-  function controlClearance(attempt, readiness, height = undefined) {
+  const receptionReach = 0.24;
+
+  function controlClearance(feed, attempt, readiness, height = undefined) {
     const player = attempt.interception ? opponent : receiver;
     const ball = attempt.interception?.ball ?? attempt.end;
     const ballX = -ball.x;
+    const arrivalTime = attempt.interception?.time ?? attempt.receiveTime;
+    const stanceTime = arrivalTime - Math.min(receptionReach, attempt.travelTime);
+    const stanceX = -(attempt.interception ? pressureAt(feed, stanceTime).x : receiverAt(feed, stanceTime));
+    const leg = ballX < stanceX ? 0 : 1;
     const gap = ballX - player.mesh.position.x;
-    // Step toward the ball, then extend the nearer boot to cushion it.
+    // Keep the supporting boot at the stance position while the other reaches for the ball.
     player.mesh.position.x += THREE.MathUtils.clamp(gap, -0.55, 0.55) * readiness;
-    const leg = gap < 0 ? 0 : 1;
+    const support = new THREE.Vector3(stanceX + (leg === 0 ? 0.18 : -0.18), 0.035, player.mesh.position.z - 0.13);
     const trap = new THREE.Vector3(ballX, (height ?? ball.y) - BALL_RADIUS * 0.68, ball.z + BALL_RADIUS * 0.55);
+    player.plantBoot(support, 0, 1 - leg, readiness);
     player.plantBoot(trap, 0, leg, readiness);
   }
 
@@ -175,7 +182,7 @@ export async function createPitch(options) {
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
         framePlayers(feed, sceneTime);
-        if (controlled) controlClearance(attempt, 1, attempt.rest?.y);
+        if (controlled) controlClearance(feed, attempt, 1, attempt.rest?.y);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
         trackBall();
@@ -281,9 +288,9 @@ export async function createPitch(options) {
           : Math.max(0, (state.tick - 1 + elapsed) * STEP);
         framePlayers(feed, time);
         if (kick && controlled) {
-          const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, arrival - 0.24), arrival);
+          const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, arrival - receptionReach), arrival);
           const height = cushion && seconds >= arrival ? ballMesh.position.y : undefined;
-          if (readiness > 0) controlClearance(attempt, readiness, height);
+          if (readiness > 0) controlClearance(feed, attempt, readiness, height);
         }
         trackBall();
         settledShadow = null;
