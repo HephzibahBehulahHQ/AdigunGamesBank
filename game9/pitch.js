@@ -146,6 +146,7 @@ export async function createPitch(options) {
         frame = undefined;
         hasFrame = true;
         ballMesh.position.copy(targetBall);
+        ballMesh.rotation.x = -targetBall.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
@@ -180,7 +181,7 @@ export async function createPitch(options) {
       const swingBoot = kick ? bootTarget.clone() : null;
       let previousSeconds = -1;
       function animate(now) {
-        const realSeconds = Math.max(0, (now - started) / 1000);
+        const realSeconds = THREE.MathUtils.clamp((now - started) / 1000, 0, duration);
         const seconds = kick && previousSeconds < windup && realSeconds >= windup ? windup : realSeconds;
         previousSeconds = seconds;
         const elapsed = Math.min(1, seconds / duration);
@@ -228,6 +229,8 @@ export async function createPitch(options) {
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
           if (feed.bounces && state.tick > 0) ballMesh.position.y = incomingAt(feed, (state.tick - 1 + elapsed) * STEP).y;
         }
+        // Leave the exact simulation endpoint ready for a deferred 16K paint.
+        if (elapsed === 1) ballMesh.position.copy(targetBall);
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);
         const time = kick
