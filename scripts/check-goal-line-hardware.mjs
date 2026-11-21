@@ -158,13 +158,32 @@ try {
         });
         await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
         await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
-        await page.keyboard.down('d');
-        await page.waitForFunction(() => document.querySelector('#defender').textContent === '1.35 m right', undefined, { timeout: 5000 });
-        await page.keyboard.up('d');
-        await page.waitForFunction(distance =>
-          document.querySelector('#ball').textContent.includes(`, ${distance} m from goal line`),
-        delivery.ball.z.toFixed(2), { timeout: 5000 });
-        await page.keyboard.press('f');
+        // React inside the page so a busy renderer cannot make Playwright miss a single live tick.
+        const contact = page.evaluate(distance => new Promise((resolve, reject) => {
+          const defender = document.querySelector('#defender');
+          const ball = document.querySelector('#ball');
+          let moved = false;
+          const observer = new MutationObserver(() => {
+            if (!moved && defender.textContent === '1.35 m right') {
+              moved = true;
+              document.querySelector('[data-move="0"]').click();
+            }
+            if (ball.textContent.includes(`, ${distance} m from goal line`)) {
+              observer.disconnect();
+              clearTimeout(deadline);
+              document.querySelector('#clear').click();
+              resolve();
+            }
+          });
+          const deadline = setTimeout(() => {
+            observer.disconnect();
+            reject(new Error(`Clearance contact was missed: ${defender.textContent}; ${ball.textContent}`));
+          }, 5000);
+          observer.observe(defender, { childList: true });
+          observer.observe(ball, { childList: true });
+        }), delivery.ball.z.toFixed(2));
+        await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+        await contact;
         const message = await page.locator('#message').textContent();
         if (!message?.includes('Safe clearance')) throw new Error(`Round ${round + 1}: ${message}`);
         await page.waitForFunction(duration => {
@@ -186,7 +205,6 @@ try {
         completedRounds++;
       }
     } catch (error) {
-      await page.keyboard.up('d');
       await page.keyboard.press('Escape');
       workloadError = String(error);
     }
