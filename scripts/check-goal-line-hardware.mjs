@@ -2,6 +2,12 @@ import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
+import { makeDrill, planClearance, readContact } from '../game9/clearance.js';
+
+const feed = makeDrill(2001)[0];
+const delivery = readContact(feed, 22, 1.35);
+const clearance = planClearance(feed, delivery, 22, 11);
+const clearanceMilliseconds = Math.ceil((Math.max(0.035, delivery.delay) + clearance.travelTime) * 1000);
 
 const mode = process.argv[2] ?? '16k';
 if (mode !== '4k' && mode !== '16k') throw new Error('Choose 4k or 16k.');
@@ -109,19 +115,28 @@ try {
     try {
       for (let round = 0; round < rounds; round++) {
         if (round) await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+        const aim = page.getByRole('slider', { name: 'Clearance angle' });
+        for (let step = 0; step < 11; step++) await aim.press('ArrowRight');
         await page.evaluate(() => {
           window.goalLineDrawTimes.length = 0;
           window.goalLineCompletionTimes.length = 0;
         });
         await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
         await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
-        await page.keyboard.down(round % 2 ? 'a' : 'd');
-        await page.waitForFunction(() => document.querySelector('#defender').textContent !== 'centre', undefined, { timeout: 5000 });
-        await page.keyboard.up(round % 2 ? 'a' : 'd');
-        await page.waitForFunction(() =>
-          Number(document.querySelector('#ball').textContent.match(/, ([\d.]+) m from goal line/)?.[1]) < 12,
-        undefined, { timeout: 5000 });
-        await page.keyboard.press('Escape');
+        await page.keyboard.down('d');
+        await page.waitForFunction(() => document.querySelector('#defender').textContent === '1.35 m right', undefined, { timeout: 5000 });
+        await page.keyboard.up('d');
+        await page.waitForFunction(distance =>
+          document.querySelector('#ball').textContent.includes(`, ${distance} m from goal line`),
+        delivery.ball.z.toFixed(2), { timeout: 5000 });
+        await page.keyboard.press('f');
+        const message = await page.locator('#message').textContent();
+        if (!message?.includes('Safe clearance')) throw new Error(`Round ${round + 1}: ${message}`);
+        await page.waitForFunction(duration => {
+          window.goalLineClearanceObservedAt ??= performance.now();
+          return performance.now() - window.goalLineClearanceObservedAt >= duration;
+        }, clearanceMilliseconds + 100, { timeout: 5000 });
+        await page.evaluate(() => { delete window.goalLineClearanceObservedAt; });
         const [frames, completions] = await page.evaluate(() => [window.goalLineDrawTimes, window.goalLineCompletionTimes]);
         for (let i = 1; i < frames.length; i++) frameIntervals.push(frames[i] - frames[i - 1]);
         for (let i = 1; i < completions.length; i++) completionIntervals.push(completions[i] - completions[i - 1]);
@@ -136,7 +151,6 @@ try {
         completedRounds++;
       }
     } catch (error) {
-      await page.keyboard.up('a');
       await page.keyboard.up('d');
       await page.keyboard.press('Escape');
       workloadError = String(error);

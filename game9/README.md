@@ -21,8 +21,9 @@ installed, run `npm run build`, then
 `node scripts/check-goal-line-hardware.mjs 16k 30`. Use `4k` to check the 4K mode.
 The optional second argument is the number of live feeds to sample.
 The script opens the static build in Chrome without forced software rendering,
-uses an isolated save for an Apprentice drill, and samples frames that submit
-draw calls during live play. The report records the GPU renderer, WebGL limits,
+uses an isolated save for an Apprentice drill, and samples draw submissions
+from the incoming feed through a successful clearance under pressure. The
+report records the GPU renderer, WebGL limits,
 actual render and display buffer sizes before and after play, and median and 95th-percentile
 frame intervals. Restart gaps are excluded from the interval percentiles.
 The 16K report also counts GPU fences the browser observed as completed

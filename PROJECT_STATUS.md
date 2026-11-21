@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The full-play hardware workload now runs from the incoming feed through a
+successful clearance under pressure. Chrome 158 on Intel Arc 140T finished
+all 30 clearances at 15,360 × 8,640 with 1,310 observed GPU completions, a
+66.6 ms median interval and a 78.8 ms 95th-percentile interval. A separate
+three-clearance run retained 3840 × 2160 with an 8.3 ms median submission
+interval. Both runs completed without WebGL errors or context loss.
+
 The hardware benchmark now records 16K GPU fence observations separately
 from draw submissions. Chrome 158 on Intel Arc 140T completed 30 live feeds
 with 616 observed frame completions, a median observation interval of 65.5 ms
