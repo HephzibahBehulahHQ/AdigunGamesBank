@@ -4,6 +4,15 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Chromium's WebGL canvas area cap explains the measured 7680 × 4320
+reduction of the direct 16K request. A separate Chrome 158 WebGPU probe
+used the local non-fallback Intel adapter, allocated both 3840 × 2160 and
+15,360 × 8,640 canvas textures and verified pixel readback from each.
+This establishes WebGPU surface allocation on the tested machine. Goal
+Line gameplay, native display output and sustained frame rate have not
+been verified on WebGPU.
+[Chromium WebGL canvas sizing source](https://chromium.googlesource.com/chromium/src/+/a8000f6b5db8c40fd71bb01904b01ebf2a954fcb/third_party/blink/renderer/modules/webgl/webgl_rendering_context_base.cc)
+
 Firefox reduced the direct 16K drawing-buffer request to 7680 × 4320 in
 the isolated viewport diagnostic. Its complete offscreen 16K framebuffer
 reported 24 depth bits for the 16-bit request. Goal Line now accepts that

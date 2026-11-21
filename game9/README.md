@@ -86,6 +86,12 @@ software renderer or incomplete workload does not qualify.
 
 ## Defender source and rebuild
 
+Run `node scripts/check-goal-line-webgpu.mjs` to verify 4K and 16K canvas
+texture allocation on an existing Chrome installation. The probe submits
+a clear and validates pixel readback at each size. Its report is written
+to `test-results/goal-line-webgpu-surface/`. It measures surface support
+only. Goal Line still renders its game scene with WebGL.
+
 The sky uses a 2048 × 1024 version of the CC0 panorama
 [Kloppenheim 05 (Pure Sky)](https://polyhaven.com/a/kloppenheim_05_puresky)
 from Poly Haven, photographed by Greg Zaal and edited by Jarod Guest.
