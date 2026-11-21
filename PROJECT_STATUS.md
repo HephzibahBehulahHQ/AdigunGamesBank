@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Chrome completed three aerial receptions at 4K and ten at 16K on Intel Arc
+140T without WebGL errors or context loss. Frame intervals were 8.3 ms
+median and 16.6 ms at the 95th percentile at 4K, and 58.2 ms median and
+66.8 ms at the 95th percentile at 16K. The 16K scene rendered into a
+15,360 × 8,640 buffer and was downsampled for display. It remains below the
+60 fps release target.
+
 On the `5ff76a8` local build, Chrome completed three 16K-to-4K switches.
 Each 16K entry allocated one full-resolution depth renderbuffer. Switching
 cameras and resizing the viewport kept the same buffer, and every return to

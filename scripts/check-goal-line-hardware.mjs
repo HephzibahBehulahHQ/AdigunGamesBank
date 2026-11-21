@@ -2,20 +2,23 @@ import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from '@playwright/test';
-import { makeDrill, planClearance, readContact } from '../game9/clearance.js';
+import { CLEARANCE_SPEED, makeDrill, planClearance, readContact } from '../game9/clearance.js';
 
 const scenario = process.argv[4] ?? 'standard';
-if (scenario !== 'standard' && scenario !== 'heavy') throw new Error('Choose standard or heavy turf.');
-const { level, tick, defender, angle } = scenario === 'heavy'
-  ? { level: 8002, tick: 18, defender: -1.35, angle: -24 }
-  : { level: 2001, tick: 22, defender: 1.35, angle: 11 };
+const fixtures = {
+  standard: { level: 2001, tick: 22, defender: 1.35, angle: 11 },
+  heavy: { level: 8002, tick: 18, defender: -1.35, angle: -24 },
+  loft: { level: 5092, tick: 20, defender: 0.45, angle: -28, speed: 6, loft: true },
+};
+if (!Object.hasOwn(fixtures, scenario)) throw new Error('Choose the standard, heavy or loft scenario.');
+const { level, tick, defender, angle, speed = CLEARANCE_SPEED, loft = false } = fixtures[scenario];
 const moveSide = defender < 0 ? 'left' : 'right';
 const moveTarget = `${Math.abs(defender).toFixed(2)} m ${moveSide}`;
 const feed = makeDrill(level)[0];
 const delivery = readContact(feed, tick, defender);
-const clearance = planClearance(feed, delivery, tick, angle);
+const clearance = planClearance(feed, delivery, tick, angle, speed, loft);
 if (!delivery.reachable || !clearance.atGate || clearance.interception) throw new Error('The benchmark clearance fixture is invalid.');
-const clearanceMilliseconds = Math.ceil((Math.max(0.035, delivery.delay) + clearance.travelTime) * 1000);
+const clearanceMilliseconds = Math.ceil((Math.max(0.035, delivery.delay) + clearance.travelTime) * 1000) + (loft ? 260 : 100);
 
 const mode = process.argv[2] ?? '16k';
 if (mode !== '4k' && mode !== '16k') throw new Error('Choose 4k or 16k.');
@@ -28,7 +31,7 @@ const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
-  `goal-line-hardware-${mode}${scenario === 'heavy' ? '-heavy' : ''}`);
+  `goal-line-hardware-${mode}${scenario === 'standard' ? '' : '-' + scenario}`);
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -179,6 +182,11 @@ try {
         if (round) await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
         const aim = page.getByRole('slider', { name: 'Clearance angle' });
         for (let step = 0; step < Math.abs(angle); step++) await aim.press(angle < 0 ? 'ArrowLeft' : 'ArrowRight');
+        if (loft) await page.getByRole('checkbox', { name: 'Loft the clearance' }).check();
+        const power = page.getByRole('slider', { name: 'Kick speed' });
+        for (let step = 0; step < Math.abs(speed - CLEARANCE_SPEED); step++) {
+          await power.press(speed < CLEARANCE_SPEED ? 'ArrowLeft' : 'ArrowRight');
+        }
         await page.evaluate(() => {
           window.goalLineDrawTimes.length = 0;
           window.goalLineCompletionTimes.length = 0;
@@ -219,7 +227,7 @@ try {
         await page.waitForFunction(duration => {
           window.goalLineClearanceObservedAt ??= performance.now();
           return performance.now() - window.goalLineClearanceObservedAt >= duration;
-        }, clearanceMilliseconds + 100, { timeout: 5000 });
+        }, clearanceMilliseconds, { timeout: 5000 });
         await page.evaluate(() => { delete window.goalLineClearanceObservedAt; });
         const { frames, completions, kickTime, browserEvents } = await page.evaluate(() => ({
           frames: window.goalLineDrawTimes, completions: window.goalLineCompletionTimes,
