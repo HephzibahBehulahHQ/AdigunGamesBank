@@ -5,10 +5,14 @@ export async function loadPlayers() {
   const response = await fetch(new URL('./defender.mesh.json', import.meta.url));
   if (!response.ok) throw new Error('Could not load the Goal Line defender mesh.');
   const data = await response.json();
-  return { defender: createPlayer(data), createOpponent: () => createPlayer(data, true) };
+  return {
+    defender: createPlayer(data, 'defend'),
+    createOpponent: () => createPlayer(data, 'press'),
+    createReceiver: () => createPlayer(data, 'receive')
+  };
 }
 
-function createPlayer(data, away = false) {
+function createPlayer(data, role) {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(data.positions, 3));
   geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(data.skinIndices, 4));
@@ -20,7 +24,7 @@ function createPlayer(data, away = false) {
   });
   geometry.setIndex(data.sections.flat());
   geometry.computeVertexNormals();
-  const { uv, palette } = outfitMaterials(data.positions, away);
+  const { uv, palette } = outfitMaterials(data.positions, role);
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   const mesh = new THREE.SkinnedMesh(geometry, palette);
   mesh.castShadow = true;

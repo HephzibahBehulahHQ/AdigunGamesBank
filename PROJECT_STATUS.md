@@ -50,6 +50,15 @@ passed [CI 44927480746](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/ac
 273 JavaScript tests, 52 API tests and 75 browser checks, including the
 advanced pressure interception and successful retry. Publication was skipped.
 
+The receiving teammate is now rendered at the outlet. From Expert onward
+the clearance is judged at the teammate's predicted position on arrival.
+The local eight-test browser suite passed, including the moving outlet,
+and the engine solver still completes all 10,000 drills. At 18:22 on
+2026-11-21, the three-player scene held its measured 15,360 × 8,640 GPU
+framebuffer through all 30 sampled Apprentice feeds on the Intel Arc 140T.
+It submitted 732 frames over 39.4 sampled seconds with no WebGL errors or
+context loss. Median and 95th-percentile intervals were 50.2 and 108.3 ms.
+
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
 on 2026-11-21 at 17:42 Europe/Berlin. Results were 272 JavaScript tests,

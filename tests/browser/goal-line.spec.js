@@ -135,6 +135,26 @@ test('Goal Line advanced pressure punishes a blocked lane and allows a wider ang
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });
 
+test('Goal Line expert receiver changes the outlet and accepts a timed clearance', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+      version: 1, completed: 6000, unlocked: 6001
+    }));
+  });
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  const gate = page.locator('#gate');
+  await expect(gate).toHaveText('2.45 m right to 4.09 m right');
+  await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  for (let i = 0; i < 18; i++) await hold.press('Enter');
+  await expect(gate).toHaveText('2.74 m right to 4.38 m right');
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  for (let i = 0; i < 19; i++) await aim.press('ArrowRight');
+  await page.getByRole('button', { name: 'Clear ball' }).press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+});
+
 test('Goal Line audio starts on request and mutes without interrupting play', async ({ page }) => {
   await page.addInitScript(() => {
     window.goalLineAudioSources = [];

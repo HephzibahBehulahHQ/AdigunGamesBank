@@ -32,7 +32,8 @@ function stripe(context, top, metres, color) {
   context.fillRect(0, row(top), SIZE, SIZE * metres / HEIGHT_METRES);
 }
 
-export function outfitMaterials(positions, away = false) {
+export function outfitMaterials(positions, role) {
+  const away = role === 'press';
   const uv = new Float32Array(positions.length / 3 * 2);
   for (let vertex = 0; vertex < positions.length / 3; vertex++) {
     const x = positions[vertex * 3];
@@ -53,7 +54,7 @@ export function outfitMaterials(positions, away = false) {
     context.font = '800 150px system-ui';
     context.lineWidth = 5;
     context.strokeStyle = '#172237';
-    const number = away ? '9' : '4';
+    const number = away ? '9' : role === 'receive' ? '8' : '4';
     context.strokeText(number, SIZE / 2, row(1.28));
     context.fillStyle = '#f3ebd5';
     context.fillText(number, SIZE / 2, row(1.28));

@@ -1,5 +1,5 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { CLEARANCE_SPEED, STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact } from './clearance.js';
+import { CLEARANCE_SPEED, STEP, advance, clear, createDrill, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
 import { createPitchAudio } from './pitch-audio.js';
 import { gamepadControls } from './gamepad.js';
 
@@ -60,7 +60,8 @@ function update(message) {
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
   byId('ball').textContent = sideways(ball.x) + ', ' + Math.abs(ball.z).toFixed(2) + ' m ' + (ball.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('defender').textContent = sideways(state.defender);
-  byId('gate').textContent = sideways(feed.channel - safeEdge) + ' to ' + sideways(feed.channel + safeEdge);
+  const outlet = ball.z <= 2.3 ? projection.receiver : receiverAt(feed, state.tick * STEP);
+  byId('gate').textContent = sideways(outlet - safeEdge) + ' to ' + sideways(outlet + safeEdge);
   const interception = projection.interception ? ' · intercepted' : '';
   byId('projection').textContent = ball.z <= 2.3 ? sideways(projection.end.x) + interception : 'Available inside contact zone';
   byId('pressing').hidden = pressure === null;

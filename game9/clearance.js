@@ -40,6 +40,13 @@ export function makeDrill(level) {
         range: 0.075 + 0.085 * difficulty
       };
     }
+    if (level > 6000) {
+      feed.receiver = {
+        phase: random() * Math.PI * 2,
+        speed: 1.35 + difficulty,
+        range: 0.22 + 0.11 * difficulty
+      };
+    }
     return feed;
   });
 }
@@ -73,20 +80,30 @@ export function readContact(feed, tick, defender) {
 export function pressureAt(feed, time) {
   const player = feed.pressure;
   if (!player) return null;
-  return { x: player.center + player.range * Math.sin(player.phase + player.speed * time), z: player.z };
+  const tracksReceiver = receiverAt(feed, time + (SAFETY_LINE - player.z) / CLEARANCE_SPEED) - feed.channel;
+  const x = player.center + tracksReceiver * player.z / SAFETY_LINE + player.range * Math.sin(player.phase + player.speed * time);
+  return { x, z: player.z };
+}
+
+export function receiverAt(feed, time) {
+  const run = feed.receiver;
+  return feed.channel + (run ? run.range * Math.sin(run.phase + run.speed * time) : 0);
 }
 
 export function planClearance(feed, delivery, tick, angle) {
   const { contact, delay } = delivery;
   const end = clearanceAt(contact, angle, feed.drift, SAFETY_LINE);
-  const atGate = Math.abs(end.x - feed.channel) <= feed.halfWidth - BALL_RADIUS;
+  const launchTime = tick * STEP + delay;
+  const receiveTime = launchTime + (SAFETY_LINE - contact.z) / CLEARANCE_SPEED;
+  const receiver = receiverAt(feed, receiveTime);
+  const atGate = Math.abs(end.x - receiver) <= feed.halfWidth - BALL_RADIUS;
   const pressure = feed.pressure;
-  if (!pressure) return { end, atGate, interception: null };
-  const time = tick * STEP + delay + (pressure.z - contact.z) / CLEARANCE_SPEED;
+  if (!pressure) return { end, atGate, interception: null, receiver, receiveTime };
+  const time = launchTime + (pressure.z - contact.z) / CLEARANCE_SPEED;
   const player = pressureAt(feed, time);
   const ball = clearanceAt(contact, angle, feed.drift, player.z);
   const interception = Math.abs(ball.x - player.x) <= 0.42 + BALL_RADIUS ? { ball, time } : null;
-  return { end, atGate, interception };
+  return { end, atGate, interception, receiver, receiveTime };
 }
 
 export function createDrill(level) {

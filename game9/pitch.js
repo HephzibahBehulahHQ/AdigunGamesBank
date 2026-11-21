@@ -1,12 +1,12 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, CLEARANCE_SPEED, SAFETY_LINE, STEP, clearanceAt, pressureAt } from './clearance.js';
+import { BALL_RADIUS, CLEARANCE_SPEED, SAFETY_LINE, STEP, clearanceAt, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
 import { addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
-  const [{ defender, createOpponent }, turf] = await Promise.all([loadPlayers(), loadTurf()]);
+  const [{ defender, createOpponent, createReceiver }, turf] = await Promise.all([loadPlayers(), loadTurf()]);
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
@@ -42,8 +42,17 @@ export async function createPitch(options) {
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
   let opponent;
+  const receiver = createReceiver();
+  receiver.mesh.rotation.y = Math.PI;
+  receiver.mesh.position.z = SAFETY_LINE + 0.28;
+  scene.add(receiver.mesh);
 
-  function framePressure(feed, time) {
+  function framePlayers(feed, time) {
+    const outlet = -receiverAt(feed, time);
+    const movement = Math.sign(outlet - receiver.mesh.position.x);
+    receiver.mesh.position.x = outlet;
+    receiver.pose(movement, motion.matches || !feed.receiver ? 0 : 0.35, 0);
+    gate.position.x = outlet;
     const pressure = pressureAt(feed, time);
     if (!pressure) {
       if (opponent) opponent.mesh.visible = false;
@@ -54,11 +63,11 @@ export async function createPitch(options) {
       opponent.mesh.rotation.y = Math.PI;
       scene.add(opponent.mesh);
     }
-    const movement = Math.sign(-pressure.x - opponent.mesh.position.x);
+    const pressDirection = Math.sign(-pressure.x - opponent.mesh.position.x);
     opponent.mesh.position.x = -pressure.x;
     opponent.mesh.position.z = pressure.z;
     opponent.mesh.visible = true;
-    opponent.pose(movement, motion.matches ? 0 : 0.35, 0);
+    opponent.pose(pressDirection, motion.matches ? 0 : 0.35, 0);
   }
 
   function framePlay(z) {
@@ -73,7 +82,6 @@ export async function createPitch(options) {
 
   return {
     draw(state, feed, ball, angle, plannedContact) {
-      gate.position.x = -feed.channel;
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
       stripe.scale.x = feed.halfWidth * 2;
@@ -104,7 +112,7 @@ export async function createPitch(options) {
         ballMesh.position.copy(targetBall);
         framePlay(ballMesh.position.z);
         const endTime = attempt ? attempt.delay + (visibleBall.z - attempt.contact.z) / CLEARANCE_SPEED : 0;
-        framePressure(feed, state.tick * STEP + endTime);
+        framePlayers(feed, state.tick * STEP + endTime);
         defender.mesh.position.x = targetX;
         defender.pose(0, 0, 0);
         stage.render();
@@ -141,8 +149,12 @@ export async function createPitch(options) {
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);
-        const pressureTime = state.tick * STEP + (kick ? Math.min(seconds, attempt.delay + flight) : 0);
-        framePressure(feed, pressureTime);
+        const time = kick
+          ? state.tick * STEP + (seconds < windup
+            ? attempt.delay * seconds / windup
+            : attempt.delay + Math.min(seconds - windup, flight))
+          : Math.max(0, (state.tick - 1 + elapsed) * STEP);
+        framePlayers(feed, time);
         stage.render();
         frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
       }

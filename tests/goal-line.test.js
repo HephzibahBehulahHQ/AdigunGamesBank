@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { LEVEL_COUNT } from '../shared/progression.js';
-import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, planClearance, readContact } from '../game9/clearance.js';
+import { STEP, SAFETY_LINE, advance, clear, createDrill, incomingAt, nextFeed, planClearance, readContact, receiverAt } from '../game9/clearance.js';
 
 export function playPlan(feed) {
   const tick = Math.round(feed.approachTime / STEP);
@@ -25,7 +25,7 @@ test('all 10,000 distinct Goal Line drills can be completed through the public c
       const center = planClearance(feed, contact, state.tick, targetAngle);
       if (center.atGate && center.interception) blockedGateShots++;
       let safeAngle = targetAngle;
-      if (center.interception) {
+      if (center.interception || !center.atGate) {
         safeAngle = undefined;
         for (let aim = -60; aim <= 60; aim++) {
           const plan = planClearance(feed, contact, state.tick, aim);
@@ -41,6 +41,16 @@ test('all 10,000 distinct Goal Line drills can be completed through the public c
   }
   assert.equal(configurations.size, LEVEL_COUNT);
   assert.ok(blockedGateShots > 1000, 'advanced pressure must change clearance decisions');
+});
+
+test('expert clearances target the receiver at the time the ball arrives', () => {
+  const state = createDrill(6001);
+  const feed = state.feeds[0];
+  const { tick, moves, targetAngle } = playPlan(feed);
+  for (let i = 0; i < tick; i++) advance(state, i < Math.abs(moves) ? Math.sign(moves) : 0);
+  const projection = planClearance(feed, readContact(feed, tick, state.defender), tick, targetAngle);
+  assert.equal(projection.receiver, receiverAt(feed, projection.receiveTime));
+  assert.notEqual(projection.receiver, receiverAt(feed, tick * STEP));
 });
 
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {
