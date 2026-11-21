@@ -4,6 +4,16 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The local stepped WebGPU scene probe now reuses Goal Line's pitch, rigs
+and clearance rules. Chrome 158 on the Intel adapter drew the pitch and
+completed a heavy-turf clearance at both 3840 × 2160 and 15,360 × 8,640.
+The renderer reported those canvas texture dimensions on each draw and
+the viewport captures showed the game scene. The ordinary WebGL path also
+completed an actual 4K clearance. A mixed-size WebGPU trial hit an allocation
+error. The verified probe starts at the requested size in a fresh session.
+WebGL-specific material effects, interactive WebGPU play, sustained frame
+rate and physical output remain open. Goal Line is still held from release.
+
 Chromium's WebGL canvas area cap explains the measured 7680 × 4320
 reduction of the direct 16K request. A separate Chrome 158 WebGPU probe
 used the local non-fallback Intel adapter, allocated both 3840 × 2160 and

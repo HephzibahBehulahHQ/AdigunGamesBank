@@ -84,13 +84,19 @@ or the corresponding 4K directory. The viewport screenshot shows the scene;
 the render buffer dimensions and framebuffer completeness come from WebGL. A fallback, lost context,
 software renderer or incomplete workload does not qualify.
 
-## Defender source and rebuild
+## WebGPU development checks
 
 Run `node scripts/check-goal-line-webgpu.mjs` to verify 4K and 16K canvas
 texture allocation on an existing Chrome installation. The probe submits
 a clear and validates pixel readback at each size. Its report is written
 to `test-results/goal-line-webgpu-surface/`. It measures surface support
-only. Goal Line still renders its game scene with WebGL.
+only. Run `node scripts/build.mjs` followed by
+`node scripts/check-goal-line-webgpu-scene.mjs 16k` for a stepped clearance
+with the real pitch, player rigs and game rules. Use `4k` for the other
+resolution. The scene probe opens a separate local view and saves its
+texture sizes and a viewport capture. The regular game still uses WebGL.
+
+## Defender source and rebuild
 
 The sky uses a 2048 × 1024 version of the CC0 panorama
 [Kloppenheim 05 (Pure Sky)](https://polyhaven.com/a/kloppenheim_05_puresky)

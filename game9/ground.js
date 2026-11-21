@@ -15,7 +15,7 @@ export async function loadTurf() {
 export function addGround(scene, renderer, { map, normalMap }) {
   const width = 48;
   const stripeLength = 5;
-  const anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const anisotropy = renderer.getMaxAnisotropy?.() ?? renderer.capabilities.getMaxAnisotropy();
   for (const texture of [map, normalMap]) {
     if (!texture) continue;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;

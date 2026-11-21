@@ -5,14 +5,14 @@ import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
 import { addOutletMarkers, addTrainingGround } from './training-ground.js';
 
-export async function createPitch(options) {
+export async function createPitch(options, makeStage = createStage) {
   const skyUrl = new URL('./textures/training-sky.jpg', import.meta.url);
   const [{ defender, createOpponent, createReceiver }, turf, sky] = await Promise.all([
     loadPlayers(),
     loadTurf(),
     new THREE.TextureLoader().loadAsync(skyUrl.href).catch(() => null),
   ]);
-  const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
+  const stage = await makeStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   camera.far = 110;
   camera.updateProjectionMatrix();
@@ -21,7 +21,7 @@ export async function createPitch(options) {
   if (sky) {
     sky.colorSpace = THREE.SRGBColorSpace;
     const skyMaterial = new THREE.MeshBasicMaterial({
-      map: sky, side: THREE.BackSide, depthWrite: false, fog: false,
+      map: sky, side: THREE.BackSide, depthWrite: false, depthTest: !renderer.isWebGPURenderer, fog: false,
     });
     // Put the panorama behind all geometry while keeping its apparent distance infinite.
     skyMaterial.onBeforeCompile = shader => {
@@ -34,7 +34,7 @@ export async function createPitch(options) {
     dome.frustumCulled = false;
     dome.position.copy(camera.position);
     // Let opaque pitch geometry reject sky fragments before sampling the panorama.
-    dome.renderOrder = 1;
+    dome.renderOrder = renderer.isWebGPURenderer ? -1 : 1;
     scene.add(dome);
   }
   scene.fog = new THREE.Fog('#9eabb2', 42, 96);

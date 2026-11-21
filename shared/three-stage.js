@@ -2,22 +2,7 @@ import * as THREE from '../vendor/three/three.module.js';
 
 export { THREE };
 
-/** A real WebGL surface, with an optional measured 16K scene framebuffer. */
-export function createStage({ canvas, context, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true, enable16K = false }) {
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas, context, antialias: !enable16K, alpha: false, powerPreference: 'high-performance' });
-  } catch {
-    const message = 'This 3D game needs WebGL 2. Enable hardware acceleration or use a compatible browser.';
-    if (status) status.textContent = message;
-    throw new Error(message);
-  }
-  renderer.setPixelRatio(1);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-  renderer.shadowMap.enabled = shadows;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
+export function createStageScene({ position = [12, 15, 18], target = [0, 0, 0], shadows = true }) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#0B1220');
   const camera = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 700);
@@ -33,6 +18,26 @@ export function createStage({ canvas, context, qualitySelect, status, position =
   light.shadow.camera.far = 150;
   light.shadow.normalBias = 0.035;
   scene.add(light);
+  return { scene, camera, light };
+}
+
+/** A real WebGL surface, with an optional measured 16K scene framebuffer. */
+export function createStage({ canvas, context, qualitySelect, status, position, target, shadows = true, enable16K = false }) {
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, context, antialias: !enable16K, alpha: false, powerPreference: 'high-performance' });
+  } catch {
+    const message = 'This 3D game needs WebGL 2. Enable hardware acceleration or use a compatible browser.';
+    if (status) status.textContent = message;
+    throw new Error(message);
+  }
+  renderer.setPixelRatio(1);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+  renderer.shadowMap.enabled = shadows;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
+  const { scene, camera, light } = createStageScene({ position, target, shadows });
   let quality = 'auto', lost = false;
   const gl = renderer.getContext();
   const maxBuffer = Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), renderer.capabilities.maxTextureSize);
