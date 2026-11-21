@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+All 19 Goal Line Chrome browser checks passed. The added advanced-drill
+check at 320 px with reduced motion covers skip-link focus, no horizontal
+overflow, clearance readiness, stable slider names and value text with
+direction or units. Axe reported zero violations with the drill rules
+expanded. Manual screen-reader announcements were not tested.
+
 Two five-clearance Chrome runs at 16K on Intel Arc 140T compared the
 existing turf shader with separate materials that computed goalmouth wear
 only on the two stripes intersecting the wear ellipse. Median scene GPU

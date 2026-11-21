@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { LEVEL_COUNT } from '../../shared/progression.js';
 import { makeDrill, planClearance, readContact, SAFETY_LINE, STEP } from '../../game9/clearance.js';
 
@@ -49,6 +50,36 @@ async function completeDrill(page, level = 1) {
   await expect(page.locator('#campaign')).toContainText(`${level} cleared`);
   if (mastered) await expect(page.locator('#campaign')).toContainText('Campaign complete');
 }
+
+test('Goal Line exposes advanced drill controls and status at 320px with reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+      version: 1, completed: 8001, unlocked: 8002,
+    }));
+  });
+  await page.goto('/game9/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to drill controls' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Start live ball' })).toBeFocused();
+  for (let step = 0; step < 3; step++) await page.getByRole('button', { name: 'Left', exact: true }).press('Enter');
+  for (let step = 3; step < 18; step++) await page.getByRole('button', { name: 'Hold', exact: true }).press('Enter');
+  await expect(page.getByRole('checkbox', { name: 'Loft the clearance' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Clear ball' })).toHaveAccessibleDescription('Ball in reach.');
+  const angle = page.getByRole('slider', { name: 'Clearance angle', exact: true });
+  await angle.press('ArrowLeft');
+  await expect(angle).toHaveAttribute('aria-valuetext', '1 degree left');
+  const speed = page.getByRole('slider', { name: 'Kick speed', exact: true });
+  await speed.press('Home');
+  await expect(speed).toHaveAttribute('aria-valuetext', '4 meters per second');
+  await page.getByText('Drill rules', { exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(321);
+  const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+  expect(result.violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }))).toEqual([]);
+});
 
 test('Goal Line marks the campaign complete after the final drill', async ({ page }) => {
   await page.addInitScript(level => {

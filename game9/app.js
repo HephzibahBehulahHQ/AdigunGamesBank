@@ -94,6 +94,11 @@ function update(message) {
   if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';
   byId('speed-value').textContent = speed + ' m/s';
+  const angleDescription = aiming === 0 ? 'Straight ahead'
+    : `${Math.abs(aiming)} ${Math.abs(aiming) === 1 ? 'degree' : 'degrees'} ${aiming < 0 ? 'left' : 'right'}`;
+  const speedDescription = `${speed} meters per second`;
+  if (angle.getAttribute('aria-valuetext') !== angleDescription) angle.setAttribute('aria-valuetext', angleDescription);
+  if (kickSpeed.getAttribute('aria-valuetext') !== speedDescription) kickSpeed.setAttribute('aria-valuetext', speedDescription);
   const contactReading = byId('contact');
   const moveSide = contact.x < state.defender ? 'left' : 'right';
   let contactText = '';
