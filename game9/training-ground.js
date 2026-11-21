@@ -3,6 +3,44 @@ import { THREE, box, material } from '../shared/three-stage.js';
 const concrete = { roughness: 0.91, metalness: 0 };
 const steel = { roughness: 0.4, metalness: 0.55 };
 
+export function addOutletMarkers(scene) {
+  const gate = new THREE.Group();
+  scene.add(gate);
+  const rubber = new THREE.BoxGeometry(0.32, 0.032, 0.32);
+  const lower = new THREE.CylinderGeometry(0.064, 0.136, 0.24, 20);
+  const band = new THREE.CylinderGeometry(0.047, 0.064, 0.058, 20);
+  const top = new THREE.CylinderGeometry(0.022, 0.047, 0.084, 20);
+  const baseMaterial = material('#393634', { roughness: 0.96, metalness: 0 });
+  const orange = material('#d76b26', { roughness: 0.78, metalness: 0 });
+  const reflector = material('#efdfbe', { roughness: 0.7, metalness: 0 });
+  function cone() {
+    const group = new THREE.Group();
+    for (const [geometry, finish, y] of [[rubber, baseMaterial, 0.016], [lower, orange, 0.152],
+      [band, reflector, 0.301], [top, orange, 0.372]]) {
+      const mesh = new THREE.Mesh(geometry, finish);
+      mesh.position.y = y;
+      mesh.castShadow = true;
+      group.add(mesh);
+    }
+    gate.add(group);
+    return group;
+  }
+  const left = cone();
+  const right = cone();
+  const stripe = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.07).rotateX(-Math.PI / 2), reflector);
+  stripe.position.y = 0.003;
+  stripe.receiveShadow = true;
+  gate.add(stripe);
+  return {
+    gate,
+    setWidth(halfWidth) {
+      left.position.x = -halfWidth - 0.16;
+      right.position.x = halfWidth + 0.16;
+      stripe.scale.x = halfWidth * 2;
+    },
+  };
+}
+
 function addDugout(structure, z) {
   const x = 24.1;
   structure([2.3, 0.12, 7.6], [x, 0.01, z], '#aaa69a', concrete);

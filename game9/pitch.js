@@ -1,9 +1,9 @@
-import { THREE, box, createStage } from '../shared/three-stage.js';
+import { THREE, createStage } from '../shared/three-stage.js';
 import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, clearanceHeight, goalNetImpact, goalNetRest, incomingAt, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
-import { addTrainingGround } from './training-ground.js';
+import { addOutletMarkers, addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
   const skyUrl = new URL('./textures/training-sky.jpg', import.meta.url);
@@ -35,11 +35,7 @@ export async function createPitch(options) {
   const setHeavyTurf = addGround(scene, renderer, turf);
   const net = addGoal(scene);
   addTrainingGround(scene);
-  const gate = new THREE.Group();
-  scene.add(gate);
-  const left = box(gate, [0.11, 0.8, 0.11], [0, 0.4, 0], '#f2c45f');
-  const right = box(gate, [0.11, 0.8, 0.11], [0, 0.4, 0], '#f2c45f');
-  const stripe = box(gate, [1, 0.025, 0.18], [0, 0.01, 0], '#f2c45f');
+  const { gate, setWidth } = addOutletMarkers(scene);
   gate.position.z = SAFETY_LINE;
   scene.add(defender.mesh);
   const ballMesh = createFootball();
@@ -132,9 +128,7 @@ export async function createPitch(options) {
       if (newFeed) ballMesh.quaternion.identity();
       previousFeed = feed;
       setHeavyTurf(Boolean(feed.resistance));
-      left.position.x = -feed.halfWidth;
-      right.position.x = feed.halfWidth;
-      stripe.scale.x = feed.halfWidth * 2;
+      setWidth(feed.halfWidth);
       const attempt = state.trajectory;
       const controlled = state.result === 'cleared' || state.result === 'intercepted';
       const netHit = state.result === 'conceded' ? goalNetImpact(feed) : null;
