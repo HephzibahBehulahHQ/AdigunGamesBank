@@ -467,6 +467,7 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
   await page.clock.install({ time: start });
   await page.clock.pauseAt(new Date(start.getTime() + 1000));
   await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({ version: 1, completed: 2000, unlocked: 2001 }));
     window.goalLineTestPad = {
       connected: true, index: 0, mapping: 'standard', axes: [0],
       buttons: Array.from({ length: 17 }, () => ({ pressed: false }))
@@ -492,6 +493,14 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
   }
   await press(9);
   await expect(page.getByRole('button', { name: 'Pause live ball' })).toBeVisible();
+  const loft = page.getByRole('checkbox', { name: 'Loft the clearance' });
+  await page.getByRole('button', { name: 'Pause live ball' }).focus();
+  await page.keyboard.press('v');
+  await expect(loft).toBeChecked();
+  await press(2);
+  await expect(loft).not.toBeChecked();
+  await press(2);
+  await expect(loft).toBeChecked();
   await press(15);
   await expect(page.getByRole('slider', { name: 'Clearance angle' })).toHaveValue('1');
   await press(5);
@@ -504,4 +513,5 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
   await press(3);
   await expect(page.getByRole('button', { name: 'Start live ball' })).toBeEnabled();
   await expect(page.locator('#defender')).toHaveText('centre');
+  await expect(loft).not.toBeChecked();
 });

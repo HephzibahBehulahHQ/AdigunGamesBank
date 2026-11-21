@@ -9,6 +9,7 @@ const levelInput = byId('level');
 const angle = byId('angle');
 const kickSpeed = byId('kick-speed');
 const loft = byId('loft');
+const loftControl = byId('loft-control');
 const buttons = [...document.querySelectorAll('[data-move]')];
 const next = byId('next');
 const clearButton = byId('clear');
@@ -38,6 +39,7 @@ const pad = gamepadControls({
   live: () => liveButton.click(),
   aim: (change) => adjustAim(change),
   power: (change) => adjustPower(change),
+  loft: toggleLoft,
   clear: () => clearButton.click(),
   advance: () => { if (!next.hidden) next.click(); },
   reset: () => byId('retry').click()
@@ -119,7 +121,7 @@ function update(message) {
     ? 'Hold A or D to move, or tap a direction. Tap Hold to stop moving.'
     : 'Each movement advances the ball by 0.1 seconds. Start the live ball for a timed clearance.';
   angle.disabled = kickSpeed.disabled = loft.disabled = clearButton.disabled = !ready;
-  byId('loft-control').hidden = !feed.pressure;
+  loftControl.hidden = !feed.pressure;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
   pitch?.draw(state, feed, ball, aiming, contact, projection);
@@ -185,6 +187,10 @@ function adjustPower(change) {
   update();
 }
 
+function toggleLoft() {
+  if (!loftControl.hidden) loft.click();
+}
+
 liveButton.addEventListener('click', toggleLive);
 sound.addEventListener('click', async () => {
   sound.disabled = true;
@@ -216,6 +222,10 @@ byId('controls').addEventListener('keydown', (event) => {
   if (key === 'f' && !event.repeat) {
     event.preventDefault();
     clearButton.click();
+  }
+  if (key === 'v' && !event.repeat) {
+    event.preventDefault();
+    toggleLoft();
   }
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
