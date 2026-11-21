@@ -51,6 +51,9 @@ from Poly Haven, photographed by Greg Zaal and edited by Jarod Guest.
 
 The rig and mesh come from the MakeHuman contributors under [CC0 1.0](https://www.makehumancommunity.org/about/license.html). To rebuild the packed, metre-scale browser mesh, place these original inputs in the local `dist` directory and run `node scripts/build-goal-line-player.mjs`. The script checks each source blob before packing.
 
+The generator writes `defender.mesh.bin` with a JSON metadata header and
+typed arrays for the vertex positions, texture coordinates and skin weights.
+
 | Local input | Pinned source |
 | --- | --- |
 | `makehuman-base.obj` | [Base mesh](https://github.com/makehumancommunity/makehuman/blob/3c701a8e52f09e69922e8b598d23be2d7dfc49e3/makehuman/data/3dobjs/base.obj) |

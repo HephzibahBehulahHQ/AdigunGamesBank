@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The packed player mesh now transfers 1.22 MB instead of 1.59 MB and uses
+the same GPU attribute values as the JSON asset. All 14 Chrome gameplay
+checks and five cold-load checks passed. Median WebGL readiness was 2.44 s
+at simulated 20 Mbps, with the slowest run at 4.63 s.
+
 Re-encoding the 1024 × 1024 turf diffuse and normal maps reduced their
 combined transfer size from 2.66 MB to 1.18 MB. In five local Chrome 158
 cold-load checks at simulated 20 Mbps and 40 ms latency, median WebGL

@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs';
+import { packPlayerMesh } from '../game9/player-mesh.js';
 import { createHash } from 'node:crypto';
 
 const inputs = [
@@ -87,5 +88,5 @@ for (const { group: groupName, vertices, uvs } of faces) {
 }
 const normalSeams = [...normalGroups.values()].filter(indices => indices.length > 1);
 const model = { positions, skinUvs, normalSeams, skinIndices, skinWeights, sections, rig };
-writeFileSync(new URL('../game9/defender.mesh.json', import.meta.url), JSON.stringify(model));
+writeFileSync(new URL('../game9/defender.mesh.bin', import.meta.url), packPlayerMesh(model));
 console.log(`Goal Line defender: ${visibleVertices.size} vertices, ${rig.length} joints, ${sections.reduce((sum, section) => sum + section.length / 3, 0)} triangles`);
