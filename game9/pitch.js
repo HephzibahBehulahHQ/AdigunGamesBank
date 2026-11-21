@@ -110,7 +110,12 @@ export async function createPitch(options) {
       const concession = Boolean(netHit) && !playedConcession;
       playedConcession = Boolean(netHit);
       if (!netHit) net.settle();
-      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? netHit ?? ball;
+      const restingBall = netHit && {
+        x: netHit.x - (netHit.panel === 'side' ? netHit.side * 0.28 : 0),
+        y: BALL_RADIUS,
+        z: netHit.z + (netHit.panel === 'back' ? 0.32 : 0),
+      };
+      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? restingBall ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
         const contact = attempt?.contact ?? plannedContact;
@@ -151,6 +156,7 @@ export async function createPitch(options) {
       const windup = kick ? Math.max(0.035, attempt.delay) : 0;
       const flight = kick ? attempt.travelTime : 0;
       const netTransit = concession ? Math.max(0.045, (ballFrom.z - netHit.z) / feed.pace) : 0;
+      const netContact = concession ? new THREE.Vector3(-netHit.x, netHit.y, netHit.z) : null;
       const duration = concession ? netTransit + 0.65 : kick ? windup + flight : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, attempt.contact.y, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
@@ -195,9 +201,16 @@ export async function createPitch(options) {
           }
         } else if (concession) {
           defender.settle(targetX);
-          ballMesh.position.lerpVectors(ballFrom, targetBall, Math.min(1, seconds / netTransit));
-          if (elapsed === 1) net.settle();
-          else if (seconds >= netTransit) net.impact(netHit, seconds - netTransit);
+          if (seconds < netTransit) {
+            ballMesh.position.lerpVectors(ballFrom, netContact, seconds / netTransit);
+          } else {
+            const reboundTime = seconds - netTransit;
+            const roll = 1 - (1 - Math.min(1, reboundTime / 0.5)) ** 2;
+            ballMesh.position.lerpVectors(netContact, targetBall, roll);
+            ballMesh.position.y = clearanceHeight(netHit.y, reboundTime);
+            if (elapsed === 1) net.settle();
+            else net.impact(netHit, reboundTime);
+          }
         } else {
           defender.stride(defender.mesh.position.x);
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
