@@ -73,11 +73,11 @@ export function addGoal(scene) {
   const height = 2.44;
   const radius = GOAL_POST_RADIUS;
   const frame = material('#e2e4de', { roughness: 0.34, metalness: 0.18 });
-  function pipe(start, end) {
+  function pipe(start, end, pipeRadius = radius, pipeMaterial = frame) {
     const a = new THREE.Vector3(...start);
     const b = new THREE.Vector3(...end);
     const axis = new THREE.Vector3().subVectors(b, a);
-    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, axis.length(), 20), frame);
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(pipeRadius, pipeRadius, axis.length(), 20), pipeMaterial);
     mesh.position.copy(a.add(b).multiplyScalar(0.5));
     mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis.normalize());
     mesh.castShadow = true;
@@ -89,6 +89,14 @@ export function addGoal(scene) {
   pipe([-post, bar, 0], [post, bar, 0]);
   const cords = [];
   const depth = NET_DEPTH;
+  const supports = material('#505b60', { roughness: 0.75, metalness: 0.15 });
+  const supportDepth = depth + 0.35;
+  for (const x of [-post, post]) {
+    pipe([x, 0, -supportDepth], [x, bar + 0.12, -supportDepth], 0.032, supports);
+    pipe([x, bar, -depth], [x, bar + 0.12, -supportDepth], 0.008, supports);
+    pipe([x, 0.024, 0], [x, 0.024, -depth], 0.021, supports);
+  }
+  pipe([-post, 0.024, -depth], [post, 0.024, -depth], 0.021, supports);
   const rowCount = 20;
   const columns = 60;
   function strand(a, b) {
