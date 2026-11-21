@@ -187,6 +187,28 @@ test('Goal Line restores 3D without resetting the current feed', async ({ page }
   })).toEqual([3840, 2160, false, 0]);
 });
 
+test('Goal Line resets shin and boot angles after a reaching pose', async ({ page }) => {
+  await page.goto('/game9/');
+  const poses = await page.evaluate(async () => {
+    const [{ loadPlayers }, { THREE }] = await Promise.all([
+      import('/game9/defender.js'), import('/shared/three-stage.js'),
+    ]);
+    const { createReceiver } = await loadPlayers();
+    const receiver = createReceiver();
+    receiver.mesh.rotation.y = Math.PI;
+    const joints = ['lowerleg01.L', 'foot.L'].map(name => receiver.mesh.skeleton.getBoneByName(name));
+    const sample = () => joints.map(joint => joint.quaternion.toArray());
+    receiver.settle(0);
+    const neutral = sample();
+    receiver.plantBoot(new THREE.Vector3(-0.25, 0.24, -0.44), 0.48, 0, 1);
+    const reaching = sample();
+    receiver.settle(0);
+    return { neutral, reaching, reset: sample() };
+  });
+  expect(poses.reaching).not.toEqual(poses.neutral);
+  expect(poses.reset).toEqual(poses.neutral);
+});
+
 test('Goal Line can enter and exit full screen during a drill', async ({ page }) => {
   await page.goto('/game9/');
   await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');

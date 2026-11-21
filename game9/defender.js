@@ -160,8 +160,8 @@ function createPlayer(rig, geometry, role, skin, build) {
         upperArm.rotation.set(-0.18 + stride * 0.18, side * 0.11, -side * (0.38 + kick * 0.15));
         lowerArm.rotation.set(-0.21 - kick * 0.27, 0, -side * 0.23);
         thigh.rotation.set(-0.29 - strike * 0.92, 0, side * 0.10 + stride * 0.26);
-        shin.rotation.x = 0.48 - strike * 0.36 + Math.max(0, stride) * 0.11;
-        foot.rotation.x = -0.19 + strike * 0.42;
+        shin.rotation.set(0.48 - strike * 0.36 + Math.max(0, stride) * 0.11, 0, 0);
+        foot.rotation.set(-0.19 + strike * 0.42, 0, 0);
       });
       mesh.position.y = -0.034 + Math.abs(step) * 0.025;
     }

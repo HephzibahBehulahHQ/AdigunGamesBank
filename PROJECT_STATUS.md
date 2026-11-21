@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Player shin and boot rotations now reset on all axes when the rig returns
+to its base pose. A Chrome regression test reproduced retained rotation on
+the previous build and verified that the fixed receiver returns both joints
+to their original orientation after a reach. All 21 Goal Line Chrome
+checks passed on the fixed build, including actual 4K and context recovery.
+
 The receiving and pressing players now use a fixed support-foot target
 from the start of the reach as their other boot moves toward the ball.
 The same stance calculation runs in reduced motion and at the animation
