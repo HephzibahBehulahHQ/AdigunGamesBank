@@ -2,6 +2,15 @@
 
 Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current acceptance record.
 
+## Goal Line conversion
+
+Goal Line (game9) is integrated on main at `292d658ea79a21968fdc5668116e43abedaf4486`. The original 3D clearance drill uses timed interception, directional clearance and a saved 10,000-drill campaign. The catalog now contains fifteen local 3D implementations, one API-dependent 3D client and eight legacy 2D titles in source. Historical publication counts below describe the previous release.
+
+- [Exact gameplay candidate CI](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44919603061) passed on 2026-11-21 at 16:44 Europe/Berlin: 271 JavaScript, 52 API and 72 browser checks (19 accessibility/reflow, 16 contract/fallback and 37 rendered gameplay). The local static build and release integrity checks passed. The engine solver completed every distinct drill through public commands.
+- Chromium/SwiftShader reported a 3840 × 2160 WebGL 2 drawing buffer with GL error 0. Keyboard completion, retry, reload and graphics fallback passed. The 320px screenshot and the frame rendered with 4K mode selected were inspected from [artifact 14713497349](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44919603061/artifacts/14713497349). Hardware frame time, physical touch and screen-reader sessions remain unverified.
+- The scoped engine checkpoint `c81a00463dab6530723f2e43d1a5c9f3b0ba19e6` and playable checkpoint `292d658ea79a21968fdc5668116e43abedaf4486` were read back from GitHub. Main was fast-forwarded to the exact playable candidate and read back on 2026-11-21.
+- Publication verification is pending. A post-integration public fetch still showed the old entry page and no new script. Keep the previous production receipt until the expected Pages deployment and byte comparison succeed.
+
 ## Acceptance
 
 **In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This **published development milestone** converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.
@@ -108,4 +117,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Verify and synchronize this published-release record, then integrate it through the existing release flow. The next product milestone is one individually scoped remaining legacy conversion, starting with Goal Line (game9); its playable rules, 3D scene, progression and actual browser evidence must be completed before proceeding to another title. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
+Verify the Goal Line deployment against its tested source before scoping the next individual legacy conversion. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
