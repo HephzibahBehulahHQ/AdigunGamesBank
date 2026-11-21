@@ -157,6 +157,28 @@ test('Goal Line expert receiver changes the outlet and accepts a timed clearance
   await expect(page.locator('#message')).toContainText('Safe clearance');
 });
 
+test('Goal Line teaches the player to wait for a skipping feed to drop', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('adigun.campaign.v1.goal-line', JSON.stringify({
+      version: 1, completed: 4043, unlocked: 4044
+    }));
+  });
+  await page.goto('/game9/');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+  const left = page.getByRole('button', { name: 'Left', exact: true });
+  const hold = page.getByRole('button', { name: 'Hold', exact: true });
+  for (let i = 0; i < 4; i++) await left.press('Enter');
+  for (let i = 0; i < 17; i++) await hold.press('Enter');
+  await expect(page.locator('#contact')).toContainText('Ball too high');
+  await expect(page.locator('#ball')).toContainText('m high');
+  await hold.press('Enter');
+  await expect(page.locator('#contact')).toHaveText('Ball in reach.');
+  const aim = page.getByRole('slider', { name: 'Clearance angle' });
+  for (let i = 0; i < 36; i++) await aim.press('ArrowRight');
+  await page.getByRole('button', { name: 'Clear ball' }).press('Enter');
+  await expect(page.locator('#message')).toContainText('Safe clearance');
+});
+
 test('Goal Line kick speed controls rolling range and resets on retry', async ({ page }) => {
   await page.goto('/game9/');
   const hold = page.getByRole('button', { name: 'Hold', exact: true });

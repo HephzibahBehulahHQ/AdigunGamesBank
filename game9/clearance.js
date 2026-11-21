@@ -11,10 +11,12 @@ export const GOAL_HALF_WIDTH = 3.66;
 export const GOAL_POST_RADIUS = 0.06;
 export const NET_DEPTH = 1.8;
 const ROLLING_DECELERATION = 1.8;
+const GRAVITY = 9.81;
 const DEFENDER_SPEED = 4.5;
 const CONTROL_REACH = 0.62;
 const CLEARANCE_WINDOW = 2.3;
 const PLANT_DISTANCE = 0.45;
+const VOLLEY_HEIGHT = 0.4;
 
 export function makeDrill(level) {
   level = validLevel(level);
@@ -52,14 +54,24 @@ export function makeDrill(level) {
         range: 0.22 + 0.11 * difficulty
       };
     }
+    if (level > 4000 && random() < 0.62) {
+      feed.bounces = {
+        first: approachTime * (0.52 + 0.14 * random()),
+        restitution: 0.46 + 0.11 * random()
+      };
+    }
     return feed;
   });
 }
 
 export function incomingAt(feed, time) {
   const fraction = time / feed.approachTime;
+  const bounces = feed.bounces;
+  const flight = bounces && (time < bounces.first ? bounces.first : bounces.first * bounces.restitution);
+  const elapsed = bounces ? time - (time < bounces.first ? 0 : bounces.first) : 0;
   return {
     x: feed.origin + (feed.crossing - feed.origin) * fraction,
+    y: BALL_RADIUS + (flight ? Math.max(0, GRAVITY / 2 * elapsed * (flight - elapsed)) : 0),
     z: feed.pace * (feed.approachTime - time)
   };
 }
@@ -88,6 +100,10 @@ export function clearanceDistance(speed, time) {
   return speed * rollTime - ROLLING_DECELERATION * rollTime ** 2 / 2;
 }
 
+export function clearanceHeight(height, time) {
+  return Math.max(BALL_RADIUS, height - GRAVITY * time ** 2 / 2);
+}
+
 function timeToDistance(distance, speed) {
   const finalSpeed = Math.sqrt(Math.max(0, speed ** 2 - 2 * ROLLING_DECELERATION * distance));
   return 2 * distance / (speed + finalSpeed);
@@ -98,9 +114,10 @@ export function readContact(feed, tick, defender) {
   const ball = incomingAt(feed, time);
   const delay = Math.max(0, (ball.z - PLANT_DISTANCE) / feed.pace);
   const contact = delay > 0 ? incomingAt(feed, time + delay) : ball;
-  const reachable = ball.z <= CLEARANCE_WINDOW && ball.z >= LINE - BALL_RADIUS &&
-    Math.abs(contact.x - defender) <= CONTROL_REACH;
-  return { ball, contact, delay, reachable };
+  const inWindow = ball.z <= CLEARANCE_WINDOW && ball.z >= LINE - BALL_RADIUS;
+  const high = contact.y > VOLLEY_HEIGHT;
+  const reachable = inWindow && !high && Math.abs(contact.x - defender) <= CONTROL_REACH;
+  return { ball, contact, delay, inWindow, high, reachable };
 }
 
 export function pressureAt(feed, time) {
@@ -120,9 +137,9 @@ export function receiverAt(feed, time) {
 export function planClearance(feed, delivery, tick, angle, speed = CLEARANCE_SPEED) {
   const { contact, delay } = delivery;
   const z = Math.min(SAFETY_LINE, contact.z + clearanceDistance(speed, speed / ROLLING_DECELERATION));
-  const end = clearanceAt(contact, angle, feed.drift, z);
   const launchTime = tick * STEP + delay;
   const travelTime = timeToDistance(z - contact.z, speed);
+  const end = { ...clearanceAt(contact, angle, feed.drift, z), y: clearanceHeight(contact.y, travelTime) };
   const receiveTime = launchTime + travelTime;
   const receiver = receiverAt(feed, receiveTime);
   const short = z < SAFETY_LINE;
@@ -133,7 +150,7 @@ export function planClearance(feed, delivery, tick, angle, speed = CLEARANCE_SPE
   const pressTime = timeToDistance(pressure.z - contact.z, speed);
   const time = launchTime + pressTime;
   const player = pressureAt(feed, time);
-  const ball = clearanceAt(contact, angle, feed.drift, player.z);
+  const ball = { ...clearanceAt(contact, angle, feed.drift, player.z), y: clearanceHeight(contact.y, pressTime) };
   if (Math.abs(ball.x - player.x) <= 0.42 + BALL_RADIUS) {
     plan.interception = { ball, time };
     plan.travelTime = pressTime;

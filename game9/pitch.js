@@ -1,5 +1,5 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, goalNetImpact, pressureAt, receiverAt } from './clearance.js';
+import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, clearanceHeight, goalNetImpact, incomingAt, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
@@ -106,7 +106,7 @@ export async function createPitch(options) {
       const movement = Math.sign(targetX - previousTarget);
       const kick = attempt && attempt !== playedAttempt;
       playedAttempt = attempt;
-      const nextBall = new THREE.Vector3(-visibleBall.x, BALL_RADIUS, visibleBall.z);
+      const nextBall = new THREE.Vector3(-visibleBall.x, visibleBall.y, visibleBall.z);
       const travel = !nextBall.equals(targetBall);
       targetBall = nextBall;
       if (!hasFrame || motion.matches || (!travel && !movement && !kick && !concession && frame === undefined)) {
@@ -131,7 +131,7 @@ export async function createPitch(options) {
       const flight = kick ? attempt.travelTime : 0;
       const netTransit = concession ? Math.max(0.045, (ballFrom.z - netHit.z) / feed.pace) : 0;
       const duration = concession ? netTransit + 0.65 : kick ? windup + flight : 0.095;
-      const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, BALL_RADIUS, attempt.contact.z) : null;
+      const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, attempt.contact.y, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
       const kickAngle = kick ? -attempt.angle * Math.PI / 180 : 0;
       const bootTarget = kick ? contactPoint.clone().add(
@@ -158,7 +158,7 @@ export async function createPitch(options) {
           } else {
             const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, seconds - windup));
             const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
-            ballMesh.position.set(-point.x, BALL_RADIUS, z);
+            ballMesh.position.set(-point.x, clearanceHeight(attempt.contact.y, seconds - windup), z);
           }
         } else if (concession) {
           defender.settle(targetX);
@@ -168,6 +168,7 @@ export async function createPitch(options) {
         } else {
           defender.stride(defender.mesh.position.x);
           ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
+          if (feed.bounces && state.tick > 0) ballMesh.position.y = incomingAt(feed, (state.tick - 1 + elapsed) * STEP).y;
         }
         ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);

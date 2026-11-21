@@ -96,6 +96,12 @@ and the cords deform around that point. A Chrome run at an actual
 3840 × 2160 drawing buffer captured the ball against the back net. The nine
 standard browser checks and the separate visual impact check passed locally.
 
+Skilled and higher drills now include bouncing feeds, with height carried
+through the contact calculation, volley animation and net impact. The
+all-drill solver completed 10,000 drills. Ten focused engine checks and ten
+local Chrome browser checks passed, including waiting for a dropping feed
+and then completing the clearance.
+
 The preceding frame-queue candidate `04b8bf590cbda4fc30795c87fc3e843b88293fbe`
 passed [CI 44930121559](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44930121559),
 including 52 API and 78 browser checks. Publication was skipped.

@@ -108,6 +108,24 @@ test('the ball meets the first net panel after fully crossing the goal line', ()
   assert.ok(angled.z > direct.z && angled.z < -BALL_RADIUS);
 });
 
+test('a skipping feed uses a lower rebound and can require a later volley', () => {
+  const state = createDrill(4044);
+  const feed = state.feeds[0];
+  const { first, restitution } = feed.bounces;
+  assert.ok(incomingAt(feed, first / 2).y > incomingAt(feed, first + first * restitution / 2).y);
+  assert.ok(Math.abs(incomingAt(feed, first).y - BALL_RADIUS) < 1e-9);
+  for (let i = 0; i < 21; i++) advance(state, i < 4 ? -1 : 0);
+  const high = readContact(feed, state.tick, state.defender);
+  assert.equal(high.inWindow, true);
+  assert.equal(high.high, true);
+  assert.equal(high.reachable, false);
+  advance(state);
+  assert.equal(readContact(feed, state.tick, state.defender).reachable, true);
+  assert.equal(clear(state, 36), true);
+  assert.ok(state.trajectory.contact.y > BALL_RADIUS);
+  assert.equal(state.trajectory.end.y, BALL_RADIUS);
+});
+
 test('an advanced pressing player can stop a clearance that would have reached the gate', () => {
   for (let level = 2001; level < 2100; level++) {
     const state = createDrill(level);

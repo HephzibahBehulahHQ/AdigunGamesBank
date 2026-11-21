@@ -1,5 +1,5 @@
 import { THREE, box, material } from '../shared/three-stage.js';
-import { BALL_RADIUS, GOAL_HALF_WIDTH, GOAL_POST_RADIUS, NET_DEPTH } from './clearance.js';
+import { GOAL_HALF_WIDTH, GOAL_POST_RADIUS, NET_DEPTH } from './clearance.js';
 
 export async function loadTurf() {
   const loader = new THREE.TextureLoader();
@@ -137,10 +137,10 @@ export function addGoal(scene) {
         const y = rest[i + 1];
         const z = rest[i + 2];
         if (hit.panel === 'back' && Math.abs(z + depth) < 0.001) {
-          const falloff = Math.exp(-((x + hit.x) ** 2 + (y - BALL_RADIUS) ** 2) * 1.7);
+          const falloff = Math.exp(-((x + hit.x) ** 2 + (y - hit.y) ** 2) * 1.7);
           positions.array[i + 2] = z - displacement * falloff * (1 - Math.abs(x) / post);
         } else if (hit.panel === 'side' && Math.abs(x + hit.side * post) < 0.001) {
-          const falloff = Math.exp(-((z - hit.z) ** 2 + (y - BALL_RADIUS) ** 2) * 1.7);
+          const falloff = Math.exp(-((z - hit.z) ** 2 + (y - hit.y) ** 2) * 1.7);
           positions.array[i] = x - hit.side * displacement * falloff * Math.sin(Math.PI * -z / depth);
         }
       }

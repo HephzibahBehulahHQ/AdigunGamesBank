@@ -52,7 +52,7 @@ function sideways(x) {
 function update(message) {
   const feed = state.feeds[state.index];
   const delivery = readContact(feed, state.tick, state.defender);
-  const { ball, contact, reachable } = delivery;
+  const { ball, contact, inWindow, high, reachable } = delivery;
   const aiming = Number(angle.value);
   const ready = state.result === 'ready';
   const finished = state.result === 'cleared' && state.index === state.feeds.length - 1;
@@ -62,7 +62,8 @@ function update(message) {
   const pressure = pressureAt(feed, state.tick * STEP);
   const position = state.result === 'conceded' ? goalNetImpact(feed) : ball;
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
-  byId('ball').textContent = sideways(position.x) + ', ' + Math.abs(position.z).toFixed(2) + ' m ' + (position.z < 0 ? 'behind' : 'from') + ' goal line';
+  const location = sideways(position.x) + ', ' + Math.abs(position.z).toFixed(2) + ' m ' + (position.z < 0 ? 'behind' : 'from') + ' goal line';
+  byId('ball').textContent = position.y > 0.12 ? location + ' · ' + position.y.toFixed(2) + ' m high' : location;
   byId('defender').textContent = sideways(state.defender);
   const outlet = ball.z <= 2.3 && !projection.short ? projection.receiver : receiverAt(feed, state.tick * STEP);
   byId('gate').textContent = sideways(outlet - safeEdge) + ' to ' + sideways(outlet + safeEdge);
@@ -74,8 +75,8 @@ function update(message) {
   if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';
   byId('speed-value').textContent = speed + ' m/s';
-  byId('contact').textContent = reachable && ready
-    ? 'Ball in reach.' : 'Close the gap before clearing.';
+  byId('contact').textContent = reachable && ready ? 'Ball in reach.'
+    : inWindow && high && ready ? 'Ball too high. Wait for it to drop.' : 'Close the gap before clearing.';
   if (message !== undefined) byId('message').textContent = message;
   levelInput.max = save.unlocked;
   const live = timer !== null;
