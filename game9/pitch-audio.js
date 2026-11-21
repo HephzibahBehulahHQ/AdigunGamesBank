@@ -29,10 +29,32 @@ function makeSounds(context) {
   }));
 }
 
+function makeWind(context) {
+  const duration = 8;
+  const buffer = context.createBuffer(2, duration * context.sampleRate, context.sampleRate);
+  for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+    const samples = buffer.getChannelData(channel);
+    const random = randomFor(912 + channel);
+    let breeze = 0;
+    let drift = 0;
+    for (let index = 0; index < samples.length; index++) {
+      const seconds = index / context.sampleRate;
+      breeze += (random() * 2 - 1 - breeze) * 0.018;
+      drift += (breeze - drift) * 0.0009;
+      const gust = 0.55 + 0.26 * Math.cos(seconds * Math.PI / 2 + channel * 0.3);
+      const loopEdge = Math.min(1, seconds * 8, (duration - seconds) * 8);
+      samples[index] = (breeze - drift) * gust * loopEdge;
+    }
+  }
+  return buffer;
+}
+
 export function createPitchAudio() {
   let context;
   let output;
   let samples;
+  let windBuffer;
+  let wind;
   let enabled = false;
   const active = new Set();
 
@@ -41,12 +63,37 @@ export function createPitchAudio() {
     active.clear();
   }
 
+  function updateAmbience() {
+    const audible = enabled && !document.hidden && context.state === 'running';
+    if (audible && !wind) {
+      const source = context.createBufferSource();
+      const gain = context.createGain();
+      source.buffer = windBuffer;
+      source.loop = true;
+      gain.gain.value = 0.22;
+      source.connect(gain).connect(output);
+      source.onended = () => {
+        source.disconnect();
+        gain.disconnect();
+      };
+      source.start();
+      wind = { source, gain };
+    } else if (!audible && wind) {
+      wind.gain.gain.setTargetAtTime(0, context.currentTime, 0.02);
+      wind.source.stop(context.currentTime + 0.08);
+      wind = undefined;
+    }
+  }
+
+  document.addEventListener('visibilitychange', updateAmbience);
+
   return {
     get enabled() { return enabled; },
     async toggle() {
       if (enabled) {
         enabled = false;
         stop();
+        updateAmbience();
         return false;
       }
       context ??= new AudioContext();
@@ -55,10 +102,12 @@ export function createPitchAudio() {
         output.gain.value = 0.32;
         output.connect(context.destination);
         samples = makeSounds(context);
+        windBuffer = makeWind(context);
       }
       await context.resume();
       if (context.state !== 'running') throw new Error('Sound could not start.');
       enabled = true;
+      updateAmbience();
       return true;
     },
     play(name, x, delay = 0, volume = 1) {

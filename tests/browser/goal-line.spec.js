@@ -567,15 +567,24 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   await disableWebGL(page);
   await page.addInitScript(() => {
     window.goalLineAudioSources = [];
+    window.goalLineWindStarts = [];
+    window.goalLineWindStops = 0;
+    if (!globalThis.AudioBufferSourceNode) return;
     const start = AudioBufferSourceNode.prototype.start;
+    const stop = AudioBufferSourceNode.prototype.stop;
     AudioBufferSourceNode.prototype.start = function (...args) {
       const sample = this.buffer.getChannelData(0);
-      window.goalLineAudioSources.push({
+      const sources = this.loop ? window.goalLineWindStarts : window.goalLineAudioSources;
+      sources.push({
         duration: this.buffer.duration,
         startsAt: args[0],
         audibleSignal: sample.some(value => Math.abs(value) > 0.01)
       });
       return start.apply(this, args);
+    };
+    AudioBufferSourceNode.prototype.stop = function (...args) {
+      if (this.loop) window.goalLineWindStops++;
+      return stop.apply(this, args);
     };
   });
   await page.goto('/game9/');
@@ -593,12 +602,16 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
     return;
   }
   await expect(sound).toHaveAttribute('aria-pressed', 'true');
+  expect(await page.evaluate(() => window.goalLineWindStarts)).toEqual([
+    expect.objectContaining({ duration: 8, audibleSignal: true })
+  ]);
   for (let i = 0; i < 3; i++) await right.press('Enter');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toEqual([
     expect.objectContaining({ audibleSignal: true })
   ]);
   await sound.click();
   await expect(sound).toHaveAttribute('aria-pressed', 'false');
+  expect(await page.evaluate(() => window.goalLineWindStops)).toBe(1);
   for (let i = 0; i < 3; i++) await right.press('Enter');
   await expect(page.locator('#defender')).toHaveText('3.15 m right');
   expect(await page.evaluate(() => window.goalLineAudioSources)).toHaveLength(1);
@@ -629,6 +642,19 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
   const feed = makeDrill(1)[0];
   const shot = planClearance(feed, readContact(feed, 24, 0), 24, 23);
   expect(contacts[1].startsAt - contacts[0].startsAt).toBeCloseTo(shot.travelTime, 1);
+  await page.getByRole('button', { name: 'Next ball' }).press('Enter');
+  expect(await page.evaluate(() => window.goalLineWindStarts)).toHaveLength(2);
+  expect(await page.evaluate(() => window.goalLineWindStops)).toBe(1);
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  expect(await page.evaluate(() => window.goalLineWindStops)).toBe(2);
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  expect(await page.evaluate(() => window.goalLineWindStarts)).toHaveLength(3);
 });
 
 test('Goal Line standard gamepad controls play and pauses on disconnect', async ({ page }) => {

@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Goal Line's optional sound now includes a quiet, original stereo wind
+loop. It continues between balls and fades out on mute or when the tab is
+hidden. Chrome and Firefox verified loop startup, muting, feed transitions
+and visibility changes. The pinned Windows WebKit build verified that
+play continues when Web Audio is unavailable. Physical listening was not
+part of these headless checks.
+
 An isolated Chrome benchmark can now compare ANGLE backends and confirms
 the renderer actually selected. On Intel Arc 140T, both Vulkan and Direct3D
 11 completed five broadcast clearances in a 15,360 × 8,640 scene and
