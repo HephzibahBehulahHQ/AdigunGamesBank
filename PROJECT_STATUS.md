@@ -4,6 +4,10 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The development build now offers a sideline broadcast view alongside the
+goal camera. The camera switch preserves the live drill state. The training
+ground includes touchline dugouts and a licensed photographic sky.
+
 **Release held under the updated owner acceptance standard.** Development
 continues on the scoped branch. The ground and goal now use original turf
 colour and relief textures, painted pitch markings, cylindrical goal posts,

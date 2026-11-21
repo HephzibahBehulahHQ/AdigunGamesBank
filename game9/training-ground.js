@@ -3,6 +3,24 @@ import { THREE, box, material } from '../shared/three-stage.js';
 const concrete = { roughness: 0.91, metalness: 0 };
 const steel = { roughness: 0.4, metalness: 0.55 };
 
+function addDugout(scene, z) {
+  const x = 24.1;
+  box(scene, [2.3, 0.12, 7.6], [x, 0.01, z], '#aaa69a', concrete);
+  box(scene, [1.85, 0.12, 7.5], [x, 2.36, z], '#34434b', steel);
+  box(scene, [0.1, 2.35, 7.5], [x + 0.94, 1.175, z], '#5e6d72', steel);
+  for (const end of [-3.65, 3.65]) {
+    box(scene, [1.8, 0.95, 0.10], [x, 0.54, z + end], '#6a7b80', steel);
+    box(scene, [0.08, 2.36, 0.08], [x - 0.90, 1.18, z + end], '#7c8990', steel);
+  }
+  for (let seat = 0; seat < 10; seat++) {
+    const at = z - 3.1 + seat * 0.68;
+    box(scene, [0.50, 0.09, 0.47], [x + 0.18, 0.51, at], '#284762', concrete);
+    box(scene, [0.08, 0.42, 0.47], [x + 0.41, 0.73, at], '#284762', concrete);
+  }
+  box(scene, [1.85, 0.16, 0.11], [x, 2.26, z + 3.64], '#79868a', steel);
+  box(scene, [1.85, 0.16, 0.11], [x, 2.26, z - 3.64], '#79868a', steel);
+}
+
 export function addTrainingGround(scene) {
   box(scene, [82, 0.16, 102], [0, -0.15, 33], '#6a706d', concrete);
   for (const side of [-1, 1]) {
@@ -34,6 +52,8 @@ export function addTrainingGround(scene) {
       }
     }
   }
+  addDugout(scene, 17.4);
+  addDugout(scene, 28.4);
 }
 
 function addSeats(scene, side) {

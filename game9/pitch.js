@@ -6,10 +6,20 @@ import { createFootball } from './football.js';
 import { addTrainingGround } from './training-ground.js';
 
 export async function createPitch(options) {
-  const [{ defender, createOpponent, createReceiver }, turf] = await Promise.all([loadPlayers(), loadTurf()]);
+  const skyUrl = new URL('./textures/training-sky.jpg', import.meta.url);
+  const [{ defender, createOpponent, createReceiver }, turf, sky] = await Promise.all([
+    loadPlayers(),
+    loadTurf(),
+    new THREE.TextureLoader().loadAsync(skyUrl.href).catch(() => null),
+  ]);
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
+  if (sky) {
+    sky.colorSpace = THREE.SRGBColorSpace;
+    sky.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = sky;
+  }
   scene.fog = new THREE.Fog('#9eabb2', 42, 96);
   light.position.set(-12, 19, 5);
   light.target.position.set(0, 0, 7);
@@ -71,6 +81,17 @@ export async function createPitch(options) {
 
   function framePlay(z) {
     const wide = motion.matches ? 1 : THREE.MathUtils.smoothstep(z, 3, 25);
+    const broadcast = options.view() === 'broadcast';
+    options.canvas.dataset.camera = broadcast ? 'broadcast' : 'goal';
+    if (broadcast) {
+      camera.position.set(
+        THREE.MathUtils.lerp(-11.2, -20.5, wide),
+        THREE.MathUtils.lerp(3.45, 7.5, wide),
+        THREE.MathUtils.lerp(-4.3, -6.5, wide)
+      );
+      camera.lookAt(0.65, 1.02, THREE.MathUtils.lerp(4.4, 11.7, wide));
+      return;
+    }
     camera.position.set(
       THREE.MathUtils.lerp(-4.5, -1.5, wide),
       THREE.MathUtils.lerp(5.9, 13, wide),

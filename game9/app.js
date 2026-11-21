@@ -13,6 +13,7 @@ const next = byId('next');
 const clearButton = byId('clear');
 const canvas = byId('pitch');
 const quality = byId('quality');
+const cameraView = byId('camera-view');
 const graphics = byId('graphics');
 const liveButton = byId('live');
 const movementHelp = byId('movement-help');
@@ -251,15 +252,17 @@ byId('load').addEventListener('click', () => {
 function fallback() {
   canvas.hidden = true;
   quality.disabled = true;
+  cameraView.disabled = true;
   graphics.textContent = '3D unavailable. Use the drill controls and position readings to play.';
 }
 canvas.addEventListener('stage-lost', fallback);
 load(level);
 
 import('./pitch.js').then(async ({ createPitch }) => {
-  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics });
+  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics, view: () => cameraView.value });
   update();
   const render = () => update();
   quality.addEventListener('change', render);
+  cameraView.addEventListener('change', render);
   new ResizeObserver(render).observe(canvas);
 }).catch(fallback);

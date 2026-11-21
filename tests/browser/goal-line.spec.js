@@ -56,8 +56,25 @@ test('Goal Line keeps visible keyboard controls and saves without WebGL', async 
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto('/game9/');
   await expect(page.locator('#graphics')).toContainText('3D unavailable');
+  await expect(page.getByRole('combobox', { name: 'Camera' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Hold', exact: true })).toBeVisible();
   await completeDrill(page);
+});
+
+test('Goal Line can switch cameras without changing the drill state', async ({ page }) => {
+  await page.goto('/game9/');
+  const canvas = page.locator('#pitch');
+  await expect(canvas).toHaveAttribute('data-camera', 'goal');
+  const initialPosition = await page.locator('#ball').textContent();
+  const camera = page.getByRole('combobox', { name: 'Camera' });
+  await camera.selectOption('broadcast');
+  await expect(canvas).toHaveAttribute('data-camera', 'broadcast');
+  await expect(page.locator('#ball')).toHaveText(initialPosition);
+  await page.getByRole('button', { name: 'Right', exact: true }).press('Enter');
+  await expect(page.locator('#defender')).toHaveText('0.45 m right');
+  await camera.selectOption('goal');
+  await expect(canvas).toHaveAttribute('data-camera', 'goal');
+  await expect(page.locator('#defender')).toHaveText('0.45 m right');
 });
 
 test('Goal Line rejects 16K when the device viewport limit is too small', async ({ page }) => {
