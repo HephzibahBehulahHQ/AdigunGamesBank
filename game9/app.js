@@ -1,5 +1,5 @@
 import { campaign, LEVEL_COUNT, tierFor } from '../shared/progression.js';
-import { CLEARANCE_SPEED, MAX_CLEARANCE_SPEED, MIN_CLEARANCE_SPEED, STEP, advance, clear, createDrill, goalNetImpact, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
+import { CLEARANCE_SPEED, MAX_CLEARANCE_SPEED, MIN_CLEARANCE_SPEED, STEP, advance, clear, createDrill, goalNetImpact, goalNetRest, incomingAt, nextFeed, planClearance, pressureAt, readContact, receiverAt } from './clearance.js';
 import { createPitchAudio } from './pitch-audio.js';
 import { gamepadControls } from './gamepad.js';
 
@@ -61,7 +61,10 @@ function update(message) {
   const speed = Number(kickSpeed.value);
   const projection = planClearance(feed, delivery, state.tick, aiming, speed);
   const pressure = pressureAt(feed, state.tick * STEP);
-  const position = state.result === 'conceded' ? goalNetImpact(feed) : ball;
+  const shot = state.trajectory;
+  const position = state.result === 'conceded'
+    ? goalNetRest(goalNetImpact(feed))
+    : shot?.interception?.ball ?? shot?.end ?? ball;
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + save.completed + ' cleared';
   const location = sideways(position.x) + ', ' + Math.abs(position.z).toFixed(2) + ' m ' + (position.z < 0 ? 'behind' : 'from') + ' goal line';
   byId('ball').textContent = position.y > 0.12 ? location + ' · ' + position.y.toFixed(2) + ' m high' : location;
@@ -71,7 +74,8 @@ function update(message) {
   const aimReading = projection.interception ? sideways(projection.end.x) + ' · intercepted'
     : projection.short ? 'Short · stops at ' + projection.end.z.toFixed(2) + ' m upfield'
       : sideways(projection.end.x);
-  byId('projection').textContent = ball.z <= 2.3 ? aimReading : 'Available inside contact zone';
+  byId('projection').textContent = !ready ? 'Ball finished'
+    : ball.z <= 2.3 ? aimReading : 'Available inside contact zone';
   byId('pressing').hidden = pressure === null;
   if (pressure) byId('pressure-position').textContent = sideways(pressure.x) + ', ' + pressure.z.toFixed(2) + ' m upfield';
   byId('angle-value').textContent = aiming + '°';

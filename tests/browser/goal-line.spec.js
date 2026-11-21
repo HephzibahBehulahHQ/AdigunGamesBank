@@ -16,6 +16,7 @@ async function completeDrill(page) {
     await page.getByRole('button', { name: 'Clear ball', exact: true }).press('Enter');
     if (index < 2) {
       await expect(page.locator('#message')).toContainText('Safe clearance');
+      await expect(page.locator('#ball')).toContainText('8.00 m from goal line');
       await page.keyboard.press('Enter');
     }
   }

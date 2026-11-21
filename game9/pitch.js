@@ -1,5 +1,5 @@
 import { THREE, box, createStage } from '../shared/three-stage.js';
-import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, clearanceHeight, goalNetImpact, incomingAt, pressureAt, receiverAt } from './clearance.js';
+import { BALL_RADIUS, SAFETY_LINE, STEP, clearanceAt, clearanceDistance, clearanceHeight, goalNetImpact, goalNetRest, incomingAt, pressureAt, receiverAt } from './clearance.js';
 import { addGoal, addGround, loadTurf } from './ground.js';
 import { loadPlayers } from './defender.js';
 import { createFootball } from './football.js';
@@ -129,11 +129,7 @@ export async function createPitch(options) {
       const concession = Boolean(netHit) && !playedConcession;
       playedConcession = Boolean(netHit);
       if (!netHit) net.settle();
-      const restingBall = netHit && {
-        x: netHit.x - (netHit.panel === 'side' ? netHit.side * 0.28 : 0),
-        y: BALL_RADIUS,
-        z: netHit.z + (netHit.panel === 'back' ? 0.32 : 0),
-      };
+      const restingBall = netHit && goalNetRest(netHit);
       const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? restingBall ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {

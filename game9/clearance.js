@@ -87,6 +87,14 @@ export function goalNetImpact(feed) {
   return { ...incomingAt(feed, time), time, panel, side };
 }
 
+export function goalNetRest(hit) {
+  return {
+    x: hit.x - (hit.panel === 'side' ? hit.side * 0.28 : 0),
+    y: BALL_RADIUS,
+    z: hit.z + (hit.panel === 'back' ? 0.32 : 0),
+  };
+}
+
 export function clearanceAt(contact, angle, drift, z) {
   const distance = z - contact.z;
   return {
