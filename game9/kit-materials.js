@@ -32,7 +32,7 @@ function stripe(context, top, metres, color) {
   context.fillRect(0, row(top), SIZE, SIZE * metres / HEIGHT_METRES);
 }
 
-export function outfitMaterials(positions, role) {
+export function outfitMaterials(positions, role, skin) {
   const away = role === 'press';
   const uv = new Float32Array(positions.length / 3 * 2);
   for (let vertex = 0; vertex < positions.length / 3; vertex++) {
@@ -72,7 +72,7 @@ export function outfitMaterials(positions, role) {
   return {
     uv,
     palette: [
-      material('#936349', { roughness: 0.65 }),
+      material(skin ? '#ffffff' : '#936349', { map: skin, roughness: 0.65, metalness: 0 }),
       material('#ffffff', { map: jersey, roughness: 0.88, metalness: 0 }),
       material('#ffffff', { map: shorts, roughness: 0.89, metalness: 0 }),
       material('#ffffff', { map: socks, roughness: 0.92, metalness: 0 }),

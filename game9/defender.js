@@ -2,17 +2,30 @@ import { THREE } from '../shared/three-stage.js';
 import { outfitMaterials } from './kit-materials.js';
 
 export async function loadPlayers() {
-  const response = await fetch(new URL('./defender.mesh.json', import.meta.url));
+  const loader = new THREE.TextureLoader();
+  const [response, ...skins] = await Promise.all([
+    fetch(new URL('./defender.mesh.json', import.meta.url)),
+    ...['defender', 'opponent', 'receiver'].map(async role => {
+      try {
+        const texture = await loader.loadAsync(new URL(`./textures/${role}-skin.jpg`, import.meta.url).href);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.channel = 1;
+        return texture;
+      } catch {
+        return null;
+      }
+    })
+  ]);
   if (!response.ok) throw new Error('Could not load the Goal Line defender mesh.');
   const data = await response.json();
   return {
-    defender: createPlayer(data, 'defend'),
-    createOpponent: () => createPlayer(data, 'press'),
-    createReceiver: () => createPlayer(data, 'receive')
+    defender: createPlayer(data, 'defend', skins[0], [1.04, 1.01, 1.02]),
+    createOpponent: () => createPlayer(data, 'press', skins[1], [0.96, 1.05, 0.98]),
+    createReceiver: () => createPlayer(data, 'receive', skins[2], [0.98, 0.96, 1.03])
   };
 }
 
-function createPlayer(data, role) {
+function createPlayer(data, role, skin, build) {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(data.positions, 3));
   geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(data.skinIndices, 4));
@@ -24,8 +37,18 @@ function createPlayer(data, role) {
   });
   geometry.setIndex(data.sections.flat());
   geometry.computeVertexNormals();
-  const { uv, palette } = outfitMaterials(data.positions, role);
+  const normals = geometry.getAttribute('normal');
+  const blended = new THREE.Vector3();
+  const sample = new THREE.Vector3();
+  for (const seam of data.normalSeams) {
+    blended.set(0, 0, 0);
+    for (const index of seam) blended.add(sample.fromBufferAttribute(normals, index));
+    blended.normalize();
+    for (const index of seam) normals.setXYZ(index, blended.x, blended.y, blended.z);
+  }
+  const { uv, palette } = outfitMaterials(data.positions, role, skin);
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  geometry.setAttribute('uv1', new THREE.Float32BufferAttribute(data.skinUvs, 2));
   const mesh = new THREE.SkinnedMesh(geometry, palette);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
@@ -43,6 +66,7 @@ function createPlayer(data, role) {
   });
   mesh.updateMatrixWorld(true);
   mesh.bind(new THREE.Skeleton(joints));
+  mesh.scale.set(...build);
   mesh.normalizeSkinWeights();
   const joint = name => joints.find(item => item.name === name);
   const spine = joint('spine03');

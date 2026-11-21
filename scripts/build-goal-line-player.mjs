@@ -15,14 +15,17 @@ const [obj, skeletonText, weightsText] = inputs.map(([name, expected]) => {
 const { bones, joints } = JSON.parse(skeletonText);
 const { weights } = JSON.parse(weightsText);
 const source = [];
+const sourceUvs = [];
 const faces = [];
 let group;
 for (const line of obj.split(/\r?\n/)) {
   const [kind, ...fields] = line.trim().split(/\s+/);
   if (kind === 'g') group = fields[0];
   if (kind === 'v') source.push(fields.map(Number));
+  if (kind === 'vt') sourceUvs.push(fields.slice(0, 2).map(Number));
   if (kind === 'f' && (group === 'body' || group === 'helper-tights' || /^helper-[lr]-eye$/.test(group))) {
-    faces.push({ group, vertices: fields.map(field => Number(field.split('/')[0]) - 1) });
+    const corners = fields.map(field => field.split('/').slice(0, 2).map(index => Number(index) - 1));
+    faces.push({ group, vertices: corners.map(([vertex]) => vertex), uvs: corners.map(([, uv]) => uv) });
   }
 }
 
@@ -52,14 +55,21 @@ function kitSlot([x, y], groupName) {
 }
 const visibleVertices = new Map();
 const positions = [];
+const skinUvs = [];
+const normalGroups = new Map();
 const skinIndices = [];
 const skinWeights = [];
 const sections = Array.from({ length: 6 }, () => []);
-function packedIndex(vertex) {
-  if (visibleVertices.has(vertex)) return visibleVertices.get(vertex);
+function packedIndex(vertex, uv) {
+  const key = `${vertex}/${uv}`;
+  if (visibleVertices.has(key)) return visibleVertices.get(key);
   const packed = visibleVertices.size;
-  visibleVertices.set(vertex, packed);
+  visibleVertices.set(key, packed);
+  if (!normalGroups.has(vertex)) normalGroups.set(vertex, []);
+  normalGroups.get(vertex).push(packed);
   positions.push(...toMetres(source[vertex]));
+  if (uv !== -1 && !sourceUvs[uv]) throw new Error(`Missing skin atlas coordinate for vertex ${vertex}`);
+  skinUvs.push(...(uv === -1 ? [0, 0] : sourceUvs[uv].map(round)));
   const top = byVertex[vertex].sort((a, b) => b[1] - a[1]).slice(0, 4);
   if (!top.length) throw new Error(`Missing rig weights for vertex ${vertex}`);
   const total = top.reduce((sum, [, weight]) => sum + weight, 0);
@@ -69,12 +79,13 @@ function packedIndex(vertex) {
   return packed;
 }
 
-for (const { group: groupName, vertices } of faces) {
+for (const { group: groupName, vertices, uvs } of faces) {
   const slot = kitSlot(average(vertices), groupName);
   if (groupName === 'helper-tights' && (slot === 0 || slot === 4)) continue;
-  const indices = vertices.map(packedIndex);
+  const indices = vertices.map((vertex, index) => packedIndex(vertex, slot === 0 ? uvs[index] : -1));
   for (let i = 1; i < indices.length - 1; i++) sections[slot].push(indices[0], indices[i], indices[i + 1]);
 }
-const model = { positions, skinIndices, skinWeights, sections, rig };
+const normalSeams = [...normalGroups.values()].filter(indices => indices.length > 1);
+const model = { positions, skinUvs, normalSeams, skinIndices, skinWeights, sections, rig };
 writeFileSync(new URL('../game9/defender.mesh.json', import.meta.url), JSON.stringify(model));
 console.log(`Goal Line defender: ${visibleVertices.size} vertices, ${rig.length} joints, ${sections.reduce((sum, section) => sum + section.length / 3, 0)} triangles`);
