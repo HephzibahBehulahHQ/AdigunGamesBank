@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Player shirts and shorts now share a fine fabric height map that ships
+with the game code. A Chrome close-up verified the weave under pitch
+lighting and exposed visible jagged edges at some garment boundaries.
+Three actual 4K broadcast clearances completed without WebGL errors or
+context loss. The close-up garment edges still need production art work.
+
 The 4K Chrome hardware benchmark can now save the drawing buffer after
 timing, separately from the viewport screenshot. Two broadcast runs on
 Intel Arc 140T captured a verified 3840 × 2160 PNG. The inspected preview

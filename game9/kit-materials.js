@@ -5,6 +5,24 @@ const SIZE = 1024;
 const WIDTH_METRES = 0.72;
 const HEIGHT_METRES = 1.80;
 
+const weaveSize = 32;
+const weaveHeights = new Uint8Array(weaveSize * weaveSize);
+for (let y = 0; y < weaveSize; y++) {
+  const weft = Math.cos(y * Math.PI / 4);
+  for (let x = 0; x < weaveSize; x++) {
+    const warp = Math.cos(x * Math.PI / 4);
+    // Add relief where the perpendicular strands cross.
+    weaveHeights[y * weaveSize + x] = Math.round(128 + 44 * (warp + weft) + 24 * warp * weft);
+  }
+}
+const weave = new THREE.DataTexture(weaveHeights, weaveSize, weaveSize, THREE.RedFormat);
+weave.wrapS = weave.wrapT = THREE.RepeatWrapping;
+weave.repeat.set(48, 120);
+weave.minFilter = THREE.LinearMipmapLinearFilter;
+weave.magFilter = THREE.LinearFilter;
+weave.generateMipmaps = true;
+weave.needsUpdate = true;
+
 function textile(background, threads, decorate) {
   const surface = document.createElement('canvas');
   surface.width = surface.height = SIZE;
@@ -75,8 +93,8 @@ export function outfitMaterials(role, skin) {
   });
   return [
     material(skin ? '#ffffff' : '#936349', { map: skin, roughness: 0.65, metalness: 0 }),
-    material('#ffffff', { map: jersey, roughness: 0.88, metalness: 0 }),
-    material('#ffffff', { map: shorts, roughness: 0.89, metalness: 0 }),
+    material('#ffffff', { map: jersey, bumpMap: weave, bumpScale: 0.00045, roughness: 0.88, metalness: 0 }),
+    material('#ffffff', { map: shorts, bumpMap: weave, bumpScale: 0.00030, roughness: 0.89, metalness: 0 }),
     material('#ffffff', { map: socks, roughness: 0.92, metalness: 0 }),
     material('#232327', { roughness: 0.45 }),
     material('#c9c4b6', { roughness: 0.28 })
