@@ -158,6 +158,8 @@ export async function createPitch(options) {
       const bootTarget = kick ? contactPoint.clone().add(
         new THREE.Vector3(-Math.sin(kickAngle) * BALL_RADIUS, -0.04, -Math.cos(kickAngle) * BALL_RADIUS)
       ) : null;
+      const supportBoot = kick ? new THREE.Vector3(targetX + (kickingLeg === 0 ? -0.21 : 0.21), 0.035, 0.13) : null;
+      const swingBoot = kick ? bootTarget.clone() : null;
       let previousSeconds = -1;
       function animate(now) {
         const realSeconds = Math.max(0, (now - started) / 1000);
@@ -167,12 +169,22 @@ export async function createPitch(options) {
         defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
         defender.mesh.position.z = 0;
         if (kick) {
-          const strike = Math.max(0, 1 - Math.abs(seconds - windup) / 0.17);
+          const afterContact = seconds - windup;
+          const strike = afterContact < 0
+            ? THREE.MathUtils.smoothstep(seconds, 0, windup)
+            : 1 - THREE.MathUtils.smoothstep(afterContact, 0.065, 0.26);
           defender.pose(0, 0, strike, kickingLeg);
           if (strike > 0) {
             defender.mesh.position.x += (contactPoint.x - targetX) * strike * 0.36;
             defender.mesh.position.z = contactPoint.z * strike * 0.26;
-            defender.plantBoot(bootTarget, kickAngle, kickingLeg, THREE.MathUtils.smoothstep(strike, 0.1, 1));
+            const followThrough = THREE.MathUtils.smoothstep(afterContact, 0, 0.11);
+            swingBoot.copy(bootTarget);
+            swingBoot.x += Math.sin(kickAngle) * followThrough * 0.22;
+            swingBoot.y += followThrough * 0.17;
+            swingBoot.z += Math.cos(kickAngle) * followThrough * 0.22;
+            const plantedWeight = THREE.MathUtils.smoothstep(strike, 0, 0.55);
+            defender.plantBoot(supportBoot, 0, 1 - kickingLeg, plantedWeight);
+            defender.plantBoot(swingBoot, kickAngle, kickingLeg, strike);
           }
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
