@@ -19,7 +19,7 @@ export function addGround(scene, renderer, { map, normalMap }) {
   for (const texture of [map, normalMap]) {
     if (!texture) continue;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.anisotropy = Math.min(texture === normalMap ? 2 : 4, anisotropy);
+    texture.anisotropy = Math.min(2, anisotropy);
   }
   const turf = {
     map, normalMap, normalScale: new THREE.Vector2(0.34, 0.34),

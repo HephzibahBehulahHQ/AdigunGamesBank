@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Reducing turf diffuse anisotropy from 4× to 2× lowered median 16K scene
+GPU time from 29.2 to 27.9 ms in two five-clearance broadcast runs on
+Intel Arc 140T. Median observed GPU completion interval fell from 43.5
+to 41.3 ms. The paired downsampled captures retained visible grass detail.
+Both runs completed without WebGL errors or context loss, and the targeted
+Chrome checks for actual 4K, camera switching and heavy turf passed.
+
 Successful clearances now schedule a distinct receiver touch cue at the
 projected arrival point. Starting another ball or restarting cancels
 pending audio from the previous feed. Chrome verified a non-silent cue
