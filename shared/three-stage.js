@@ -155,7 +155,9 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     else releaseLargeFrame();
     let width = large ? adaptive : requested?.[0] ?? adaptive;
     let height = Math.round(width * 9 / 16);
-    if (width <= maxWidth) renderer.setSize(width, height, false);
+    if (width <= maxWidth && (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height)) {
+      renderer.setSize(width, height, false);
+    }
     const rejected = (large && !largeFrame) || width > maxWidth || gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height;
     if (rejected) {
       releaseLargeFrame();
@@ -163,7 +165,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
       if (qualitySelect) qualitySelect.value = 'auto';
       width = adaptive;
       height = Math.round(width * 9 / 16);
-      renderer.setSize(width, height, false);
+      if (gl.drawingBufferWidth !== width || gl.drawingBufferHeight !== height) renderer.setSize(width, height, false);
     }
     camera.aspect = gl.drawingBufferHeight ? gl.drawingBufferWidth / gl.drawingBufferHeight : width / height;
     // Keep ground markings distinguishable from the turf in the 16-bit depth mode.
