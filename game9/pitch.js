@@ -43,6 +43,7 @@ export async function createPitch(options) {
   gate.position.z = SAFETY_LINE;
   scene.add(defender.mesh);
   const ballMesh = createFootball();
+  const rollingAxis = new THREE.Vector3();
   scene.add(ballMesh);
   const coords = new Float32Array(13 * 3);
   const geometry = new THREE.BufferGeometry();
@@ -57,6 +58,7 @@ export async function createPitch(options) {
   let playedConcession = false;
   let targetBall = new THREE.Vector3();
   let hasFrame = false;
+  let previousFeed;
   let settledShadow = null;
   let opponent;
   const receiver = createReceiver();
@@ -126,6 +128,9 @@ export async function createPitch(options) {
 
   return {
     draw(state, feed, ball, angle, plannedContact, projection) {
+      const newFeed = feed !== previousFeed;
+      if (newFeed) ballMesh.quaternion.identity();
+      previousFeed = feed;
       setHeavyTurf(Boolean(feed.resistance));
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
@@ -157,12 +162,11 @@ export async function createPitch(options) {
       const nextBall = new THREE.Vector3(-visibleBall.x, visibleBall.y, visibleBall.z);
       const travel = !nextBall.equals(targetBall);
       targetBall = nextBall;
-      if (!hasFrame || motion.matches || (!travel && !movement && !kick && !concession && frame === undefined)) {
+      if (!hasFrame || newFeed || motion.matches || (!travel && !movement && !kick && !concession && frame === undefined)) {
         cancelAnimationFrame(frame);
         frame = undefined;
         hasFrame = true;
         ballMesh.position.copy(targetBall);
-        ballMesh.rotation.x = -targetBall.z / BALL_RADIUS;
         framePlay(ballMesh.position.z);
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
@@ -199,6 +203,8 @@ export async function createPitch(options) {
       const swingBoot = kick ? bootTarget.clone() : null;
       let previousSeconds = -1;
       function animate(now) {
+        const previousX = ballMesh.position.x;
+        const previousZ = ballMesh.position.z;
         const realSeconds = THREE.MathUtils.clamp((now - started) / 1000, 0, duration);
         const seconds = kick && previousSeconds < windup && realSeconds >= windup ? windup : realSeconds;
         previousSeconds = seconds;
@@ -249,7 +255,13 @@ export async function createPitch(options) {
         }
         // Leave the exact simulation endpoint ready for a deferred 16K paint.
         if (elapsed === 1) ballMesh.position.copy(targetBall);
-        ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
+        const dx = ballMesh.position.x - previousX;
+        const dz = ballMesh.position.z - previousZ;
+        const distance = Math.hypot(dx, dz);
+        if (distance > 0) {
+          rollingAxis.set(dz / distance, 0, -dx / distance);
+          ballMesh.rotateOnWorldAxis(rollingAxis, distance / BALL_RADIUS);
+        }
         framePlay(ballMesh.position.z);
         const time = kick
           ? state.tick * STEP + (seconds < windup
