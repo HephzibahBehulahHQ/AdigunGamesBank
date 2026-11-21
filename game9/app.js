@@ -104,8 +104,8 @@ function fallback() {
 canvas.addEventListener('stage-lost', fallback);
 load(level);
 
-import('./pitch.js').then(({ createPitch }) => {
-  pitch = createPitch({ canvas, qualitySelect: quality, status: graphics });
+import('./pitch.js').then(async ({ createPitch }) => {
+  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics });
   update();
   const render = () => update();
   quality.addEventListener('change', render);

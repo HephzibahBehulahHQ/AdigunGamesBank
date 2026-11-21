@@ -1,8 +1,10 @@
 import { THREE, box, createStage, material } from '../shared/three-stage.js';
 import { BALL_RADIUS, SAFETY_LINE, clearanceAt } from './clearance.js';
 import { addGoal, addGround } from './ground.js';
+import { loadDefender } from './defender.js';
 
-export function createPitch(options) {
+export async function createPitch(options) {
+  const defender = await loadDefender();
   const stage = createStage({ ...options, position: [0, 15, -12], target: [0, 0, 11], enable16K: true });
   const { scene, camera, light, renderer } = stage;
   scene.background = new THREE.Color('#9eabb2');
@@ -21,15 +23,7 @@ export function createPitch(options) {
   const right = box(gate, [0.11, 0.8, 0.11], [0, 0.4, 0], '#f2c45f');
   const stripe = box(gate, [1, 0.025, 0.18], [0, 0.01, 0], '#f2c45f');
   gate.position.z = SAFETY_LINE;
-  const defender = new THREE.Group();
-  scene.add(defender);
-  box(defender, [0.53, 0.63, 0.28], [0, 1.12, 0], '#2563eb');
-  box(defender, [0.92, 0.19, 0.22], [0, 1.26, 0], '#2563eb');
-  box(defender, [0.24, 0.26, 0.24], [0, 1.59, 0], '#a47054');
-  for (const x of [-0.15, 0.15]) {
-    box(defender, [0.16, 0.82, 0.19], [x, 0.43, 0], '#172d45');
-    box(defender, [0.18, 0.12, 0.34], [x, 0.07, 0.08], '#e0ebdb');
-  }
+  scene.add(defender.mesh);
   const ballMesh = new THREE.Mesh(new THREE.SphereGeometry(BALL_RADIUS, 18, 14), material('#fff7dc'));
   ballMesh.castShadow = true;
   scene.add(ballMesh);
@@ -39,10 +33,13 @@ export function createPitch(options) {
   const trail = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: '#f6dc86' }));
   trail.frustumCulled = false;
   scene.add(trail);
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let frame;
+  let targetX = 0;
+  let playedAttempt = null;
 
   return {
     draw(state, feed, ball, angle) {
-      defender.position.x = -state.defender;
       gate.position.x = -feed.channel;
       left.position.x = -feed.halfWidth;
       right.position.x = feed.halfWidth;
@@ -61,7 +58,32 @@ export function createPitch(options) {
         geometry.attributes.position.needsUpdate = true;
       }
       camera.lookAt(0, 0, 7 + Math.max(0, visibleBall.z - 14) * 0.2);
-      stage.render();
+      const previousTarget = targetX;
+      targetX = -state.defender;
+      const movement = Math.sign(targetX - previousTarget);
+      const kick = attempt && attempt !== playedAttempt;
+      playedAttempt = attempt;
+      if (motion.matches || (!movement && !kick && frame === undefined)) {
+        cancelAnimationFrame(frame);
+        frame = undefined;
+        defender.mesh.position.x = targetX;
+        defender.pose(0, 0, 0);
+        stage.render();
+        return;
+      }
+      if (!movement && !kick) return;
+      cancelAnimationFrame(frame);
+      const from = defender.mesh.position.x;
+      const started = performance.now();
+      function animate(now) {
+        const elapsed = Math.min(1, (now - started) / (kick ? 340 : 175));
+        const step = Math.sin(Math.PI * elapsed);
+        defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
+        defender.pose(movement, step, kick ? step : 0);
+        stage.render();
+        frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
+      }
+      frame = requestAnimationFrame(animate);
     }
   };
 }

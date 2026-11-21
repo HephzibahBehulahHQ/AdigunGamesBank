@@ -7,7 +7,9 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 **Release held under the updated owner acceptance standard.** Development
 continues on the scoped branch. The ground and goal now use original turf
 colour and relief textures, painted pitch markings, cylindrical goal posts,
-netting and shadows. The human character, animation and measured 16K
+netting and shadows. The defender now uses a CC0 human mesh and skinned rig
+with initial lateral-step and clearance poses. Browser inspection of the
+new character, production-quality kit and animation, and measured 16K
 qualification remain open. The evidence below belongs to the earlier
 gameplay candidate.
 
