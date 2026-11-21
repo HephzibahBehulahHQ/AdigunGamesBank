@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+All 22 Goal Line browser checks passed on build `73bf832` in Chrome,
+Firefox 159 and the pinned Windows WebKit 26.0. They cover actual 4K,
+context recovery, accessibility, the final saved drill, touch and controller
+fixtures, and the current player rig. The 12 engine tests and release
+integrity check passed as well. GitHub `main` was `2ac20c4`, while the
+public Goal Line HTML matched legacy revision `4616eaf` byte for byte.
+The development build remains unpublished pending the release gates.
+
 Each eyeball now has rigid weights to its own joint. The two joints track
 the ball within a small range and return to center when the ball moves
 behind the player. Packed weights verified the attachments on both sides.
