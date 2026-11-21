@@ -77,3 +77,27 @@ test('Goal Line rejects 16K when the device viewport limit is too small', async 
   await expect(page.locator('#graphics')).toContainText('16K UHD unavailable on this device.');
   await expect(pitch).not.toHaveAttribute('data-resolution', '15360x8640');
 });
+
+test('Goal Line runs a timed feed with held keys, pauses and resets cleanly', async ({ page }) => {
+  const start = new Date('2026-11-21T16:00:00Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000));
+  await page.goto('/game9/');
+  const live = page.getByRole('button', { name: 'Start live ball' });
+  await live.press('Enter');
+  await page.keyboard.down('d');
+  await page.clock.runFor(300);
+  await page.keyboard.up('d');
+  await expect(page.locator('#defender')).toHaveText('1.35 m right');
+  await expect(page.locator('#ball')).toContainText('22.00 m from goal line');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#message')).toContainText('Live ball paused');
+  await page.clock.runFor(4000);
+  await expect(page.locator('#ball')).toContainText('22.00 m from goal line');
+  await page.getByRole('button', { name: 'Resume live ball' }).press('Enter');
+  await page.clock.runFor(3000);
+  await expect(page.locator('#message')).toContainText('Goal conceded');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#defender')).toHaveText('centre');
+  await expect(live).toBeEnabled();
+});

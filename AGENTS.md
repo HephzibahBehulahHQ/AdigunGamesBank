@@ -17,9 +17,11 @@ explicitly; do not silently follow a moving branch.
   It is a cross-division product within the five-brand corporate identity.
 - The owner's requirements are preserved in
   [Adigun Game bank pursuing goals and template.md](<Adigun Game bank pursuing goals and template.md>).
-  The target is **2,000 individually designed games**, each with **10,000 levels**
-  from Beginner to Professional Master. Generated catalog entries, reskins and
-  level counters do not establish that this target is delivered.
+  The owner has expanded the catalog target to **approximately 100,000 distinct
+  games** organized by category across Elektroniker, Trading, Artificial
+  Intelligence, Evangelism, and Politics. Retain the per-game brief of **10,000
+  meaningful levels** from Beginner to Professional Master. Generated catalog
+  entries, reskins and level counters cannot establish delivery.
 - All application code, game data, tests, product documentation, checkpoint
   tooling and deployment work stay in this repository. Standards repositories
   are read-only references for this task.
@@ -59,6 +61,11 @@ owns final verification.
 - Use GTA VI as a reference for the requested realism and presentation quality.
   Design original games and use original or appropriately licensed characters,
   animations, assets, environments, audio, and game content.
+- Priority titles include realistic club and international football with human
+  players and an original Adigun open-world game for adults. Use FIFA as a
+  football presentation and playability reference and GTA VI as an open-world
+  realism reference. Clear rights for any real-player likenesses, club or
+  national team marks, kits, leagues, and other protected material before use.
 - The owner requested “16HK,” interpreted as a 16K UHD presentation target
   (15,360 × 8,640). Verify the actual render buffer, an inspected frame, and
   measured performance on named supported hardware before claiming 16K.

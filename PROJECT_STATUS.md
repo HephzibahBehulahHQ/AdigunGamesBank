@@ -22,6 +22,11 @@ Goal Line (game9) is integrated on main at `292d658ea79a21968fdc5668116e43abedaf
 
 ## Acceptance
 
+The owner's current catalog target is approximately 100,000 distinct games
+across all five brands. The original 2,000-game figures below remain in the
+historical release records. Each title retains the meaningful difficulty and
+level requirements in the brief and the current acceptance rules in `AGENTS.md`.
+
 **In progress.** The target of **2,000 individually designed games, each with 10,000 meaningful levels**, is not delivered. This **published development milestone** converts **nine existing titles** to distinct playable 3D games. The catalog contains **24 titles: fourteen local 3D games, one API-dependent 3D client and nine legacy 2D games**. These are implementation counts, not full production qualification. Procedural levels, renamed templates and reskins are not separate games.
 
 Full Genesis–Revelation coverage, production art/device qualification, complete EN/DE/Yoruba/Nigerian Pidgin localization and native-console releases remain unfinished. Live provider competition still requires its server-side deployment and configuration.

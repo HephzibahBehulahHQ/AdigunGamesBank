@@ -11,9 +11,24 @@ const clearButton = byId('clear');
 const canvas = byId('pitch');
 const quality = byId('quality');
 const graphics = byId('graphics');
+const liveButton = byId('live');
+const movementHelp = byId('movement-help');
+const keys = new Set();
 let level = save.unlocked;
 let state;
 let pitch;
+let timer = null;
+let direction = 0;
+
+function setLive(enabled) {
+  if (timer !== null) clearInterval(timer);
+  timer = enabled ? setInterval(() => {
+    const movement = keys.size ? Number(keys.has('d')) - Number(keys.has('a')) : direction;
+    move(movement);
+  }, STEP * 1000) : null;
+  keys.clear();
+  direction = 0;
+}
 
 function sideways(x) {
   if (Math.abs(x) < 0.005) return 'centre';
@@ -38,7 +53,17 @@ function update(message) {
     ? 'Ball in reach.' : 'Close the gap before clearing.';
   if (message !== undefined) byId('message').textContent = message;
   levelInput.max = save.unlocked;
-  buttons.forEach((button) => { button.disabled = !ready; });
+  const live = timer !== null;
+  buttons.forEach((button) => {
+    button.disabled = !ready;
+    if (live) button.setAttribute('aria-pressed', Number(button.dataset.move) === direction);
+    else button.removeAttribute('aria-pressed');
+  });
+  liveButton.disabled = !ready;
+  liveButton.textContent = live ? 'Pause live ball' : state.tick ? 'Resume live ball' : 'Start live ball';
+  movementHelp.textContent = live
+    ? 'Hold A or D to move, or tap a direction. Tap Hold to stop moving.'
+    : 'Each movement advances the ball by 0.1 seconds. Start the live ball for a timed clearance.';
   angle.disabled = clearButton.disabled = !ready;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
@@ -46,6 +71,7 @@ function update(message) {
 }
 
 function load(levelNumber, moveFocus = false) {
+  setLive(false);
   level = levelNumber;
   levelInput.value = levelNumber;
   state = createDrill(levelNumber);
@@ -54,15 +80,50 @@ function load(levelNumber, moveFocus = false) {
   if (moveFocus) buttons[1].focus();
 }
 
-buttons.forEach((button) => button.addEventListener('click', () => {
-  advance(state, Number(button.dataset.move));
+function move(direction) {
+  advance(state, direction);
   if (state.result === 'conceded') {
+    setLive(false);
     update('Goal conceded. Restart the drill to try again.');
     byId('retry').focus();
     return;
   }
-  update('Ball ' + (state.index + 1) + ': ' + byDistance());
+  update(timer === null ? 'Ball ' + (state.index + 1) + ': ' + byDistance() : undefined);
+}
+
+buttons.forEach((button) => button.addEventListener('click', () => {
+  const selected = Number(button.dataset.move);
+  if (timer === null) {
+    move(selected);
+  } else {
+    direction = selected;
+    update();
+  }
 }));
+
+function toggleLive() {
+  if (state.result !== 'ready') return;
+  setLive(timer === null);
+  update(timer === null ? 'Live ball paused. ' + byDistance() : 'Live ball in play.');
+}
+
+liveButton.addEventListener('click', toggleLive);
+window.addEventListener('keydown', (event) => {
+  if (timer === null || event.altKey || event.ctrlKey || event.metaKey || event.target.matches('input, select, textarea, [contenteditable]')) return;
+  const key = event.key.toLowerCase();
+  if (key === 'a' || key === 'd') {
+    event.preventDefault();
+    keys.add(key);
+  }
+  if (key === 'escape') toggleLive();
+});
+window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && timer !== null) toggleLive();
+});
+window.addEventListener('blur', () => {
+  if (timer !== null) toggleLive();
+});
 
 function byDistance() {
   const ball = incomingAt(state.feeds[state.index], state.tick * STEP);
@@ -71,6 +132,7 @@ function byDistance() {
 
 angle.addEventListener('input', () => update());
 clearButton.addEventListener('click', () => {
+  setLive(false);
   if (clear(state, Number(angle.value))) {
     const finished = state.index === state.feeds.length - 1;
     if (finished) save.complete(level);

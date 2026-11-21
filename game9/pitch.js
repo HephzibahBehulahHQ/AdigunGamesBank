@@ -37,6 +37,8 @@ export async function createPitch(options) {
   let frame;
   let targetX = 0;
   let playedAttempt = null;
+  let targetBall = new THREE.Vector3();
+  let hasFrame = false;
 
   return {
     draw(state, feed, ball, angle) {
@@ -46,7 +48,6 @@ export async function createPitch(options) {
       stripe.scale.x = feed.halfWidth * 2;
       const attempt = state.trajectory;
       const visibleBall = attempt?.end ?? ball;
-      ballMesh.position.set(-visibleBall.x, BALL_RADIUS, visibleBall.z);
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
         const contact = attempt?.contact ?? ball;
@@ -63,23 +64,37 @@ export async function createPitch(options) {
       const movement = Math.sign(targetX - previousTarget);
       const kick = attempt && attempt !== playedAttempt;
       playedAttempt = attempt;
-      if (motion.matches || (!movement && !kick && frame === undefined)) {
+      const nextBall = new THREE.Vector3(-visibleBall.x, BALL_RADIUS, visibleBall.z);
+      const travel = !nextBall.equals(targetBall);
+      targetBall = nextBall;
+      if (!hasFrame || motion.matches || (!travel && !movement && !kick && frame === undefined)) {
         cancelAnimationFrame(frame);
         frame = undefined;
+        hasFrame = true;
+        ballMesh.position.copy(targetBall);
         defender.mesh.position.x = targetX;
         defender.pose(0, 0, 0);
         stage.render();
         return;
       }
-      if (!movement && !kick) return;
+      if (!travel && !movement && !kick) return;
       cancelAnimationFrame(frame);
       const from = defender.mesh.position.x;
+      const ballFrom = ballMesh.position.clone();
       const started = performance.now();
       function animate(now) {
-        const elapsed = Math.min(1, (now - started) / (kick ? 340 : 175));
+        const elapsed = Math.min(1, (now - started) / (kick ? 340 : 95));
         const step = Math.sin(Math.PI * elapsed);
         defender.mesh.position.x = THREE.MathUtils.lerp(from, targetX, elapsed);
         defender.pose(movement, step, kick ? step : 0);
+        if (kick) {
+          const z = THREE.MathUtils.lerp(attempt.contact.z, attempt.end.z, elapsed);
+          const point = clearanceAt(attempt.contact, attempt.angle, attempt.drift, z);
+          ballMesh.position.set(-point.x, BALL_RADIUS, z);
+        } else {
+          ballMesh.position.lerpVectors(ballFrom, targetBall, elapsed);
+        }
+        ballMesh.rotation.x = -ballMesh.position.z / BALL_RADIUS;
         stage.render();
         frame = elapsed < 1 ? requestAnimationFrame(animate) : undefined;
       }
