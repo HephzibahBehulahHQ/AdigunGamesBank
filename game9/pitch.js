@@ -50,7 +50,7 @@ export async function createPitch(options) {
   const trail = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: '#f6dc86' }));
   trail.frustumCulled = false;
   scene.add(trail);
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const { motion } = options;
   let frame;
   let targetX = 0;
   let playedAttempt = null;

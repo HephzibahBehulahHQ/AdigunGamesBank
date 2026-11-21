@@ -269,10 +269,12 @@ canvas.addEventListener('stage-lost', fallback);
 load(level);
 
 import('./pitch.js').then(async ({ createPitch }) => {
-  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics, view: () => cameraView.value });
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  pitch = await createPitch({ canvas, qualitySelect: quality, status: graphics, view: () => cameraView.value, motion });
   update();
   const render = () => update();
   quality.addEventListener('change', render);
+  motion.addEventListener('change', render);
   cameraView.addEventListener('change', () => {
     try { localStorage.setItem(cameraKey, cameraView.value); } catch { /* Keep the current view. */ }
     render();
