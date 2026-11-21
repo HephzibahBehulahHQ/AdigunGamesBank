@@ -2,6 +2,16 @@ import { test, expect } from '@playwright/test';
 import { LEVEL_COUNT } from '../../shared/progression.js';
 import { makeDrill, planClearance, readContact, SAFETY_LINE, STEP } from '../../game9/clearance.js';
 
+async function disableWebGL(page) {
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, ...options) {
+      if (type.startsWith('webgl')) return null;
+      return getContext.call(this, type, ...options);
+    };
+  });
+}
+
 async function completeDrill(page, level = 1) {
   const feeds = makeDrill(level);
   for (const [index, feed] of feeds.entries()) {
@@ -68,7 +78,7 @@ test('Goal Line saves a complete final-tier drill and unlocks the next one', asy
 test('Goal Line renders actual 4K, recovers from failure and saves a complete keyboard drill', async ({ page }, info) => {
   await page.goto('/game9/');
   const pitch = page.locator('#pitch');
-  await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2');
+  await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 15000 });
   await page.getByRole('combobox', { name: 'Graphics' }).selectOption('4k');
   await expect(pitch).toHaveAttribute('data-resolution', '3840x2160');
   const drawingBuffer = await pitch.evaluate((canvas) => {
@@ -86,13 +96,7 @@ test('Goal Line renders actual 4K, recovers from failure and saves a complete ke
 });
 
 test('Goal Line keeps visible keyboard controls and saves without WebGL', async ({ page }) => {
-  await page.addInitScript(() => {
-    const getContext = HTMLCanvasElement.prototype.getContext;
-    HTMLCanvasElement.prototype.getContext = function (type, ...options) {
-      if (type.startsWith('webgl')) return null;
-      return getContext.call(this, type, ...options);
-    };
-  });
+  await disableWebGL(page);
   await page.setViewportSize({ width: 320, height: 900 });
   await page.goto('/game9/');
   await expect(page.locator('#graphics')).toContainText('3D unavailable');
@@ -125,8 +129,9 @@ test.describe('Goal Line touch controls', () => {
   test.use({ hasTouch: true, viewport: { width: 360, height: 800 } });
 
   test('play, retry and save a drill with taps', async ({ page }) => {
+    await disableWebGL(page);
     await page.goto('/game9/');
-    await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+    await expect(page.locator('#graphics')).toContainText('3D unavailable');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
     const kick = page.getByRole('button', { name: 'Clear ball', exact: true });
     await kick.tap();
@@ -177,6 +182,7 @@ test('Goal Line rejects 16K when the device viewport limit is too small', async 
 });
 
 test('Goal Line runs a timed feed with held keys, pauses and resets cleanly', async ({ page }) => {
+  await disableWebGL(page);
   const start = new Date('2026-11-21T16:00:00Z');
   await page.clock.install({ time: start });
   await page.clock.pauseAt(new Date(start.getTime() + 1000));
@@ -356,6 +362,10 @@ test('Goal Line audio starts on request and mutes without interrupting play', as
 });
 
 test('Goal Line standard gamepad starts play, moves, aims and restarts', async ({ page }) => {
+  await disableWebGL(page);
+  const start = new Date('2026-11-21T16:00:00Z');
+  await page.clock.install({ time: start });
+  await page.clock.pauseAt(new Date(start.getTime() + 1000));
   await page.addInitScript(() => {
     window.goalLineTestPad = {
       connected: true, index: 0, mapping: 'standard', axes: [0],
@@ -370,14 +380,15 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
     });
   });
   await page.goto('/game9/');
+  await page.clock.runFor(50);
   await page.waitForFunction(() => window.goalLinePadPolls >= 2);
   async function press(index) {
-    const sampled = await page.evaluate(button => {
+    await page.evaluate(button => {
       window.goalLineTestPad.buttons[button].pressed = true;
-      return window.goalLinePadPolls;
     }, index);
-    await page.waitForFunction(previous => window.goalLinePadPolls > previous, sampled);
+    await page.clock.runFor(32);
     await page.evaluate(button => { window.goalLineTestPad.buttons[button].pressed = false; }, index);
+    await page.clock.runFor(32);
   }
   await press(9);
   await expect(page.getByRole('button', { name: 'Pause live ball' })).toBeVisible();
@@ -386,6 +397,7 @@ test('Goal Line standard gamepad starts play, moves, aims and restarts', async (
   await press(5);
   await expect(page.getByRole('slider', { name: 'Kick speed' })).toHaveValue('15');
   await page.evaluate(() => { window.goalLineTestPad.axes[0] = -0.9; });
+  await page.clock.runFor(150);
   await expect(page.locator('#defender')).toContainText('left');
   await press(0);
   await expect(page.locator('#message')).toContainText('Missed contact.');

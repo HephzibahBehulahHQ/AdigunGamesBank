@@ -4,6 +4,15 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+[CI run 44939298561](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44939298561)
+on `04d855b` passed unit, API, accessibility and fallback checks. Its rendered
+gameplay step passed 47 cases and failed three Goal Line input cases. The
+follow-up isolates those input checks from software rendering and advances
+the gamepad fixture on an explicit clock. All three corrected input cases
+and the separate actual-4K case passed locally with SwiftShader flags. The
+published Goal Line entry still matches the legacy `4616eaf` page byte for
+byte. The 3D build remains held from publication.
+
 The 16K renderer now checks the GPU fence on a short timer only while a
 newer frame is waiting. In paired five-clearance runs on Intel Arc 140T,
 median observed completion changed from 58.3 to 51.4 ms, with a 66.8 ms
