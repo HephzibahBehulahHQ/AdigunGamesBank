@@ -204,6 +204,9 @@ export function clear(state, angle, speed = CLEARANCE_SPEED, loft = false) {
   const plan = planClearance(feed, delivery, state.tick, angle, speed, loft);
   state.trajectory = { ...delivery, ...plan, angle };
   state.result = plan.interception ? 'intercepted' : plan.short ? 'short' : plan.tooHigh ? 'high' : plan.atGate ? 'cleared' : 'unsafe';
+  if (state.result === 'cleared' && loft && plan.end.y > BALL_RADIUS) {
+    state.trajectory.rest = { ...plan.end, y: BALL_RADIUS };
+  }
   return state.result === 'cleared';
 }
 

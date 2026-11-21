@@ -83,7 +83,7 @@ export async function createPitch(options) {
     else opponent.stride(-pressure.x);
   }
 
-  function controlClearance(attempt, readiness) {
+  function controlClearance(attempt, readiness, height = undefined) {
     const player = attempt.interception ? opponent : receiver;
     const ball = attempt.interception?.ball ?? attempt.end;
     const ballX = -ball.x;
@@ -91,7 +91,7 @@ export async function createPitch(options) {
     // Step toward the ball, then extend the nearer boot to cushion it.
     player.mesh.position.x += THREE.MathUtils.clamp(gap, -0.55, 0.55) * readiness;
     const leg = gap < 0 ? 0 : 1;
-    const trap = new THREE.Vector3(ballX, ball.y - BALL_RADIUS * 0.68, ball.z + BALL_RADIUS * 0.55);
+    const trap = new THREE.Vector3(ballX, (height ?? ball.y) - BALL_RADIUS * 0.68, ball.z + BALL_RADIUS * 0.55);
     player.plantBoot(trap, 0, leg, readiness);
   }
 
@@ -140,7 +140,7 @@ export async function createPitch(options) {
       playedConcession = Boolean(netHit);
       if (!netHit) net.settle();
       const restingBall = netHit && goalNetRest(netHit);
-      const visibleBall = attempt?.interception?.ball ?? attempt?.end ?? restingBall ?? ball;
+      const visibleBall = attempt?.interception?.ball ?? attempt?.rest ?? attempt?.end ?? restingBall ?? ball;
       trail.visible = Boolean(attempt) || (state.result === 'ready' && ball.z <= 2.3);
       if (trail.visible) {
         const shot = attempt ?? projection;
@@ -175,7 +175,7 @@ export async function createPitch(options) {
         const endTime = attempt ? attempt.delay + attempt.travelTime : 0;
         const sceneTime = state.tick * STEP + endTime;
         framePlayers(feed, sceneTime);
-        if (controlled) controlClearance(attempt, 1);
+        if (controlled) controlClearance(attempt, 1, attempt.rest?.y);
         defender.mesh.position.z = 0;
         defender.settle(targetX);
         trackBall();
@@ -194,9 +194,11 @@ export async function createPitch(options) {
       const started = performance.now();
       const windup = kick ? Math.max(0.035, attempt.delay) : 0;
       const flight = kick ? attempt.travelTime : 0;
+      const arrival = windup + flight;
+      const cushion = kick && attempt.rest ? 0.16 : 0;
       const netTransit = concession ? Math.max(0.045, (ballFrom.z - netHit.z) / feed.pace) : 0;
       const netContact = concession ? new THREE.Vector3(-netHit.x, netHit.y, netHit.z) : null;
-      const duration = concession ? netTransit + 0.65 : kick ? windup + flight : 0.095;
+      const duration = concession ? netTransit + 0.65 : kick ? arrival + cushion : 0.095;
       const contactPoint = kick ? new THREE.Vector3(-attempt.contact.x, attempt.contact.y, attempt.contact.z) : null;
       const kickingLeg = contactPoint && contactPoint.x >= targetX ? 0 : 1;
       const kickAngle = kick ? -attempt.angle * Math.PI / 180 : 0;
@@ -235,6 +237,10 @@ export async function createPitch(options) {
           }
           if (seconds < windup) {
             ballMesh.position.lerpVectors(ballFrom, contactPoint, Math.min(1, seconds / windup));
+          } else if (cushion && seconds >= arrival) {
+            const progress = THREE.MathUtils.smoothstep(seconds, arrival, duration);
+            ballMesh.position.copy(targetBall);
+            ballMesh.position.y = THREE.MathUtils.lerp(attempt.end.y, targetBall.y, progress);
           } else {
             const flightTime = seconds - windup;
             const z = Math.min(visibleBall.z, attempt.contact.z + clearanceDistance(attempt.speed, flightTime, attempt.resistance, attempt.airtime));
@@ -275,8 +281,9 @@ export async function createPitch(options) {
           : Math.max(0, (state.tick - 1 + elapsed) * STEP);
         framePlayers(feed, time);
         if (kick && controlled) {
-          const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, duration - 0.24), duration);
-          if (readiness > 0) controlClearance(attempt, readiness);
+          const readiness = THREE.MathUtils.smoothstep(seconds, Math.max(windup, arrival - 0.24), arrival);
+          const height = cushion && seconds >= arrival ? ballMesh.position.y : undefined;
+          if (readiness > 0) controlClearance(attempt, readiness, height);
         }
         trackBall();
         settledShadow = null;

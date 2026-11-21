@@ -74,7 +74,7 @@ function update(message) {
   const shot = state.trajectory;
   const position = state.result === 'conceded'
     ? goalNetRest(goalNetImpact(feed))
-    : shot?.interception?.ball ?? shot?.end ?? ball;
+    : shot?.interception?.ball ?? shot?.rest ?? shot?.end ?? ball;
   const completed = save.completed;
   const mastery = completed === LEVEL_COUNT ? ' · Campaign complete' : '';
   byId('campaign').textContent = 'Drill ' + level + ' of 10,000 · ' + tierFor(level) + ' · ' + completed + ' cleared' + mastery;

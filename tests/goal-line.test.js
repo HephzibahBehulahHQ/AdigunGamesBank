@@ -58,6 +58,15 @@ test('expert clearances target the receiver at the time the ball arrives', () =>
   assert.notEqual(fast.receiver, projection.receiver);
 });
 
+test('a lofted reception keeps its arrival height and settles on the turf', () => {
+  const state = createDrill(5092);
+  for (let step = 0; step < 20; step++) advance(state, step === 0 ? 1 : 0);
+  assert.equal(clear(state, -28, 6, true), true);
+  const { end, rest } = state.trajectory;
+  assert.ok(end.y > BALL_RADIUS);
+  assert.deepEqual(rest, { ...end, y: BALL_RADIUS });
+});
+
 test('ground resistance stops an underpowered clearance short of the outlet', () => {
   const state = createDrill(1);
   const feed = state.feeds[0];
