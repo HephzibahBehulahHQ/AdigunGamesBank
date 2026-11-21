@@ -215,7 +215,6 @@ byId('controls').addEventListener('keydown', (event) => {
     event.preventDefault();
     keys.add(key);
   }
-  if (key === 'escape') toggleLive();
   if (key === 'q' || key === 'e') {
     event.preventDefault();
     adjustAim(key === 'q' ? -1 : 1);
@@ -231,6 +230,11 @@ byId('controls').addEventListener('keydown', (event) => {
   if (key === 'v' && !event.repeat) {
     event.preventDefault();
     toggleLoft();
+  }
+});
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && timer !== null && !event.altKey && !event.ctrlKey && !event.metaKey) {
+    toggleLive();
   }
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));

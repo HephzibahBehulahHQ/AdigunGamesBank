@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Escape now pauses a live feed from the sliders or toolbar and preserves
+keyboard focus. Chrome passed the timed pause/resume test with focus on kick
+speed and the Drill field, plus all 18 other Goal Line tests against the
+same application build. The original test targeted the Camera selector,
+which is disabled in its no-WebGL fixture. The corrected case passed.
+
 All 19 Goal Line Chrome browser checks passed. The added advanced-drill
 check at 320 px with reduced motion covers skip-link focus, no horizontal
 overflow, clearance readiness, stable slider names and value text with
