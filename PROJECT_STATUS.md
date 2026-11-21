@@ -4,6 +4,12 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The football panels now have object-space grain that affects color and
+roughness and fades once the features approach pixel size. The Chrome
+close-up showed the texture and recessed seams without shader errors.
+Three actual 4K lofted receptions completed on Intel Arc 140T without
+WebGL errors or context loss. Native 16K appearance was not verified.
+
 Heavy-turf highlights now fade between 22 and 30 m of camera depth. In
 two five-clearance broadcast runs on Intel Arc 140T, median 16K scene GPU
 time fell from 29.1 to 27.0 ms and median observed GPU completion fell

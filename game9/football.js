@@ -1,6 +1,28 @@
 import { THREE, material } from '../shared/three-stage.js';
 import { BALL_RADIUS } from './clearance.js';
 
+function addLeatherGrain(shader) {
+  const position = 'varying vec3 vPanelPosition;\n';
+  shader.vertexShader = position + shader.vertexShader.replace('#include <begin_vertex>', `
+    #include <begin_vertex>
+    vPanelPosition = position;
+  `);
+  shader.fragmentShader = position + shader.fragmentShader.replace('#include <roughnessmap_fragment>', `
+    #include <roughnessmap_fragment>
+    vec3 grainPosition = vPanelPosition * 550.0;
+    float footprint = max(length(dFdx(grainPosition)), length(dFdy(grainPosition)));
+    float grainVisibility = 1.0 - smoothstep(0.35, 1.0, footprint);
+    if (grainVisibility > 0.0) {
+      vec3 cell = floor(grainPosition);
+      float seed = fract(sin(dot(cell, vec3(127.1, 311.7, 74.7))) * 43758.5453);
+      float pebble = 1.0 - smoothstep(0.12, 0.5, length(fract(grainPosition) - 0.5));
+      float grain = (pebble * seed - 0.11) * grainVisibility;
+      diffuseColor.rgb *= 1.0 + grain * 0.18;
+      roughnessFactor = clamp(roughnessFactor + grain * 0.24, 0.08, 1.0);
+    }
+  `);
+}
+
 /** A 32-panel ball from the truncated icosahedron, curved onto a sphere. */
 export function createFootball() {
   const ico = new THREE.IcosahedronGeometry(1, 0);
@@ -40,6 +62,7 @@ export function createFootball() {
   const seam = material('#363a35', { roughness: 0.81 });
   const leather = material('#eae4d3', { roughness: 0.65 });
   const darkPanel = material('#20282b', { roughness: 0.72 });
+  leather.onBeforeCompile = darkPanel.onBeforeCompile = addLeatherGrain;
   const core = new THREE.Mesh(new THREE.SphereGeometry(BALL_RADIUS * 0.991, 32, 24), seam);
   core.castShadow = true;
   ball.add(core);
