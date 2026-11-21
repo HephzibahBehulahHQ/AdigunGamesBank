@@ -4,8 +4,12 @@ import path from 'node:path';
 import { chromium } from '@playwright/test';
 
 const mode = process.argv[2] ?? '16k';
-const requested = { '4k': [3840, 2160], '16k': [15360, 8640] }[mode];
-if (!requested) throw new Error('Choose 4k or 16k.');
+if (mode !== '4k' && mode !== '16k') throw new Error('Choose 4k or 16k.');
+const requested = mode === '4k' ? [3840, 2160] : [15360, 8640];
+const rounds = Number(process.argv[3] ?? 1);
+if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
+  throw new Error('Choose a workload of 1 to 100 live feeds.');
+}
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results', `goal-line-hardware-${mode}`);
@@ -82,27 +86,49 @@ try {
   let sample = null;
   let workloadError = null;
   if (requestedBufferAllocated) {
+    const frameIntervals = [];
+    let frameCount = 0;
+    let activeMilliseconds = 0;
+    let completedRounds = 0;
+    const started = performance.now();
     try {
-      await page.evaluate(() => { window.goalLineDrawTimes.length = 0; });
-      await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
-      await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
-      await page.keyboard.down('d');
-      await page.waitForFunction(() => document.querySelector('#defender').textContent !== 'centre', undefined, { timeout: 5000 });
-      await page.keyboard.up('d');
-      await page.waitForFunction(() =>
-        Number(document.querySelector('#ball').textContent.match(/, ([\d.]+) m from goal line/)?.[1]) < 12,
-      undefined, { timeout: 5000 });
-      await page.keyboard.press('Escape');
+      for (let round = 0; round < rounds; round++) {
+        if (round) await page.getByRole('button', { name: 'Restart drill' }).press('Enter');
+        await page.evaluate(() => { window.goalLineDrawTimes.length = 0; });
+        await page.getByRole('button', { name: 'Start live ball' }).press('Enter');
+        await page.getByRole('button', { name: 'Pause live ball' }).waitFor({ timeout: 5000 });
+        await page.keyboard.down(round % 2 ? 'a' : 'd');
+        await page.waitForFunction(() => document.querySelector('#defender').textContent !== 'centre', undefined, { timeout: 5000 });
+        await page.keyboard.up(round % 2 ? 'a' : 'd');
+        await page.waitForFunction(() =>
+          Number(document.querySelector('#ball').textContent.match(/, ([\d.]+) m from goal line/)?.[1]) < 12,
+        undefined, { timeout: 5000 });
+        await page.keyboard.press('Escape');
+        const frames = await page.evaluate(() => window.goalLineDrawTimes);
+        for (let i = 1; i < frames.length; i++) frameIntervals.push(frames[i] - frames[i - 1]);
+        frameCount += frames.length;
+        if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
+        after = await readSurface();
+        if (!after || after.contextLost || after.error ||
+            after.renderBuffer.some((dimension, index) => dimension !== requested[index])) {
+          throw new Error(`Render target failed in round ${round + 1}.`);
+        }
+        completedRounds++;
+      }
     } catch (error) {
+      await page.keyboard.up('a');
       await page.keyboard.up('d');
       await page.keyboard.press('Escape');
       workloadError = String(error);
     }
     after = await readSurface();
-    const frames = await page.evaluate(() => window.goalLineDrawTimes);
-    const intervals = frames.slice(1).map((time, index) => time - frames[index]).sort((a, b) => a - b);
-    const percentile = fraction => intervals[Math.ceil(intervals.length * fraction) - 1] ?? null;
-    sample = { frames: frames.length, medianMs: percentile(0.5), p95Ms: percentile(0.95) };
+    frameIntervals.sort((a, b) => a - b);
+    const percentile = fraction => frameIntervals[Math.ceil(frameIntervals.length * fraction) - 1] ?? null;
+    sample = {
+      completedRounds, requestedRounds: rounds, frames: frameCount,
+      activeMilliseconds, wallMilliseconds: performance.now() - started,
+      medianMs: percentile(0.5), p95Ms: percentile(0.95), p99Ms: percentile(0.99)
+    };
     if (await canvas.isVisible()) await canvas.screenshot({ path: path.join(output, 'viewport.png'), timeout: 5000 });
   }
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');

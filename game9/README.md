@@ -16,12 +16,14 @@ Goal Line is an original browser football clearance drill for Adigun Game Bank. 
 
 On a machine with the repository's locked Playwright dependencies and Chrome
 installed, run `npm run build`, then
-`node scripts/check-goal-line-hardware.mjs 16k`. Use `4k` to check the 4K mode.
+`node scripts/check-goal-line-hardware.mjs 16k 30`. Use `4k` to check the 4K mode.
+The optional second argument is the number of live feeds to sample.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples frames that submit
 draw calls during live play. The report records the GPU renderer, WebGL limits,
 actual render and display buffer sizes before and after play, and median and 95th-percentile
-frame intervals. Files are written under `test-results/goal-line-hardware-16k/`
+frame intervals. Restart gaps are excluded from the interval percentiles.
+Files are written under `test-results/goal-line-hardware-16k/`
 or the corresponding 4K directory. The viewport screenshot shows the scene;
 the render buffer dimensions and framebuffer completeness come from WebGL. A fallback, lost context,
 software renderer or incomplete workload does not qualify.

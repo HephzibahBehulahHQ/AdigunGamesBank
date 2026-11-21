@@ -22,8 +22,14 @@ frames had a 41.7 ms median interval and a 50.2 ms 95th-percentile interval.
 At 17:58, the same hardware and workload retained an actual
 3840 × 2160 drawing buffer and submitted 147 frames with an 8.3 ms median
 interval and an 8.5 ms 95th-percentile interval.
-This was a short live-play sample. Native 16K display, sustained performance,
-and the production art gate remain unverified.
+The repeated-feed hardware check on 2026-11-21 at 18:00 Europe/Berlin held
+the 16K framebuffer through all 30 feeds, with 963 frames over 39.1 seconds
+of sampled live play and no WebGL errors or context loss. Median, 95th- and
+99th-percentile intervals were 41.7, 83.1 and 92.0 ms. The 18:01 4K comparison
+completed the same 30 feeds with 4,681 frames over 39.4 sampled seconds and
+intervals of 8.3, 8.5 and 16.5 ms. These figures exclude restart gaps. The kit
+and pressure opponent rendered in both modes. Native 16K display and the
+production art gate remain unverified.
 
 The development candidate `0423d2fb8cd9a2ffdccded3c8085924a80975976`
 passed [CI 44924998702](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44924998702)
