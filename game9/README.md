@@ -50,6 +50,10 @@ Set `ADIGUN_CAPTURE_4K_BUFFER=1` on a `4k` run to save
 `drawing-buffer.png` after the timed workload. The script verifies the
 PNG dimensions independently of the smaller viewport screenshot and adds
 `-buffer` to the report directory.
+For a driver comparison, set `ADIGUN_CHROME_ANGLE_BACKEND` to `d3d11` or
+`vulkan`. The flag applies to the isolated Chrome run. The report records
+the requested and observed renderer, rejects an unexpected backend, and
+appends the backend name to the report directory.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The

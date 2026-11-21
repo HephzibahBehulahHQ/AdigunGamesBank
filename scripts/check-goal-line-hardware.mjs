@@ -32,6 +32,11 @@ if (!Number.isInteger(rounds) || rounds < 1 || rounds > 100) {
   throw new Error('Choose a workload of 1 to 100 live feeds.');
 }
 const headless = process.env.ADIGUN_HARDWARE_HEADLESS === '1';
+const angleBackend = process.env.ADIGUN_CHROME_ANGLE_BACKEND ?? '';
+const backendNames = { d3d11: /\bDirect3D11\b/i, vulkan: /\bVulkan\b/i };
+if (angleBackend && !Object.hasOwn(backendNames, angleBackend)) {
+  throw new Error('Choose d3d11 or vulkan for ADIGUN_CHROME_ANGLE_BACKEND.');
+}
 const requireDirect = process.env.ADIGUN_HARDWARE_NATIVE_16K === '1';
 const fullscreen = requireDirect || process.env.ADIGUN_HARDWARE_FULLSCREEN === '1';
 const profileGpu = mode === '16k' && process.env.ADIGUN_PROFILE_GPU === '1';
@@ -47,7 +52,7 @@ const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
   ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
     camera === 'goal' ? '' : camera, requireDirect ? 'native' : fullscreen ? 'fullscreen' : '',
-    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : ''].filter(Boolean).join('-'));
+    profileGpu ? `gpu-${gpuPhase}` : '', captureBuffer ? 'buffer' : '', angleBackend].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -75,7 +80,8 @@ await new Promise((resolve, reject) => {
 
 let browser;
 try {
-  browser = await chromium.launch({ channel: 'chrome', headless });
+  const args = angleBackend ? [`--use-angle=${angleBackend}`] : [];
+  browser = await chromium.launch({ channel: 'chrome', headless, args });
   const page = await browser.newPage({ viewport: requireDirect ? null : { width: 1440, height: 900 } });
   await page.addInitScript(({ profileGpu, gpuPhase, level, captureBuffer }) => {
     // Unlock the selected drill in the isolated test context.
@@ -225,6 +231,9 @@ try {
   let sample = null;
   let bufferCapture = null;
   let workloadError = requireDirect && !hasDirectBuffer(before) ? 'Direct 16K drawing buffer was not allocated.' : null;
+  if (!workloadError && angleBackend && !backendNames[angleBackend].test(before?.renderer ?? '')) {
+    workloadError = `Chrome did not select the requested ${angleBackend} backend.`;
+  }
   if (!workloadError && requestedBufferAllocated && before.camera === camera && before.fullscreen === fullscreen) {
     const frameIntervals = [];
     const completionIntervals = [];
@@ -372,7 +381,7 @@ try {
   const report = {
     mode, scenario, camera, level, requested, requestedBufferAllocated, requireDirect, softwareRenderer,
     before, after, restored4K, sample, bufferCapture, workloadError,
-    browser: browser.version(), platform: process.platform, headless,
+    browser: browser.version(), platform: process.platform, headless, angleBackend: angleBackend || null,
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
     capturedAt: new Date().toISOString()

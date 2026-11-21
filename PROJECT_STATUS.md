@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+An isolated Chrome benchmark can now compare ANGLE backends and confirms
+the renderer actually selected. On Intel Arc 140T, both Vulkan and Direct3D
+11 completed five broadcast clearances in a 15,360 × 8,640 scene and
+restored actual 4K without errors or context loss. Median GPU completion
+interval was 58.1 ms on Vulkan and 59.3 ms on Direct3D 11. Neither run
+met the 60 fps target. These runs used a downsampled presentation canvas.
+
 Goal Line now has one-step Slower and Faster controls for kick speed.
 Chrome and WebKit passed three targeted checks each for touch play and
 persistence, the 320 px reduced-motion accessibility scan, and kick-speed
