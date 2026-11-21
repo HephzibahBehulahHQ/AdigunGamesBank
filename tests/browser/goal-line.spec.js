@@ -120,6 +120,43 @@ test('Goal Line can switch cameras without changing the drill state', async ({ p
   await expect(canvas).toHaveAttribute('data-camera', 'broadcast');
 });
 
+test.describe('Goal Line touch controls', () => {
+  test.use({ hasTouch: true, viewport: { width: 360, height: 800 } });
+
+  test('play, retry and save a drill with taps', async ({ page }) => {
+    await page.goto('/game9/');
+    await expect(page.locator('#pitch')).toHaveAttribute('data-renderer', 'WebGL2');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+    const kick = page.getByRole('button', { name: 'Clear ball', exact: true });
+    await kick.tap();
+    await expect(page.locator('#message')).toContainText('Missed contact');
+    await page.getByRole('button', { name: 'Restart drill' }).tap();
+
+    const feeds = makeDrill(1);
+    for (const [index, feed] of feeds.entries()) {
+      const tick = Math.round(feed.approachTime / STEP);
+      const moves = Math.round(feed.crossing / 0.45);
+      const move = page.getByRole('button', { name: moves < 0 ? 'Left' : 'Right', exact: true });
+      const hold = page.getByRole('button', { name: 'Hold', exact: true });
+      for (let step = 0; step < Math.abs(moves); step++) await move.tap();
+      for (let step = Math.abs(moves); step < tick; step++) await hold.tap();
+      await expect(page.locator('#contact')).toHaveText('Ball in reach.');
+      const aim = Math.atan((feed.channel - feed.crossing) / SAFETY_LINE) * 180 / Math.PI;
+      const slider = page.getByRole('slider', { name: 'Clearance angle' });
+      const { width, height } = await slider.boundingBox();
+      await slider.tap({ position: { x: width * (aim + 60) / 120, y: height / 2 } });
+      await kick.tap();
+      if (index < feeds.length - 1) {
+        await expect(page.locator('#message')).toContainText('Safe clearance');
+        await page.getByRole('button', { name: 'Next ball' }).tap();
+      }
+    }
+    await expect(page.locator('#message')).toContainText('Drill cleared');
+    await page.reload();
+    await expect(page.locator('#level')).toHaveValue('2');
+  });
+});
+
 test('Goal Line rejects 16K when the device viewport limit is too small', async ({ page }) => {
   await page.addInitScript(() => {
     const getParameter = WebGL2RenderingContext.prototype.getParameter;

@@ -4,6 +4,11 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Chrome 158 touch emulation at 360 × 800 verified that Goal Line fits the
+viewport and can be played entirely with taps. The test triggered a missed
+clearance, restarted, aimed and cleared all three balls, then verified that
+drill 2 remained unlocked after reload. Physical phone input remains untested.
+
 The packed player mesh now transfers 1.22 MB instead of 1.59 MB and uses
 the same GPU attribute values as the JSON asset. All 14 Chrome gameplay
 checks and five cold-load checks passed. Median WebGL readiness was 2.44 s
