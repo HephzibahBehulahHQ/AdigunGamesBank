@@ -5,6 +5,8 @@ import { chromium } from '@playwright/test';
 import { CLEARANCE_SPEED, makeDrill, planClearance, readContact } from '../game9/clearance.js';
 
 const scenario = process.argv[4] ?? 'standard';
+const camera = process.argv[5] ?? 'goal';
+if (camera !== 'goal' && camera !== 'broadcast') throw new Error('Choose the goal or broadcast camera.');
 const fixtures = {
   standard: { level: 2001, tick: 22, defender: 1.35, angle: 11 },
   heavy: { level: 8002, tick: 18, defender: -1.35, angle: -24 },
@@ -36,7 +38,8 @@ if (!['combined', 'scene', 'presentation'].includes(gpuPhase)) {
 
 const root = path.resolve(import.meta.dirname, '..', 'dist');
 const output = path.resolve(import.meta.dirname, '..', 'test-results',
-  `goal-line-hardware-${mode}${scenario === 'standard' ? '' : '-' + scenario}${profileGpu ? '-gpu-' + gpuPhase : ''}`);
+  ['goal-line-hardware', mode, scenario === 'standard' ? '' : scenario,
+    camera === 'goal' ? '' : camera, profileGpu ? `gpu-${gpuPhase}` : ''].filter(Boolean).join('-'));
 const mime = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png'
@@ -160,7 +163,10 @@ try {
   const canvas = page.locator('#pitch');
   const graphics = page.getByRole('combobox', { name: 'Graphics' });
   await page.waitForFunction(() => document.querySelector('#pitch').dataset.renderer || document.querySelector('#pitch').hidden);
-  if (await graphics.isEnabled()) await graphics.selectOption(mode);
+  if (await graphics.isEnabled()) {
+    await page.getByRole('combobox', { name: 'Camera' }).selectOption(camera);
+    await graphics.selectOption(mode);
+  }
   const readSurface = () => canvas.evaluate(element => {
     if (element.dataset.renderer !== 'WebGL2') return null;
     const graphicsContext = element.getContext('webgl2');
@@ -170,6 +176,7 @@ try {
       drawingBuffer: [graphicsContext.drawingBufferWidth, graphicsContext.drawingBufferHeight],
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
+      camera: element.dataset.camera,
       maxViewport: Array.from(graphicsContext.getParameter(graphicsContext.MAX_VIEWPORT_DIMS)),
       maxRenderbuffer: graphicsContext.getParameter(graphicsContext.MAX_RENDERBUFFER_SIZE),
       gpuTimerAvailable: graphicsContext.getSupportedExtensions()?.includes('EXT_disjoint_timer_query_webgl2') ?? false,
@@ -184,7 +191,7 @@ try {
   let restored4K = null;
   let sample = null;
   let workloadError = null;
-  if (requestedBufferAllocated) {
+  if (requestedBufferAllocated && before.camera === camera) {
     const frameIntervals = [];
     const completionIntervals = [];
     const longGaps = [];
@@ -267,7 +274,7 @@ try {
         frameCount += frames.length;
         if (frames.length) activeMilliseconds += frames.at(-1) - frames[0];
         after = await readSurface();
-        if (!after || after.contextLost || after.error ||
+        if (!after || after.contextLost || after.error || after.camera !== camera ||
             after.renderBuffer.some((dimension, index) => dimension !== requested[index])) {
           throw new Error(`Render target failed in round ${round + 1}.`);
         }
@@ -308,7 +315,7 @@ try {
   }
   const softwareRenderer = /swiftshader|llvmpipe|softpipe|software|basic render driver|warp/i.test(before?.renderer ?? '');
   const report = {
-    mode, scenario, level, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
+    mode, scenario, camera, level, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
     fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
@@ -317,7 +324,7 @@ try {
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
   const restored = mode !== '16k' || (restored4K?.drawingBuffer.join('x') === '3840x2160' &&
-    restored4K.renderSurface === 'drawing buffer' && !restored4K.error && !restored4K.contextLost);
+    restored4K.renderSurface === 'drawing buffer' && restored4K.camera === camera && !restored4K.error && !restored4K.contextLost);
   const measuredCompletion = mode !== '16k' || sample?.observedGpuCompletion?.medianMs > 0;
   if (!requestedBufferAllocated || softwareRenderer || workloadError || !after || after.contextLost || after.error || !sample?.medianMs || !restored || !measuredCompletion ||
       after?.renderBuffer.some((dimension, index) => dimension !== requested[index])) process.exitCode = 1;

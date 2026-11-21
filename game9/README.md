@@ -32,6 +32,9 @@ Add `heavy` as the third argument to use drill 8,002, which combines heavy
 turf, a moving receiver and an opponent. Those reports use a `-heavy` suffix.
 Use `loft` to measure the aerial reception in drill 5,092. Those reports use
 a `-loft` suffix.
+Add `broadcast` as the fourth argument, for example
+`node scripts/check-goal-line-hardware.mjs 16k 5 heavy broadcast`, to use
+the broadcast camera. Its reports append `-broadcast` to the scenario.
 The script opens the static build in Chrome without forced software rendering,
 uses an isolated save for an Apprentice drill, and samples draw submissions
 from the incoming feed through a successful clearance under pressure. The

@@ -4,6 +4,15 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+The hardware benchmark now selects and verifies the broadcast camera.
+Chrome on Intel Arc 140T completed five heavy-turf clearances per mode.
+At 3840 × 2160 the median draw submission interval was 8.3 ms and the
+95th percentile was 8.6 ms. At 15,360 × 8,640, median observed GPU
+completion was 47.6 ms and the 95th percentile was 54.3 ms. The 16K scene
+was downsampled for display and restored to 4K in the broadcast view.
+Both runs finished without WebGL errors or context loss. The default
+goal camera also passed one 4K clearance using the existing report path.
+
 Escape now pauses a live feed from the sliders or toolbar and preserves
 keyboard focus. Chrome passed the timed pause/resume test with focus on kick
 speed and the Drill field, plus all 18 other Goal Line tests against the
