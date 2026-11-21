@@ -50,27 +50,27 @@ export function createStage({ canvas, context, qualitySelect, status, position =
       colorSpace: THREE.LinearSRGBColorSpace,
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
-      depthBuffer: true
+      depthBuffer: false
     });
-    renderer.setRenderTarget(framebuffer);
-    const complete = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-    const depth = complete && gl.getFramebufferAttachmentParameter(
-      gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
-    );
-    let allocatedWidth = 0, allocatedHeight = 0, depthBits = 0;
-    if (depth) {
-      const previous = gl.getParameter(gl.RENDERBUFFER_BINDING);
-      gl.bindRenderbuffer(gl.RENDERBUFFER, depth);
-      // The 16K depth surface is transient and needs only 16-bit storage.
-      gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
-      allocatedWidth = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_WIDTH);
-      allocatedHeight = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_HEIGHT);
-      depthBits = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_DEPTH_SIZE);
-      gl.bindRenderbuffer(gl.RENDERBUFFER, previous);
+    // Attach the verified 16-bit buffer directly, without allocating the renderer's default depth surface.
+    const depth = gl.createRenderbuffer();
+    if (!depth) {
+      framebuffer.dispose();
+      return null;
     }
+    renderer.setRenderTarget(framebuffer);
+    const previous = gl.getParameter(gl.RENDERBUFFER_BINDING);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, depth);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depth);
+    const allocatedWidth = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_WIDTH);
+    const allocatedHeight = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_HEIGHT);
+    const depthBits = gl.getRenderbufferParameter(gl.RENDERBUFFER, gl.RENDERBUFFER_DEPTH_SIZE);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, previous);
     const finalized = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
     renderer.setRenderTarget(null);
     if (gl.getError() !== gl.NO_ERROR || !finalized || depthBits !== 16 || allocatedWidth !== width || allocatedHeight !== height) {
+      gl.deleteRenderbuffer(depth);
       framebuffer.dispose();
       return null;
     }
@@ -98,7 +98,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     );
     presentation.add(quad);
     return {
-      framebuffer, presentation, quad,
+      framebuffer, depth, presentation, quad,
       camera: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
       resolution: `${allocatedWidth}x${allocatedHeight}`
     };
@@ -110,6 +110,7 @@ export function createStage({ canvas, context, qualitySelect, status, position =
     if (largeFrameFence) gl.deleteSync(largeFrameFence);
     largeFrameFence = null;
     if (!largeFrame) return;
+    gl.deleteRenderbuffer(largeFrame.depth);
     largeFrame.framebuffer.dispose();
     largeFrame.quad.material.dispose();
     largeFrame.quad.geometry.dispose();

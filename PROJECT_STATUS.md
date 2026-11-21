@@ -4,6 +4,14 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Directly attaching the 16-bit depth renderbuffer removed an extra
+full-resolution depth allocation at 16K startup. Chrome on Intel Arc 140T
+reported a 24-bit then a 16-bit allocation on the previous code and one
+16-bit allocation on the new code. Five heavy-turf clearances kept the
+15,360 × 8,640 scene buffer and returned to 4K without WebGL errors.
+[CI run 44943246720](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/44943246720)
+also passed verification for the earlier `5bbc237` pitch-marking revision.
+
 Three matched five-clearance heavy-turf runs at 16K compared goalmouth wear
 implementations on Intel Arc 140T. Median GPU scene and presentation times
 were 43.9 ms for the existing shader, 46.6 ms for a bounds check in that

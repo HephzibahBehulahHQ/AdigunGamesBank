@@ -66,6 +66,14 @@ try {
     window.goalLineDrawTimes = [];
     window.goalLineCompletionTimes = [];
     window.goalLineGpuTimes = [];
+    window.goalLineDepthAllocations = [];
+    const allocateDepth = WebGL2RenderingContext.prototype.renderbufferStorage;
+    WebGL2RenderingContext.prototype.renderbufferStorage = function (target, format, width, height) {
+      if (width === 15360 && height === 8640 && (format === this.DEPTH_COMPONENT16 || format === this.DEPTH_COMPONENT24)) {
+        window.goalLineDepthAllocations.push(format === this.DEPTH_COMPONENT16 ? 16 : 24);
+      }
+      return allocateDepth.call(this, target, format, width, height);
+    };
     window.goalLineBrowserEvents = [];
     function recordBrowserEvent(event) {
       window.goalLineBrowserEvents.push({
@@ -278,6 +286,7 @@ try {
     mode, scenario, level, requested, requestedBufferAllocated, softwareRenderer, before, after, restored4K, sample, workloadError,
     browser: browser.version(), platform: process.platform, headless,
     graphicsStatus: await page.locator('#graphics').textContent(),
+    fullResolutionDepthAllocations: await page.evaluate(() => window.goalLineDepthAllocations),
     capturedAt: new Date().toISOString()
   };
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2));
