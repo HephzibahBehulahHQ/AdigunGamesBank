@@ -4,6 +4,13 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+All 14 Goal Line browser checks passed locally on Windows using the cached
+Firefox 159.0 executable against development revision `c959bcd`. Coverage
+included the measured 3840 × 2160 WebGL 2 drawing buffer, keyboard play
+without WebGL, camera preference persistence and the saved final campaign
+completion. This also passed the same 14 cases in Chrome. The Firefox run
+used the existing cached browser and did not change the CI browser setup.
+
 A second 10-clearance comparison tested discarding the 16K depth attachment
 before presenting the color texture. On Intel Arc 140T, the median observed
 completion interval was 83.1 ms with the discard and 67.1 ms with the
