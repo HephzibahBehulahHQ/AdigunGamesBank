@@ -4,6 +4,17 @@ Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current accep
 
 ## Goal Line conversion
 
+Goal Line requests antialiasing for the WebGL drawing buffer. Chrome on
+Intel Arc 140T granted it, and the paired 4K broadcast captures showed
+smoother rails and goal edges. Across three heavy-turf clearances per
+run, median 4K draw submission was 8.3 ms before and 8.4 ms after, and
+the 95th percentile moved from 8.5 to 16.8 ms. Three 16K clearances
+with antialiasing enabled on the presentation canvas completed at a
+50.1 ms median observed GPU completion interval. The 16K scene framebuffer
+remains single-sampled. Both candidate runs completed without WebGL errors
+or context loss, and the 16K run restored actual 4K.
+All 19 Goal Line Chrome browser checks passed on the candidate build.
+
 The training venue now has a connected railing behind the goal and terrain
 beyond the apron. The 4K broadcast capture shows the new boundary and
 horizon. Chrome on Intel Arc 140T completed three broadcast heavy-turf

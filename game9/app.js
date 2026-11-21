@@ -322,7 +322,7 @@ load(level);
 
 async function initializePitch() {
   const context = canvas.getContext('webgl2', {
-    antialias: false, alpha: false, powerPreference: 'high-performance',
+    antialias: true, alpha: false, powerPreference: 'high-performance',
   });
   if (!context) {
     fallback();

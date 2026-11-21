@@ -174,6 +174,7 @@ try {
     const debug = graphicsContext.getExtension('WEBGL_debug_renderer_info');
     return {
       drawingBuffer: [graphicsContext.drawingBufferWidth, graphicsContext.drawingBufferHeight],
+      canvasAntialias: graphicsContext.getContextAttributes()?.antialias ?? false,
       renderBuffer: element.dataset.renderResolution.split('x').map(Number),
       renderSurface: element.dataset.renderSurface,
       camera: element.dataset.camera,
