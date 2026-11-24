@@ -1,6 +1,15 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-05T00:58:25+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-24T20:53:19+01:00 (Europe/Berlin)**. This is the current acceptance record.
+
+## Corporate template — floating Adigun BOT checkpoint
+
+On scoped branch `work/gamesbank-adigun-bot`, commit **`b87b5cb31eec2629f059215a7ebfdb57a73ca420`** (pushed and read back from `origin/work/gamesbank-adigun-bot`), added a floating, product-aware Adigun BOT to all **25 generated HTML pages**. It routes same-origin requests through a Cloudflare Worker AI binding, constrains request size, roles and rate, never submits game/account/save data, and fails closed without the configured AI and limiter bindings. The bot UI provides EN, Deutsch, Yoruba and Nigerian Pidgin controls; this does not certify the entire product is translated.
+
+- Local `npm test`: **277 passed, 1 skipped, 0 failed**. `npm run check` passed. `npm run build` generated 195 files; a static check found the bot assets on all 25 HTML pages. `git diff --check` passed.
+- GitHub Actions run [45474739030](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45474739030) was **in progress** when this status was recorded. Browser tests are **NOT TESTED locally**: the Playwright executable was unavailable, the declared dependency was not valid after one `npm ci` attempt, and the local browser preview could not connect. Do not claim browser acceptance until CI completes successfully.
+- No production deploy or live model request was made. Runtime AI and rate limits still require Cloudflare configuration/deployment. The available Cloudflare Workers AI free allowance is account/plan dependent; confirm current account allocation before production use. No external paid service was enabled here.
+- Pre-existing untracked `.wrangler/` and `supabase/.temp/` directories were left untouched.
 
 ## Goal Line conversion
 
@@ -117,4 +126,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Verify the Goal Line deployment against its tested source before scoping the next individual legacy conversion. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
+Confirm CI run 45474739030 outcome; if it passes, plan the scoped integration/deploy only after required Cloudflare bindings are confirmed. Then continue auditing the remaining existing product repos for the shared template requirements. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
