@@ -13,6 +13,26 @@ for (const name of [...files, ...folders]) {
   try { await cp(path.join(root, name), path.join(output, name), { recursive: true }); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
+for (const asset of ["product-bot-ui.mjs", "product-bot-ui.css"]) {
+  await cp(path.join(root, "cloudflare", asset), path.join(output, asset));
+}
+async function attachBot(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      await attachBot(target);
+    } else if (entry.name.endsWith(".html")) {
+      const html = await readFile(target, "utf8");
+      if (!/<\/head>/i.test(html) || !/<\/body>/i.test(html)) {
+        throw new Error("Missing HTML boundary for Adigun BOT: " + target);
+      }
+      await writeFile(target, html
+        .replace(/<\/head>/i, '<link rel="stylesheet" href="/product-bot-ui.css"></head>')
+        .replace(/<\/body>/i, '<script type="module" src="/product-bot-ui.mjs"></script></body>'));
+    }
+  }
+}
+await attachBot(output);
 if (process.env.GAMESBANK_ACCOUNT_PREVIEW === 'true') {
   for (const asset of ['product-account-ui.mjs', 'product-account-ui.css']) {
     await cp(path.join(root, 'cloudflare', asset), path.join(output, asset));
