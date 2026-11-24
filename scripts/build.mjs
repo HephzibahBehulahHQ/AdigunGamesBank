@@ -13,6 +13,28 @@ for (const name of [...files, ...folders]) {
   try { await cp(path.join(root, name), path.join(output, name), { recursive: true }); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
+if (process.env.GAMESBANK_ACCOUNT_PREVIEW === 'true') {
+  for (const asset of ['product-account-ui.mjs', 'product-account-ui.css']) {
+    await cp(path.join(root, 'cloudflare', asset), path.join(output, asset));
+  }
+  async function attachAccountInterface(directory) {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const target = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        await attachAccountInterface(target);
+      } else if (entry.name.endsWith('.html')) {
+        const html = await readFile(target, 'utf8');
+        if (!/<\/head>/i.test(html) || !/<\/body>/i.test(html)) {
+          throw new Error('Missing HTML boundary for account controls: ' + target);
+        }
+        await writeFile(target, html
+          .replace(/<\/head>/i, '<link rel="stylesheet" href="/product-account-ui.css"></head>')
+          .replace(/<\/body>/i, '<script type="module" src="/product-account-ui.mjs"></script></body>'));
+      }
+    }
+  }
+  await attachAccountInterface(output);
+}
 const hashes = {};
 async function fingerprint(directory, prefix = '') {
   for (const entry of (await readdir(directory, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
