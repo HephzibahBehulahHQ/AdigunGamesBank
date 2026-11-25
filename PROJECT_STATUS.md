@@ -2,9 +2,10 @@
 
 Updated **2026-11-25 (Europe/Berlin)**. This is the current acceptance record.
 
-## Floating-window standards follow-up — 25 November 2026
+## Floating Adigun BOT window — verified candidate
 
-The local `work/gamesbank-adigun-bot` candidate now adds draggable and resizable window behavior, minimize/maximize/restore/close controls, viewport clamping, local geometry persistence, keyboard resizing, and four-language window-control names. The generated product/game workspaces remain outside the floating panel and clickable. A focused Playwright spec covers canvas pointer pass-through, window controls, persistence, viewport fit and German labels. Unit tests and static release/build checks passed; the browser spec is **NOT TESTED locally** because this checkout has no `node_modules` or Playwright installation. This candidate has not been pushed, merged or deployed.
+PR [#9](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/9) extends the existing floating Adigun BOT with drag/resize, minimize/maximize/restore/close controls, viewport clamping, local geometry persistence, keyboard resizing and four-language control names while keeping game workspaces clickable. The resize and reload-persistence browser checks pass in CI run [45688099865](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45688099865) on candidate `867668689f90346de25b45c887bd508d43ad3fd7`; product canvas/game code was not changed. Local browser execution remains unavailable. The PR is not yet merged or deployed. Its first attempt to update the branch after CI exposed a merge conflict in this status document because `main` advanced; reconcile against current `main`, rerun the exact-candidate gate, then integrate.
+
 
 ## Product-aware OTP origin context — 25 November 2026
 
@@ -15,7 +16,7 @@ On `work/gamesbank-adigun-bot`, the product account Worker now passes its alread
 On scoped branch `work/gamesbank-adigun-bot`, commit **`b87b5cb31eec2629f059215a7ebfdb57a73ca420`** (pushed and read back from `origin/work/gamesbank-adigun-bot`), added a floating, product-aware Adigun BOT to all **25 generated HTML pages**. It routes same-origin requests through a Cloudflare Worker AI binding, constrains request size, roles and rate, never submits game/account/save data, and fails closed without the configured AI and limiter bindings. The bot UI provides EN, Deutsch, Yoruba and Nigerian Pidgin controls; this does not certify the entire product is translated.
 
 - Local `npm test`: **277 passed, 1 skipped, 0 failed**. `npm run check` passed. `npm run build` generated 195 files; a static check found the bot assets on all 25 HTML pages. `git diff --check` passed.
-- GitHub Actions run [45474739030](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45474739030) was **in progress** when this status was recorded. Browser tests are **NOT TESTED locally**: the Playwright executable was unavailable, the declared dependency was not valid after one `npm ci` attempt, and the local browser preview could not connect. Do not claim browser acceptance until CI completes successfully.
+- GitHub Actions run [45688099865](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45688099865) passed on exact candidate `867668689f90346de25b45c887bd508d43ad3fd7` at 2026-11-25 19:55:24Z; its complete `verify` job, including rendered gameplay/browser flows, completed successfully. The Playwright browser suite remains **NOT TESTED locally** because this checkout has no installed Playwright dependencies. This verifies the CI candidate, not production behavior.
 - No production deploy or live model request was made. Runtime AI and rate limits still require Cloudflare configuration/deployment. The available Cloudflare Workers AI free allowance is account/plan dependent; confirm current account allocation before production use. No external paid service was enabled here.
 - Pre-existing untracked `.wrangler/` and `supabase/.temp/` directories were left untouched.
 
@@ -134,18 +135,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Confirm CI run 45474739030 outcome; if it passes, plan the scoped integration/deploy only after required Cloudflare bindings are confirmed. Then continue auditing the remaining existing product repos for the shared template requirements. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
-
-## Adigun BOT floating-window checkpoint — 2026-11-25
-
-- PR [#9](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/9), candidate `c79b036639cb686c17e2e96c5a2e0175cd56e31b`, passed `npm run check`, `npm test`, Python tests, build, accessibility/reflow and contract gates. The gameplay browser gate found 39 passing tests and one failed assertion: the window correctly capped at 600px high, while the new test incorrectly required a height above 600px.
-- The test now shrinks the 600px default window and checks the resulting height against its pre-resize size; it still checks width growth, reload persistence and viewport bounds. Product UI code is unchanged.
-- Local JavaScript syntax passed; CRLF-aware `git diff --check` passed. The browser test has not run locally because this checkout has no installed Playwright dependencies; a new GitHub Actions run is required.
-- The failure correction is on `work/gamesbank-adigun-bot`; merge and deployment remain pending a successful full CI run. No production files or service configuration were changed.
-
-### CI rerun diagnosis and correction — 2026-11-25
-
-- CI run `45685502577` completed with 39 browser tests passing and one failure in `tests/browser/adigun-bot-window.spec.js`: after reload, the test expected the moved panel at x=840 but observed its default x=1000.
-- Root cause: the `beforeEach` init script removed the panel geometry from localStorage on every document load, including the reload that the persistence test was intended to verify. The browser behavior was correct; the test setup erased its own persisted state.
-- Changed the init script to clear the geometry only once per isolated test context, using a sessionStorage marker that survives reload. This preserves test isolation and allows the reload assertion to exercise real localStorage persistence.
-- Next: run the corrected browser gate locally with the available system Chrome, then push the fix and require a successful full CI run before merge/deploy. The prior local Playwright browser download path is unavailable in this sandbox; no browser or dependency was installed.
+The corrected GamesBank browser suite is green on candidate `867668689f90346de25b45c887bd508d43ad3fd7`. Reconcile the `PROJECT_STATUS.md` conflict against the current `main`, require a fresh full check on the synchronized PR head, then integrate and verify Pages publication. Continue the remaining product-template audit after this checkpoint. Live-AI and native-console dependencies remain explicit; full-project finish time is **unknown**, ETA **pending**.
