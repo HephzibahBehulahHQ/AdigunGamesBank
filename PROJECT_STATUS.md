@@ -135,3 +135,10 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 ## Next bounded action
 
 Confirm CI run 45474739030 outcome; if it passes, plan the scoped integration/deploy only after required Cloudflare bindings are confirmed. Then continue auditing the remaining existing product repos for the shared template requirements. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
+
+## Adigun BOT floating-window checkpoint — 2026-11-25
+
+- PR [#9](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/9), candidate `c79b036639cb686c17e2e96c5a2e0175cd56e31b`, passed `npm run check`, `npm test`, Python tests, build, accessibility/reflow and contract gates. The gameplay browser gate found 39 passing tests and one failed assertion: the window correctly capped at 600px high, while the new test incorrectly required a height above 600px.
+- The test now shrinks the 600px default window and checks the resulting height against its pre-resize size; it still checks width growth, reload persistence and viewport bounds. Product UI code is unchanged.
+- Local JavaScript syntax passed; CRLF-aware `git diff --check` passed. The browser test has not run locally because this checkout has no installed Playwright dependencies; a new GitHub Actions run is required.
+- The failure correction is on `work/gamesbank-adigun-bot`; merge and deployment remain pending a successful full CI run. No production files or service configuration were changed.

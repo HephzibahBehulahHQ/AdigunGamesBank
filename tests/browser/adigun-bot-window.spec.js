@@ -53,11 +53,11 @@ test('dragged and resized window geometry survives reload and remains in the vie
   const grip = await panel.locator('[data-resize]').boundingBox();
   await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
   await page.mouse.down();
-  await page.mouse.move(grip.x + 80, grip.y + 60);
+  await page.mouse.move(grip.x + 80, grip.y - 60);
   await page.mouse.up();
   const afterResize = await panel.boundingBox();
   expect(afterResize.width).toBeGreaterThan(420);
-  expect(afterResize.height).toBeGreaterThan(600);
+  expect(afterResize.height).toBeLessThan(beforeDrag.height);
 
   await page.reload();
   await page.getByRole('button', { name: 'Open Adigun BOT' }).click();
