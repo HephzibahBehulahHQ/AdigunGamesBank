@@ -1,6 +1,10 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-24T20:53:19+01:00 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-25 (Europe/Berlin)**. This is the current acceptance record.
+
+## Product-aware OTP origin context — 25 November 2026
+
+On `work/gamesbank-adigun-bot`, the product account Worker now passes its already-validated product origin to Supabase as `redirect_to`; the account-worker test asserts the exact origin. Focused test result: **2 passed, 0 failed**. This gives a configured Send Email Hook enough product context to select a GamesBank-specific OTP email, but does **not** change the email's displayed product name by itself. The shared Supabase projects still have no configured Send Email Hook/provider credential, and no such email behavior or Worker deployment is claimed live. The existing `.wrangler/` and `supabase/.temp/` generated directories remain untouched and excluded.
 
 ## Corporate template — floating Adigun BOT checkpoint
 
