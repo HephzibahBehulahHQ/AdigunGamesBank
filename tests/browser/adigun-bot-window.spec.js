@@ -1,7 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.removeItem('hb:adigun-bot:gamesbank:guest:window:v1'));
+  await page.addInitScript(() => {
+    const key = 'hb:adigun-bot:gamesbank:guest:window:v1';
+    const marker = 'hb:adigun-bot:gamesbank:test-storage-reset:v1';
+    if (!sessionStorage.getItem(marker)) {
+      localStorage.removeItem(key);
+      sessionStorage.setItem(marker, '1');
+    }
+  });
 });
 
 test('floating Adigun BOT keeps the engineering canvas interactive and exposes window controls', async ({ page }) => {

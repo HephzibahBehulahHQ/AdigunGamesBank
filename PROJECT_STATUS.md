@@ -142,3 +142,10 @@ Confirm CI run 45474739030 outcome; if it passes, plan the scoped integration/de
 - The test now shrinks the 600px default window and checks the resulting height against its pre-resize size; it still checks width growth, reload persistence and viewport bounds. Product UI code is unchanged.
 - Local JavaScript syntax passed; CRLF-aware `git diff --check` passed. The browser test has not run locally because this checkout has no installed Playwright dependencies; a new GitHub Actions run is required.
 - The failure correction is on `work/gamesbank-adigun-bot`; merge and deployment remain pending a successful full CI run. No production files or service configuration were changed.
+
+### CI rerun diagnosis and correction — 2026-11-25
+
+- CI run `45685502577` completed with 39 browser tests passing and one failure in `tests/browser/adigun-bot-window.spec.js`: after reload, the test expected the moved panel at x=840 but observed its default x=1000.
+- Root cause: the `beforeEach` init script removed the panel geometry from localStorage on every document load, including the reload that the persistence test was intended to verify. The browser behavior was correct; the test setup erased its own persisted state.
+- Changed the init script to clear the geometry only once per isolated test context, using a sessionStorage marker that survives reload. This preserves test isolation and allows the reload assertion to exercise real localStorage persistence.
+- Next: run the corrected browser gate locally with the available system Chrome, then push the fix and require a successful full CI run before merge/deploy. The prior local Playwright browser download path is unavailable in this sandbox; no browser or dependency was installed.
