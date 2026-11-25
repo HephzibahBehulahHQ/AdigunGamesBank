@@ -2,6 +2,11 @@
 
 Updated **2026-11-25 (Europe/Berlin)**. This is the current acceptance record.
 
+## Floating Adigun BOT window — verified candidate
+
+PR [#9](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/9) extends the existing floating Adigun BOT with drag/resize, minimize/maximize/restore/close controls, viewport clamping, local geometry persistence, keyboard resizing and four-language control names while keeping game workspaces clickable. The resize and reload-persistence browser checks pass in CI run [45688099865](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45688099865) on candidate `867668689f90346de25b45c887bd508d43ad3fd7`; product canvas/game code was not changed. Local browser execution remains unavailable. The PR is not yet merged or deployed. Its first attempt to update the branch after CI exposed a merge conflict in this status document because `main` advanced; reconcile against current `main`, rerun the exact-candidate gate, then integrate.
+
+
 ## Product-aware OTP origin context — 25 November 2026
 
 On `work/gamesbank-adigun-bot`, the product account Worker now passes its already-validated product origin to Supabase as `redirect_to`; the account-worker test asserts the exact origin. Focused test result: **2 passed, 0 failed**. This gives a configured Send Email Hook enough product context to select a GamesBank-specific OTP email, but does **not** change the email's displayed product name by itself. The shared Supabase projects still have no configured Send Email Hook/provider credential, and no such email behavior or Worker deployment is claimed live. The existing `.wrangler/` and `supabase/.temp/` generated directories remain untouched and excluded.
@@ -11,7 +16,7 @@ On `work/gamesbank-adigun-bot`, the product account Worker now passes its alread
 On scoped branch `work/gamesbank-adigun-bot`, commit **`b87b5cb31eec2629f059215a7ebfdb57a73ca420`** (pushed and read back from `origin/work/gamesbank-adigun-bot`), added a floating, product-aware Adigun BOT to all **25 generated HTML pages**. It routes same-origin requests through a Cloudflare Worker AI binding, constrains request size, roles and rate, never submits game/account/save data, and fails closed without the configured AI and limiter bindings. The bot UI provides EN, Deutsch, Yoruba and Nigerian Pidgin controls; this does not certify the entire product is translated.
 
 - Local `npm test`: **277 passed, 1 skipped, 0 failed**. `npm run check` passed. `npm run build` generated 195 files; a static check found the bot assets on all 25 HTML pages. `git diff --check` passed.
-- GitHub Actions run [45474739030](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45474739030) was **in progress** when this status was recorded. Browser tests are **NOT TESTED locally**: the Playwright executable was unavailable, the declared dependency was not valid after one `npm ci` attempt, and the local browser preview could not connect. Do not claim browser acceptance until CI completes successfully.
+- GitHub Actions run [45688099865](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/45688099865) passed on exact candidate `867668689f90346de25b45c887bd508d43ad3fd7` at 2026-11-25 19:55:24Z; its complete `verify` job, including rendered gameplay/browser flows, completed successfully. The Playwright browser suite remains **NOT TESTED locally** because this checkout has no installed Playwright dependencies. This verifies the CI candidate, not production behavior.
 - No production deploy or live model request was made. Runtime AI and rate limits still require Cloudflare configuration/deployment. The available Cloudflare Workers AI free allowance is account/plan dependent; confirm current account allocation before production use. No external paid service was enabled here.
 - Pre-existing untracked `.wrangler/` and `supabase/.temp/` directories were left untouched.
 
@@ -130,4 +135,4 @@ Policy remains **HB-AI-ENGINEERING-001 v2.0**, `d42d4e04ac6ab77ebafa1d4fccb724a4
 
 ## Next bounded action
 
-Confirm CI run 45474739030 outcome; if it passes, plan the scoped integration/deploy only after required Cloudflare bindings are confirmed. Then continue auditing the remaining existing product repos for the shared template requirements. Live-AI and native-console dependencies above remain explicit. The nine-game milestone is published; full-project finish time is **unknown**, ETA **pending**.
+The corrected GamesBank browser suite is green on candidate `867668689f90346de25b45c887bd508d43ad3fd7`. Reconcile the `PROJECT_STATUS.md` conflict against the current `main`, require a fresh full check on the synchronized PR head, then integrate and verify Pages publication. Continue the remaining product-template audit after this checkpoint. Live-AI and native-console dependencies remain explicit; full-project finish time is **unknown**, ETA **pending**.
