@@ -1,1 +1,110 @@
-(()=>{const lights=document.getElementById("lights"),entry=document.getElementById("entry"),start=document.getElementById("start"),check=document.getElementById("check"),phase=document.getElementById("phase"),msg=document.getElementById("msg"),levelEl=document.getElementById("level");let sequence="",best=0,active=false;try{best=Number(localStorage.getItem("hbgb.synapse.best"))||0}catch{}document.getElementById("best").textContent=best;const cols=["#5af3ef","#ff70b7","#ffd166","#a78bfa","#8bff8b","#ff8066"];function draw(count=0,on=-1){lights.replaceChildren();for(let i=0;i<count;i++){const d=document.createElement("span");d.className="light"+(i===on?" active":"");d.style.setProperty("--color",cols[Number(sequence[i])%cols.length]);lights.append(d)}}function begin(){if(active)return;active=true;const level=window.HBGameLevels.current;levelEl.textContent=level.toLocaleString();const len=Math.min(16,3+Math.floor((level-1)/90));document.getElementById("length").textContent=len;let seed=(level*1103515245+12345)>>>0;sequence="";for(let i=0;i<len;i++){seed=(seed*1664525+1013904223)>>>0;sequence+=(1+(seed%6))}entry.value="";entry.disabled=true;check.disabled=true;start.disabled=true;phase.textContent="Watch the sequence. Do not type yet.";msg.textContent="Memorize the colors in order.";let i=0;const delay=Math.max(280,900-Math.floor(level/18));draw(len);const flash=()=>{if(i>=len){draw(len);phase.textContent="Now type the colors as digits 1–6.";entry.disabled=false;entry.focus();check.disabled=false;active=false;return}draw(len,i);setTimeout(()=>{draw(len);i++;setTimeout(flash,Math.max(90,delay*.35))},delay)};setTimeout(flash,400)}start.onclick=begin;check.onclick=()=>{if(entry.value===sequence){const n=window.HBGameLevels.complete();levelEl.textContent=n.toLocaleString();msg.textContent=window.HBGameLevels.isMastered?"Perfect recall: stage 10,000 mastered!":"Sequence recalled. Stage "+n+" unlocked.";msg.style.color="#b1ffcf";best=Math.max(best,n-1);document.getElementById("best").textContent=best;try{localStorage.setItem("hbgb.synapse.best",String(best))}catch{}draw(sequence.length);[...lights.children].forEach(x=>x.classList.add("done"));entry.disabled=true;check.disabled=true;start.disabled=false;start.textContent="NEXT SEQUENCE";phase.textContent="Memory confirmed."}else{msg.textContent="Sequence mismatch. Try again, or start a fresh sequence.";msg.style.color="#ff8293";entry.value="";entry.focus()}};entry.addEventListener("keydown",e=>{if(e.key==="Enter"&&!check.disabled)check.click()});levelEl.textContent=window.HBGameLevels.current.toLocaleString();draw(3)})();
+(() => {
+  const byId = id => document.getElementById(id);
+  const lights = byId("lights");
+  const entry = byId("entry");
+  const start = byId("start");
+  const check = byId("check");
+  const phase = byId("phase");
+  const message = byId("msg");
+  const cue = byId("cue");
+  const guide = byId("studio-help");
+  const levels = window.HBGameLevels;
+  const colors = ["#5af3ef", "#ff70b7", "#ffd166", "#a78bfa", "#8bff8b", "#ff8066"];
+  const lengthFor = level => Math.min(16, 3 + Math.floor((level - 1) / 90));
+  let sequence = "";
+  let best = 0;
+  try { best = Number(localStorage.getItem("hbgb.synapse.best")) || 0; } catch {}
+  byId("best").textContent = best;
+  byId("level").textContent = levels.current.toLocaleString();
+  byId("length").textContent = lengthFor(levels.current);
+
+  function draw(count) {
+    lights.replaceChildren();
+    lights.toggleAttribute("data-long", count > 8);
+    for (let index = 0; index < count; index++) {
+      const light = document.createElement("span");
+      light.className = "light";
+      light.setAttribute("aria-hidden", "true");
+      lights.append(light);
+    }
+  }
+
+  function setRecall(enabled) {
+    entry.disabled = check.disabled = !enabled;
+    entry.hidden = check.hidden = !enabled;
+    if (enabled && !guide.open && matchMedia("(pointer: fine)").matches) entry.focus();
+  }
+
+  function begin() {
+    const level = levels.current;
+    const length = lengthFor(level);
+    let seed = (level * 1103515245 + 12345) >>> 0;
+    sequence = "";
+    for (let index = 0; index < length; index++) {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      sequence += 1 + (seed % colors.length);
+    }
+    entry.value = "";
+    setRecall(false);
+    start.disabled = true;
+    phase.textContent = "Watch";
+    message.textContent = "";
+    draw(length);
+
+    const duration = Math.max(280, 900 - Math.floor(level / 18));
+    const flash = index => {
+      if (index === length) {
+        cue.textContent = "";
+        phase.textContent = "Recall";
+        start.hidden = true;
+        setRecall(true);
+        if (!guide.open && document.activeElement === document.body && !matchMedia("(pointer: fine)").matches) {
+          check.focus();
+        }
+        return;
+      }
+      const digit = sequence[index];
+      const light = lights.children[index];
+      light.style.setProperty("--pulse", colors[Number(digit) - 1]);
+      light.textContent = digit;
+      light.classList.add("active");
+      cue.textContent = `Pulse ${index + 1}: ${digit}`;
+      setTimeout(() => {
+        light.classList.remove("active");
+        light.textContent = "";
+        setTimeout(() => flash(index + 1), Math.max(90, duration * .35));
+      }, duration);
+    };
+    setTimeout(() => flash(0), 400);
+  }
+
+  start.addEventListener("click", begin);
+  check.form.addEventListener("submit", event => {
+    event.preventDefault();
+    if (check.disabled) return;
+    if (entry.value !== sequence) {
+      message.textContent = "Mismatch · Try again";
+      entry.value = "";
+      entry.focus();
+      return;
+    }
+
+    best = Math.max(best, levels.current);
+    const next = levels.complete();
+    byId("level").textContent = next.toLocaleString();
+    byId("length").textContent = lengthFor(next);
+    byId("best").textContent = best;
+    try { localStorage.setItem("hbgb.synapse.best", String(best)); } catch {}
+    for (const light of lights.children) light.classList.add("done");
+    phase.textContent = levels.isMastered ? "Mastered" : "Correct";
+    message.textContent = "";
+    setRecall(false);
+    start.hidden = false;
+    start.disabled = false;
+    start.textContent = levels.isMastered ? "Replay sequence" : "Next sequence";
+    start.focus();
+  });
+
+  byId("help-open").addEventListener("click", () => guide.showModal());
+  draw(lengthFor(levels.current));
+})();
