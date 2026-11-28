@@ -50,6 +50,11 @@ function prepareSettings() {
   updateSettings();
 }
 function telemetry() {
+  const fallback = $('graphics-fallback');
+  if (!fallback.hidden) {
+    fallback.style.setProperty('--ball-x', `${clamp(50 + state.ball.x * 7, 8, 92)}%`);
+    fallback.style.setProperty('--ball-y', `${clamp(45 + state.ball.z * 2.65 - state.ball.y * 8, 12, 85)}%`);
+  }
   $('distance').textContent = `${Math.max(0, state.ball.z).toFixed(2)} m`;
   $('height').textContent = `${state.ball.y.toFixed(2)} m`;
   $('flight-time').textContent = `${state.elapsed.toFixed(2)} s`;
@@ -97,10 +102,17 @@ function sync() {
   presets.forEach(button => { button.disabled = !ready || keeping; });
   for (const name of ['dive-position', 'dive-height', 'dive-delay']) $(name).disabled = !ready || !keeping;
   dives.forEach(button => { button.disabled = !ready || !keeping; });
+  $('shot-presets').hidden = keeping || !ready;
+  $('dive-presets').hidden = !keeping || !ready;
+  $('aim-open').hidden = !ready;
+  $('keeper-tell').hidden = !ready;
+  $('shoot').hidden = !ready;
+  $('result-retry').hidden = !finished;
   $('shoot').disabled = !ready;
   $('shoot').textContent = keeping ? 'Face penalty' : 'Shoot penalty';
   $('pause').disabled = !['flight', 'paused'].includes(state.phase);
-  $('pause').textContent = state.phase === 'paused' ? 'Resume flight' : 'Pause flight';
+  $('pause').textContent = state.phase === 'paused' ? '▶' : 'Ⅱ';
+  $('pause').setAttribute('aria-label', state.phase === 'paused' ? 'Resume flight' : 'Pause flight');
   $('next-kick').hidden = state.phase !== 'result';
   $('next-kick').textContent = state.kickIndex === 5 ? 'Take the goalkeeper gloves' : 'Next kick';
   $('next-level').hidden = !(state.phase === 'won' && state.config.level < progress.unlocked);
@@ -118,6 +130,11 @@ function sync() {
     else if (state.phase === 'lost') showMessage(`${state.winner === 'player' ? 'Goal target not reached' : 'Shootout lost'}: ${state.goals}–${state.opponentGoals}. You need more goals than the opposition and at least ${state.config.target} goals. Retry this challenge.`, 'error');
     else if (state.phase === 'result') showMessage(`${label[state.result.outcome]} — ${state.result.detail}. Score ${state.goals}–${state.opponentGoals}.${state.kickIndex === 5 ? ' Now take the gloves for five goalkeeper turns.' : ` ${10 - state.kickIndex} kicks remain.`}`, (keeping ? state.result.outcome !== 'goal' : state.result.outcome === 'goal') ? 'success' : 'error');
     lastEvent = state.event;
+  }
+  const action = document.activeElement;
+  if ((action === $('shoot') || action === $('pause')) && (action.disabled || action.hidden)) {
+    const next = [$('next-kick'), $('next-level'), $('result-retry')].find(button => !button.hidden);
+    (next || canvas).focus({ preventScroll: true });
   }
   renderHistory(); telemetry(); dirty = true;
 }
@@ -146,7 +163,16 @@ presets.forEach(button => button.addEventListener('click', () => {
 $('shoot').addEventListener('click', takePenalty);
 $('pause').addEventListener('click', togglePause);
 $('next-kick').addEventListener('click', prepareNextKick);
-$('restart').addEventListener('click', () => reset());
+const help = $('studio-help');
+$('help-open').addEventListener('click', () => help.showModal());
+$('aim-open').addEventListener('click', () => $('aim-dialog').showModal());
+function retry() {
+  help.close();
+  reset();
+  $('shoot').focus({ preventScroll: true });
+}
+$('restart').addEventListener('click', retry);
+$('result-retry').addEventListener('click', retry);
 $('next-level').addEventListener('click', () => {
   if (state.phase === 'won' && state.config.level < progress.unlocked) { reset(state.config.level + 1); $('shoot').focus({ preventScroll: true }); }
 });
@@ -154,6 +180,8 @@ $('load-level').addEventListener('click', () => {
   const level = Number($('level').value);
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked || level > LEVEL_COUNT) { showMessage(`Choose an unlocked challenge from 1 to ${progress.unlocked.toLocaleString()}.`, 'error'); return; }
   reset(level);
+  help.close();
+  $('shoot').focus({ preventScroll: true });
 });
 canvas.addEventListener('keydown', event => {
   if (event.repeat && [' ', 'Escape', 'r', 'R', 'n', 'N'].includes(event.key)) return;
@@ -175,6 +203,7 @@ canvas.addEventListener('keydown', event => {
 document.addEventListener('visibilitychange', () => { if (document.hidden && pauseShootout(state)) { previous = 0; sync(); } });
 window.addEventListener('storage', event => { if (event.key === saveKey) sync(); });
 $('quality').addEventListener('change', () => { dirty = true; });
+new ResizeObserver(() => { dirty = true; }).observe(canvas);
 canvas.addEventListener('stage-lost', () => {
   scene?.dispose(); scene = null; $('graphics-fallback').hidden = false;
   $('graphics-status').textContent = 'Graphics connection lost. Command controls continue the same shootout.';

@@ -1,4 +1,4 @@
-import { THREE, createStage, box, material, line3 } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, box, material, line3 } from '../shared/three-stage.js';
 import { GOAL, BALL_RADIUS, KEEPER_PARTS, keeperPose, currentKick, makeFlight, ballAt } from './penalty-engine.js';
 
 function capsule(parent, start, end, radius, color) {
@@ -100,6 +100,7 @@ export function createPenaltyScene(options) {
 
   return {
     update(state, input, dive, reduceMotion) {
+      fitStudioCamera(stage.camera, options.canvas);
       const kick = state.flight?.kick || currentKick(state), pose = keeperPose(kick, state.flight ? state.elapsed : 0);
       if (state.role === 'keeper' && state.phase === 'ready') pose.x = 0;
       keeper.position.set(pose.x, pose.y, pose.z); keeper.rotation.z = pose.angle;
