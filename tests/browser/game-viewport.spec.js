@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -172,4 +172,28 @@ test('APEX Strategy applies a driver setup, charts a full race and restarts', as
   await page.getByRole('button', { name: 'Race again' }).click();
   await expect(page.locator('#lap-label')).toHaveText('0/10');
   await expect(page.getByRole('button', { name: 'Start race' })).toBeVisible();
+});
+
+test('Debate Arena validates arguments, reviews three rounds and starts a new debate', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game18/');
+  await page.getByRole('button', { name: 'Begin debate' }).press('Enter');
+  const submit = page.getByRole('button', { name: 'Submit argument' });
+  await submit.click();
+  await expect(page.locator('#validation')).not.toBeEmpty();
+  for (let round = 1; round <= 3; round++) {
+    await page.getByRole('textbox', { name: /Your argument/ }).fill('A controlled trial would measure costs, access and quality because all three matter to this decision.');
+    await submit.click();
+    await expect(page.locator('#round-result')).toContainText('Round ' + round);
+    await expect(page.locator('#ai-text')).not.toBeEmpty();
+    if (round === 1) {
+      await page.keyboard.press('Escape');
+      await page.getByRole('button', { name: 'Review result' }).press('Enter');
+      await expect(page.locator('#result')).toBeVisible();
+    }
+    await page.getByRole('button', { name: round === 3 ? 'Final result' : 'Next round' }).click();
+  }
+  await expect(page.locator('#finish')).toBeVisible();
+  await page.getByRole('button', { name: 'Play again' }).click();
+  await expect(page.getByRole('button', { name: 'Begin debate' })).toBeFocused();
 });
