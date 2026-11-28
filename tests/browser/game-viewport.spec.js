@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -107,4 +107,31 @@ test('Cortex Prime switches puzzles and saves a solved stage from its phone stud
   await expect(page.locator('#solved')).toHaveText('1');
   await page.reload();
   await expect(page.locator('#level')).toHaveText('2');
+});
+
+test('Synapse Sprint displays numbered pulses and saves a keyboard recall', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.pulses = [];
+    new MutationObserver(() => {
+      const pulse = document.querySelector('#lights .active');
+      const digit = pulse?.textContent;
+      if (digit && window.pulses.at(-1)?.element !== pulse) {
+        window.pulses.push({ element: pulse, digit });
+      }
+    }).observe(document, { subtree: true, attributes: true, childList: true });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game13/');
+  await page.getByRole('button', { name: 'Start sequence' }).press('Enter');
+  const entry = page.getByRole('textbox', { name: /Recall the sequence/ });
+  await expect(entry).toBeEnabled({ timeout: 10000 });
+  const digits = await page.evaluate(() => window.pulses.map(pulse => pulse.digit).join(''));
+  expect(digits).toMatch(/^[1-6]{3}$/);
+  await entry.fill(digits);
+  await entry.press('Enter');
+  await expect(page.locator('#phase')).toHaveText('Correct');
+  await expect(page.getByRole('button', { name: 'Next sequence' })).toBeFocused();
+  await page.reload();
+  await expect(page.locator('#level')).toHaveText('2');
+  await expect(page.locator('#best')).toHaveText('1');
 });

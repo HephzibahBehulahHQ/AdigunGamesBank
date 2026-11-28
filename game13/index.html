@@ -1,12 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07101e"><title>SYNAPSE SPRINT | Game Bank</title><style>
-:root{color-scheme:dark;--cyan:#5af3ef;--pink:#ff70b7;--bg:#070b18;--muted:#a5b5cb}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 4%,#3a1752,var(--bg) 62%);color:#f3f5ff;font:16px/1.5 system-ui,sans-serif;text-align:center}.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px auto;padding:8px;width:min(92%,500px);border:1px solid #5af3ef44;border-radius:12px;background:#081323;color:#fff;text-decoration:none;font-weight:800;letter-spacing:.1em}.brand img{width:145px;max-height:42px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px}.wrap{width:min(760px,94%);margin:20px auto}.tag{color:var(--pink);font:700 11px ui-monospace,monospace;letter-spacing:.2em}h1{font-size:clamp(34px,7vw,64px);line-height:1;margin:8px}.stats{display:flex;justify-content:center;gap:10px;margin:17px;flex-wrap:wrap}.pill{padding:8px 13px;border:1px solid #ff70b755;border-radius:99px;background:#120d20}.console{max-width:580px;margin:auto;padding:26px;border:1px solid #ff70b777;border-radius:20px;background:linear-gradient(145deg,#1a1230,#090e1a);box-shadow:0 0 40px #ff70b71c}.lights{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;min-height:72px;align-items:center}.light{width:clamp(30px,8vw,56px);height:clamp(30px,8vw,56px);border-radius:50%;border:2px solid #ffffff44;background:#161a2b;box-shadow:inset 0 0 14px #0008}.light.active{background:var(--color);box-shadow:0 0 24px var(--color),inset 0 0 8px white}.light.done{background:#43ffb2;box-shadow:0 0 18px #43ffb2}.input{display:flex;justify-content:center;gap:8px;margin:20px auto}.input input{width:100%;max-width:380px;padding:12px;border:1px solid #ff70b788;border-radius:10px;background:#060b16;color:white;font:700 21px ui-monospace,monospace;letter-spacing:.3em;text-align:center}.btn{padding:12px 18px;border:0;border-radius:10px;background:linear-gradient(90deg,#ff70b7,#b78cff);color:#130a20;font-weight:950;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}#msg{min-height:26px;color:var(--cyan);font-weight:750}.foot{font-size:12px;color:var(--muted)}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style><link rel="stylesheet" href="../shared/game-viewport.css">
-</head><body>
-<main class="game-viewport wrap">
-
-<div class="game-console">
-<div class="game-console-nav"><a class="brand" href="../"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a></div>
-<div class="game-console-content"><p class="tag">WORKING MEMORY · SPEED · FOCUS</p><h1>SYNAPSE SPRINT</h1><p>Memorize the light sequence, then reproduce it exactly before the neural timer runs out.</p><div class="stats"><span class="pill">Stage <b id="level">1</b>/10,000</span><span class="pill">Sequence <b id="length">3</b></span><span class="pill">Best streak <b id="best">0</b></span></div><section class="console"><p id="phase">Press START SEQUENCE when ready.</p><div class="lights" id="lights" aria-label="Light sequence display"></div><div class="input"><input id="entry" inputmode="numeric" maxlength="16" aria-label="Type the displayed sequence" placeholder="Enter sequence" disabled></div><button class="btn" id="start">START SEQUENCE</button><button class="btn" id="check" disabled>CHECK MEMORY</button><p id="msg" role="status" aria-live="polite">Every correct recall advances one stage.</p></section><p class="foot">Sequence duration shortens and sequence length grows at milestone stages. Progress is saved locally.</p>
-</div>
-</div>
-</main><script src="../assets/game-levels.js"></script><script src="../assets/game13.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080c1a">
+  <title>Synapse Sprint | Game Bank</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main class="game-viewport" id="studio" aria-label="Synapse Sprint">
+  <section class="memory-field" aria-label="Memory playfield">
+    <p id="phase" role="status">Ready</p>
+    <div id="lights" aria-label="Sequence positions"></div>
+    <span class="sr-only" id="cue" aria-live="assertive"></span>
+    <p id="msg" role="status"></p>
+  </section>
+  <div class="memory-hud" aria-label="Progress">
+    <span aria-label="Stage"><span aria-hidden="true">⚑</span> <b id="level">1</b></span>
+    <span aria-label="Sequence length"><span aria-hidden="true">▦</span> <b id="length">3</b></span>
+    <span aria-label="Best stage cleared"><span aria-hidden="true">★</span> <b id="best">0</b></span>
+  </div>
+  <button type="button" id="help-open" class="memory-help" aria-label="Help" aria-haspopup="dialog">?</button>
+  <form class="memory-controls">
+    <input id="entry" inputmode="numeric" maxlength="16" pattern="[1-6]+" autocomplete="off" aria-label="Recall the sequence using digits 1 to 6" placeholder="1–6" disabled hidden>
+    <button type="button" id="start">Start sequence</button>
+    <button type="submit" id="check" disabled hidden>Check</button>
+  </form>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <h1 id="help-title">Synapse Sprint</h1>
+    <p>Watch the numbered pulses from left to right. Once the display goes dark, enter the digits in order and select Check or press Enter.</p>
+    <p>A correct recall unlocks the next stage. At higher stages the sequence grows longer and flashes faster. Your progress and best stage are saved on this device.</p>
+    <footer><a href="../">Game Bank</a><form method="dialog"><button autofocus>Close</button></form></footer>
+  </dialog>
+</main>
+<script src="../assets/game-levels.js"></script>
+<script src="../assets/game13.js"></script>
+</body>
+</html>
