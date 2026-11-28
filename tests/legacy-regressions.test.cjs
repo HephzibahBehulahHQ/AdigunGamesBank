@@ -32,7 +32,11 @@ function harness(game, { saved = "1", storage = new Map(), blockedStorage = fals
     };
     element.classList = {
       add(...classes) { element.className = [...new Set([...element.className.split(/\s+/).filter(Boolean), ...classes])].join(" "); },
-      contains(name) { return element.className.split(/\s+/).includes(name); }
+      contains(name) { return element.className.split(/\s+/).includes(name); },
+      toggle(name, enabled) {
+        if (enabled) this.add(name);
+        else element.className = element.className.split(/\s+/).filter(item => item !== name).join(" ");
+      }
     };
     return element;
   }
@@ -47,6 +51,7 @@ function harness(game, { saved = "1", storage = new Map(), blockedStorage = fals
   const context = vm.createContext({
     document: {
       body, createElement: node, getElementById: get,
+      querySelector(selector) { return selector.startsWith("#") ? elements.get(selector.slice(1)) ?? null : null; },
       querySelectorAll(selector) {
         if (selector === "[data-mode]") return modes;
         if (selector === ".cell") return get("board").children;

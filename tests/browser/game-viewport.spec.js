@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -91,4 +91,20 @@ test('Cortex Prime and Billionaire Challenge put answers before reference conten
   await expect(page.getByRole('button', { name: 'Lock answer' })).toBeInViewport({ ratio: 1 });
   await page.goto('/game14/');
   await expect(page.locator('#answers button').first()).toBeInViewport({ ratio: 1 });
+});
+
+test('Cortex Prime switches puzzles and saves a solved stage from its phone studio', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game12/');
+  await page.getByRole('button', { name: 'Matrix Vault' }).click();
+  await expect(page.locator('#modeTitle')).toHaveText('MATRIX VAULT');
+  await page.getByRole('button', { name: 'Rule Decoder' }).click();
+  await expect(page.locator('#puzzle')).toContainText('INPUT');
+  await page.getByRole('button', { name: 'Sequence Engine' }).click();
+  const values = (await page.locator('#puzzle').innerText()).match(/\d+/g).map(Number);
+  await page.getByRole('textbox', { name: 'Your answer' }).fill(String(values.at(-1) + values[1] - values[0]));
+  await page.getByRole('button', { name: 'Lock answer' }).click();
+  await expect(page.locator('#solved')).toHaveText('1');
+  await page.reload();
+  await expect(page.locator('#level')).toHaveText('2');
 });
