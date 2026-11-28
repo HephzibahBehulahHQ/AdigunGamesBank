@@ -6,6 +6,15 @@ import { createGame, startGame, stepGame, commandMove, commandWait, pauseGame, r
 const $ = id => document.getElementById(id), canvas = $('volt-canvas'), progress = createCampaign(), reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const keys = new Set(), directions = { north: {x:0,z:-1}, east: {x:1,z:0}, south: {x:0,z:1}, west: {x:-1,z:0} };
 let state, scene = null, recorded = false, dirty = true, lastFrame = 0, lastUI = 0, pointerDirection = null, pointerStarted = 0, coreRows = [], mapCells = [];
+let noticeTimer;
+function showNotice(value) {
+  const notice = $('message');
+  if (notice.textContent === value) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = value;
+  notice.classList.toggle('sr-only', !value);
+  if (value) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3500);
+}
 let mode = 'continuous'; try { if (localStorage.getItem('adigun.volt-dodge.controls.v1') === 'step') mode = 'step'; } catch { /* Commands do not depend on storage. */ }
 $('control-mode').value = mode;
 const text = (element, value) => { if (element.textContent !== value) element.textContent = value; };
@@ -41,14 +50,14 @@ function sync() {
   text($('phase'),labels[state.phase]); $('phase').dataset.phase=state.phase; $('phase').dataset.mode=mode;
   text($('tier'),state.config.tier); text($('unlock-status'),`Sector ${progress.unlocked.toLocaleString()} of ${LEVEL_COUNT.toLocaleString()} unlocked`);
   $('level').max=String(progress.unlocked); $('level').disabled=['running','paused'].includes(state.phase); $('load-level').disabled=$('level').disabled;
-  $('control-mode').disabled=state.phase==='running'; $('start').disabled=state.phase!=='ready'; $('pause').disabled=!['running','paused'].includes(state.phase); text($('pause'),state.phase==='paused'?'Resume mission':'Pause mission');
+  $('control-mode').disabled=state.phase==='running'; $('start').disabled=$('start').hidden=state.phase!=='ready'; $('pause').disabled=!['running','paused'].includes(state.phase); text($('pause'),state.phase==='paused'?'▶':'Ⅱ');const pauseLabel=state.phase==='paused'?'Resume mission':'Pause mission';$('pause').setAttribute('aria-label',pauseLabel);$('pause').title=pauseLabel;
   $('next-level').hidden=state.phase!=='won'||state.config.level>=LEVEL_COUNT;
   for(const name of Object.keys(directions))$(name).disabled=state.phase!=='running'; $('wait').disabled=state.phase!=='running'||mode!=='step';
   text($('mode-help'),mode==='step'?'Each direction advances one unit with the same collision engine; time is frozen between commands. Wait advances 0.5 s.':'Focus the arena for WASD / arrows, or hold a direction button. A short tap nudges the rover. Pause to switch modes.');
   coreRows.forEach((row,index)=>{row.li.classList.toggle('collected',state.collected[index]);text(row.status,state.collected[index]?'Recovered':'Awaiting pickup');});
   const remaining=state.collected.filter(value=>!value).length;
   text($('exit-status'),state.phase==='won'?'Exit reached. Sector complete.':remaining?`Locked · ${remaining} core${remaining===1?'':'s'} remaining`:'Open · bring the rover to the gate.'); $('exit-status').classList.toggle('open',remaining===0);
-  text($('message'),state.message); $('message').className=`message${state.phase==='lost'?' error':state.phase==='won'?' success':''}`;
+  showNotice(state.phase==='ready'?'':state.message);
   text($('save-status'),!progress.completed?'Cleared sectors save on this device.':`${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'sector' : 'sectors'} cleared. ${confirmedSave()?'Progress saved on this device.':'Progress is available for this session only; browser storage could not confirm a save.'}`);
   if(state.phase!=='running')clearInput(); telemetry(); updateMap(); dirty=true;
 }
@@ -68,11 +77,12 @@ function updateMap() {
 }
 function loadLevel(value) {
   const level=Number(value);
-  if(!Number.isInteger(level)||level<1||level>progress.unlocked){$('level').value=String(state?.config.level||1);if(state){state.message='Clear the current unlocked sector before loading a later one.';sync();}return;}
+  if(!Number.isInteger(level)||level<1||level>progress.unlocked){$('level').value=String(state?.config.level||1);if(state){sync();showNotice('Clear the current unlocked sector before loading a later one.');}return;}
   state=createGame(level);recorded=false;clearInput();lastFrame=0;$('level').value=String(level);buildControls();scene?.rebuild(state.config);sync();
 }
 function retry(){loadLevel(state.config.level);}
 function togglePause(){command(()=>state.phase==='paused'?resumeGame(state):pauseGame(state));}
+$('help-open').addEventListener('click',()=> $('studio-help').showModal());
 $('start').addEventListener('click',()=>{command(()=>startGame(state));if(mode==='continuous')canvas.focus({preventScroll:true});});
 $('pause').addEventListener('click',togglePause);$('retry').addEventListener('click',retry);$('load-level').addEventListener('click',()=>loadLevel($('level').value));$('next-level').addEventListener('click',()=>loadLevel(state.config.level+1));
 $('control-mode').addEventListener('change',()=>{mode=$('control-mode').value;clearInput();try{localStorage.setItem('adigun.volt-dodge.controls.v1',mode);}catch{}sync();lastFrame=0;});
@@ -95,7 +105,7 @@ canvas.addEventListener('keyup',event=>{const key=event.key.toLowerCase();if(key
 $('map-details').addEventListener('toggle',updateMap);$('view-arena').addEventListener('click',()=>{scene?.setView('arena');dirty=true;});$('view-top').addEventListener('click',()=>{scene?.setView('top');dirty=true;});
 $('quality').addEventListener('change',()=>{dirty=true;});new ResizeObserver(()=>{dirty=true;}).observe(canvas);reducedMotion.addEventListener('change',()=>{dirty=true;});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.phase==='running'){pauseGame(state);sync();}clearInput();lastFrame=0;});
-function graphicsFailure(message){$('graphics-fallback').hidden=false;$('quality').disabled=true;$('view-arena').disabled=true;$('view-top').disabled=true;$('map-details').open=true;text($('graphics-status'),message);delete canvas.dataset.renderer;delete canvas.dataset.resolution;mode='step';$('control-mode').value=mode;if(state.phase==='running')pauseGame(state);clearInput();sync();}
+function graphicsFailure(message){$('graphics-fallback').append($('map-details'));$('graphics-fallback').hidden=false;$('quality').disabled=true;$('view-arena').disabled=true;$('view-top').disabled=true;$('map-details').open=true;text($('graphics-status'),message);delete canvas.dataset.renderer;delete canvas.dataset.resolution;mode='step';$('control-mode').value=mode;if(state.phase==='running')pauseGame(state);clearInput();sync();}
 canvas.addEventListener('stage-lost',()=>graphicsFailure('Graphics connection lost. Mission paused; continue with the map and step commands.'));
 loadLevel(progress.unlocked);
 try{const{createScene}=await import('./scene.js');scene=createScene({canvas,qualitySelect:$('quality'),status:$('graphics-status')});scene.rebuild(state.config);dirty=true;}

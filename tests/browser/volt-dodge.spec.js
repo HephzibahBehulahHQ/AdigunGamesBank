@@ -3,6 +3,22 @@ import AxeBuilder from '@axe-core/playwright';
 
 const SAVE_KEY = 'adigun.campaign.v1.volt-dodge';
 const move = (page, direction) => page.getByRole('button', { name: `Move ${direction}`, exact: true });
+const openGuide = page => page.locator('#help-open').click();
+const closeGuide = page => page.keyboard.press('Escape');
+
+test('Volt Dodge moves the rover from the compact phone D-pad', async ({ browser, baseURL }) => {
+  const page = await browser.newPage({ baseURL, viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  try {
+    await page.goto('/game4/');
+    await expect(page.locator('#volt-canvas')).toHaveAttribute('data-renderer', 'WebGL2');
+    await page.locator('#start').tap();
+    await move(page, 'east').tap();
+    await expect.poll(async () => Number(await page.locator('#position').getAttribute('data-x'))).toBeGreaterThan(1.05);
+    const coverage = await page.evaluate(() => [...document.querySelectorAll('.volt-readouts > span, .volt-tools button, .volt-controls button, .gamesbank-bot-launch')]
+      .reduce((area, element) => { const { width, height } = element.getBoundingClientRect(); return area + width * height; }, 0) / (innerWidth * innerHeight));
+    expect(coverage).toBeLessThanOrEqual(0.15);
+  } finally { await page.close(); }
+});
 async function clearFirstSector(page, keyboard = false) {
   const start = page.getByRole('button', { name: 'Start mission', exact: true });
   if (keyboard) await start.press('Enter'); else await start.click();
@@ -24,19 +40,22 @@ test('Volt Dodge renders an actual 4K arena, moves with keyboard, requires every
   test.setTimeout(120000);
   const errors = []; page.on('pageerror', error => errors.push(error.message)); await page.goto('/game4/');
   const canvas = page.locator('#volt-canvas'); await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
-  await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k'); await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
+  await openGuide(page); await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k'); await closeGuide(page);
+  await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await canvas.screenshot({ path: testInfo.outputPath('volt-dodge-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 }); await testInfo.attach('volt-dodge-4k-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
-  await page.setViewportSize({ width: 800, height: 1000 }); await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
+  await page.setViewportSize({ width: 800, height: 1000 }); await openGuide(page); await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
   await page.getByRole('button', { name: 'Top view', exact: true }).click(); await page.getByRole('button', { name: 'Arena view', exact: true }).click();
+  await closeGuide(page);
   await page.getByRole('button', { name: 'Start mission', exact: true }).click(); await expect(canvas).toBeFocused();
   await page.keyboard.down('d');
   try { await expect.poll(async () => Number(await page.locator('#position').getAttribute('data-x')), { timeout: 10000 }).toBeGreaterThan(1.15); }
   finally { await page.keyboard.up('d'); }
   await canvas.press('Space'); await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'paused');
   const paused = await page.locator('.telemetry').innerText(); await page.waitForTimeout(400); expect(await page.locator('.telemetry').innerText()).toBe(paused);
-  await page.getByRole('button', { name: 'Retry sector', exact: true }).click(); await page.getByRole('combobox', { name: 'Control mode', exact: true }).selectOption('step');
+  await page.getByRole('button', { name: 'Retry sector', exact: true }).click();
+  await openGuide(page); await page.getByRole('combobox', { name: 'Control mode', exact: true }).selectOption('step'); await closeGuide(page);
   await page.getByRole('button', { name: 'Start mission', exact: true }).click();
   for (let step = 0; step < 6; step++) await move(page, 'south').click();
   await expect(page.locator('#position')).toHaveText('1.00, 7.00'); await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'running');
@@ -46,16 +65,16 @@ test('Volt Dodge renders an actual 4K arena, moves with keyboard, requires every
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
   await page.screenshot({ path: testInfo.outputPath('volt-dodge-sector-clear.png'), fullPage: true });
-  await page.getByRole('button', { name: 'Next sector →', exact: true }).click(); await expect(page.getByRole('spinbutton', { name: 'Sector', exact: true })).toHaveValue('2');
-  await page.reload(); await expect(page.getByRole('spinbutton', { name: 'Sector', exact: true })).toHaveValue('2'); await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'ready');
-  await expect(page.getByRole('combobox', { name: 'Control mode', exact: true })).toHaveValue('step'); expect(errors).toEqual([]);
+  await page.getByRole('button', { name: 'Next sector →', exact: true }).click(); await expect(page.locator('#level')).toHaveValue('2');
+  await page.reload(); await expect(page.locator('#level')).toHaveValue('2'); await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'ready');
+  await expect(page.locator('#control-mode')).toHaveValue('step'); expect(errors).toEqual([]);
 });
 
 test('Volt Dodge keeps visible keyboard commands without WebGL and retries a real spark failure', async ({ page }, testInfo) => {
   test.setTimeout(60000); await noWebGL(page); await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = []; page.on('pageerror', error => errors.push(error.message)); await page.goto('/game4/');
   await expect(page.locator('#graphics-fallback')).toBeVisible(); await expect(page.locator('#graphics-status')).toContainText('WebGL 2 unavailable');
-  await expect(page.locator('#map-details')).toHaveAttribute('open', ''); await expect(page.getByRole('combobox', { name: 'Control mode', exact: true })).toHaveValue('step');
+  await expect(page.locator('#map-details')).toHaveAttribute('open', ''); await expect(page.locator('#control-mode')).toHaveValue('step');
   const start = page.getByRole('button', { name: 'Start mission', exact: true }); await start.focus();
   const focus = await start.evaluate(element => ({ active: document.activeElement === element, style: getComputedStyle(element).outlineStyle, width: parseFloat(getComputedStyle(element).outlineWidth) }));
   expect(focus.active).toBe(true); expect(focus.style).not.toBe('none'); expect(focus.width).toBeGreaterThanOrEqual(2);
@@ -72,6 +91,7 @@ test('Volt Dodge keeps visible keyboard commands without WebGL and retries a rea
 test('Volt Dodge has accessible controls and a coordinate map without overflow at 390 and 320 pixels', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto('/game4/');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'ready'); await page.keyboard.press('Tab'); await expect(page.getByRole('link', { name: 'Skip to game controls', exact: true })).toBeFocused();
+  await openGuide(page);
   await page.getByText('Coordinate map and route inspection', { exact: true }).click();
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 844 }); const bounds = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
