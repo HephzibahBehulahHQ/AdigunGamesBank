@@ -91,3 +91,7 @@ dialog h1 { margin-top: 0; font-size: 1.35rem; }
 dialog footer { display: flex; justify-content: space-between; align-items: center; }
 dialog a { color: #e8caff; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .memory-controls:has(#entry:not([hidden])) { bottom: max(62px, env(safe-area-inset-bottom)); }
+}
