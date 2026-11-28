@@ -36,6 +36,7 @@
   <dialog id="studio-help" aria-labelledby="help-title">
     <form method="dialog"><button class="register-close" aria-label="Close help" autofocus>×</button></form>
     <h2 id="help-title">Link settings and guide</h2>
+    <button id="retry-from-help" type="button">Restart mission</button>
     <div class="toolbar"><label for="level">Mission <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label><button id="load-level" type="button">Load mission</button><span id="tier" class="badge">Beginner</span><span id="unlock-status">Mission 1 of 10,000 unlocked</span></div>
     <div class="view-toolbar"><p id="graphics-status" class="graphics-status" role="status">Preparing the 3D register…</p><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label><label for="view">View <select id="view"><option value="bench">Bench perspective</option><option value="overhead">Overhead</option></select></label></div>
     <section class="briefing" aria-labelledby="mission-title"><div><p class="eyebrow">Link specification</p><h2 id="mission-title">First packet</h2><p id="mission-brief"></p></div><div class="brief-facts"><span id="word-width">4-bit register</span><span id="packet-size">2 ordered frames</span><span>Manual clock · no reaction timer</span></div></section>
