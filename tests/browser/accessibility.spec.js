@@ -57,6 +57,7 @@ test('AI campaign specifications and stage evidence remain accessible when expan
   await page.setViewportSize({width:320,height:900});
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/game22/');
+  await page.locator('#desk-open').click();
   await page.locator('#play-mode').selectOption('campaign');
   await page.locator('.stage-evidence summary').click();
   await page.locator('#campaign-panel details summary').click();

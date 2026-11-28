@@ -94,6 +94,7 @@ function syncStage() {
   }));
   const returned = rows.filter(row => row.returned).length;
   $('stage-state').textContent = running ? 'Requests in progress' : currentMatch ? `${historicalMatch ? 'Saved match' : 'Returned'} · ${returned} verified responses` : gateway ? `${rows.filter(row => row.configured).length} configured · no responses yet` : 'Awaiting connection';
+  $('studio-state').textContent = running ? 'Running' : currentMatch ? `${returned} replies` : gateway ? 'Connected' : 'Offline';
   stage?.update(snapshot);
 }
 function syncProgress() {
@@ -428,6 +429,8 @@ async function run(event) {
   finally { if (version === epoch) { running = false; $('results').setAttribute('aria-busy', 'false'); syncSubmit(); } }
 }
 
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
+$('desk-open').addEventListener('click', () => $('match-desk').showModal());
 $('settings-open').addEventListener('click', openSettings);
 $('connect-inline').addEventListener('click', openSettings);
 $('check-connection').addEventListener('click', health);
@@ -455,7 +458,6 @@ $('load-challenge').addEventListener('click', () => loadChallenge($('campaign-le
 $('campaign-level').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); loadChallenge($('campaign-level').value); } });
 $('resume-challenge').addEventListener('click', () => loadChallenge(progress?.unlocked || 1));
 $('next-challenge').addEventListener('click', () => loadChallenge(progress?.unlocked || 1));
-$('year').textContent = new Date().getFullYear();
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!SpeechRecognition) {

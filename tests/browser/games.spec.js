@@ -128,10 +128,13 @@ test('AI Arena renders 4K and previews real challenges without inventing live re
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/game22/');
   await expect(page.locator('#arena-stage')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#desk-open').click();
   await page.locator('#arena-quality').selectOption('4k');
   await expect(page.locator('#arena-stage')).toHaveAttribute('data-resolution', '3840x2160');
   expect(await page.locator('#arena-stage').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
+  await page.keyboard.press('Escape');
   await page.screenshot({ path: 'test-results/ai-arena-4k.png', fullPage: true });
+  await page.locator('#desk-open').click();
   await page.locator('#arena-quality').selectOption('auto');
   await expect(page.locator('#configured-count')).toContainText('0');
   await expect(page.locator('#results')).toBeEmpty();
