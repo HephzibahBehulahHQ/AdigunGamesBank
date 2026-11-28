@@ -10,39 +10,41 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
 <link rel="stylesheet" href="../shared/game-viewport.css">
+  <link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#game">Skip to game controls</a>
-<main class="game-viewport" id="game">
-<div class="game-play-surface viewport">
+<body><a class="skip-link" href="#manifest">Skip to cargo controls</a>
+<main class="game-viewport" id="studio">
+  <h1 class="sr-only">Ark: The Waterline Commission</h1>
+  <div class="game-play-surface viewport">
           <canvas id="ark-canvas" tabindex="0" role="img" aria-label="Ark commissioning scene. Arrow keys select a bay; Enter loads selected cargo; Backspace unloads the bay; Space pauses a trial." aria-describedby="graphics-status scene-description"></canvas>
-          <div class="scene-label" aria-hidden="true"><span>FORE ↑</span><span>PORT ← &nbsp; → STARBOARD</span></div>
           <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The interactive 3D scene could not start. Continue this voyage using the deck buttons and live telemetry below.</p></div>
         </div>
-<div class="game-stage-hud telemetry" aria-label="Live vessel telemetry">
-          <div><span>Port / starboard</span><strong id="balance-value">0</strong><small id="balance-limit">within limit</small></div>
-          <div><span>Fore / aft trim</span><strong id="trim-value">0</strong><small id="trim-limit">within limit</small></div>
-          <div><span>Freeboard</span><strong id="freeboard-value">—</strong><small id="freeboard-limit">waterline clearance</small></div>
-          <div><span>Trial progress</span><strong id="trial-value">0%</strong><small id="trial-condition">awaiting launch</small></div>
-        </div>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#bay-grid">Jump to play controls</a>
-
-
-  <header class="game-header">
-    <a class="identity" href="../">
-      <img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58">
-      <span>Adigun Game Bank<small>EVANGELISM · BIBLE CHRONICLES</small></span>
-    </a>
-    <a class="back-link" href="../">← Game library</a>
-  </header>
-
-    <div class="title-row">
-      <div><p class="eyebrow">Genesis 6–9 · Commissioning voyage</p><h1>Ark: The Waterline Commission</h1><p class="subtitle">Build a balanced refuge. Prove it on the water.</p></div>
-      <span class="chapter-mark" aria-hidden="true">GENESIS<br><b>6–9</b></span>
+  <div class="studio-hud" aria-label="Live vessel telemetry">
+    <span class="studio-pill" title="Heel"><span aria-hidden="true">⚖</span><span class="sr-only">Heel: </span><strong id="balance-value">0.00°</strong></span>
+    <span class="studio-pill" title="Trim"><span aria-hidden="true">◩</span><span class="sr-only">Trim: </span><strong id="trim-value">0.00°</strong></span>
+    <span class="studio-pill" title="Freeboard"><span aria-hidden="true">≈</span><span class="sr-only">Freeboard: </span><strong id="freeboard-value">—</strong></span>
+    <span class="studio-pill" title="Progress"><span aria-hidden="true">◷</span><span class="sr-only">Progress: </span><strong id="trial-value">0%</strong></span>
+  </div>
+  <button id="help-open" class="studio-help" type="button" aria-label="Help and voyage settings" aria-haspopup="dialog">?</button>
+  <p id="scene-description" class="sr-only">A cutaway timber ark with six interactive deck bays. Select cargo from the hotbar and activate a bay to load it.</p>
+  <p id="graphics-status" class="sr-only" role="status">Starting the 3D scene…</p>
+  <div class="studio-dock">
+    <div id="message" role="status" aria-live="polite"></div>
+    <div class="studio-actions">
+      <div id="manifest" class="studio-hotbar" aria-label="Cargo hotbar" tabindex="-1"></div>
+      <div class="studio-orders">
+        <button id="launch" type="button" class="studio-launch">Launch</button>
+        <button id="unload-cargo" type="button" aria-label="Unload selected bay" title="Unload selected bay"><span aria-hidden="true">↥</span></button>
+        <button id="pause" type="button" hidden>Pause trial</button>
+        <button id="retry" type="button" hidden>Return to quay</button>
+        <button id="next-level" type="button" hidden>Next voyage →</button>
+      </div>
     </div>
-    <p class="source-note">An original strategy adaptation inspired by Genesis 6–9. Cargo systems, conditions, and commissioning challenges are fictional gameplay.</p>
+  </div>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="studio-close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Voyage guide</h2>
+    <a href="../">Game library</a>
     <div class="toolbar campaign-toolbar">
       <label for="level">Voyage <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label>
       <button id="load-level" type="button">Load voyage</button>
@@ -52,35 +54,26 @@
     </div>
     <section class="briefing panel" aria-labelledby="briefing-title">
       <div><p class="eyebrow">Commissioning brief</p><h2 id="briefing-title">A refuge that holds its course</h2><p id="mission-brief">Distribute the manifest, adjust ballast, then launch the trial.</p></div>
-      <details id="instructions" open><summary>How to sail this voyage</summary><ol id="mission-instructions"><li>Select a cargo item, select a deck bay, then use <strong>Load selected cargo</strong>.</li><li>Keep fore/aft trim and port/starboard balance within the displayed limits. Use ballast only when it helps.</li><li>Launch with every cargo item loaded. Complete the water trial to unlock the next voyage.</li></ol><p class="key-help">All commands work with mouse, touch, or keyboard. Tab to a labelled control; use Enter or Space to activate it. On the scene, use arrow keys to select a bay, Enter to load, and Backspace to unload. Space pauses a running trial.</p></details>
+      <details id="instructions" open><summary>How to sail this voyage</summary><ol id="mission-instructions"><li>Select a cargo item, click or tap a deck bay to load it.</li><li>Keep fore/aft trim and port/starboard balance within the displayed limits. Use ballast only when it helps.</li><li>Launch with every cargo item loaded. Complete the water trial to unlock the next voyage.</li></ol><p class="key-help">All commands work with mouse, touch, or keyboard. Tab to a labelled control; use Enter or Space to activate it. On the scene, use arrow keys to select a bay, Enter to load, and Backspace to unload. Space pauses a running trial.</p></details>
     </section>
-    <div class="layout">
-      <section class="bridge" aria-labelledby="scene-heading">
-        <div class="section-heading"><h2 id="scene-heading">Ark commissioning deck</h2><span id="phase" class="phase-tag">DOCKED</span></div>
-
-        <p id="scene-description" class="sr-only">A timber ark shown in cutaway, exposing six bays on its lower cargo deck. The intact starboard hull edge represents the freeboard boundary. The deck command grid below provides the same cargo placement controls as the scene.</p>
-        <p id="graphics-status" class="graphics-status" role="status">Starting the 3D scene…</p>
-
-        <div id="message" class="message" role="status" aria-live="polite">Load the manifest to prepare for launch.</div>
-        <section class="panel deck-panel" aria-labelledby="deck-title">
+    <section class="panel deck-panel" aria-labelledby="deck-title">
           <div class="section-heading"><h2 id="deck-title">Deck command grid</h2><span id="selected-bay-label">Select a bay</span></div>
           <div class="deck-directions" aria-hidden="true"><span>PORT</span><span>STARBOARD</span></div>
           <div id="bay-grid" class="bay-grid" aria-label="Cargo deck bays" tabindex="-1"></div>
-          <div class="controls"><button id="load-cargo" type="button" class="primary">Load selected cargo</button><button id="unload-cargo" type="button">Unload selected bay</button></div>
+          <div class="controls"><button id="load-cargo" type="button" class="primary">Load selected cargo</button></div>
           <p class="hint" id="bay-help">Choose cargo from the manifest, then a deck bay. A filled bay can be unloaded and rearranged before launch.</p>
         </section>
-      </section>
-      <aside class="command-column" aria-label="Voyage command station">
-        <section class="panel" aria-labelledby="manifest-title"><div class="section-heading"><h2 id="manifest-title">Cargo manifest</h2><span id="manifest-count">0 loaded</span></div><div id="manifest" class="manifest"></div></section>
-        <section class="panel" aria-labelledby="ballast-title"><h2 id="ballast-title">Ballast tanks</h2><p class="hint">Ballast adds mass below deck. Use the least you need: excess ballast reduces freeboard.</p><div id="ballast-controls" class="ballast-controls"></div><p id="ballast-total" class="hint">Total ballast: 0</p></section>
-        <section class="panel voyage-controls" aria-labelledby="trial-title"><h2 id="trial-title">Water trial</h2><div id="launch-checks" class="launch-checks"></div><button id="launch" type="button" class="primary">Launch trial</button><button id="pause" type="button" disabled>Pause trial</button><button id="retry" type="button">Restart voyage</button><button id="next-level" type="button" hidden>Next voyage →</button><p id="save-status" class="save-status" role="status">Progress saves on this device after a successful trial.</p></section>
-      </aside>
-    </div>
+    <section class="panel" aria-labelledby="ballast-title"><h2 id="ballast-title">Ballast tanks</h2><p class="hint">Ballast adds mass below deck. Use the least you need: excess ballast reduces freeboard.</p><div id="ballast-controls" class="ballast-controls"></div><p id="ballast-total" class="hint">Total ballast: 0</p></section>
+    <details><summary>Vessel readings and launch checks</summary>
+      <p><span id="phase"></span> · <span id="manifest-count"></span></p>
+      <p>Heel: <span id="balance-limit"></span></p>
+      <p>Trim: <span id="trim-limit"></span></p>
+      <p>Freeboard: <span id="freeboard-limit"></span></p>
+      <p>Progress: <span id="trial-condition"></span></p>
+      <div id="launch-checks"></div><p id="save-status" role="status"></p>
+    </details>
     <details class="model-notes"><summary>About the water trial</summary><p>This simplified rectangular-hull model uses tonnes, metres and seconds. Sealed ballast tanks, cargo height, water density, wind, waves and fore/aft moments affect stability. It omits structural flex, leaks, free-surface slosh and moving cargo. It is an original teaching game inspired by Genesis 6–9, not a reconstruction of the biblical vessel or a seaworthiness tool.</p></details>
-    <footer class="chapter-footer"><p>10,000 commissioning challenges · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · Evangelism<br><a href="../">Game Bank</a> · <a href="https://hephzibahbehulah.com/">Corporate home</a> · <a href="README.md">Game guide and development status</a></p></footer>
-
-</div>
-</details>
+  </dialog>
 </main>
 </body>
 </html>
