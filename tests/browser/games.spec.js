@@ -17,15 +17,17 @@ test('catalog filters, search, empty results and persistent accessible theme', a
 test('Electronicer renders actual 4K and completes a real circuit through controls', async ({ page }) => {
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/game3/'); await expect(page.locator('#circuit-view')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(page.locator('#circuit-view')).toHaveAttribute('data-resolution', '3840x2160');
   expect(await page.locator('#circuit-view').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth, g.drawingBufferHeight, g.getError()]; })).toEqual([3840, 2160, 0]);
   await page.locator('#link1').check(); await page.locator('#link2').check();
   await page.getByRole('button', { name: 'Power on', exact: true }).click();
   await expect(page.locator('#meter-current')).toHaveText('15.000 mA');
-  await page.getByRole('button', { name: 'Verify circuit targets' }).click();
+  await page.getByRole('button', { name: 'Test circuit targets' }).click();
   await expect(page.locator('#message')).toContainText('Level 1 commissioned');
-  await page.getByRole('button', { name: 'Verify circuit targets' }).click();
+  await page.getByRole('button', { name: 'Test circuit targets' }).click();
   await expect(page.locator('#save-status')).toContainText('1 levels completed');
   await page.screenshot({ path: 'test-results/electronicer-4k.png', fullPage: true });
   await page.getByRole('button', { name: 'Next level →' }).click();
@@ -34,12 +36,20 @@ test('Electronicer renders actual 4K and completes a real circuit through contro
 });
 
 test('Electronicer fuse trips, stays open and can be repaired without a false level award', async ({ page }) => {
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+      return /webgl/i.test(kind) ? null : getContext.call(this, kind, ...args);
+    };
+  });
   await page.goto('/game3/'); await page.locator('#link1').check(); await page.locator('#link2').check();
-  await page.locator('#fuse').selectOption('0.01'); await page.getByRole('button', { name: 'Power on', exact: true }).click();
+  await page.locator('#fallback-setup').click(); await page.locator('#fuse').selectOption('0.01'); await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Power on', exact: true }).click();
   await expect(page.locator('#circuit-state')).toHaveText('Fuse tripped');
-  await page.getByRole('button', { name: 'Verify circuit targets' }).click(); await expect(page.locator('#next-level')).toBeDisabled();
+  await page.getByRole('button', { name: 'Test circuit targets' }).click(); await expect(page.locator('#next-level')).toBeDisabled();
   await page.getByRole('button', { name: 'Power off', exact: true }).click();
-  await page.locator('#fuse').selectOption('0.025'); await page.getByRole('button', { name: 'Replace fuse', exact: true }).click();
+  await page.locator('#help-open').click(); await page.locator('#fuse').selectOption('0.025'); await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Replace fuse', exact: true }).click();
   await page.getByRole('button', { name: 'Power on', exact: true }).click(); await expect(page.locator('#meter-current')).toHaveText('15.000 mA');
 });
 

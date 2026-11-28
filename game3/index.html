@@ -8,67 +8,70 @@
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="./style.css">
 <link rel="stylesheet" href="../shared/game-viewport.css">
+  <link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#main">Skip to the circuit bench</a>
-<main class="game-viewport" id="main">
-<div class="game-play-surface viewport"><canvas id="circuit-view" tabindex="0" aria-label="Interactive three-dimensional circuit bench. Arrow keys rotate; plus and minus zoom; keys 1 to 4 connect resistor leads. The same actions are available in labelled controls." aria-describedby="view-help"></canvas></div>
-<div class="game-stage-hud stats"><span>Network <strong id="meter-voltage">0.000 V</strong></span><span>Current <strong id="meter-current">0.000 mA</strong></span><span>Equivalent <strong id="meter-resistance">Open circuit</strong></span><span>Power <strong id="meter-power">0.000 W</strong></span></div>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#resistor-controls">Jump to play controls</a>
-
-
-  <header class="game-header">
-    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah"><span>Adigun Game Bank<small>BY HB ELEKTRONIKER</small></span></a>
-    <a class="back-link" href="../">← All games</a>
-  </header>
-
-    <div class="split"><div><div class="eyebrow">Electrical engineering / DC laboratory</div><h1>Electronicer</h1></div><span class="badge">In progress · browser edition</span></div>
-    <p class="muted">Wire the network. Set the source. Read the meters. Make every target agree with the circuit you built.</p>
+<body>
+<a class="skip-link" href="#lead-controls">Skip to patch leads</a>
+<main id="studio" class="game-viewport">
+  <h1 class="sr-only">Electronicer</h1>
+  <div class="game-play-surface viewport"><canvas id="circuit-view" tabindex="0" aria-label="Interactive three-dimensional circuit bench. Arrow keys rotate; plus and minus zoom; keys 1 to 4 connect resistor leads. The same actions are available in labelled controls." aria-describedby="view-help"></canvas><div id="bench-fallback" class="graphics-fallback" hidden><p>3D bench unavailable. The patch leads and meters still work.</p><button id="fallback-setup" type="button">Open bench setup</button></div></div>
+  <div class="bench-readouts" aria-label="Circuit meter readings">
+    <span title="Network voltage"><i aria-hidden="true">ϟ</i><span class="sr-only">Network voltage:</span> <strong id="meter-voltage">0.000 V</strong></span>
+    <span title="Current"><i aria-hidden="true">⇥</i><span class="sr-only">Current:</span> <strong id="meter-current">0.000 mA</strong></span>
+    <span title="Resistance"><i aria-hidden="true">Ω</i><span class="sr-only">Resistance:</span> <strong id="meter-resistance">OPEN</strong></span>
+    <span title="Power"><i aria-hidden="true">◈</i><span class="sr-only">Power:</span> <strong id="meter-power">0.000 W</strong></span>
+  </div>
+  <div class="bench-tools">
+    <button id="help-open" type="button" aria-haspopup="dialog" aria-label="Help and circuit setup" title="Help and circuit setup">?</button>
+  </div>
+  <div class="bench-studio-controls">
+    <p id="message" class="sr-only" role="status" aria-live="polite"></p>
+    <div class="bench-action-row">
+      <div id="lead-controls" class="bench-leads" aria-label="Resistor patch leads" tabindex="-1"></div>
+      <div class="bench-orders">
+        <button id="power" type="button" aria-pressed="false">Power on</button>
+        <button id="verify" type="button" aria-label="Test circuit targets" title="Test circuit targets">Test</button>
+        <button id="replace-fuse" type="button" aria-label="Replace fuse" title="Replace fuse" disabled hidden>ϟ</button>
+        <button id="retry" type="button" aria-label="Reset this level" title="Reset this level">⟳</button>
+        <button id="next-level" type="button" disabled hidden>Next level →</button>
+      </div>
+    </div>
+  </div>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="bench-close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Bench setup and guide</h2>
+    <div class="controls"><button id="view-top" type="button">Top view</button><button id="view-angle" type="button">Bench view</button></div>
     <div class="toolbar">
       <strong id="level-label">Level 1 / 10,000</strong><span id="tier" class="badge">Beginner</span>
       <label for="quality">Render quality <select id="quality"><option value="auto">Adaptive 3D</option><option value="1080">1920 × 1080</option><option value="4k">3840 × 2160</option></select></label>
       <span id="render-status" class="hint" role="status">Initializing the 3D bench…</span>
     </div>
-    <div class="layout">
-      <section aria-label="Circuit scene and challenge">
-
-
-        <p class="instructions" id="view-help">Drag to inspect the bench; tap a resistor to connect its lead. With the scene focused, use <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>, <kbd>+</kbd>/<kbd>−</kbd> to zoom, and <kbd>1</kbd>–<kbd>4</kbd> for leads. Every control also works with keyboard and touch below.</p>
-        <div class="controls"><button id="view-top" type="button">Top view</button><button id="view-angle" type="button">Bench view</button><button id="retry" type="button">Reset this level</button><button id="next-level" type="button" class="primary" disabled>Next level →</button></div>
-        <p id="message" class="message" role="status" aria-live="polite">Connect the resistor leads, set the component values, and turn on the supply.</p>
-        <section class="panel target-panel" aria-labelledby="target-title">
+    <p class="instructions" id="view-help">Drag to inspect the bench; tap a resistor to connect its lead. With the scene focused, use <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>, <kbd>+</kbd>/<kbd>−</kbd> to zoom, and <kbd>1</kbd>–<kbd>4</kbd> for leads. Every control also works with keyboard and touch below.</p>
+    <section class="panel target-panel" aria-labelledby="target-title">
           <div class="split"><h2 id="target-title">Commissioning brief</h2><button id="show-guide" type="button" aria-expanded="false" aria-controls="guide">Show wiring guidance</button></div>
           <p id="brief"></p>
           <div id="targets" class="target-list"></div>
           <p id="logic-target" class="hint"></p>
           <div id="guide" class="guide" hidden></div>
         </section>
-        <details><summary>Live component measurements</summary><div class="table-scroll"><table><caption class="sr-only">Measured resistor values, voltage drops, current and power</caption><thead><tr><th>Component</th><th>Resistance</th><th>Voltage</th><th>Current</th><th>Power</th><th>Lead</th></tr></thead><tbody id="measurements"></tbody></table></div></details>
-      </section>
-      <aside class="panel bench-controls" aria-label="Circuit configuration">
+    <section class="panel" aria-label="Circuit configuration">
         <div class="split"><h2>Build the circuit</h2><span id="circuit-state" class="badge">Supply off</span></div>
         <label for="topology">Patch-panel wiring</label><select id="topology"></select>
         <div class="control-grid"><div><label for="voltage">DC source (V)</label><select id="voltage"></select></div><div><label for="fuse">Fuse rating (mA)</label><select id="fuse"></select></div></div>
         <fieldset id="resistor-controls" tabindex="-1"><legend>Resistors and patch leads</legend></fieldset>
         <label for="contact-mode">Contact wiring</label><select id="contact-mode"><option value="bypass">Direct link · no contact logic</option><option value="and">Two series contacts · AND</option><option value="or">Two parallel contacts · OR</option></select>
         <div class="switch-row"><label><input id="contact-a" type="checkbox"> Contact A</label><label><input id="contact-b" type="checkbox"> Contact B</label></div>
-        <div class="controls power-controls"><button id="power" type="button" class="primary" aria-pressed="false">Power on</button><button id="replace-fuse" type="button" disabled>Replace fuse</button></div>
-        <button id="verify" type="button" class="primary verify">Verify circuit targets</button>
+
+
         <p class="hint compact">Connections and values affect the meters immediately. A tripped fuse stays open until you turn off the supply and replace it.</p>
         <hr>
         <label for="level">Replay an unlocked level</label><div class="level-control"><input id="level" type="number" inputmode="numeric" value="1" min="1" max="1"><button id="load-level" type="button">Load</button></div>
         <p id="save-status" class="hint compact">Progress saves on this browser.</p>
-      </aside>
-    </div>
+      </section>
+    <details><summary>Live component measurements</summary><div class="table-scroll"><table><caption class="sr-only">Measured resistor values, voltage drops, current and power</caption><thead><tr><th>Component</th><th>Resistance</th><th>Voltage</th><th>Current</th><th>Power</th><th>Lead</th></tr></thead><tbody id="measurements"></tbody></table></div></details>
     <details><summary>Model, controls and learning references</summary><p>This is a playable ideal DC simulation: 3–15 V sources, ohmic resistors, ideal wires, switch contacts and an instantaneous fuse limit. All bench resistors use a 5 W model. Temperature, component tolerance, transients and manufacturer fuse curves are outside this model. The 25% fuse margin is a game constraint. This game does not provide instructions for real mains wiring or certify physical circuits.</p><p>Levels use deterministic circuit challenges and five increasing network/logic tiers. Automated validation can establish generated solvability; it does not mean 10,000 levels have been manually playtested. English interface; complete German, Yoruba and Nigerian Pidgin localization remains in progress.</p><p><a href="https://openstax.org/books/university-physics-volume-2/pages/10-2-resistors-in-series-and-parallel" target="_blank" rel="noopener noreferrer">OpenStax: series and parallel resistors</a> · <a href="https://openstax.org/books/university-physics-volume-2/pages/10-3-kirchhoffs-rules" target="_blank" rel="noopener noreferrer">OpenStax: Kirchhoff’s rules</a> · <a href="./README.md">Game design and evidence record</a></p></details>
-    <noscript><p class="message error">Electronicer needs JavaScript to solve circuits and render the 3D bench.</p></noscript>
-  <footer><p>© 2026 Hephzibah Behulah · HB Elektroniker · Adigun Game Bank</p><a href="https://hephzibahbehulah.com/">Company</a><a href="../">Game catalog</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank">Source and documentation</a></footer>
-</div>
-</details>
+    <a href="../">Game library</a>
+  </dialog>
 </main>
-
-  <script type="module" src="./app.js"></script>
-</body>
-</html>
+<script type="module" src="./app.js"></script>
+</body></html>

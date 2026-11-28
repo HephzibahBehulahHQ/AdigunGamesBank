@@ -1,0 +1,33 @@
+#studio { background: #101a29; }
+#studio > .game-play-surface { z-index: 1; }
+.bench-readouts, .bench-tools, .bench-studio-controls { position: absolute; z-index: 2; pointer-events: none; }
+.bench-readouts, .bench-tools, .bench-leads, .bench-orders, .bench-action-row { display: flex; align-items: center; gap: 6px; }
+.bench-readouts { inset: 16px auto auto 16px; }
+.bench-tools { inset: 16px 16px auto auto; }
+.bench-readouts > span, .bench-tools button, .bench-leads label, .bench-orders button { border: 1px solid #65788f; border-radius: 9px; background: rgb(15 29 47 / 94%); color: #eef6ff; }
+.bench-readouts > span { padding: 5px 8px; white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; }
+.bench-readouts i { color: #eacd84; font-style: normal; }
+.bench-tools button, .bench-orders button { min-height: 40px; min-width: 40px; padding: 5px 8px; }
+.bench-studio-controls { inset: auto 12px 16px; }
+.bench-action-row { width: fit-content; max-width: 100%; margin: auto; justify-content: center; }
+.bench-leads label { display: grid; place-content: center; justify-items: center; gap: 2px; min-width: 43px; min-height: 52px; cursor: pointer; font: 700 12px system-ui, sans-serif; }
+.bench-leads label:has(:checked) { border-color: #8cdec8; background: #163d3a; }
+.bench-leads label:has(:disabled) { opacity: .65; }
+.bench-leads input[type='checkbox'] { width: 15px; height: 15px; margin: 0; }
+.bench-orders #power { color: #21180b; border-color: #ffe3a7; background: #ebc479; }
+.bench-studio-controls #message:not(.sr-only) { margin: 0 auto 5px; padding: 4px 8px; width: fit-content; max-width: 100%; white-space: normal; font-size: 12px; background: #0c1e30; border-radius: 6px; }
+#studio-help { z-index: 20; width: min(680px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 1px solid #65788f; border-radius: 14px; color: #eef6ff; background: #142236; }
+#studio-help::backdrop { background: #060d18cc; }
+.bench-close { float: inline-end; }
+#studio #bench-fallback { display: grid; place-content: center; justify-items: center; gap: 8px; padding: 16px; text-align: center; }
+#studio #bench-fallback[hidden] { display: none; }
+@media (max-width: 700px) {
+  .bench-readouts { inset: 8px auto auto 6px; gap: 3px; }
+  .bench-readouts > span { padding: 3px; font-size: 10px; }
+  .bench-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .bench-studio-controls { bottom: 77px; }
+  .bench-leads label { min-width: 32px; min-height: 44px; }
+  .bench-action-row, .bench-leads, .bench-orders { gap: 3px; }
+  .bench-action-row { flex-wrap: wrap; }
+  .bench-orders button { font-size: 12px; }
+}
