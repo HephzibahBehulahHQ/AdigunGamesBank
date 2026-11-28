@@ -57,12 +57,15 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   test.setTimeout(300000);
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/game11/'); await expect(page.locator('#start')).toBeEnabled();
-  await page.locator('#quality').selectOption('4k'); await expect(page.locator('#pitch')).toHaveAttribute('data-resolution', '3840x2160');
+  await page.locator('#help-open').click(); await page.locator('#quality').selectOption('4k'); await page.keyboard.press('Escape');
+  await expect(page.locator('#pitch')).toHaveAttribute('data-resolution', '3840x2160');
   expect(await page.locator('#pitch').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth, g.drawingBufferHeight, g.getError()]; })).toEqual([3840,2160,0]);
   await page.screenshot({ path: 'test-results/football-4k.png', fullPage: true });
   // The full match runs at adaptive resolution: a CPU rasterizer is not a 4K performance benchmark.
   await page.setViewportSize({width: 800, height: 900});
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.locator('#pitch').focus(); await page.keyboard.press('Enter');
   // Exercise a real shot while the kickoff taker has possession. The later
   // opponent-driven match is not a deterministic strategy benchmark.
@@ -72,10 +75,12 @@ test('football renders 4K, accepts movement/shot input, pauses and reaches a ful
   await expect(page.locator('#home-shots')).not.toHaveText('0', { timeout: 15000 });
   await page.locator('#pause').click(); const paused = await page.locator('#clock').innerText();
   await page.waitForTimeout(1200); await expect(page.locator('#clock')).toHaveText(paused);
+  await page.locator('#help-open').click();
   await page.locator('#sub-out').selectOption('h11'); await page.locator('#sub-in').selectOption('h12');
   await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage: #11 off / #12 on.');
   await page.locator('#cancel-subs').click(); await expect(page.locator('#sub-status')).toContainText('No substitution queued');
   await page.locator('#queue-sub').click(); await expect(page.locator('#sub-status')).toContainText('Queued for the next stoppage: #11 off / #12 on.');
+  await page.keyboard.press('Escape');
   await page.locator('#pause').click();
   await page.locator('#pitch').focus();
   // Only read player-visible telemetry and issue real keyboard inputs. No engine state mutation.

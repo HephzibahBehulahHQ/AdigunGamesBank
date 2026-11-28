@@ -1,0 +1,41 @@
+#studio { background: #142e26; }
+#studio > .game-play-surface { z-index: 1; }
+#studio [hidden] { display: none !important; }
+.football-readouts, .football-tools, .football-controls { position: absolute; z-index: 2; pointer-events: none; }
+.football-readouts, .football-tools, .football-orders { display: flex; align-items: center; gap: 5px; }
+.football-readouts { inset: 16px auto auto 16px; }
+.football-tools { inset: 16px 16px auto auto; }
+.football-readouts > span, .football-tools button, .football-controls button { border: 1px solid #739589; border-radius: 9px; background: rgb(11 31 34 / 94%); color: #f1fbf7; }
+.football-readouts > span { padding: 4px 8px; white-space: nowrap; font-size: 13px; font-variant-numeric: tabular-nums; }
+.football-readouts i { color: #a7e8c1; font-style: normal; }
+.football-readouts .score-divider { padding-inline: 3px; }
+.football-tools button, .football-controls button { min-width: 42px; min-height: 42px; padding: 4px 7px; }
+.football-controls { inset: auto 12px 80px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; }
+.football-controls #message:not(.sr-only) { grid-column: 1 / -1; width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; border-radius: 6px; background: #102c2c; color: #f1fbf7; font-size: 12px; }
+.football-orders { grid-column: 2; grid-row: 2; justify-content: center; }
+.football-orders :is(#start, #next), .football-controls .ball-controls #shoot { background: #a4e1bb; color: #132b1c; border-color: #c4f3d7; }
+.football-controls .direction-pad { grid-area: 2 / 1; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(2, 42px); gap: 3px; justify-self: start; }
+.football-controls .ball-controls { grid-area: 2 / 3; justify-self: end; justify-content: flex-end; max-width: 255px; gap: 4px; }
+.football-controls .ball-controls button { font-size: 12px; }
+.football-controls :is(.direction-pad, .ball-controls) button { touch-action: none; }
+.football-controls button[aria-pressed='true'] { border-color: #f3d58d; }
+#studio-help { z-index: 20; width: min(660px, calc(100% - 24px)); max-height: calc(100dvh - 24px); background: #152b31; color: #effaf7; border: 1px solid #739589; border-radius: 14px; }
+#studio-help::backdrop { background: #051212cc; }
+.football-close { float: inline-end; }
+@media (max-width: 650px) {
+  .football-readouts { inset: 8px auto auto 6px; gap: 2px; }
+  .football-readouts > span { padding: 3px; font-size: 11px; }
+  .football-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .football-orders { grid-column: 1 / -1; margin-bottom: 4px; }
+  .football-controls .direction-pad { grid-row: 3; }
+  .football-controls .ball-controls { grid-row: 3; max-width: 145px; }
+  .football-controls .ball-controls button { padding-inline: 4px; font-size: 11px; }
+}
+
+@media (max-width: 360px) {
+  .football-readouts > span { padding: 2px; }
+  .football-controls .direction-pad { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(2, 36px); }
+  .football-controls :is(.direction-pad, .ball-controls) button { min-width: 35px; min-height: 35px; padding: 2px 3px; }
+  .football-controls .ball-controls button { font-size: 10px; }
+  .football-controls .ball-controls { max-width: 128px; }
+}

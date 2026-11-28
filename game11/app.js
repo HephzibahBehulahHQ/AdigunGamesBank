@@ -1,4 +1,4 @@
-import { THREE, createStage } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera } from '../shared/three-stage.js';
 import { campaign, validCampaignSave } from '../shared/progression.js';
 import { createMatch, startMatch, stepMatch, pauseMatch, resumeMatch, selectPlayer, queueSubstitution, cancelSubstitutions } from './engine.js';
 import { buildFootballScene } from './scene.js';
@@ -13,8 +13,17 @@ const activePhases = ['live','goal','restart'];
 const actionButtons = ['pass','shoot','switch','tackle','sprint','up','down','left','right'];
 
 function clearInput() { held.clear(); queued = {}; touchSprint = false; $('sprint').setAttribute('aria-pressed','false'); }
-function focusPitch() { canvas.focus({preventScroll:true}); }
-function message(text) { $('message').textContent = text; }
+function focusPitch() { if (!$('studio-help').open) canvas.focus({preventScroll:true}); }
+function paintPitch() { fitStudioCamera(stage.camera, canvas); stage.render(); }
+let noticeTimer;
+function message(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
 function progressSaved() {
   try {
     const stored = JSON.parse(globalThis.localStorage.getItem('adigun.campaign.v1.football') || 'null');
@@ -81,7 +90,10 @@ function updateUI(force = false) {
   $('situation').textContent=match.restartKick ? `${match.restartKick.type}: ${match.restartKick.team===0?'your':'opponent'} #${owner.number} takes the restart. ${match.restartKick.type==='Penalty'?'Use J/K/L to aim and Space to shoot.':match.restartKick.type==='Throw-in'?'Press P to throw.':'Press P to pass or Space to shoot.'} Your team restarts automatically after four idle seconds.` : `You control #${controlled.number} in the ${flank}, ${zone}. ${owner?`${owner.team===0?'Adigun':'Opponent'} #${owner.number} has the ball.`:'The ball is free.'}`;
   for(const stat of ['shots','passes','saves','offsides','fouls','yellows','reds','substitutions']) { $(`home-${stat}`).textContent=String(match.stats[stat][0]);$(`away-${stat}`).textContent=String(match.stats[stat][1]); }
   const playing=activePhases.includes(match.phase), paused=match.phase==='paused', finished=match.phase==='fulltime';
-  $('start').disabled=match.phase!=='ready';$('pause').disabled=!playing&&!paused;$('pause').textContent=paused?'Resume · Esc':'Pause · Esc';
+  $('start').disabled=$('start').hidden=match.phase!=='ready';$('pause').disabled=!playing&&!paused;$('pause').textContent=paused?'▶':'Ⅱ';
+  $('pause').setAttribute('aria-label',paused?'Resume · Esc':'Pause · Esc');
+  $('football-directions').hidden=!playing;
+  $('football-ball-controls').hidden=!playing;
   $('load-level').disabled=playing;$('level').disabled=playing;
   actionButtons.forEach(id=>$(id).disabled=match.phase!=='live');
   if(match.restartKick) {
@@ -106,13 +118,17 @@ function updateUI(force = false) {
   }
   $('next').hidden=!(finished&&match.qualified&&match.config.level<10000&&save.unlocked>match.config.level);
 }
-function reset(level=match.config.level) { clearInput();match=createMatch(level);lastTime=null;lastUI=-1;lastTactical=-1;lastEvent=-1;lastRoster=-1;recorded=false;$('sub-feedback').textContent='';brief();updateUI(true);visual.update(match,0,reducedMotion.matches);stage.render(); }
+function reset(level=match.config.level) { clearInput();match=createMatch(level);lastTime=null;lastUI=-1;lastTactical=-1;lastEvent=-1;lastRoster=-1;recorded=false;$('sub-feedback').textContent='';brief();updateUI(true);visual.update(match,0,reducedMotion.matches);paintPitch(); }
 function kickOff() { if(startMatch(match)) { lastTime=null;updateUI(true);focusPitch(); } }
 function togglePause() {
   if(match.phase==='paused') resumeMatch(match);else pauseMatch(match);
   clearInput();lastTime=null;updateUI(true);focusPitch();
 }
 $('start').addEventListener('click',kickOff);
+$('help-open').addEventListener('click',()=>{
+  if (activePhases.includes(match.phase)) togglePause();
+  $('studio-help').showModal();
+});
 $('pause').addEventListener('click',togglePause);
 $('restart').addEventListener('click',()=>{reset();focusPitch();});
 $('next').addEventListener('click',()=>{reset(Math.min(save.unlocked,match.config.level+1));focusPitch();});
@@ -177,7 +193,7 @@ function frame(time) {
   },seconds);
   if(seconds>0)queued={};
   visual.update(match,activePhases.includes(match.phase)?seconds:0,reducedMotion.matches);
-  updateUI(before!==match.phase);stage.render();requestAnimationFrame(frame);
+  updateUI(before!==match.phase);paintPitch();requestAnimationFrame(frame);
 }
-brief();updateUI(true);visual.update(match,0,reducedMotion.matches);stage.render();requestAnimationFrame(frame);
+brief();updateUI(true);visual.update(match,0,reducedMotion.matches);paintPitch();requestAnimationFrame(frame);
 window.addEventListener('pagehide',event=>{if(!event.persisted)stage.dispose();});
