@@ -39,3 +39,7 @@ dialog .close { float:right; margin-left:8px; }
   .debate-field { padding-top:62px; }
   textarea { height:clamp(44px,22dvh,115px); }
 }
+
+@media(max-width:360px) {
+  #topic { width: min(250px, 100%); }
+}
