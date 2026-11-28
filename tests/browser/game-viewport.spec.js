@@ -108,3 +108,30 @@ test('Cortex Prime switches puzzles and saves a solved stage from its phone stud
   await page.reload();
   await expect(page.locator('#level')).toHaveText('2');
 });
+
+test('Synapse Sprint displays numbered pulses and saves a keyboard recall', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.pulses = [];
+    new MutationObserver(() => {
+      const pulse = document.querySelector('#lights .active');
+      const digit = pulse?.textContent;
+      if (digit && window.pulses.at(-1)?.element !== pulse) {
+        window.pulses.push({ element: pulse, digit });
+      }
+    }).observe(document, { subtree: true, attributes: true, childList: true });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game13/');
+  await page.getByRole('button', { name: 'Start sequence' }).press('Enter');
+  const entry = page.getByRole('textbox', { name: /Recall the sequence/ });
+  await expect(entry).toBeEnabled({ timeout: 10000 });
+  const digits = await page.evaluate(() => window.pulses.map(pulse => pulse.digit).join(''));
+  expect(digits).toMatch(/^[1-6]{3}$/);
+  await entry.fill(digits);
+  await entry.press('Enter');
+  await expect(page.locator('#phase')).toHaveText('Correct');
+  await expect(page.getByRole('button', { name: 'Next sequence' })).toBeFocused();
+  await page.reload();
+  await expect(page.locator('#level')).toHaveText('2');
+  await expect(page.locator('#best')).toHaveText('1');
+});
