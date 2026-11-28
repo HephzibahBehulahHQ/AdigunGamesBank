@@ -7,6 +7,19 @@ const progress = createCampaign(), canvas = $('fusebox-canvas');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let state, selectedBranch = 0, selectedLoad = 0, recorded = false, scene = null, lastFrame = 0, lastUI = 0, dirty = true;
 let branchControls = [], loadControls = [], stockRows = [], stageRows = [];
+let noticeTimer, initialMessage;
+function showNotice(value) {
+  const notice = $('message');
+  if (notice.textContent === value) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = value;
+  notice.classList.toggle('sr-only', !value);
+  if (value) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
+function showBranches(enabled) {
+  $('branch-view').hidden = !enabled;
+  $('toggle-branches').setAttribute('aria-pressed', String(enabled));
+}
 const text = (element, value) => { if (element.textContent !== value) element.textContent = value; };
 const amps = value => `${value.toFixed(2)} A`;
 function confirmedSave() {
@@ -38,11 +51,12 @@ function buildControls() {
   });
   loadControls = state.config.loads.map((load, index) => {
     const button = document.createElement('button'); button.type = 'button'; button.id = `load-${index}`; button.className = 'load-button';
-    const title = document.createElement('strong'); title.textContent = load.name;
-    const power = document.createElement('small'); power.textContent = `L / D / F: ${load.powers.map(value => `${Number(value.toFixed(2))}`).join(' / ')} W`;
-    const current = document.createElement('small'); current.textContent = `Current: ${load.powers.map(value => (value / state.config.voltage).toFixed(2)).join(' / ')} A`;
-    const assignment = document.createElement('span'); assignment.className = 'load-assignment';
-    button.append(title, power, current, assignment); button.addEventListener('click', () => selectLoad(index)); $('loads').append(button);
+    const icon = document.createElement('span'), watts = document.createElement('span');
+    icon.textContent = ['◈', '☼', '▣', '◉', '▤', '◇'][index % 6]; icon.setAttribute('aria-hidden', 'true');
+    watts.textContent = `${Math.round(Math.max(...load.powers))}W`;
+    const assignment = document.createElement('span'); assignment.className = 'sr-only';
+    button.append(icon, watts, assignment);
+    button.addEventListener('click', () => selectLoad(index)); $('loads').append(button);
     return { button, assignment };
   });
   stockRows = Object.entries(state.config.inventory).map(([value, count]) => {
@@ -71,6 +85,8 @@ function sync() {
   loadControls.forEach((control, index) => {
     control.button.classList.toggle('selected', index === selectedLoad); control.button.setAttribute('aria-pressed', String(index === selectedLoad));
     const branch = state.assignments[index]; text(control.assignment, branch < 0 ? 'Not connected' : `Connected · ${state.config.branches[branch].name}`);
+    const label = `${state.config.loads[index].name}, ${control.button.children[1].textContent}, ${control.assignment.textContent}`;
+    control.button.setAttribute('aria-label', label); control.button.title = label;
   });
   stockRows.forEach(row => text(row.available, `${row.count - (inspection.stock[row.rating] || 0)} / ${row.count} available · ${breakerCost(row.rating)} credits`));
   text($('budget'), `${inspection.cost} / ${state.config.budget} credits used`); $('budget').classList.toggle('over-budget', inspection.cost > state.config.budget);
@@ -83,11 +99,14 @@ function sync() {
   }
   text($('main-limit'), `Supply limit ${amps(state.config.mainAmpacity)}. Breaker inventory applies across the whole board.`);
   $('connect-load').disabled = !editable; $('disconnect-load').disabled = !editable || state.assignments[selectedLoad] < 0;
-  $('start-trial').disabled = !editable;
-  $('pause-trial').disabled = !['testing', 'paused'].includes(state.phase); text($('pause-trial'), state.phase === 'paused' ? 'Resume trial' : 'Pause trial');
-  $('isolate').disabled = state.isolated || state.phase === 'won'; $('reset-trip').hidden = state.phase !== 'tripped'; $('reset-trip').disabled = !state.isolated;
+  $('loads').hidden = !editable; $('connect-load').hidden = $('disconnect-load').hidden = !editable;
+  $('start-trial').disabled = $('start-trial').hidden = !editable;
+  $('pause-trial').disabled = !['testing', 'paused'].includes(state.phase); text($('pause-trial'), state.phase === 'paused' ? '▶' : 'Ⅱ');
+  const pauseLabel = state.phase === 'paused' ? 'Resume trial' : 'Pause trial';
+  $('pause-trial').setAttribute('aria-label', pauseLabel); $('pause-trial').title = pauseLabel;
+  $('isolate').disabled = $('isolate').hidden = state.isolated || state.phase === 'won'; $('reset-trip').hidden = state.phase !== 'tripped'; $('reset-trip').disabled = !state.isolated;
   $('clear-board').disabled = !editable && state.phase !== 'won'; $('next-level').hidden = state.phase !== 'won' || state.config.level >= LEVEL_COUNT;
-  text($('message'), state.message); $('message').className = `message${state.phase === 'tripped' ? ' error' : state.phase === 'won' ? ' success' : ''}`;
+  showNotice(state.message === initialMessage ? '' : state.message);
   text($('save-status'), !progress.completed ? 'Completed boards save on this device.' : `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'board' : 'boards'} completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
   telemetry(); dirty = true;
 }
@@ -103,10 +122,12 @@ function loadLevel(value) {
     $('level').value = String(state?.config.level || 1); if (state) { state.message = 'Complete the current unlocked board before loading a later one.'; sync(); } return;
   }
   if (state && !state.isolated) { state.message = 'Isolate the supply before loading another board.'; sync(); return; }
-  state = createBoard(level); selectedBranch = 0; selectedLoad = 0; recorded = false; lastFrame = 0;
+  state = createBoard(level); initialMessage = state.message; selectedBranch = 0; selectedLoad = 0; recorded = false; lastFrame = 0;
   $('level').value = String(level); text($('brief'), state.config.brief); buildControls(); scene?.rebuild(state.config); sync();
 }
 function pause() { if (state.phase === 'testing') pauseTrial(state); else if (state.phase === 'paused') resumeTrial(state); lastFrame = 0; sync(); }
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
+$('toggle-branches').addEventListener('click', () => showBranches($('branch-view').hidden));
 $('connect-load').addEventListener('click', () => command(() => assignLoad(state, selectedLoad, selectedBranch)));
 $('disconnect-load').addEventListener('click', () => command(() => assignLoad(state, selectedLoad, -1)));
 $('load-level').addEventListener('click', () => loadLevel($('level').value));
@@ -126,7 +147,7 @@ new ResizeObserver(() => { dirty = true; }).observe(canvas);
 reducedMotion.addEventListener('change', () => { dirty = true; });
 document.addEventListener('visibilitychange', () => { if (document.hidden && state.phase === 'testing') { pauseTrial(state); sync(); } lastFrame = 0; });
 function graphicsFailure(message) {
-  $('graphics-fallback').hidden = false; $('quality').disabled = true;
+  $('graphics-fallback').hidden = false; $('toggle-branches').disabled = true; showBranches(true); $('quality').disabled = true;
   text($('graphics-status'), message); delete canvas.dataset.renderer; delete canvas.dataset.resolution; dirty = false;
 }
 canvas.addEventListener('stage-lost', () => graphicsFailure('Graphics connection lost. Continue with the board controls, or reload graphics.'));

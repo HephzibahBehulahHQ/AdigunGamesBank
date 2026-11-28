@@ -4,6 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 const SAVE_KEY = 'adigun.campaign.v1.fuse-box';
 const FIRST_ASSIGNMENTS = [0, 0, 1, 1, 2, 2];
 async function wireBoard(page, assignments = FIRST_ASSIGNMENTS, keyboard = false) {
+  const branches = page.locator('#toggle-branches');
+  if (await branches.getAttribute('aria-pressed') === 'false') await branches.click();
   for (const [index, branch] of assignments.entries()) {
     if (keyboard) {
       await page.locator(`#load-${index}`).press('Enter'); await page.locator(`#branch-${branch}`).press('Enter');
@@ -29,12 +31,14 @@ test('Fuse Box renders an actual 4K cabinet and commissions, saves and reloads a
   await page.goto('/game8/');
   const canvas = page.locator('#fusebox-canvas'), phase = page.locator('#phase');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
-  await page.locator('#quality').selectOption('4k'); await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
+  await page.locator('#help-open').click(); await page.locator('#quality').selectOption('4k'); await page.keyboard.press('Escape');
+  await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await canvas.screenshot({ path: testInfo.outputPath('fusebox-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('fusebox-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
-  await page.setViewportSize({ width: 800, height: 1000 }); await page.locator('#quality').selectOption('auto');
+  await page.setViewportSize({ width: 800, height: 1000 });
+  await page.locator('#help-open').click(); await page.locator('#quality').selectOption('auto'); await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Energize and test', exact: true }).click();
   await expect(phase).toHaveAttribute('data-phase', 'isolated'); await expect(page.locator('#message')).toContainText('Assign all 6 loads');
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
@@ -56,8 +60,8 @@ test('Fuse Box renders an actual 4K cabinet and commissions, saves and reloads a
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
   await page.screenshot({ path: testInfo.outputPath('fusebox-commissioned.png'), fullPage: true });
   await page.getByRole('button', { name: 'Next board →', exact: true }).click();
-  await expect(page.getByLabel('Board', { exact: true })).toHaveValue('2'); await expect(page.locator('#connected')).toHaveText('0 / 6');
-  await page.reload(); await expect(page.getByLabel('Board', { exact: true })).toHaveValue('2');
+  await expect(page.locator('#level')).toHaveValue('2'); await expect(page.locator('#connected')).toHaveText('0 / 6');
+  await page.reload(); await expect(page.locator('#level')).toHaveValue('2');
   await expect(page.locator('#unlock-status')).toContainText('Board 2 of 10,000 unlocked'); expect(errors).toEqual([]);
 });
 
@@ -104,7 +108,8 @@ test('Fuse Box reflows at 390 and 320 pixels with reduced motion and accessible 
 test('Fuse Box reports session-only completion when browser storage silently rejects the campaign save', async ({ page }) => {
   test.setTimeout(45000); await noWebGL(page);
   await page.addInitScript(() => { const original = Storage.prototype.setItem; Storage.prototype.setItem = function (key, value) { if (key === 'adigun.campaign.v1.fuse-box') return; return original.call(this, key, value); }; });
-  await page.goto('/game8/'); await wireBoard(page); await page.getByRole('button', { name: 'Energize and test', exact: true }).click();
+  await page.goto('/game8/'); await expect(page.locator('#graphics-fallback')).toBeVisible();
+  await wireBoard(page); await page.getByRole('button', { name: 'Energize and test', exact: true }).click();
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'won', { timeout: 20000 });
   await expect(page.locator('#save-status')).toContainText('session only');
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();

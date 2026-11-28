@@ -1,0 +1,40 @@
+#studio { background: #101e2a; }
+#studio > .game-play-surface { z-index: 1; }
+.fuse-readouts, .fuse-tools, .fuse-controls { position: absolute; z-index: 2; pointer-events: none; }
+.fuse-readouts, .fuse-tools, .fuse-loads, .fuse-orders { display: flex; align-items: center; gap: 5px; }
+.fuse-readouts { inset: 16px auto auto 16px; padding: 0; border: 0; background: none; }
+.fuse-tools { inset: 16px 16px auto auto; }
+.fuse-readouts > span, .fuse-tools button, .fuse-controls button { border: 1px solid #6c8593; border-radius: 8px; background: rgb(14 32 43 / 94%); color: #eff9ff; }
+.fuse-readouts > span { padding: 4px 7px; font-size: 12px; white-space: nowrap; }
+.fuse-readouts i { color: #f0cd8a; font-style: normal; }
+.fuse-tools button, .fuse-orders button { min-width: 38px; min-height: 40px; padding: 4px 7px; }
+.fuse-tools button[aria-pressed='true'] { border-color: #f2d196; }
+.fuse-controls { inset: auto 10px 16px; }
+.fuse-loads { margin: auto; width: fit-content; max-width: 100%; overflow-x: auto; pointer-events: auto; }
+.fuse-loads button { display: grid; place-items: center; align-content: center; width: 44px; height: 44px; flex: none; gap: 0; padding: 0; font-size: 11px; line-height: 1.1; }
+.fuse-loads button > span:first-child { font-size: 17px; }
+.fuse-loads button[aria-pressed='true'] { border-color: #ffd991; background: #303727; }
+.fuse-orders { width: fit-content; max-width: 100%; margin: 4px auto 0; }
+.fuse-orders :is(#start-trial, #next-level) { background: #edc98a; color: #201a12; border-color: #ffe6a8; }
+.fuse-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; border-radius: 6px; background: #193347; color: #eff9ff; font-size: 12px; }
+.fuse-branch-view { position: absolute; inset: 65px 8px 128px; display: grid; place-items: center; overflow: auto; }
+.fuse-branch-view .branch-grid { width: min(100%, 730px); max-height: 100%; }
+#studio-help { z-index: 20; width: min(660px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 1px solid #6c8593; border-radius: 14px; color: #eff9ff; background: #132838; }
+#studio-help::backdrop { background: #071016cc; }
+.fuse-close { float: inline-end; }
+#studio .graphics-fallback { padding: 12px; align-content: start; justify-content: start; }
+@media (max-width: 660px) {
+  .fuse-readouts { inset: 8px auto auto 6px; gap: 2px; }
+  .fuse-readouts > span { padding: 3px; font-size: 10px; }
+  .fuse-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .fuse-controls { bottom: 77px; }
+  .fuse-branch-view { bottom: 177px; }
+  .fuse-orders button { padding-inline: 5px; font-size: 12px; }
+}
+
+@media (max-width: 360px) {
+  .fuse-loads { gap: 3px; }
+  .fuse-loads button { width: 36px; height: 40px; }
+  .fuse-orders { gap: 3px; }
+  .fuse-orders button { min-width: 35px; }
+}

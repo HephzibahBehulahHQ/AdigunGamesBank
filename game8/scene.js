@@ -1,4 +1,4 @@
-import { THREE, createStage, box, cylinder, material } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, box, cylinder, material } from '../shared/three-stage.js';
 import { inspectBoard } from './engine.js';
 
 const COLORS = ['#22d3ee', '#d4af37', '#a78bfa', '#22c55e', '#f97316', '#60a5fa'];
@@ -164,7 +164,7 @@ export function createScene({ canvas, qualitySelect, status, onSelect }) {
     return inspection;
   }
   return {
-    rebuild, update, render: () => stage.render(),
+    rebuild, update, render() { fitStudioCamera(stage.camera, canvas); stage.render(); },
     dispose() { canvas.removeEventListener('pointerup', onPointer); release(root); release(wires); stage.dispose(); }
   };
 }
