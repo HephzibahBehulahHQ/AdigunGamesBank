@@ -36,14 +36,20 @@ and `6a166e8cb093b38616508552b249d670adf68d33`
 Capacitor Charge (#17) passed candidate and main verification. Its live files matched
 the production manifest for `34239b7de04c74024c643b276723e54c34aa8254`
 ([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46184291783)).
-Binary Flash (#18) passed its seven focused Windows Chrome checks, including the
-site assistant check that timed out in GitHub Actions. The GitHub rerun is pending.
-Ark's narrow-phone cargo dock correction is independently queued in #35.
+Binary Flash (#18) passed its seven focused Windows Chrome checks and the
+[GitHub rerun](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46178264600).
+It merged at `7b193373b9266e341118c68e074c5cbde8d277d8`. Production verification is pending.
+Ark's narrow-phone cargo dock correction passed candidate verification in #35.
 On the cumulative candidate, Windows Chrome passed all 34 viewport and game-flow
 cases before the narrow-screen corrections. The affected layouts passed targeted
 rechecks. Revision `5e89def4d0f5acb4583403550f33b7b014639dc4` passed Help open,
 close and focus restoration by emulated tap on all 24 routes. The four restored
 skip links passed the 320 px accessibility gate. Physical touch is **NOT TESTED**.
+The cumulative candidate at `4ec73be0904ab80f741df066734067623a1d40d0` passed
+93 Chrome cases in 9.2 minutes on Windows, including the viewport, gameplay,
+fallback, and fixture-only gateway contract suites. The separate accessibility
+run passed 15 cases, and all four initially failing routes passed their recheck
+after restoring the keyboard skip links.
 The remaining title redesigns are in scoped PRs #18–#34. Verify each live
 rollout before merging the next to avoid superseding a deployment.
 
