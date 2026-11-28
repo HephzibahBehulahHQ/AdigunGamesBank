@@ -1,0 +1,26 @@
+#studio { background: #101c29; }
+#studio > .game-play-surface { z-index: 1; }
+.charge-readouts, .charge-tools, .charge-controls { position: absolute; z-index: 2; pointer-events: none; }
+.charge-readouts, .charge-tools, .charge-orders { display: flex; align-items: center; gap: 5px; }
+.charge-readouts { inset: 16px auto auto 16px; padding: 0; border: 0; background: none; }
+.charge-tools { inset: 16px 16px auto auto; }
+.charge-readouts > span, .charge-tools button, .charge-orders button { border: 1px solid #68829a; border-radius: 9px; background: rgb(12 30 44 / 94%); color: #eef9ff; }
+.charge-readouts > span { padding: 5px 7px; white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; }
+.charge-readouts i { color: #9addee; font-style: normal; }
+.charge-tools button, .charge-orders button { min-width: 40px; min-height: 40px; padding: 5px 8px; }
+.charge-controls { inset: auto 10px 16px; }
+.charge-orders { justify-content: center; width: fit-content; margin: auto; }
+.charge-orders :is(#start-charge, #capture-target, #start-discharge, #next-level) { border-color: #95d4e3; background: #a9dfed; color: #10232e; }
+.charge-orders #capture-target[data-window='inside'] { border-color: #d4ffe0; background: #9ce5b1; color: #122516; box-shadow: 0 0 15px #b2f6bf88; }
+.charge-orders #capture-target[data-window='outside'] { border-color: #f4a5ad; }
+.charge-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; background: #173348; color: #effaff; border-radius: 6px; font-size: 12px; }
+#studio-help { z-index: 20; width: min(680px, calc(100% - 24px)); max-height: calc(100dvh - 24px); background: #142738; color: #effaff; border: 1px solid #68829a; border-radius: 14px; }
+#studio-help::backdrop { background: #07111dcc; }
+.charge-close { float: inline-end; }
+@media (max-width: 575px) {
+  .charge-readouts { inset: 8px auto auto 6px; gap: 2px; }
+  .charge-readouts > span { padding: 4px; font-size: 10px; }
+  .charge-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .charge-controls { bottom: 77px; }
+  .charge-orders button { font-size: 12px; }
+}

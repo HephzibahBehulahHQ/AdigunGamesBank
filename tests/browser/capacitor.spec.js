@@ -3,9 +3,11 @@ import AxeBuilder from '@axe-core/playwright';
 
 const SAVE_KEY = 'adigun.campaign.v1.capacitor-charge';
 async function fitReferenceParts(page) {
+  await page.locator('#fit-parts').click();
   await page.getByLabel('Capacitor bank C', { exact: true }).selectOption('c-reference');
   await page.getByLabel('Charge resistor R1', { exact: true }).selectOption('charge-reference');
   await page.getByLabel('Discharge resistor R2', { exact: true }).selectOption('discharge-reference');
+  await page.keyboard.press('Escape');
 }
 async function chargeThroughControls(page, keyboard = false) {
   const start = page.getByRole('button', { name: 'Start charge', exact: true });
@@ -41,13 +43,15 @@ test('Capacitor Charge renders a real 4K RC bench and completes a saved experime
   await page.getByRole('button', { name: 'Start charge', exact: true }).click(); await expect(page.locator('#message')).toContainText('Fit all three parts');
   await fitReferenceParts(page); await expect(page.locator('#plan-warnings')).toContainText('meet the predicted bench limits');
   const canvas = page.locator('#capacitor-canvas'); await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
-  await page.locator('#quality').selectOption('4k'); await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
+  await page.locator('#help-open').click(); await page.locator('#quality').selectOption('4k'); await page.keyboard.press('Escape');
+  await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await canvas.screenshot({ path: testInfo.outputPath('capacitor-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('capacitor-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
-  await page.setViewportSize({ width: 800, height: 1000 }); await page.locator('#quality').selectOption('auto');
+  await page.setViewportSize({ width: 800, height: 1000 }); await page.locator('#help-open').click(); await page.locator('#quality').selectOption('auto');
   await page.getByRole('button', { name: 'Top view', exact: true }).click(); await page.getByRole('button', { name: 'Bench view', exact: true }).click();
+  await page.keyboard.press('Escape');
   await chargeThroughControls(page);
   const paused = await page.locator('.telemetry').innerText(); await page.waitForTimeout(400); expect(await page.locator('.telemetry').innerText()).toBe(paused);
   await expect(page.locator('#capture-status')).toContainText('Voltage and energy are in the target window');
@@ -55,8 +59,8 @@ test('Capacitor Charge renders a real 4K RC bench and completes a saved experime
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
   await page.screenshot({ path: testInfo.outputPath('capacitor-commissioned.png'), fullPage: true });
-  await page.getByRole('button', { name: 'Next experiment →', exact: true }).click(); await expect(page.getByLabel('Experiment', { exact: true })).toHaveValue('2');
-  await page.reload(); await expect(page.getByLabel('Experiment', { exact: true })).toHaveValue('2'); await expect(page.locator('#unlock-status')).toContainText('Experiment 2 of 10,000 unlocked');
+  await page.getByRole('button', { name: 'Next experiment →', exact: true }).click(); await expect(page.locator('#level')).toHaveValue('2');
+  await page.reload(); await expect(page.locator('#level')).toHaveValue('2'); await expect(page.locator('#unlock-status')).toContainText('Experiment 2 of 10,000 unlocked');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'planning'); expect(errors).toEqual([]);
 });
 
@@ -64,13 +68,14 @@ test('Capacitor Charge keeps visible keyboard controls without WebGL and repairs
   test.setTimeout(90000); await noWebGL(page); await page.emulateMedia({ reducedMotion: 'reduce' });
   const errors = []; page.on('pageerror', error => errors.push(error.message)); await page.goto('/game6/');
   await expect(page.locator('#graphics-fallback')).toBeVisible(); await expect(page.locator('#graphics-status')).toContainText('WebGL 2 unavailable');
-  await fitReferenceParts(page); await page.getByLabel('Charge resistor R1', { exact: true }).selectOption('charge-fast');
+  await fitReferenceParts(page); await page.locator('#fit-parts').click();
+  await page.getByLabel('Charge resistor R1', { exact: true }).selectOption('charge-fast'); await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Start charge', exact: true }).press('Enter'); await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'lost');
   await expect(page.locator('#message')).toContainText('Charge current'); await expect(page.locator('#next-level')).toBeHidden();
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
   await page.getByRole('button', { name: 'Reset experiment', exact: true }).press('Enter');
-  await expect(page.getByLabel('Charge resistor R1', { exact: true })).toHaveValue('charge-fast');
-  await page.getByLabel('Charge resistor R1', { exact: true }).selectOption('charge-reference');
+  await page.locator('#fit-parts').click(); await expect(page.getByLabel('Charge resistor R1', { exact: true })).toHaveValue('charge-fast');
+  await page.getByLabel('Charge resistor R1', { exact: true }).selectOption('charge-reference'); await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Start charge', exact: true }).focus();
   const focus = await page.locator('#start-charge').evaluate(element => ({ active: document.activeElement === element, style: getComputedStyle(element).outlineStyle, width: parseFloat(getComputedStyle(element).outlineWidth) }));
   expect(focus.active).toBe(true); expect(focus.style).not.toBe('none'); expect(focus.width).toBeGreaterThanOrEqual(2);
@@ -83,6 +88,8 @@ test('Capacitor Charge has responsive accessible controls and a readable trace a
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto('/game6/');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'planning'); await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to game controls', exact: true })).toBeFocused();
+  await page.locator('#help-open').click();
+  await expect(page.locator('#trace')).toBeVisible();
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 844 }); const bounds = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
     expect(bounds[0]).toBeLessThanOrEqual(bounds[1] + 1);

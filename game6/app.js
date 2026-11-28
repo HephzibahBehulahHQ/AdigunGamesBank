@@ -39,6 +39,15 @@ function fitControls() {
   $('target-band').setAttribute('y', String(y(config.target.maxVolts))); $('target-band').setAttribute('height', String(y(config.target.minVolts) - y(config.target.maxVolts)));
   $('floor-line').setAttribute('d', `M54 ${y(config.target.holdFloor)}H776`);
 }
+let noticeTimer, initialMessage;
+function showNotice(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
 function sync() {
   if (state.phase === 'won' && !recorded) { progress.complete(state.config.level); recorded = true; }
   const phase = physicalPhase(), editing = state.phase === 'planning';
@@ -48,10 +57,15 @@ function sync() {
   text($('tier'), state.config.tier); text($('unlock-status'), `Experiment ${progress.unlocked.toLocaleString()} of ${LEVEL_COUNT.toLocaleString()} unlocked`);
   $('level').max = String(progress.unlocked); $('level').disabled = !['planning', 'lost', 'won'].includes(state.phase); $('load-level').disabled = $('level').disabled;
   for (const [id, key] of [['capacitor','capacitor'],['charge-resistor','chargeResistor'],['discharge-resistor','dischargeResistor']]) { $(id).value = state.selected[key]; $(id).disabled = !editing; }
-  $('start-charge').disabled = !editing; $('capture-target').disabled = phase !== 'charging'; $('start-discharge').disabled = state.phase !== 'ready';
-  $('pause').disabled = !ACTIVE.includes(phase); text($('pause'), state.phase === 'paused' ? 'Resume experiment' : 'Pause experiment');
-  $('advance').disabled = state.phase !== 'paused'; $('next-level').hidden = state.phase !== 'won' || state.config.level >= LEVEL_COUNT;
-  text($('message'), state.message); $('message').className = `message${state.phase === 'lost' ? ' error' : state.phase === 'won' ? ' success' : ''}`;
+  $('fit-parts').hidden = !editing;
+  $('start-charge').disabled = $('start-charge').hidden = !editing;
+  $('capture-target').disabled = $('capture-target').hidden = phase !== 'charging';
+  $('start-discharge').disabled = $('start-discharge').hidden = state.phase !== 'ready';
+  $('pause').disabled = !ACTIVE.includes(phase); text($('pause'), state.phase === 'paused' ? '▶' : 'Ⅱ');
+  const pauseLabel = state.phase === 'paused' ? 'Resume experiment' : 'Pause experiment';
+  $('pause').setAttribute('aria-label', pauseLabel); $('pause').title = pauseLabel;
+  $('advance').disabled = $('advance').hidden = state.phase !== 'paused'; $('next-level').hidden = state.phase !== 'won' || state.config.level >= LEVEL_COUNT;
+  showNotice(state.message === initialMessage ? '' : state.message);
   text($('save-status'), !progress.completed ? 'Completed experiments save on this device.' : `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'experiment' : 'experiments'} completed. ${confirmedSave() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.'}`);
   const plan = inspectPlan(state);
   text($('plan-tau'), plan.ready ? `${display(plan.circuit.chargeTau, 3)} s` : '—'); text($('plan-time'), plan.ready ? `${display(plan.chargeTime, 3)} s` : '—');
@@ -85,6 +99,7 @@ function telemetry() {
   else if (phase === 'discharging') capture = `Discharging toward ${target.safeVolts} V. The source is disconnected.`;
   else if (state.phase === 'won') { capture = 'Capture, hold and discharge verified.'; status = 'inside'; }
   else if (state.phase === 'lost') { capture = 'Trial stopped. No experiment completion was awarded.'; status = 'outside'; }
+  $('capture-target').dataset.window = status;
   text($('capture-status'), capture); $('capture-status').className = `capture-status ${status}`;
   const extent = limits.chargeSeconds + target.holdSeconds + limits.dischargeSeconds;
   const data = [...state.trace, { time: state.time, voltage: state.voltage }];
@@ -93,7 +108,7 @@ function telemetry() {
 function loadLevel(value) {
   const level = Number(value);
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked) { $('level').value = String(state?.config.level || 1); if (state) { state.message = 'Complete the current unlocked experiment before loading a later one.'; sync(); } return; }
-  state = createExperiment(level); recorded = false; $('level').value = String(level); fitControls(); scene?.rebuild(state.config); lastFrame = 0; sync();
+  state = createExperiment(level); initialMessage = state.message; recorded = false; $('level').value = String(level); fitControls(); scene?.rebuild(state.config); lastFrame = 0; sync();
 }
 function action(name) {
   if (name === 'charge') command(() => startCharge(state));
@@ -102,6 +117,11 @@ function action(name) {
 }
 for (const [id, key] of [['capacitor','capacitor'],['charge-resistor','chargeResistor'],['discharge-resistor','dischargeResistor']]) $(id).addEventListener('change', () => command(() => selectPart(state, key, $(id).value)));
 $('start-charge').addEventListener('click', () => action('charge')); $('capture-target').addEventListener('click', () => action('hold')); $('start-discharge').addEventListener('click', () => action('discharge'));
+$('help-open').addEventListener('click', () => {
+  if (ACTIVE.includes(state.phase)) command(() => pauseExperiment(state));
+  $('studio-help').showModal();
+});
+$('fit-parts').addEventListener('click', () => { $('studio-help').showModal(); $('capacitor').focus(); });
 $('pause').addEventListener('click', () => command(() => state.phase === 'paused' ? resumeExperiment(state) : pauseExperiment(state)));
 $('advance').addEventListener('click', () => command(() => advancePaused(state)));
 $('reset').addEventListener('click', () => { state = resetExperiment(state); recorded = false; lastFrame = 0; sync(); });
