@@ -122,7 +122,38 @@ their applicability to the release revision.
 - Full game release: **NOT ACCEPTED** until all applicable requirements and
   evidence gates above are satisfied. Do not count this template in the
   2,000-game delivery target.
-# Required viewport layout
+## Universal Game Studio layout
+
+- Lock `html`, `body`, and `#studio` to `100vw` × `100vh` with zero margin,
+  padding, and document scrolling. Use `100dvh` where supported so the layout
+  follows the visible mobile viewport. Put the full-bleed gameplay canvas at
+  `z-index: 1`. For games played through HTML, give the primary playfield the
+  equivalent full-viewport treatment.
+- Keep 90% of the playfield open during ordinary play. Visible interface chrome
+  may cover at most 15%. Keep menus, dashboards, permanent text panels and
+  multi-line sidebars out of the default view. Design controls for the title's
+  own mechanics.
+- Place up to four small, single-line glass pills at the top left, 16px from
+  each edge. Each pill shows an icon and a short live value. Give icons and
+  values accessible names without adding visible descriptions or sub-labels.
+- Place compact 40 × 40px icon controls for help, audio and pause or menu at the
+  top right, 16px from each edge. Use labels accessible to keyboard and
+  assistive technology users. Include controls that apply to the title.
+- Center the hotbar 16px from the bottom. Keep it at most 76px high, with
+  60 × 60px square item, card, tool or ability tiles showing an icon and a short
+  badge. Put no more than two primary actions, plus applicable reset or undo
+  icons, at the bottom right. Adapt spacing and tile size at narrow widths
+  so the zones never overlap or cover the playable target.
+- Put instructions, detailed statistics, specifications and settings inside
+  centered glass modals at `z-index: 20`. Open them on request through help
+  or menu, or as appropriate at game start and game over. Give modal controls
+  accessible names, keyboard dismissal and focus restoration.
+- Use `pointer-events: none` on full-screen HUD wrappers and passive readouts.
+  Apply `pointer-events: auto` to interactive controls and docks. Check that
+  clicks and taps pass through passive overlays to the playfield.
+- Verify the open-playfield area, absence of document scrolling, overlay
+  separation, keyboard focus and touch input on desktop, phone portrait and
+  phone landscape before releasing the title.
 
 Each game uses one fixed viewport with zero document scrolling. Set `html`,
 `body` and the main wrapper to `100vw` × `100vh` with zero margin and padding

@@ -50,6 +50,21 @@ owns final verification.
 
 ## Product honesty and release gates
 
+- Make the play surface the focus of every title. Use compact controls and HUDs
+  designed for that game's mechanics. Put instructions, detailed readouts and
+  settings behind an on-demand help or menu control. A full-height dashboard or
+  a scrolling block of explanatory text must never be the default play UI.
+  Follow the **Universal Game Studio layout** in `docs/GAME_TEMPLATE.md` for
+  every new title and when redesigning existing titles. This is a release gate.
+  Lock `#studio` to the viewport and target 90% open playfield, with a hard cap
+  of 15% UI coverage during play. Use up to four icon-and-value pills at the
+  top left and 40px help, audio and pause/menu icons at the top right as needed.
+  Center a hotbar up to 76px high at the bottom when the game uses selectable
+  items. Keep one or two primary actions at the bottom right. Hide tutorials,
+  detailed stats and settings in on-demand dialogs. Passive overlays must let
+  clicks and taps reach the playfield. Verify desktop, phone portrait and phone
+  landscape without document scrolling or overlapping controls.
+
 - Every game opens in a single viewport with zero document scrolling. Set the
   root, body and game wrapper to viewport width and height, zero margin and
   padding, and hidden overflow. Fill the viewport with the gameplay canvas
