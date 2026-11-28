@@ -11,6 +11,7 @@
 <body><a class="skip-link" href="#shot-controls">Skip to shot controls</a>
 <main class="game-viewport">
 <div class="game-play-surface viewport"><canvas id="penalty-canvas" tabindex="0" aria-label="Penalty pitch. Arrow keys aim, W and S change power, Space shoots, Escape pauses, N prepares the next kick, R restarts."></canvas><div class="pitch-caption" aria-hidden="true">ADIGUN ATHLETIC · TRAINING PITCH</div><div id="graphics-fallback" class="graphics-fallback" hidden><strong>Command play is ready.</strong><p>3D graphics are unavailable. The shot controls, keeper scouting, physics and campaign work here with the same rules.</p></div></div>
+<div class="game-stage-hud scoreboard" aria-label="Shootout score"><div><span>YOUR GOALS</span><strong id="goals">0 / 5</strong><small id="target">Target: 3 goals</small></div><div><span>OPPOSITION</span><strong id="opponent-goals">0 / 5</strong><small id="saves">Your saves: 0</small></div><div><span>PENALTY</span><strong id="kick-number" class="gold-value">1 / 10</strong><small id="kick-status">Ready to aim</small><small id="level-status">Challenge 1</small></div></div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -27,7 +28,7 @@
         <div class="match-top"><p class="kicker">ADIGUN ATHLETIC · <span id="tier">Beginner</span></p><span id="phase" class="stage-badge" data-phase="ready">READY TO SHOOT</span></div>
 
         <div class="quality-line"><p id="graphics-status" class="graphics-status" role="status">Loading the 3D training ground…</p><label for="playback">Playback <select id="playback"><option value="0.35">Study pace · 0.35×</option><option value="1">Real time · 1×</option></select></label></div>
-        <div class="scoreboard" aria-label="Shootout score"><div><span>YOUR GOALS</span><strong id="goals">0 / 5</strong><small id="target">Target: 3 goals</small></div><div><span>OPPOSITION</span><strong id="opponent-goals">0 / 5</strong><small id="saves">Your saves: 0</small></div><div><span>PENALTY</span><strong id="kick-number" class="gold-value">1 / 10</strong><small id="kick-status">Ready to aim</small><small id="level-status">Challenge 1</small></div></div>
+
         <p id="message" class="message" role="status">Read the keeper's stance, choose your aim, then shoot.</p>
         <ol id="shot-list" class="shot-list" aria-label="Ten penalty results"></ol>
         <div class="telemetry" aria-label="Ball telemetry"><span>Distance to line: <b id="distance">11.00 m</b></span><span>Ball height: <b id="height">0.11 m</b></span><span>Flight time: <b id="flight-time">0.00 s</b></span></div>

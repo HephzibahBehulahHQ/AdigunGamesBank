@@ -9,6 +9,7 @@
 <body><a class="skip-link" href="#component-grid">Skip to component trays</a>
 <main class="game-viewport">
 <div class="game-play-surface viewport"><canvas id="resistor-canvas" tabindex="0" aria-label="Resistor tray. Arrow keys select a tray. Enter or Space reveals it. C resolves the comparison. R retries the challenge."></canvas><div class="scene-caption" aria-hidden="true">ADIGUN ELECTRICAL LAB · COMPONENT STORE</div><div id="graphics-fallback" class="graphics-fallback" hidden><strong>Your component bench is ready.</strong><p>3D graphics are unavailable. Use the numbered trays below; the same components, moves and matching rules remain active.</p></div></div>
+<div class="game-stage-hud scoreboard" aria-label="Challenge score"><div><span>PAIRS STORED</span><strong id="pairs">0 / 4</strong><small id="components-count">8 covered components</small></div><div><span>MOVES USED</span><strong id="moves">0 / 14</strong><small>Two reveals make one move</small></div><div><span>REMAINING</span><strong id="remaining">14</strong><small id="minimum-moves">At least 4 matches needed</small></div></div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -21,7 +22,7 @@
       <div class="bench-top"><p>PRECISION BENCH · <span id="tier">Beginner</span></p><span id="phase" class="phase-badge" data-phase="ready">LIFT A COVER</span></div>
 
       <p id="graphics-status" class="graphics-status" role="status">Loading the 3D component bench…</p>
-      <div class="scoreboard" aria-label="Challenge score"><div><span>PAIRS STORED</span><strong id="pairs">0 / 4</strong><small id="components-count">8 covered components</small></div><div><span>MOVES USED</span><strong id="moves">0 / 14</strong><small>Two reveals make one move</small></div><div><span>REMAINING</span><strong id="remaining">14</strong><small id="minimum-moves">At least 4 matches needed</small></div></div>
+
       <p id="message" class="message" role="status">Choose any two covered trays. Match the nominal resistance and tolerance.</p>
       <div class="board-title"><h2>Component trays</h2><p>Click a 3D cover or use these buttons.</p></div><div id="component-grid" class="component-grid" role="group" aria-label="Numbered component trays"></div>
     </div><section class="panel inspector" aria-labelledby="inspection-title">

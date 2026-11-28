@@ -17,6 +17,12 @@
           <canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas>
           <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div>
         </div>
+<div class="game-stage-hud telemetry" aria-label="Board measurements">
+          <div><span>Supply</span><strong id="voltage">24 V</strong><small>DC nominal</small></div>
+          <div><span>Connected loads</span><strong id="connected">0 / 6</strong><small id="supply-status">Supply isolated</small></div>
+          <div><span>Trial progress</span><strong id="trial-progress">0%</strong><small id="stage-name">Awaiting trial</small></div>
+          <div><span>Energy in trial</span><strong id="energy">0.000 Wh</strong><small>Ideal load consumption</small></div>
+        </div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -43,12 +49,7 @@
 
         <p id="scene-description" class="sr-only">An open metal distribution enclosure with a DC supply, copper bus, individual resettable breakers and connected workshop loads. The branch controls provide the same selection as the 3D cabinet.</p>
         <p id="graphics-status" class="graphics-status" role="status">Starting the 3D cabinet…</p>
-        <div class="telemetry" aria-label="Board measurements">
-          <div><span>Supply</span><strong id="voltage">24 V</strong><small>DC nominal</small></div>
-          <div><span>Connected loads</span><strong id="connected">0 / 6</strong><small id="supply-status">Supply isolated</small></div>
-          <div><span>Trial progress</span><strong id="trial-progress">0%</strong><small id="stage-name">Awaiting trial</small></div>
-          <div><span>Energy in trial</span><strong id="energy">0.000 Wh</strong><small>Ideal load consumption</small></div>
-        </div>
+
         <div class="message" id="message" role="status" aria-live="polite">Supply isolated. Start with the load list.</div>
         <section class="panel branch-panel" aria-labelledby="branches-title"><div class="section-heading"><h2 id="branches-title">Protected branches</h2><span class="hint">Current ≤ breaker ≤ cable</span></div><div id="branches" class="branch-grid"></div></section>
         <section class="panel loads-panel" aria-labelledby="loads-title"><div class="section-heading"><h2 id="loads-title">Workshop loads</h2><span class="hint">L / D / F = the three trial stages</span></div><div id="loads" class="load-grid"></div><div class="patch-summary"><span id="selected-load">Select a load</span><span aria-hidden="true">→</span><strong id="selected-branch">Branch A</strong></div><div class="controls"><button id="connect-load" class="primary" type="button">Connect selected load</button><button id="disconnect-load" type="button">Disconnect selected load</button></div></section>

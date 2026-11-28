@@ -18,6 +18,7 @@
           <div class="scene-corner" aria-hidden="true"><span>APEX / HB</span><span id="view-label">CHASE CAMERA</span></div>
           <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>Step driving remains available with the same physics, gates and race clock. Read the engineer guide, set your steering and throttle, then advance half a second.</p><button id="reload-graphics" type="button">Reload graphics</button></div>
         </div>
+<div class="game-stage-hud telemetry" aria-label="Race telemetry"><div><span>Speed</span><strong id="speed">0</strong><small>km/h</small></div><div><span>Race clock</span><strong id="elapsed">0.00</strong><small id="time-left">45.0 s remaining</small></div><div><span>Lap</span><strong id="lap">1 / 1</strong><small id="gate-count">0 / 12 gates</small></div><div><span>Track limits</span><strong id="track-state">CLEAN</strong><small id="penalty">0.0 s penalty</small></div></div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -39,7 +40,7 @@
         <div class="section-heading"><h2 id="track-heading">Live circuit</h2><span id="phase" class="phase-tag" data-phase="ready">READY</span></div>
 
         <div class="view-toolbar"><p id="graphics-status" class="graphics-status" role="status">Preparing the 3D circuit…</p><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label><label for="camera">Camera <select id="camera"><option value="chase">Chase</option><option value="circuit">Circuit overview</option></select></label></div>
-        <div class="telemetry" aria-label="Race telemetry"><div><span>Speed</span><strong id="speed">0</strong><small>km/h</small></div><div><span>Race clock</span><strong id="elapsed">0.00</strong><small id="time-left">45.0 s remaining</small></div><div><span>Lap</span><strong id="lap">1 / 1</strong><small id="gate-count">0 / 12 gates</small></div><div><span>Track limits</span><strong id="track-state">CLEAN</strong><small id="penalty">0.0 s penalty</small></div></div>
+
         <div id="message" class="message" role="status" aria-live="polite">Set your controls, then start the qualifying run.</div>
         <section id="race-controls" class="panel driving-panel" aria-labelledby="controls-heading">
           <h2 id="controls-heading">Driver controls</h2>

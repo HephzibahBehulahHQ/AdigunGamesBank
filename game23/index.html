@@ -12,6 +12,7 @@
 <body><a class="skip-link" href="#game">Skip to game controls</a>
 <main class="game-viewport" id="game">
 <div class="game-play-surface viewport"><canvas id="valley" tabindex="0" aria-label="Interactive 3D valley and sling challenge. Keyboard controls are described below." aria-describedby="keyboard-help target-telemetry"></canvas><div id="game-overlay" class="game-overlay"><p class="eyebrow" id="overlay-kicker">Five stones. One encounter.</p><h2 id="overlay-title">Stand in the valley.</h2><p id="overlay-copy">Select Begin. Adjust your aim and release speed, then throw.</p></div></div>
+<div class="game-stage-hud stats"><span>Challenge <strong id="level-readout">1 / 10,000</strong></span><span>Stones <strong id="stones-readout">5</strong></span><span>Targets <strong id="hits-readout">0 / 3</strong></span><span id="tier" class="badge">Beginner</span></div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -23,7 +24,7 @@
     <div class="layout">
       <section aria-label="Sling challenge">
 
-        <div class="stats"><span>Challenge <strong id="level-readout">1 / 10,000</strong></span><span>Stones <strong id="stones-readout">5</strong></span><span>Targets <strong id="hits-readout">0 / 3</strong></span><span id="tier" class="badge">Beginner</span></div>
+
         <p id="message" class="message" role="status" aria-live="polite"></p>
         <div class="controls"><button id="start" class="primary" type="button">Begin · Enter</button><button id="throw" class="throw-button" type="button" disabled>Throw stone · Space</button><button id="pause" type="button" disabled>Pause · Esc</button><button id="restart" type="button">Retry level · R</button><button id="next" class="primary" type="button" hidden>Next challenge →</button></div>
         <div class="aim-controls" aria-label="Aim and release controls">

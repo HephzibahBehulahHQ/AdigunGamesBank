@@ -18,6 +18,12 @@
           <div class="scene-label" aria-hidden="true"><span>FORE ↑</span><span>PORT ← &nbsp; → STARBOARD</span></div>
           <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The interactive 3D scene could not start. Continue this voyage using the deck buttons and live telemetry below.</p></div>
         </div>
+<div class="game-stage-hud telemetry" aria-label="Live vessel telemetry">
+          <div><span>Port / starboard</span><strong id="balance-value">0</strong><small id="balance-limit">within limit</small></div>
+          <div><span>Fore / aft trim</span><strong id="trim-value">0</strong><small id="trim-limit">within limit</small></div>
+          <div><span>Freeboard</span><strong id="freeboard-value">—</strong><small id="freeboard-limit">waterline clearance</small></div>
+          <div><span>Trial progress</span><strong id="trial-value">0%</strong><small id="trial-condition">awaiting launch</small></div>
+        </div>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -52,12 +58,7 @@
 
         <p id="scene-description" class="sr-only">A timber ark shown in cutaway, exposing six bays on its lower cargo deck. The intact starboard hull edge represents the freeboard boundary. The deck command grid below provides the same cargo placement controls as the scene.</p>
         <p id="graphics-status" class="graphics-status" role="status">Starting the 3D scene…</p>
-        <div class="telemetry" aria-label="Live vessel telemetry">
-          <div><span>Port / starboard</span><strong id="balance-value">0</strong><small id="balance-limit">within limit</small></div>
-          <div><span>Fore / aft trim</span><strong id="trim-value">0</strong><small id="trim-limit">within limit</small></div>
-          <div><span>Freeboard</span><strong id="freeboard-value">—</strong><small id="freeboard-limit">waterline clearance</small></div>
-          <div><span>Trial progress</span><strong id="trial-value">0%</strong><small id="trial-condition">awaiting launch</small></div>
-        </div>
+
         <div id="message" class="message" role="status" aria-live="polite">Load the manifest to prepare for launch.</div>
         <section class="panel deck-panel" aria-labelledby="deck-title">
           <div class="section-heading"><h2 id="deck-title">Deck command grid</h2><span id="selected-bay-label">Select a bay</span></div>

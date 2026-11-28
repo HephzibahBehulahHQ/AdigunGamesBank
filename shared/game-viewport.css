@@ -14,7 +14,8 @@ body > .game-viewport {
 }
 
 body > .game-viewport {
-  position: relative;
+  position: fixed;
+  inset: 0;
   display: block;
   isolation: isolate;
 }
@@ -49,12 +50,9 @@ body > .game-viewport {
 }
 
 .game-play-surface > canvas:focus-visible { outline-offset: -4px; }
-.game-play-surface > canvas[hidden],
-.game-play-surface > [hidden] { display: none; }
-
 .game-viewport > .game-console {
   position: absolute;
-  inset: 0;
+  inset: var(--game-top, 0px) 0 0;
   z-index: 1;
   margin: 0;
   padding: 0;
@@ -65,6 +63,7 @@ body > .game-viewport {
   box-sizing: border-box;
   max-height: 100%;
   padding: 16px;
+  padding-bottom: 76px;
   overflow: auto;
   overscroll-behavior: contain;
   scroll-padding: 12px;
@@ -76,7 +75,8 @@ body > .game-viewport {
   display: flex;
   flex-direction: column;
   width: min(42vw, 520px);
-  max-height: calc(100% - 24px);
+  --dock-height: calc(100dvh - 84px);
+  max-height: var(--dock-height);
   border: 1px solid #52637c;
   border-radius: 12px;
   background: rgb(11 18 32 / 94%);
@@ -93,7 +93,11 @@ body > .game-viewport {
 }
 
 .game-dock > summary:focus-visible { outline: 2px solid #ebcd72; outline-offset: -3px; }
-.game-dock > .game-console-content { min-height: 0; padding-top: 0; }
+.game-dock > .game-console-content {
+  min-height: 0;
+  max-height: calc(var(--dock-height) - 46px);
+  padding-block: 0 16px;
+}
 .game-dock .game-header { padding: 10px 0; flex-wrap: wrap; }
 .game-dock :is(.layout, .help-grid, .command-column, .briefing) { grid-template-columns: minmax(0, 1fr); }
 .game-dock :is(.bench-controls, .aim-panel) { position: static; }
@@ -126,19 +130,68 @@ body > .game-viewport {
   background: linear-gradient(90deg, rgb(8 15 29 / 94%), rgb(8 15 29 / 28%));
 }
 
+.game-play-surface > [hidden] { display: none; }
+
+.game-viewport > .game-stage-hud {
+  position: absolute;
+  inset: 42px auto auto 12px;
+  z-index: 1;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: min(50vw, 720px);
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #52637c;
+  border-radius: 8px;
+  background: rgb(11 18 32 / 91%);
+  color: #edf4ff;
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+
+.game-viewport > .game-stage-hud:is(.telemetry, .scoreboard, .readings) {
+  grid-template-columns: repeat(auto-fit, minmax(min(105px, 100%), 1fr));
+}
+
+.game-viewport > .game-stage-hud > div { min-width: 0; }
+.game-viewport > .game-stage-hud :is(dd, strong) { white-space: normal; }
+
+/* The legacy practice controller adds its own status strip above these games. */
+.game-viewport.wrap { --game-top: 48px; }
+
+#hb-level-bar {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 8px 14px;
+  border: 1px solid #55f5e577;
+  border-radius: 99px;
+  background: #071522;
+  color: #b1ffcf;
+  font: 700 12px ui-monospace, monospace;
+  pointer-events: none;
+}
+
 @media (max-width: 700px) and (orientation: portrait) {
   .game-viewport > .game-dock {
-    inset: auto 6px 6px;
+    inset: auto 6px 66px;
     width: auto;
-    max-height: min(44%, 380px);
+    --dock-height: min(calc(44dvh - 60px), 380px);
   }
 
   .game-play-surface > :is(.graphics-fallback, .game-overlay, .match-overlay, .game-scene-menu) {
     padding: 12px 16px 44dvh;
   }
+
+  .game-viewport > .game-stage-hud { inset: 30px 6px auto; width: auto; max-width: none; }
+  .game-viewport > .game-stage-hud > div { padding: 4px 6px; }
 }
 
 @media (orientation: landscape) and (max-height: 480px) {
-  .game-viewport > .game-dock { inset: 6px 6px auto auto; width: 46vw; max-height: calc(100% - 12px); }
+  .game-viewport > .game-dock { inset: 6px 6px auto auto; width: 46vw; --dock-height: calc(100dvh - 76px); }
   .game-dock > summary { padding-block: 8px; }
 }

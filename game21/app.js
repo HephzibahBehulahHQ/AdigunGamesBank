@@ -20,6 +20,11 @@ function reset(){running=false;m=makeMatch();$("#start-screen").hidden=false;$("
 function point(e){let r=c.getBoundingClientRect();aim={x:(e.clientX-r.left)*c.width/r.width,y:(e.clientY-r.top)*c.height/r.height}}
 function input(){let p=navigator.getGamepads?.()[0],ax=p?.axes?.[0]||0,ay=p?.axes?.[1]||0;return{left:keys.has("a")||keys.has("arrowleft")||ax<-.25,right:keys.has("d")||keys.has("arrowright")||ax>.25,up:keys.has("w")||keys.has("arrowup")||ay<-.25,down:keys.has("s")||keys.has("arrowdown")||ay>.25,fire:keys.has(" ")||keys.has("enter")||!!(p?.buttons?.[7]?.pressed||p?.buttons?.[0]?.pressed),aim:angle()}}
 function frame(t){let dt=last?Math.min(.05,(t-last)/1000):0;last=t;let p=navigator.getGamepads?.()[0],pressed=!!p?.buttons?.[9]?.pressed;if(pressed&&!startHeld&&!running&&!m.finished)start();startHeld=pressed;if(running){step(m,input(),dt);ui();draw()}requestAnimationFrame(frame)}
-window.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();keys.add(e.key.toLowerCase());if(!running&&!m.finished&&(e.key==="Enter"||e.key===" "))start()});
+window.addEventListener("keydown", e => {
+ if (e.defaultPrevented || e.target instanceof Element && e.target.closest('button, a, summary, input, select, textarea')) return;
+ if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) e.preventDefault();
+ keys.add(e.key.toLowerCase());
+ if (!running && !m.finished && (e.key === "Enter" || e.key === " ")) start();
+});
 window.addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));c.addEventListener("pointermove",point);c.addEventListener("pointerdown",e=>{point(e);if(running){let p=m.actors[0];if(p.alive&&p.ammo>0&&p.cooldown<=0)step(m,{fire:true,aim:angle()},.001);ui(true);draw()}});
 $("#start").addEventListener("click",start);$("#restart").addEventListener("click",reset);$("#again").addEventListener("click",start);ui(true);draw();requestAnimationFrame(frame);

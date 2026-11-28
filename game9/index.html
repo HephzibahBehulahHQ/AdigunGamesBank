@@ -12,6 +12,12 @@
 <body><a class="skip-link" href="#controls">Skip to drill controls</a>
 <main class="game-viewport">
 <div class="game-play-surface viewport"><canvas id="pitch" aria-hidden="true"></canvas></div>
+<dl class="game-stage-hud readings">
+          <div><dt>Ball</dt><dd id="ball"></dd></div>
+          <div><dt>Defender</dt><dd id="defender"></dd></div>
+          <div><dt>Clearance gate</dt><dd id="gate"></dd></div>
+          <div><dt>Projected clearance</dt><dd id="projection"></dd></div>
+        </dl>
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
@@ -34,12 +40,7 @@
 
         <p id="graphics" role="status">Loading pitch…</p>
         <p id="message" class="message" role="status"></p>
-        <dl class="readings">
-          <div><dt>Ball</dt><dd id="ball"></dd></div>
-          <div><dt>Defender</dt><dd id="defender"></dd></div>
-          <div><dt>Clearance gate</dt><dd id="gate"></dd></div>
-          <div><dt>Projected clearance</dt><dd id="projection"></dd></div>
-        </dl>
+
       </section>
       <section id="controls" class="panel" aria-labelledby="control-title">
         <h2 id="control-title">Defend the line</h2>
