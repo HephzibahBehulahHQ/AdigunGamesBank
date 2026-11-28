@@ -46,6 +46,7 @@ async function loadApp(game, { writeFails = false, readFails = false, completed 
     setTimeout: () => 1, clearTimeout() {},
     THREE: { Raycaster: class {}, Vector2: class {} },
     createStage: () => ({ render() {}, dispose() {} }),
+    fitStudioCamera() {},
     buildFootballScene: () => ({ update() {}, playerRoots: [] }),
     buildValleyScene: () => ({ update() {} }),
     createBench: () => ({ render() { rendered++; }, dispose() { disposed++; }, view() {} })

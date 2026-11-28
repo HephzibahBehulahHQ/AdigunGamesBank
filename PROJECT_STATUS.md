@@ -18,12 +18,19 @@ Neon Pulse [PR #12](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/1
 passed candidate verification and merged at `1258dca6d2f6139cff0d676bc38bafbc3998c6eb`.
 [Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46177369709)
 passed, and the live studio HTML, CSS and gameplay script matched the production
-manifest and inspected source. Circuit Rush (#13) passed candidate verification
-and merged at `644ea4da69e97777353fc220294e1adf62751fe6`. Its production
-verification is pending. Electronicer (#14), Volt Dodge (#15), Resistor Match
-(#16), Capacitor Charge (#17) and Binary Flash (#18) have separate locally
-verified candidates. Preserve each verified live rollout before merging the
-next to avoid superseding a deployment.
+manifest and inspected source. Circuit Rush (#13) passed candidate and main
+verification and [Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46178580070)
+at `644ea4da69e97777353fc220294e1adf62751fe6`. The live Circuit Rush HTML, CSS,
+and gameplay script matched the production manifest and inspected source.
+
+Electronicer (#14) is next. The initial CI run failed because the synthetic
+storage-test DOM lacked `clearTimeout`. The fixture now includes notice timers,
+and all nine local storage and history resilience checks pass. The repaired
+candidate is in exact-candidate CI. Volt Dodge (#15), Resistor Match (#16),
+Capacitor Charge (#17), Binary Flash (#18), Fuse Box (#19), Goal Line (#20),
+and APEX Circuit (#21) have individual locally verified candidates queued.
+Preserve each verified live rollout before merging the next to avoid
+superseding a deployment.
 
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
 
