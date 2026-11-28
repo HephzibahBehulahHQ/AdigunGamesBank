@@ -9,14 +9,24 @@
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
+<link rel="stylesheet" href="../shared/game-viewport.css">
 </head>
-<body>
-  <a class="skip-link" href="#race-controls">Skip to race controls</a>
+<body><a class="skip-link" href="#race-controls">Skip to race controls</a>
+<main class="game-viewport">
+<div class="game-play-surface viewport">
+          <canvas id="race-canvas" tabindex="0" role="img" aria-label="3D racing circuit. Arrow keys or W A S D drive; Space pauses. Equivalent steering and pedal controls follow." aria-describedby="graphics-status"></canvas>
+          <div class="scene-corner" aria-hidden="true"><span>APEX / HB</span><span id="view-label">CHASE CAMERA</span></div>
+          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>Step driving remains available with the same physics, gates and race clock. Read the engineer guide, set your steering and throttle, then advance half a second.</p><button id="reload-graphics" type="button">Reload graphics</button></div>
+        </div>
+<details class="game-console game-dock" open>
+<summary>Game controls and information</summary>
+<div class="game-console-content">
+
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>SPORT · ORIGINAL CIRCUITS</small></span></a>
     <a class="back-link" href="../">← Game library</a>
   </header>
-  <main>
+
     <div class="title-row"><div><p class="eyebrow">Precision. Grip. One clean line.</p><h1>APEX CIRCUIT</h1><p class="subtitle">Own the braking point. Earn every gate.</p></div><div class="event-mark" aria-hidden="true">HB<span>TIME ATTACK</span></div></div>
     <div class="toolbar campaign-toolbar">
       <label for="level">Race <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label>
@@ -27,11 +37,7 @@
     <div class="layout">
       <section aria-labelledby="track-heading">
         <div class="section-heading"><h2 id="track-heading">Live circuit</h2><span id="phase" class="phase-tag" data-phase="ready">READY</span></div>
-        <div class="viewport">
-          <canvas id="race-canvas" tabindex="0" role="img" aria-label="3D racing circuit. Arrow keys or W A S D drive; Space pauses. Equivalent steering and pedal controls follow." aria-describedby="graphics-status"></canvas>
-          <div class="scene-corner" aria-hidden="true"><span>APEX / HB</span><span id="view-label">CHASE CAMERA</span></div>
-          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>Step driving remains available with the same physics, gates and race clock. Read the engineer guide, set your steering and throttle, then advance half a second.</p><button id="reload-graphics" type="button">Reload graphics</button></div>
-        </div>
+
         <div class="view-toolbar"><p id="graphics-status" class="graphics-status" role="status">Preparing the 3D circuit…</p><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label><label for="camera">Camera <select id="camera"><option value="chase">Chase</option><option value="circuit">Circuit overview</option></select></label></div>
         <div class="telemetry" aria-label="Race telemetry"><div><span>Speed</span><strong id="speed">0</strong><small>km/h</small></div><div><span>Race clock</span><strong id="elapsed">0.00</strong><small id="time-left">45.0 s remaining</small></div><div><span>Lap</span><strong id="lap">1 / 1</strong><small id="gate-count">0 / 12 gates</small></div><div><span>Track limits</span><strong id="track-state">CLEAN</strong><small id="penalty">0.0 s penalty</small></div></div>
         <div id="message" class="message" role="status" aria-live="polite">Set your controls, then start the qualifying run.</div>
@@ -51,6 +57,9 @@
     </div>
     <details class="rules"><summary>Track rules and accessibility</summary><p>Cross twelve gates in order on every lap. A finish-line crossing alone earns nothing. Leaving the tarmac adds three seconds and invalidates the current sector. Recover to your last clean gate to continue; recovery adds five more seconds. Run out of time and the race ends. Retry keeps previously completed races.</p><p>The racing model uses metres, seconds, acceleration, braking and a tyre-grip limit. These are original arcade cars and circuits, not manufacturer data or driver training. Changing driving mode pauses the run. Leaving the page pauses it too. Reduced motion uses a fixed circuit camera; step driving removes the need for timed reactions. Live telemetry and the engineer guide provide an alternative to reading the scene.</p></details>
     <footer><p>10,000 original qualifying configurations · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · <a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a><a href="README.md">Game guide and development status</a></p></footer>
-  </main>
+
+</div>
+</details>
+</main>
 </body>
 </html>

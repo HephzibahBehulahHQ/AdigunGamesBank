@@ -9,14 +9,23 @@
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
+<link rel="stylesheet" href="../shared/game-viewport.css">
 </head>
-<body>
-  <a class="skip-link" href="#game">Skip to game controls</a>
+<body><a class="skip-link" href="#game">Skip to game controls</a>
+<main class="game-viewport" id="game">
+<div class="game-play-surface viewport">
+          <canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas>
+          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div>
+        </div>
+<details class="game-console game-dock" open>
+<summary>Game controls and information</summary>
+<div class="game-console-content">
+
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>ELEKTRONIKER · THE COMMISSIONING ROOM</small></span></a>
     <a class="back-link" href="../">← Game library</a>
   </header>
-  <main id="game">
+
     <div class="title-row"><div><p class="eyebrow">Workshop 08 · DC distribution</p><h1>Fuse Box</h1><p class="subtitle">Every load has a place. Every circuit has a limit.</p></div><div class="workshop-mark" aria-hidden="true">DC<br><b>08</b></div></div>
     <p class="model-note">An extra-low-voltage teaching simulation with ideal resettable breakers. All currents and cable limits are game parameters.</p>
     <div class="toolbar">
@@ -31,10 +40,7 @@
     <div class="layout">
       <section class="board-column" aria-labelledby="cabinet-title">
         <div class="section-heading"><h2 id="cabinet-title">Distribution cabinet</h2><span id="phase" class="phase-tag" data-phase="isolated">ISOLATED</span></div>
-        <div class="viewport">
-          <canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas>
-          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div>
-        </div>
+
         <p id="scene-description" class="sr-only">An open metal distribution enclosure with a DC supply, copper bus, individual resettable breakers and connected workshop loads. The branch controls provide the same selection as the 3D cabinet.</p>
         <p id="graphics-status" class="graphics-status" role="status">Starting the 3D cabinet…</p>
         <div class="telemetry" aria-label="Board measurements">
@@ -54,7 +60,10 @@
       </aside>
     </div>
     <details class="model-notes"><summary>What the electrical model includes</summary><p>Each load draws I = P ÷ V at the stated DC voltage. Branch currents are added for each operating profile. A breaker above the branch cable limit fails inspection; current above a fitted breaker's rating trips the test immediately. Real breakers have time-current curves: this game uses an ideal instantaneous threshold.</p><p>The model omits cable resistance, voltage drop, temperature, short-circuit capacity, earthing and shock protection. Its 12–48 V scenarios are original puzzles, not wiring instructions or a compliance assessment for a real installation.</p><p><a href="https://openstax.org/books/physics/pages/19-4-electric-power">OpenStax: electric power</a> · <a href="https://www.se.com/hk/en/faqs/FAQ000283711/">Schneider Electric: load, breaker and cable current</a> · <a href="README.md">Game guide and evidence</a></p></details>
-  </main>
   <footer><p>10,000 DC commissioning challenges · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · Elektroniker</p><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a></footer>
+</div>
+</details>
+</main>
+
 </body>
 </html>

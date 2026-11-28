@@ -7,14 +7,23 @@
   <title>WORLD FOOTBALL · Game Bank</title>
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../shared/game-viewport.css">
 </head>
-<body>
-  <a class="skip-link" href="#pitch">Skip to the football pitch</a>
+<body><a class="skip-link" href="#pitch">Skip to the football pitch</a>
+<main class="game-viewport">
+<div class="game-play-surface viewport" id="match-viewport">
+          <canvas id="pitch" tabindex="0" aria-label="3D football pitch. You control the highlighted Adigun XI player." aria-describedby="instructions situation"></canvas>
+          <div class="match-overlay" id="match-overlay"><h2 id="overlay-title">Your match starts here.</h2><p id="overlay-copy">Read the objective, then press Kick off.</p></div>
+        </div>
+<details class="game-console game-dock" open>
+<summary>Game controls and information</summary>
+<div class="game-console-content">
+
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK<small>ONE COMPANY. FIVE BRANDS.</small></span></a>
     <a class="back-link" href="../">← All games</a>
   </header>
-  <main>
+
     <div class="intro-row"><div><p class="eyebrow">Original teams · 11 versus 11 · Live match play</p><h1>WORLD FOOTBALL</h1><p class="muted">Build the attack, find the pass and finish the chance. You play as Adigun XI, with a full team moving around you.</p></div><span class="badge">In progress · Browser build</span></div>
     <div class="toolbar">
       <label for="level">Campaign level <input id="level" type="number" min="1" max="1" value="1" aria-describedby="campaign-status"></label>
@@ -26,10 +35,7 @@
     <div class="layout">
       <section aria-label="Football match">
         <div class="scoreboard" aria-label="Match score"><div><span class="team-swatch home"></span><span>Adigun XI</span></div><strong><span id="home-score">0</span><span class="score-divider">:</span><span id="away-score">0</span></strong><div><span id="opponent">Copper Coast XI</span><span class="team-swatch away"></span></div><span class="clock" id="clock" aria-label="Time remaining">02:00</span></div>
-        <div class="viewport" id="match-viewport">
-          <canvas id="pitch" tabindex="0" aria-label="3D football pitch. You control the highlighted Adigun XI player." aria-describedby="instructions situation"></canvas>
-          <div class="match-overlay" id="match-overlay"><h2 id="overlay-title">Your match starts here.</h2><p id="overlay-copy">Read the objective, then press Kick off.</p></div>
-        </div>
+
         <div class="stats"><span id="render-status" role="status">Loading the 3D pitch…</span><span>Controlled <strong id="controlled">#10</strong></span><span>Stamina <strong id="stamina">100%</strong></span><span>Possession <strong id="possession">Adigun XI</strong></span></div>
         <div class="controls">
           <button class="primary" id="start" type="button" disabled>Kick off</button>
@@ -65,8 +71,11 @@
     </div>
     <details><summary>Rules, access and development status</summary><p>This original football game has 22 starting players, a tactical opponent, ball physics and goalkeeper saves. Whole-ball scoring, offside involvement, contact fouls, direct/indirect free kicks, penalties and yellow/red cards affect play. Offside is judged when a teammate kicks, then penalised on a flagged player’s touch or challenge; direct throw-ins, corners and goal kicks are exempt. Centre-point positions and contact-speed thresholds are simulation simplifications. Advantage, handball, detailed visual obstruction, extra time, league management and online multiplayer are not implemented; this is not full IFAB-law compliance.</p><p>At a free kick use Pass or Shoot; at a throw-in use Pass; at a penalty choose the shot target and Shoot. Movement waits until the restart is taken. The opponent restarts automatically; your taker plays after four idle seconds if you have not acted. Indirect restarts need a second player’s touch to score. Time stops during setup and while awaiting the kick. Queue up to five real roster replacements across three stoppages; sent-off players cannot be replaced. Two yellows or a direct red remove the player; fewer than seven players abandons the match without a campaign award.</p><p>The campaign contains 10,000 deterministic match configurations. AI speed, decision time, pressure, shot accuracy and match objectives change with level. Configuration tests do not mean all 10,000 matches have been manually played. Progress is saved on this device after a qualifying full-time result.</p><p>The pitch uses real WebGL geometry and the quality readout shows its actual drawing buffer. 4K requires compatible hardware; production visual quality, full accessibility and hardware performance remain under evaluation. Keyboard and touch controls, text match events, visible focus and reduced camera motion are implemented. Spatial play still relies on seeing the pitch.</p><p><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/game11/README.md">Game evidence and controls</a> · <a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md">Current project status</a></p></details>
     <noscript><p class="message error">JavaScript is required to run this football game.</p></noscript>
-  </main>
   <footer>HEPHZIBAH BEHULAH · ADIGUN GAME BANK · Original browser football.<br><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/blob/main/PROJECT_STATUS.md">Project status</a></footer>
+</div>
+</details>
+</main>
+
   <script type="module">import('./app.js').catch(() => { const status = document.getElementById('render-status'); status.textContent = 'The 3D game could not load. Check the connection and WebGL support, then reload this page.'; document.getElementById('message').textContent = 'Match unavailable because the renderer did not load.'; });</script>
 </body>
 </html>

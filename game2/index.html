@@ -4,18 +4,24 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0B1220">
 <meta name="description" content="Rotate real terminal connections on an original 3D circuit board. Route the feed, isolate faults and commission 10,000 DC wiring puzzles.">
 <title>CIRCUIT RUSH · Adigun Game Bank</title><link rel="stylesheet" href="../shared/game.css"><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script>
+<link rel="stylesheet" href="../shared/game-viewport.css">
 </head>
-<body>
-<a class="skip-link" href="#routing-controls">Skip to routing controls</a>
+<body><a class="skip-link" href="#routing-controls">Skip to routing controls</a>
+<main class="game-viewport">
+<div class="game-play-surface viewport"><canvas id="circuit-canvas" tabindex="0" role="img" aria-label="3D circuit board. Arrow keys select a cell; Enter rotates clockwise; Backspace rotates counterclockwise. Matching controls follow." aria-describedby="graphics-status"></canvas><div class="scene-label" aria-hidden="true"><span>HB / CIRCUIT RUSH</span><span id="supply-state">SUPPLY ISOLATED</span></div><div id="graphics-fallback" class="graphics-fallback" hidden><strong>3D view unavailable</strong><p>The terminal board below runs the same circuit, rotation budget and commissioning checks. Continue with mouse, touch or keyboard.</p><button id="reload-graphics" type="button">Reload graphics</button></div></div>
+<details class="game-console game-dock" open>
+<summary>Game controls and information</summary>
+<div class="game-console-content">
+
 <header class="game-header"><a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>ELEKTRONIKER · COMMISSIONING LAB</small></span></a><a class="back-link" href="../">← Game library</a></header>
-<main>
+
 <div class="title-row"><div><p class="eyebrow">Virtual DC commissioning bench</p><h1>CIRCUIT RUSH</h1><p class="subtitle">Route it. Prove it. Power it.</p></div><div class="bench-mark" aria-hidden="true">01<span>FEED / RETURN</span></div></div>
 <div class="toolbar"><label for="level">Job <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label><button id="load-level" type="button">Load job</button><span id="tier" class="badge">Beginner</span><span id="unlock-status">Job 1 of 10,000 unlocked</span></div>
 <section class="briefing" aria-labelledby="job-title"><div><p class="eyebrow">Work order</p><h2 id="job-title">Workshop feed</h2><p id="mission-brief"></p></div><div class="supply-facts"><span><strong id="voltage">12</strong> V DC</span><span><strong id="fuse-rating">150</strong> mA virtual fuse</span><span>Return rail: prewired</span></div></section>
 <div class="layout">
 <section aria-labelledby="bench-heading">
 <div class="section-heading"><h2 id="bench-heading">Commissioning panel</h2><span id="phase" class="phase-tag" data-phase="ready">READY</span></div>
-<div class="viewport"><canvas id="circuit-canvas" tabindex="0" role="img" aria-label="3D circuit board. Arrow keys select a cell; Enter rotates clockwise; Backspace rotates counterclockwise. Matching controls follow." aria-describedby="graphics-status"></canvas><div class="scene-label" aria-hidden="true"><span>HB / CIRCUIT RUSH</span><span id="supply-state">SUPPLY ISOLATED</span></div><div id="graphics-fallback" class="graphics-fallback" hidden><strong>3D view unavailable</strong><p>The terminal board below runs the same circuit, rotation budget and commissioning checks. Continue with mouse, touch or keyboard.</p><button id="reload-graphics" type="button">Reload graphics</button></div></div>
+
 <div class="view-toolbar"><p id="graphics-status" class="graphics-status" role="status">Preparing the 3D bench…</p><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label><label for="view">View <select id="view"><option value="bench">Bench perspective</option><option value="overhead">Overhead</option></select></label></div>
 <div class="telemetry" aria-label="Commissioning telemetry"><div><span>Turns remaining</span><strong id="turns-left">12</strong><small id="turns-used">0 quarter-turns used</small></div><div><span>Last test loads</span><strong id="loads-powered">—</strong><small id="load-target">1 required</small></div><div><span>Predicted draw</span><strong id="current">—</strong><small>mA at the supply</small></div><div><span>Network test</span><strong id="network-status">PENDING</strong><small id="test-count">0 tests</small></div></div>
 <div id="message" class="message" role="status" aria-live="polite">Begin the job, then align the terminals.</div>
@@ -28,4 +34,7 @@
 </aside></div>
 <details class="model-notes"><summary>How the network model works</summary><p>Every wire tile is one conductive node. North connects to south, east to west, and both tiles must present a matching terminal. Diagonals and row edges never connect. All specified lamps must receive the feed without exposed live branches, an unwanted auxiliary load, or a path straight to return. The rotation budget applies to this job; failed jobs can be retried.</p><p>This virtual panel models ideal wires and resistive loads with prewired returns. Load current uses I = V / R; branch currents add at the supply. A direct ideal short trips the virtual fuse without inventing a finite short-circuit current. Wire resistance, component tolerances, fuse time-current curves and mains installations are outside this game.</p><p>Technical references: <a href="https://openstax.org/books/university-physics-volume-2/pages/9-4-ohms-law">OpenStax: Ohm’s law</a> and <a href="https://openstax.org/books/university-physics-volume-2/pages/10-3-kirchhoffs-rules">Kirchhoff’s rules</a>. Layouts and commissioning objectives are original game design.</p></details>
 <footer><p>10,000 distinct circuit jobs · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · Elektroniker<br><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a><a href="README.md">Game guide and development status</a></p></footer>
+
+</div>
+</details>
 </main></body></html>

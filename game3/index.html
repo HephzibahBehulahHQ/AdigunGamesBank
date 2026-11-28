@@ -7,14 +7,20 @@
   <title>Electronicer · Adigun Game Bank</title>
   <link rel="stylesheet" href="../shared/game.css">
   <link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="../shared/game-viewport.css">
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to the circuit bench</a>
+<body><a class="skip-link" href="#main">Skip to the circuit bench</a>
+<main class="game-viewport" id="main">
+<div class="game-play-surface viewport"><canvas id="circuit-view" tabindex="0" aria-label="Interactive three-dimensional circuit bench. Arrow keys rotate; plus and minus zoom; keys 1 to 4 connect resistor leads. The same actions are available in labelled controls." aria-describedby="view-help"></canvas></div>
+<details class="game-console game-dock" open>
+<summary>Game controls and information</summary>
+<div class="game-console-content">
+
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah"><span>Adigun Game Bank<small>BY HB ELEKTRONIKER</small></span></a>
     <a class="back-link" href="../">← All games</a>
   </header>
-  <main id="main">
+
     <div class="split"><div><div class="eyebrow">Electrical engineering / DC laboratory</div><h1>Electronicer</h1></div><span class="badge">In progress · browser edition</span></div>
     <p class="muted">Wire the network. Set the source. Read the meters. Make every target agree with the circuit you built.</p>
     <div class="toolbar">
@@ -24,7 +30,7 @@
     </div>
     <div class="layout">
       <section aria-label="Circuit scene and challenge">
-        <div class="viewport"><canvas id="circuit-view" tabindex="0" aria-label="Interactive three-dimensional circuit bench. Arrow keys rotate; plus and minus zoom; keys 1 to 4 connect resistor leads. The same actions are available in labelled controls." aria-describedby="view-help"></canvas></div>
+
         <div class="stats"><span>Network <strong id="meter-voltage">0.000 V</strong></span><span>Current <strong id="meter-current">0.000 mA</strong></span><span>Equivalent <strong id="meter-resistance">Open circuit</strong></span><span>Power <strong id="meter-power">0.000 W</strong></span></div>
         <p class="instructions" id="view-help">Drag to inspect the bench; tap a resistor to connect its lead. With the scene focused, use <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd>, <kbd>+</kbd>/<kbd>−</kbd> to zoom, and <kbd>1</kbd>–<kbd>4</kbd> for leads. Every control also works with keyboard and touch below.</p>
         <div class="controls"><button id="view-top" type="button">Top view</button><button id="view-angle" type="button">Bench view</button><button id="retry" type="button">Reset this level</button><button id="next-level" type="button" class="primary" disabled>Next level →</button></div>
@@ -55,8 +61,11 @@
     </div>
     <details><summary>Model, controls and learning references</summary><p>This is a playable ideal DC simulation: 3–15 V sources, ohmic resistors, ideal wires, switch contacts and an instantaneous fuse limit. All bench resistors use a 5 W model. Temperature, component tolerance, transients and manufacturer fuse curves are outside this model. The 25% fuse margin is a game constraint. This game does not provide instructions for real mains wiring or certify physical circuits.</p><p>Levels use deterministic circuit challenges and five increasing network/logic tiers. Automated validation can establish generated solvability; it does not mean 10,000 levels have been manually playtested. English interface; complete German, Yoruba and Nigerian Pidgin localization remains in progress.</p><p><a href="https://openstax.org/books/university-physics-volume-2/pages/10-2-resistors-in-series-and-parallel" target="_blank" rel="noopener noreferrer">OpenStax: series and parallel resistors</a> · <a href="https://openstax.org/books/university-physics-volume-2/pages/10-3-kirchhoffs-rules" target="_blank" rel="noopener noreferrer">OpenStax: Kirchhoff’s rules</a> · <a href="./README.md">Game design and evidence record</a></p></details>
     <noscript><p class="message error">Electronicer needs JavaScript to solve circuits and render the 3D bench.</p></noscript>
-  </main>
   <footer><p>© 2026 Hephzibah Behulah · HB Elektroniker · Adigun Game Bank</p><a href="https://hephzibahbehulah.com/">Company</a><a href="../">Game catalog</a><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank">Source and documentation</a></footer>
+</div>
+</details>
+</main>
+
   <script type="module" src="./app.js"></script>
 </body>
 </html>
