@@ -89,7 +89,7 @@ test('Last Signal keeps help independent of the match and accepts touch input', 
   await expect(arena).toBeFocused();
   await expect(page.getByRole('button', { name: 'Move right' })).toBeVisible();
   const ammo = Number(await page.locator('#ammo').textContent());
-  await arena.tap({ position: { x: 195, y: 420 } });
+  await arena.tap({ position: { x: 310, y: 508 } });
   await expect(page.locator('#ammo')).toHaveText(String(ammo - 1));
   await toggle.tap();
   await expect(page.locator('#studio-help')).toBeVisible();

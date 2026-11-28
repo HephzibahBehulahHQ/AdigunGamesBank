@@ -44,6 +44,7 @@ function finishMatch(){
 }
 function start(){
  m=makeMatch((Date.now()^Math.floor(Math.random()*0xffffffff))>>>0);
+ m.actors[0].cooldown=0;
  running=true;last=0;lastSecond=-1;
  setPaused(false);
  result.close();help.close();
