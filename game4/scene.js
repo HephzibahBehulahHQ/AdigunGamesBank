@@ -117,5 +117,18 @@ export function createScene({ canvas, qualitySelect, status }) {
     });
     const open = state.collected.every(Boolean); gate.userData.plate.material.color.set(open ? '#43996c' : '#8b743e'); gate.userData.plate.material.emissive.set(open ? '#2d9c66' : '#755a25'); gate.userData.bar.material.color.set(open ? '#a1e9b9' : '#d7b75e'); gate.userData.bar.material.emissive.set(open ? '#65d58b' : '#aa8439');
   }
-  return { rebuild, update, setView, render: () => stage.render(), dispose() { release(root); stage.dispose(); } };
+  function render() {
+    if (canvas.clientWidth && canvas.clientHeight) {
+      const aspect = canvas.clientWidth / canvas.clientHeight;
+      const tangent = Math.tan(THREE.MathUtils.degToRad(21)) * Math.max(1, 0.9 / aspect);
+      const fov = THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
+      if (stage.camera.aspect !== aspect || stage.camera.fov !== fov) {
+        stage.camera.aspect = aspect;
+        stage.camera.fov = fov;
+        stage.camera.updateProjectionMatrix();
+      }
+    }
+    stage.render();
+  }
+  return { rebuild, update, setView, render, dispose() { release(root); stage.dispose(); } };
 }

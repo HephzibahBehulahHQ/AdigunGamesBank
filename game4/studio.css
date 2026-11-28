@@ -1,0 +1,33 @@
+#studio { background: #111e2c; }
+#studio > .game-play-surface { z-index: 1; }
+.volt-readouts, .volt-tools, .volt-controls { position: absolute; z-index: 2; pointer-events: none; }
+.volt-readouts, .volt-tools, .volt-orders { display: flex; align-items: center; gap: 6px; }
+.volt-readouts { inset: 16px auto auto 16px; padding: 0; border: 0; background: none; }
+.volt-tools { inset: 16px 16px auto auto; }
+.volt-readouts > span, .volt-tools button, .volt-controls button { border: 1px solid #637d8c; border-radius: 10px; background: rgb(10 27 39 / 94%); color: #edf7ff; }
+.volt-readouts > span { padding: 4px 9px; font-size: 13px; white-space: nowrap; }
+.volt-readouts i { color: #a4e6bd; font-style: normal; }
+.volt-tools button, .volt-controls button { min-width: 40px; min-height: 40px; padding: 5px 8px; }
+.volt-controls { inset: auto 16px 80px; display: flex; justify-content: space-between; align-items: end; }
+.volt-pad { display: grid; gap: 3px; grid-template: repeat(3, 40px) / repeat(3, 40px); }
+.volt-pad button { touch-action: none; }
+.volt-pad #north { grid-area: 1 / 2; }
+.volt-pad #west { grid-area: 2 / 1; }
+.volt-pad #wait { grid-area: 2 / 2; }
+.volt-pad #east { grid-area: 2 / 3; }
+.volt-pad #south { grid-area: 3 / 2; }
+.volt-orders #start, .volt-orders #next-level { background: #9fdfb6; color: #122719; border-color: #c0edcf; }
+.volt-controls #message:not(.sr-only) { position: absolute; inset: auto 0 100%; width: fit-content; max-width: 100%; padding: 4px 8px; margin: 0 auto 6px; background: #0a2534; border-radius: 6px; font-size: 12px; }
+#studio-help { z-index: 20; width: min(660px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 1px solid #637d8c; border-radius: 14px; color: #edf7ff; background: #112332; }
+#studio-help::backdrop { background: #060d18cc; }
+.volt-close { float: inline-end; }
+.volt-map-stage { position: absolute; inset: 64px 10px 210px; display: grid; place-items: center; overflow: auto; }
+.volt-map-stage #map-details { max-width: min(100%, 650px); padding: 8px; }
+.volt-map-stage #map-details summary { padding: 0; }
+@media (max-height: 460px) { .volt-map-stage { bottom: 120px; } }
+@media (max-width: 550px) {
+  .volt-readouts { inset: 8px auto auto 6px; gap: 3px; }
+  .volt-readouts > span { padding: 4px; font-size: 11px; }
+  .volt-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .volt-controls { inset-inline: 6px; }
+}
