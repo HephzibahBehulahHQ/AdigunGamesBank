@@ -112,7 +112,17 @@ export function createResistorScene({ canvas, qualitySelect, status, onPick }) {
       }
       return moving;
     },
-    render() { stage.render(); },
+    render() {
+      if (canvas.clientWidth && canvas.clientHeight) {
+        const aspect = canvas.clientWidth / canvas.clientHeight;
+        const tangent = Math.tan(THREE.MathUtils.degToRad(21)) * Math.max(1, 0.9 / aspect);
+        const fov = THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
+        if (camera.aspect !== aspect || camera.fov !== fov) {
+          camera.aspect = aspect; camera.fov = fov; camera.updateProjectionMatrix();
+        }
+      }
+      stage.render();
+    },
     dispose() {
       canvas.removeEventListener('pointerdown', onDown); canvas.removeEventListener('pointerup', onUp); canvas.removeEventListener('pointercancel', onCancel);
       textures.forEach(texture => texture.dispose()); stage.dispose();

@@ -1,0 +1,29 @@
+#studio { background: #111e2d; }
+#studio > .game-play-surface { z-index: 1; }
+.tray-readouts, .tray-tools, .tray-controls { position: absolute; z-index: 2; pointer-events: none; }
+.tray-readouts, .tray-tools, .tray-orders, .tray-comparison { display: flex; align-items: center; gap: 6px; }
+.tray-readouts { inset: 16px auto auto 16px; }
+.tray-tools { inset: 16px 16px auto auto; }
+.tray-readouts > span, .tray-tools button, .tray-orders button, .tray-comparison article { border: 1px solid #7b849c; border-radius: 9px; background: rgb(16 31 44 / 94%); color: #edf7ff; }
+.tray-readouts > span { padding: 4px 8px; font-size: 13px; white-space: nowrap; }
+.tray-readouts i { color: #ffcd94; font-style: normal; }
+.tray-tools button, .tray-orders button { min-width: 40px; min-height: 40px; padding: 4px 8px; }
+.tray-controls { inset: auto 12px 16px; }
+.tray-orders, .tray-comparison { justify-content: center; }
+.tray-comparison article { display: flex; gap: 6px; align-items: center; padding: 5px 8px; margin-bottom: 6px; }
+.tray-comparison article strong { font-size: 12px; white-space: nowrap; }
+.tray-orders :is(#resolve, #next-level) { background: #ecc389; color: #251b12; border-color: #ffebce; }
+.tray-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; background: #10283b; border-radius: 6px; font-size: 12px; }
+.tray-grid-stage { position: absolute; inset: 60px 8px 124px; display: grid; place-items: center; overflow: auto; background: #102231; }
+.tray-grid-stage .component-grid { width: min(100%, 760px); max-height: 100%; }
+#studio-help { z-index: 20; width: min(680px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 1px solid #7b849c; border-radius: 14px; color: #edf7ff; background: #112435; }
+#studio-help::backdrop { background: #060d18cc; }
+.tray-close { float: inline-end; }
+@media (max-width: 590px) {
+  .tray-readouts { inset: 8px auto auto 6px; gap: 3px; }
+  .tray-readouts > span { padding: 4px; font-size: 11px; }
+  .tray-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .tray-controls { bottom: 77px; }
+  .tray-grid-stage { bottom: 174px; }
+  .tray-comparison article { padding: 4px; }
+}

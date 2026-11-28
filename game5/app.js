@@ -17,7 +17,24 @@ function saveText() {
   if (!progress.completed) return 'Completed challenges save on this device.';
   return `${progress.completed.toLocaleString()} ${progress.completed === 1 ? 'challenge' : 'challenges'} completed. ` + (confirmSaved() ? 'Progress saved on this device.' : 'Progress is available for this session only; browser storage could not confirm a save.');
 }
-function message(text, kind = '') { $('message').textContent = text; $('message').className = `message ${kind}`; }
+let noticeTimer;
+function message(text, kind = '') {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.className = text ? kind : 'sr-only';
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
+function setTrayView(enabled) {
+  $('tray-grid-stage').hidden = !enabled;
+  $('tray-view').setAttribute('aria-pressed', String(enabled));
+}
+function useTrayFallback() {
+  $('graphics-fallback').hidden = false;
+  $('tray-view').disabled = true;
+  setTrayView(true);
+}
 function bandDiagram(component) {
   const model = element('span', '', 'mini-resistor'), body = element('span', '', 'mini-body'); model.setAttribute('aria-hidden', 'true');
   for (const name of component.bands) { const band = element('i', '', 'mini-band'); band.style.backgroundColor = BAND_COLORS[name]; body.append(band); }
@@ -27,13 +44,13 @@ function inspection(id, component, index, first) {
   const panel = $(id); panel.replaceChildren(element('h3', first ? 'FIRST COMPONENT' : 'SECOND COMPONENT'));
   if (!component) { panel.append(element('p', first ? 'Lift a tray cover to inspect its resistor.' : 'Choose a second covered tray to compare.', 'muted')); return; }
   panel.append(element('strong', `Tray ${index + 1} · ${component.label}`));
-  const bandSequence = element('div', '', 'band-sequence');
+  const bandSequence = element('div', '', 'sr-only');
   const meaning = [Math.floor(component.mantissa / 10), component.mantissa % 10, `×${10 ** component.exponent}`, `±${component.tolerance}%`];
   component.bands.forEach((name, i) => {
     const item = element('span'), swatch = element('i'); swatch.setAttribute('aria-hidden', 'true'); swatch.style.backgroundColor = BAND_COLORS[name];
     item.append(swatch, element('b', String(meaning[i])), element('span', titleCase(name))); bandSequence.append(item);
   });
-  panel.append(bandSequence, element('p', `Nominal tolerance interval: ${formatOhms(component.lowerOhms)} to ${formatOhms(component.upperOhms)}.`));
+  panel.append(bandSequence, element('p', `Nominal tolerance interval: ${formatOhms(component.lowerOhms)} to ${formatOhms(component.upperOhms)}.`, 'sr-only'));
 }
 function buildBoard() {
   const grid = $('component-grid'); grid.replaceChildren(); buttons = [];
@@ -87,7 +104,7 @@ function sync() {
     message(state.comparison === 'match' ? `Match found: two ${a.label} resistors. Store the pair to keep it.` : `Different values: ${a.label} and ${b.label}. Remember their trays before covering them.`, state.comparison === 'match' ? 'success' : '');
     $('comparison').textContent = state.comparison === 'match' ? 'Nominal resistance and tolerance match.' : 'These parts have different nominal values or tolerances.';
   } else {
-    message(state.revealed.length ? `Tray ${state.revealed[0] + 1} is revealed. Choose a different covered tray to complete this move.` : 'Choose any two covered trays. Match their nominal resistance and tolerance.');
+    message(state.revealed.length ? `Tray ${state.revealed[0] + 1} is revealed. Choose a different covered tray to complete this move.` : '');
     $('comparison').textContent = 'No timer. Read the values at your own pace.';
   }
   updateSelection();
@@ -149,12 +166,14 @@ $('load-level').addEventListener('click', () => {
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked || level > LEVEL_COUNT) { message(`Choose an unlocked challenge from 1 to ${progress.unlocked.toLocaleString()}.`, 'error'); return; }
   reset(level);
 });
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
+$('tray-view').addEventListener('click', () => setTrayView($('tray-grid-stage').hidden));
 canvas.addEventListener('keydown', event => boardKeys(event));
 $('quality').addEventListener('change', () => { dirty = true; });
 window.addEventListener('resize', () => { dirty = true; });
 window.addEventListener('storage', event => { if (event.key === saveKey) sync(); });
 canvas.addEventListener('stage-lost', () => {
-  scene?.dispose(); scene = null; $('quality').disabled = true; $('graphics-fallback').hidden = false;
+  scene?.dispose(); scene = null; $('quality').disabled = true; useTrayFallback();
   $('graphics-status').textContent = 'Graphics connection lost. The numbered trays keep the same matching game active.';
   canvas.removeAttribute('data-renderer'); canvas.removeAttribute('data-resolution');
 });
@@ -173,7 +192,7 @@ try {
   const { createResistorScene } = await import('./scene.js');
   scene = createResistorScene({ canvas, qualitySelect: $('quality'), status: $('graphics-status'), onPick: index => select(index, true) }); dirty = true;
 } catch {
-  $('quality').disabled = true; $('graphics-fallback').hidden = false;
+  $('quality').disabled = true; useTrayFallback();
   $('graphics-status').textContent = 'WebGL 2 unavailable. Numbered trays use the same components, moves and campaign.';
   canvas.removeAttribute('data-renderer'); canvas.removeAttribute('data-resolution');
 }
