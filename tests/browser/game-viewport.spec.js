@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls, .market-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls, .market-controls, .signal-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -71,18 +71,35 @@ for (let game = 1; game <= 24; game++) {
   });
 }
 
-test('Last Signal keeps its controls toggle and start button independent', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test('Last Signal keeps help independent of the match and accepts touch input', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ baseURL, hasTouch: true, viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  // Seed the match so a random supply pickup cannot alter the first shot's ammo count.
+  await page.clock.setFixedTime(21001);
+  await page.addInitScript(() => { Math.random = () => 0; });
   await page.goto('/game21/');
-  const toggle = page.getByText('Game controls and information', { exact: true });
+  const toggle = page.getByRole('button', { name: 'Help and match information' });
   const start = page.getByRole('button', { name: 'Drop into the basin' });
   const again = page.getByRole('button', { name: 'Drop again' });
   await expect(again).toBeHidden();
   await toggle.press('Space');
+  await expect(page.locator('#studio-help')).toBeVisible();
+  await page.keyboard.press('Escape');
   await expect(start).toBeVisible();
-  await start.click();
+  await start.tap();
   await expect(start).toBeHidden();
-  await expect(page.locator('canvas#arena')).toBeFocused();
+  const arena = page.locator('canvas#arena');
+  await expect(arena).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Move right' })).toBeVisible();
+  const ammo = Number(await page.locator('#ammo').textContent());
+  await arena.tap({ position: { x: 310, y: 508 } });
+  await expect(page.locator('#ammo')).toHaveText(String(ammo - 1));
+  await toggle.tap();
+  await expect(page.locator('#studio-help')).toBeVisible();
+  const clock = await page.locator('#clock').textContent();
+  await page.waitForTimeout(1100);
+  await expect(page.locator('#clock')).toHaveText(clock);
+  await context.close();
 });
 
 test('Cortex Prime and Billionaire Challenge put answers before reference content on phones', async ({ page }) => {
