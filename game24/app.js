@@ -8,10 +8,18 @@ const progress = createCampaign();
 const deckOrder = [4, 5, 2, 3, 0, 1];
 let state, selectedBay = 0, selectedCargo = 0, scene = null, recorded = false;
 let frameId = 0, previousTime = 0, lastUI = 0, dirty = true, stopped = false;
+let noticeTimer;
 const bayButtons = [], cargoButtons = [], ballastInputs = [], ballastButtons = [];
 const number = (value, digits = 2) => value.toFixed(digits);
 
-function message(text) { $('message').textContent = text; }
+function message(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
 function saved() {
   try {
     const value = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null');
@@ -154,7 +162,12 @@ function togglePause() { if (state.phase === 'paused') resumeGame(state); else i
 function automaticPause() { if (state.phase === 'sailing') { pauseGame(state); previousTime = 0; sync(); } }
 $('load-cargo').addEventListener('click', () => command(() => loadCargo(state, selectedCargo, selectedBay)));
 $('unload-cargo').addEventListener('click', () => command(() => unloadCargo(state, state.placement.indexOf(selectedBay))));
-$('launch').addEventListener('click', () => { launch(state); previousTime = 0; sync(); });
+$('launch').addEventListener('click', () => {
+  const launched = launch(state);
+  previousTime = 0;
+  sync();
+  if (!launched) message(state.message);
+});
 $('pause').addEventListener('click', togglePause);
 $('retry').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); retryGame(state); previousTime = 0; sync(); });
 $('load-level').addEventListener('click', () => loadLevel($('level').value));

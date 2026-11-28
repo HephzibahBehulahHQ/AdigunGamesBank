@@ -4,12 +4,21 @@ const SAVE_KEY = 'adigun.campaign.v1.genesis-ark';
 const CARGO = ['Grain stores', 'Fresh-water casks', 'Fodder bundles', 'Animal shelter supplies', 'Repair timbers', 'Family provisions'];
 const FIRST_PLACEMENT = [0, 1, 3, 2, 5, 4];
 
+async function help(page, open) {
+  const dialog = page.locator('#studio-help');
+  if (await dialog.isVisible() === open) return;
+  if (open) await page.locator('#help-open').click();
+  else await page.keyboard.press('Escape');
+}
+
 // Every change below is a player input. No campaign or engine state is injected.
 async function loadFirstVoyage(page, keyboardOnly = false, ballasted = true) {
   for (const [index, bayIndex] of FIRST_PLACEMENT.entries()) {
     const cargo = page.locator(`#cargo-${index}`), bay = page.locator(`#bay-${bayIndex}`);
+    await help(page, false);
     if (keyboardOnly) {
       await cargo.press('Enter');
+      await help(page, true);
       await bay.press('Enter');
       await page.getByRole('button', { name: 'Load selected cargo', exact: true }).press('Enter');
     } else if (index === 0) {
@@ -31,12 +40,14 @@ async function loadFirstVoyage(page, keyboardOnly = false, ballasted = true) {
       await canvas.press('Enter');
     } else {
       await cargo.click();
+      await help(page, true);
       await bay.click();
       await page.getByRole('button', { name: 'Load selected cargo', exact: true }).click();
     }
     await expect(bay).toContainText(CARGO[index]);
     await expect(page.locator('#manifest-count')).toHaveText(`${index + 1} / 6 loaded`);
   }
+  await help(page, true);
   for (const name of ['Aft port (t)', 'Aft starboard (t)']) {
     const tank = page.getByLabel(name, { exact: true });
     await tank.fill(ballasted ? '25' : '0');
@@ -58,7 +69,9 @@ test('Ark renders a real 4K frame and commissions a saved voyage through player 
   const canvas = page.locator('#ark-canvas'), phase = page.locator('#phase');
   await expect(phase).toHaveAttribute('data-phase', 'loading');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
+  await help(page, true);
   await page.locator('#quality').selectOption('4k');
+  await help(page, false);
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await canvas.screenshot({ path: testInfo.outputPath('ark-4k.png') });
   const buffer = await canvas.evaluate(element => {
@@ -71,23 +84,32 @@ test('Ark renders a real 4K frame and commissions a saved voyage through player 
   // SwiftShader verifies rendering, not hardware 4K performance. Run physics at
   // adaptive resolution so a slow software frame does not dominate the trial.
   await page.setViewportSize({ width: 800, height: 900 });
+  await help(page, true);
   await page.locator('#quality').selectOption('auto');
+  await help(page, false);
   await expect(canvas).not.toHaveAttribute('data-resolution', '3840x2160');
-  await page.getByRole('button', { name: 'Launch trial', exact: true }).click();
+  await page.locator('#cargo-0').click();
+  // Center of the highlighted aft-port deck pad in the 800 × 900 studio.
+  await canvas.click({ position: { x: 468, y: 550 } });
+  await expect(page.locator('#bay-0')).toContainText(CARGO[0]);
+  await page.locator('#unload-cargo').click();
+  await expect(page.locator('#bay-0')).toContainText('Empty bay');
+  await page.locator('#launch').click();
   await expect(page.locator('#message')).toContainText('Load all six stores');
   await expect(phase).toHaveAttribute('data-phase', 'loading');
   await expect(page.locator('#next-level')).toBeHidden();
   expect(await page.evaluate(key => localStorage.getItem(key), SAVE_KEY)).toBeNull();
 
   await loadFirstVoyage(page);
-  await page.getByRole('button', { name: 'Launch trial', exact: true }).click();
+  await help(page, false);
+  await page.locator('#launch').click();
   await expect(phase).toHaveAttribute('data-phase', 'sailing');
   await expect(page.locator('#trial-value')).not.toHaveText('0%', { timeout: 15000 });
   await page.getByRole('button', { name: 'Pause trial', exact: true }).click();
   await expect(phase).toHaveAttribute('data-phase', 'paused');
-  const pausedTelemetry = await page.locator('.telemetry').innerText();
+  const pausedTelemetry = await page.locator('.studio-hud').innerText();
   await page.waitForTimeout(700); // A bounded observation that paused physics stays still.
-  expect(await page.locator('.telemetry').innerText()).toBe(pausedTelemetry);
+  expect(await page.locator('.studio-hud').innerText()).toBe(pausedTelemetry);
   await expect(phase).toHaveAttribute('data-phase', 'paused');
   await page.getByRole('button', { name: 'Resume trial', exact: true }).press('Enter');
   await expect(phase).toHaveAttribute('data-phase', 'won', { timeout: 70000 });
@@ -142,7 +164,8 @@ test('Ark keeps visible keyboard focus without WebGL and completes the same voya
     await page.getByLabel(name, { exact: true }).fill('33');
     await page.getByLabel(name, { exact: true }).press('Tab');
   }
-  await page.getByRole('button', { name: 'Launch trial', exact: true }).press('Enter');
+  await help(page, false);
+  await page.locator('#launch').press('Enter');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'lost', { timeout: 10000 });
   await expect(page.locator('#message')).toContainText('freeboard');
   await expect(page.locator('#next-level')).toBeHidden();
@@ -151,11 +174,13 @@ test('Ark keeps visible keyboard focus without WebGL and completes the same voya
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'loading');
   await expect(page.locator('#manifest-count')).toHaveText('6 / 6 loaded');
   await expect(page.locator('#ballast-total')).toContainText('Total: 66 /');
+  await help(page, true);
   for (const [name, value] of [['Aft port (t)','25'], ['Mid port (t)','0'], ['Aft starboard (t)','25']]) {
     await page.getByLabel(name, { exact: true }).fill(value);
     await page.getByLabel(name, { exact: true }).press('Tab');
   }
-  await page.getByRole('button', { name: 'Launch trial', exact: true }).press('Enter');
+  await help(page, false);
+  await page.locator('#launch').press('Enter');
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'won', { timeout: 25000 });
   await expect(page.locator('#trial-value')).toHaveText('100%');
   await expect(page.locator('#save-status')).toContainText('Progress saved on this device.');
@@ -170,7 +195,7 @@ test('Ark commands reflow at 390 and 320 pixels with reduced motion and visible 
   await page.goto('/game24/');
   await expect(page.locator('#manifest-count')).toHaveText('0 / 6 loaded');
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Skip to game controls', exact: true })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Skip to cargo controls', exact: true })).toBeFocused();
   const outline = await page.locator(':focus').evaluate(element => getComputedStyle(element).outlineStyle);
   expect(outline).not.toBe('none');
   for (const width of [390, 320]) {
@@ -178,10 +203,16 @@ test('Ark commands reflow at 390 and 320 pixels with reduced motion and visible 
     const bounds = await page.evaluate(() => ({
       content: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
-      ballastRight: document.querySelector('#ballast-controls').getBoundingClientRect().right
+      ballastRight: document.querySelector('#ballast-controls').getBoundingClientRect().right,
+      uiCoverage: [...document.querySelectorAll('.studio-pill, .studio-help, .studio-actions, .gamesbank-bot-launch')]
+        .reduce((area, element) => {
+          const { width, height } = element.getBoundingClientRect();
+          return area + width * height;
+        }, 0) / (innerWidth * innerHeight),
     }));
     expect(bounds.content).toBeLessThanOrEqual(bounds.viewport + 1);
     expect(bounds.ballastRight).toBeLessThanOrEqual(bounds.viewport + 1);
+    expect(bounds.uiCoverage).toBeLessThanOrEqual(0.15);
     await expect(page.locator('#bay-grid button')).toHaveCount(6);
     await expect(page.getByLabel('Aft port (t)', { exact: true })).toBeEnabled();
     await page.screenshot({ path: testInfo.outputPath(`ark-mobile-${width}.png`), fullPage: true });

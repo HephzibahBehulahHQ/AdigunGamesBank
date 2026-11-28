@@ -1,5 +1,17 @@
 # Adigun Game Bank — current project status
 
+## Universal Game Studio redesign
+
+The permanent studio rules are in `AGENTS.md` and `docs/GAME_TEMPLATE.md`.
+Ark is the first title under redesign on `codex/ark-studio`. The candidate
+replaces the scrolling dashboard with a four-pill HUD, cargo hotbar, direct
+3D deck placement and an on-demand voyage guide. The seven Ark numerical
+tests passed. Windows Chrome verified actual WebGL2 4K, click-to-load and
+unload, launch/retry, saved progression, keyboard play without WebGL, and
+the 15% UI coverage cap at 320px and 390px portrait. Exact-candidate CI and
+production verification are pending. The remaining 23 studios need custom
+design and release checks for their own gameplay.
+
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Single-viewport games
