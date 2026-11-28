@@ -102,10 +102,17 @@ function sync() {
   presets.forEach(button => { button.disabled = !ready || keeping; });
   for (const name of ['dive-position', 'dive-height', 'dive-delay']) $(name).disabled = !ready || !keeping;
   dives.forEach(button => { button.disabled = !ready || !keeping; });
+  $('shot-presets').hidden = keeping || !ready;
+  $('dive-presets').hidden = !keeping || !ready;
+  $('aim-open').hidden = !ready;
+  $('keeper-tell').hidden = !ready;
+  $('shoot').hidden = !ready;
+  $('result-retry').hidden = !finished;
   $('shoot').disabled = !ready;
   $('shoot').textContent = keeping ? 'Face penalty' : 'Shoot penalty';
   $('pause').disabled = !['flight', 'paused'].includes(state.phase);
-  $('pause').textContent = state.phase === 'paused' ? 'Resume flight' : 'Pause flight';
+  $('pause').textContent = state.phase === 'paused' ? '▶' : 'Ⅱ';
+  $('pause').setAttribute('aria-label', state.phase === 'paused' ? 'Resume flight' : 'Pause flight');
   $('next-kick').hidden = state.phase !== 'result';
   $('next-kick').textContent = state.kickIndex === 5 ? 'Take the goalkeeper gloves' : 'Next kick';
   $('next-level').hidden = !(state.phase === 'won' && state.config.level < progress.unlocked);
@@ -156,7 +163,16 @@ presets.forEach(button => button.addEventListener('click', () => {
 $('shoot').addEventListener('click', takePenalty);
 $('pause').addEventListener('click', togglePause);
 $('next-kick').addEventListener('click', prepareNextKick);
-$('restart').addEventListener('click', () => reset());
+const help = $('studio-help');
+$('help-open').addEventListener('click', () => help.showModal());
+$('aim-open').addEventListener('click', () => $('aim-dialog').showModal());
+function retry() {
+  help.close();
+  reset();
+  $('shoot').focus({ preventScroll: true });
+}
+$('restart').addEventListener('click', retry);
+$('result-retry').addEventListener('click', retry);
 $('next-level').addEventListener('click', () => {
   if (state.phase === 'won' && state.config.level < progress.unlocked) { reset(state.config.level + 1); $('shoot').focus({ preventScroll: true }); }
 });
@@ -165,7 +181,7 @@ $('load-level').addEventListener('click', () => {
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked || level > LEVEL_COUNT) { showMessage(`Choose an unlocked challenge from 1 to ${progress.unlocked.toLocaleString()}.`, 'error'); return; }
   reset(level);
   help.close();
-  shoot.focus({ preventScroll: true });
+  $('shoot').focus({ preventScroll: true });
 });
 canvas.addEventListener('keydown', event => {
   if (event.repeat && [' ', 'Escape', 'r', 'R', 'n', 'N'].includes(event.key)) return;
