@@ -1,4 +1,4 @@
-import { THREE, createStage, material, box, cylinder, line3 } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, material, box, cylinder, line3 } from '../shared/three-stage.js';
 import { stageRows } from './stage-data.js';
 
 const COLORS = { violet: '#A78BFA', gold: '#D4AF37', steel: '#637187', navy: '#0B1220', green: '#7DE6AB', muted: '#B9C6DA', red: '#FFB0B8' };
@@ -91,7 +91,12 @@ export function createArenaStage({ canvas, qualitySelect, status, viewSelect, on
     stage.camera.position.set(Math.sin(azimuth) * distance, elevation, Math.cos(azimuth) * distance);
     stage.camera.lookAt(target);
   }
-  function render() { if (!disposed && !lost) { positionCamera(); stage.render(); } }
+  function render() {
+    if (disposed || lost) return;
+    positionCamera();
+    fitStudioCamera(stage.camera, canvas);
+    stage.render();
+  }
   function tick(time) {
     frame = 0;
     if (disposed || lost || !animation || document.hidden) return;

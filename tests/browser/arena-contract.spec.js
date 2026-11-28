@@ -64,6 +64,7 @@ test('AI Arena TEST-ONLY gateway: bound campaign awards, stale-result clearing a
   const saved = () => page.evaluate(key => JSON.parse(localStorage.getItem(key) || 'null'), saveKey(41));
 
   await page.goto('/game22/');
+  await page.locator('#desk-open').click();
   await page.locator('#settings-open').click();
   await page.locator('#api-url').fill(TEST_GATEWAY);
   await page.locator('#settings-form button[type="submit"]').click();

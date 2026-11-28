@@ -9,32 +9,43 @@
   <link rel="stylesheet" href="../shared/tokens.css">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
-<link rel="stylesheet" href="../shared/game-viewport.css">
+<link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#arena">Skip to the arena</a>
-<main class="game-viewport" id="arena">
-<div class="game-play-surface stage-viewport"><canvas id="arena-stage" tabindex="0" role="img" aria-label="Interactive 3D competition stage" aria-describedby="stage-description"></canvas></div>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#play-mode">Jump to play controls</a>
-
-
-  <header class="site-header">
-    <a class="brand" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span class="brand-copy"><span class="brand-name">Adigun Game Bank</span><span>Artificial Intelligence · AI Arena</span></span></a>
-    <nav aria-label="Game navigation"><a href="../">Game library</a><button id="settings-open" type="button">Connection</button><button id="account-open" type="button">Sign in</button></nav>
-  </header>
-
-    <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow">Eight supported providers. One shared prompt.</p><h1 id="page-title">AI <span>ARENA</span></h1><p class="intro">Ask once. Compare real answers, measured response times and a disclosed judging rubric. Decide which answer earns your trust.</p></div>
-      <div class="connection"><span class="status-dot" id="lamp" aria-hidden="true"></span><p id="connection-state" role="status">Secure gateway not connected</p><button id="check-connection" type="button" class="quiet">Check connection</button></div>
-    </section>
-    <dl class="overview" aria-label="Arena availability"><div><dt>Configured contenders</dt><dd id="configured-count">0 <small>/ 8</small></dd></div><div><dt>Judge</dt><dd id="judge-status" class="small-value">Not configured</dd></div><div><dt>Your completed matches</dt><dd id="record-matches">—</dd></div></dl>
+<body>
+<main id="studio" class="game-viewport" aria-label="AI Arena">
+  <div class="game-play-surface stage-viewport">
+    <canvas id="arena-stage" tabindex="0" role="img" aria-label="Interactive 3D competition stage" aria-describedby="stage-description"></canvas>
+  </div>
+  <div class="arena-hud" aria-label="Arena status">
+    <span><i aria-hidden="true">▣</i><span class="sr-only">Configured contenders</span> <b id="configured-count">0 <small>/ 8</small></b></span>
+    <span><i aria-hidden="true">⚑</i><span class="sr-only">Completed matches</span> <b id="record-matches">—</b></span>
+    <span id="studio-state">Offline</span>
+  </div>
+  <button id="help-open" class="arena-help" type="button" aria-label="Help" aria-haspopup="dialog">?</button>
+  <div class="arena-controls">
+    <button id="desk-open" class="primary" type="button" aria-haspopup="dialog">Match desk</button>
+  </div>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog" class="dialog-close"><button type="submit" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">AI Arena</h2>
+    <p id="stage-description">The stage displays configured contenders and returned evidence. Select a cabinet to toggle its contender. Drag to orbit, use arrow keys to rotate, plus or minus to zoom, or Home to reset. Use Match desk for the same lineup and evidence without 3D.</p>
+    <p>Configure a gateway and sign in to compare answers or forecast a campaign result. The match desk displays live results only when providers return them.</p>
+    <a href="../">Game library</a>
+  </dialog>
+  <dialog id="match-desk" aria-labelledby="desk-title">
+    <form method="dialog" class="dialog-close"><button type="submit" aria-label="Close match desk" autofocus>×</button></form>
+    <h1 id="desk-title">Match desk</h1>
+    <nav aria-label="Match desk navigation">
+      <button id="settings-open" type="button">Connection</button><button id="account-open" type="button">Sign in</button>
+      <a href="#lineup-title">Lineup</a><a href="#history-title">Record</a>
+    </nav>
+    <div class="connection"><span class="status-dot" id="lamp" aria-hidden="true"></span><p id="connection-state" role="status">Secure gateway not connected</p><button id="check-connection" type="button" class="quiet">Check connection</button></div>
+    <p>Judge · <b id="judge-status">Not configured</b></p>
     <section class="panel stage-panel" aria-labelledby="stage-title">
       <div class="section-head"><div><p class="eyebrow">Live evidence, spatial view</p><h2 id="stage-title">The competition stage</h2></div><span class="badge" id="stage-state">Awaiting connection</span></div>
       <div class="stage-toolbar"><div><label for="arena-quality">Rendering quality</label><select id="arena-quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></div><div><label for="arena-view">Camera</label><select id="arena-view"><option value="overview">Overview</option><option value="front">Front</option><option value="plan">Elevated</option></select></div><p id="render-status" class="note" role="status">Loading the 3D renderer…</p></div>
 
-      <p id="stage-description" class="note">Eight original scoreboard cabinets show only configured providers and returned evidence. Drag to orbit; use arrow keys, + / − to zoom, or Home to reset. Select a configured cabinet to toggle its contender. The lineup and evidence table provide the same controls and information without 3D.</p>
+
       <details class="stage-evidence"><summary>Stage evidence and provider states</summary><div class="table-wrap"><table><caption>Current request or saved match evidence; no scores are inferred</caption><thead><tr><th scope="col">Provider</th><th scope="col">State</th><th scope="col">Score / 100</th><th scope="col">Latency</th></tr></thead><tbody id="stage-ledger"></tbody></table></div></details>
     </section>
     <div class="layout">
@@ -72,10 +83,7 @@
         <section class="panel" aria-labelledby="history-title"><div class="section-head"><h2 id="history-title">Your record</h2><button id="history-refresh" class="quiet" type="button">Refresh</button></div><p>Answers you rated 4–5: <strong id="record-strong">—</strong></p><div id="history"><p class="note">Sign in to view your match history.</p></div></section>
       </aside>
     </div>
-    <footer class="site-footer"><p>© <span id="year">2026</span> Hephzibah Behulah · Adigun Game Bank</p><p><a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/tree/main/game22">Game documentation</a> · <a href="https://github.com/HephzibahBehulahHQ/AdigunGamesBank/issues">Report a problem</a></p><p>Browser game · 3D requires WebGL2; the renderer reports its actual drawing buffer. Live competition requires configured providers and a secure gateway. Native console releases are not available.</p></footer>
-
-</div>
-</details>
+    </dialog>
 </main>
   <dialog id="auth-dialog" aria-labelledby="auth-title"><form method="dialog" class="dialog-close"><button type="submit" aria-label="Close sign-in dialog">×</button></form><p class="eyebrow">Player access</p><h2 id="auth-title">Sign in</h2><form id="auth-form"><label for="auth-email">Email</label><input type="email" id="auth-email" autocomplete="email" required><div id="name-fields" hidden><label for="auth-name">Display name</label><input id="auth-name" minlength="2" maxlength="80" autocomplete="nickname"></div><label for="auth-password">Password</label><input type="password" id="auth-password" maxlength="128" required><p id="auth-error" class="error" role="alert"></p><button id="auth-submit" class="primary" type="submit">Sign in</button></form><button id="auth-switch" class="quiet" type="button">Create account</button></dialog>
   <dialog id="settings-dialog" aria-labelledby="settings-title"><form method="dialog" class="dialog-close"><button type="submit" aria-label="Close connection dialog">×</button></form><p class="eyebrow">Secure connection</p><h2 id="settings-title">Your AI gateway</h2><p>Use the HTTPS origin of your deployed Game Bank API. Provider keys belong on that server, never in this form.</p><form id="settings-form"><label for="api-url">API origin</label><input type="url" id="api-url" placeholder="https://api.example.com" autocomplete="url" required><p class="note">Local development also accepts http://localhost with an optional port. Changing gateway signs you out.</p><p id="settings-error" class="error" role="alert"></p><button class="primary" type="submit">Save and check</button></form></dialog>
