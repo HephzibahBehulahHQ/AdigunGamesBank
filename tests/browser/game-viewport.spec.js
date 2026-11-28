@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -196,4 +196,25 @@ test('Debate Arena validates arguments, reviews three rounds and starts a new de
   await expect(page.locator('#finish')).toBeVisible();
   await page.getByRole('button', { name: 'Play again' }).click();
   await expect(page.getByRole('button', { name: 'Begin debate' })).toBeFocused();
+});
+
+test('Casefile interviews a suspect, preserves literal notes and resolves an accusation', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game19/');
+  await page.getByRole('button', { name: 'Open case' }).press('Enter');
+  await page.getByRole('button', { name: /Interview Lena Cho/ }).click();
+  await page.getByRole('textbox', { name: 'Your question' }).fill('Where was the <em>service key</em>?');
+  await page.getByRole('button', { name: 'Ask', exact: true }).click();
+  await expect(page.locator('#left')).toHaveText('9');
+  await page.getByRole('button', { name: 'Case notes' }).click();
+  await expect(page.locator('#log')).toContainText('<em>service key</em>');
+  await expect(page.locator('#log em')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Accuse', exact: true }).click();
+  await page.getByLabel('Suspect', { exact: true }).selectOption('lena');
+  await page.getByRole('button', { name: 'Confirm accusation' }).click();
+  await expect(page.locator('#end-title')).toHaveText('Case solved');
+  await page.getByRole('button', { name: 'Next case', exact: true }).click();
+  await expect(page.locator('#case-title')).toHaveText('Blackout at Meridian');
+  await expect(page.locator('#left')).toHaveText('10');
 });
