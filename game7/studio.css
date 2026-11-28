@@ -33,6 +33,7 @@
 }
 
 @media (max-width: 360px) {
-  .register-bit-strip .bit-button { width: 37px; min-width: 37px; height: 38px; min-height: 38px; }
-  .register-actions button { min-height: 36px; }
+  .register-pills > span { padding: 2px 3px; }
+  .register-actions button { min-height: 34px; padding-inline: 4px; }
+  #studio:has(#phase[data-phase='working']) #retry { display: none; }
 }

@@ -139,6 +139,7 @@ $('start').addEventListener('click', () => { startGame(state); sync(); bits[sele
 $('help-open').addEventListener('click', () => $('studio-help').showModal());
 $('pause').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); else pauseGame(state); sync(); });
 $('retry').addEventListener('click', () => { state = retryGame(state); selectedBit = state.config.width - 1; recorded = false; buildControls(); sync(); $('start').focus(); });
+$('retry-from-help').addEventListener('click', () => { $('studio-help').close(); $('retry').click(); });
 $('next-level').addEventListener('click', () => { loadMission(state.config.level + 1); $('start').focus(); });
 $('load-level').addEventListener('click', () => loadMission($('level').value));
 $('level').addEventListener('keydown', event => { if (event.key === 'Enter') loadMission($('level').value); });
