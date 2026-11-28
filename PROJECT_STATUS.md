@@ -38,7 +38,11 @@ the production manifest for `34239b7de04c74024c643b276723e54c34aa8254`
 ([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46184291783)).
 Binary Flash (#18) passed its seven focused Windows Chrome checks and the
 [GitHub rerun](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46178264600).
-It merged at `7b193373b9266e341118c68e074c5cbde8d277d8`. Production verification is pending.
+Binary Flash merged at `7b193373b9266e341118c68e074c5cbde8d277d8`, passed main
+verification, and its HTML, CSS and script matched the live build manifest
+([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46186031754)).
+Fuse Box (#19) passed candidate verification and merged at
+`27eca355d82958638d910503b11ecb4d983c50bd`. Its production verification is pending.
 Ark's narrow-phone cargo dock correction passed candidate verification in #35.
 On the cumulative candidate, Windows Chrome passed all 34 viewport and game-flow
 cases before the narrow-screen corrections. The affected layouts passed targeted
