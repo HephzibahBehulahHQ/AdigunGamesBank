@@ -48,20 +48,27 @@ test('Resistor Match renders actual 4K components, compares visible codes and cl
   await expect(page.locator('.component-card')).toHaveCount(8);
   await expect(page.locator('.card-pattern')).toHaveCount(0);
   expect(await page.locator('.card-value').allTextContents()).toEqual(Array(8).fill('Reveal component'));
+  await page.locator('#tray-view').click();
   await tray(page, 0).click(); await tray(page, 1).click();
   await expect(phase(page)).toHaveAttribute('data-phase', 'compare');
   await expect(page.locator('#inspection-a')).toContainText('10 Ω ±5%');
   await expect(page.locator('#inspection-b')).toContainText('100 Ω ±5%');
   await expect(tray(page, 0).locator('.card-pattern')).toHaveText('1 · 0 · ×1 · ±5%');
   await expect(tray(page, 1).locator('.card-colors')).toHaveText('Brown · Black · Brown · Gold');
+  await page.locator('#tray-view').click();
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await page.waitForTimeout(500); // Capture the opened opaque covers after their transition.
   await canvas.screenshot({ path: testInfo.outputPath('resistor-match-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('resistor-match-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
+  await page.keyboard.press('Escape');
+  await page.locator('#tray-view').click();
   await page.setViewportSize({ width: 320, height: 900 });
   const dimensions = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(dimensions[0]).toBeLessThanOrEqual(dimensions[1] + 1);
@@ -80,9 +87,9 @@ test('Resistor Match renders actual 4K components, compares visible codes and cl
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY)).toEqual({ version: 1, completed: 1, unlocked: 2 });
   await page.screenshot({ path: testInfo.outputPath('resistor-match-win.png'), fullPage: true });
   await page.getByRole('button', { name: 'Next challenge →', exact: true }).click();
-  await expect(page.getByLabel('Challenge', { exact: true })).toHaveValue('2');
+  await expect(page.locator('#level')).toHaveValue('2');
   await page.reload();
-  await expect(page.getByLabel('Challenge', { exact: true })).toHaveValue('2');
+  await expect(page.locator('#level')).toHaveValue('2');
   await expect(page.locator('#unlock-status')).toContainText('Challenge 2 of 10,000 unlocked');
   await expect(page.locator('#moves')).toHaveText('0 / 14');
   expect(errors).toEqual([]);
@@ -133,6 +140,7 @@ test('Resistor Match keeps visible keyboard controls without WebGL, loses at its
 
 test('Resistor Match keeps visible keyboard focus aligned while skipping unavailable trays without crossing grid boundaries', async ({ page }) => {
   await removeGraphics(page); await page.goto('/game5/');
+  await expect(page.locator('#tray-grid-stage')).toBeVisible();
   // Create disabled trays through a real match in the introductory layout.
   await tray(page, 1).press('Enter'); await tray(page, 4).press('Enter');
   await expect(page.locator('#comparison')).toHaveText('Nominal resistance and tolerance match.');
