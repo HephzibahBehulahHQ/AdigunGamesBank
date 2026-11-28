@@ -31,3 +31,10 @@
   .fuse-branch-view { bottom: 177px; }
   .fuse-orders button { padding-inline: 5px; font-size: 12px; }
 }
+
+@media (max-width: 360px) {
+  .fuse-loads { gap: 3px; }
+  .fuse-loads button { width: 36px; height: 40px; }
+  .fuse-orders { gap: 3px; }
+  .fuse-orders button { min-width: 35px; }
+}
