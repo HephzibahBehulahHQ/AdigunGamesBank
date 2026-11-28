@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -150,4 +150,26 @@ test('Billionaire Challenge can bank during feedback and restart without stale a
   await expect(page.locator('#answers button:disabled')).toHaveCount(2);
   await page.reload();
   await expect(page.locator('#best')).toHaveText('£100');
+});
+
+test('APEX Strategy applies a driver setup, charts a full race and restarts', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game16/');
+  const chart = page.locator('#chart');
+  await expect.poll(() => chart.boundingBox()).toEqual({ x: 0, y: 0, width: 390, height: 844 });
+  await page.getByRole('button', { name: 'Driver strategy' }).click();
+  await page.locator('#tyre-hb1').selectOption('hard');
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Start race' }).click();
+  await expect(page.locator('#lap-label')).toHaveText('1/10');
+  await page.getByRole('button', { name: 'Race data' }).click();
+  await expect(page.locator('#standings tr').filter({ hasText: /HARD/ }).first()).toBeVisible();
+  await page.keyboard.press('Escape');
+  for (let lap = 2; lap <= 10; lap++) {
+    await page.getByRole('button', { name: 'Run lap ' + lap, exact: true }).click();
+  }
+  await expect(page.locator('#overlay')).toBeVisible();
+  await page.getByRole('button', { name: 'Race again' }).click();
+  await expect(page.locator('#lap-label')).toHaveText('0/10');
+  await expect(page.getByRole('button', { name: 'Start race' })).toBeVisible();
 });
