@@ -10,10 +10,16 @@ let previousTime = 0, previousUI = 0, previousRender = 0, frame = 0, suspended =
 const keys = new Set(), held = new Set(), buttonFor = new Map(), resetButtons = [];
 const number = (value, precision = 1) => value.toFixed(precision);
 const phases = { ready: 'READY', running: 'ON TRACK', paused: 'PAUSED', won: 'QUALIFIED', lost: 'TIME EXPIRED' };
-let lastMessage = '';
+let lastMessage = '', noticeTimer;
 
 function message(text) {
-  if (text !== lastMessage) { $('message').textContent = text; lastMessage = text; }
+  if (text === lastMessage) return;
+  const notice = $('message');
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+  lastMessage = text;
 }
 function progressText() {
   if (!campaign.completed) return 'Progress saves on this device after you qualify.';
@@ -77,16 +83,18 @@ function sync() {
   if (state.phase === 'won' && !recorded) { campaign.complete(state.config.level); recorded = true; clearHeld(); }
   const active = state.phase === 'running', paused = state.phase === 'paused', step = $('drive-mode').value === 'step';
   $('phase').textContent = phases[state.phase]; $('phase').dataset.phase = state.phase;
-  $('start').disabled = state.phase !== 'ready'; $('pause').disabled = !active && !paused;
-  $('pause').textContent = paused ? 'Resume race' : 'Pause race';
-  $('recover').disabled = !active && !paused; $('step').disabled = !active;
+  $('start').disabled = $('start').hidden = state.phase !== 'ready'; $('pause').disabled = !active && !paused;
+  $('pause').textContent = paused ? '▶' : 'Ⅱ';
+  const pauseLabel = paused ? 'Resume race' : 'Pause race';
+  $('pause').setAttribute('aria-label', pauseLabel); $('pause').title = pauseLabel;
+  $('recover').disabled = $('recover').hidden = !active && !paused; $('step').disabled = !active;
   $('step').hidden = !step;
+  document.querySelector('.apex-step-panel').hidden = !step && !paused;
   $('next-level').hidden = state.phase !== 'won' || state.config.level === LEVEL_COUNT;
   $('level').max = String(campaign.unlocked);
   $('unlock-status').textContent = campaign.mastered ? 'All 10,000 races qualified' : `Race ${campaign.unlocked.toLocaleString()} of ${LEVEL_COUNT.toLocaleString()} unlocked`;
   $('save-status').textContent = progressText();
-  $('message').className = `message ${state.phase === 'won' ? 'success' : state.phase === 'lost' || state.sectorInvalid ? 'error' : ''}`;
-  message(state.message); telemetry(); dirty = true;
+  message(state.phase === 'ready' ? '' : state.message); telemetry(); dirty = true;
 }
 function setCircuit(requested) {
   const value = Number(requested);
@@ -177,19 +185,28 @@ window.addEventListener('pageshow', event => {
   if (event.persisted) { suspended = false; previousTime = 0; dirty = true; frame = requestAnimationFrame(animate); }
 });
 
+$('help-open').addEventListener('click', () => {
+  backgroundPause();
+  $('studio-help').showModal();
+});
+function showTrackFallback() {
+  const fallback = $('graphics-fallback');
+  fallback.append(document.querySelector('.map-panel'));
+  fallback.hidden = false;
+}
 setCircuit(campaign.unlocked); configureCamera(); frame = requestAnimationFrame(animate);
 try {
   const { createCircuitScene } = await import('./scene.js');
   scene = createCircuitScene({ canvas, qualitySelect: $('quality'), status: $('graphics-status') });
   configureCamera(); dirty = true;
 } catch {
-  $('graphics-fallback').hidden = false; $('quality').disabled = true; $('camera').disabled = true;
+  showTrackFallback(); $('quality').disabled = true; $('camera').disabled = true;
   $('drive-mode').value = 'step';
   $('graphics-status').textContent = 'WebGL 2 unavailable. Step driving and live telemetry remain available.';
   if (state.phase === 'running') pauseRace(state);
   sync();
 }
 canvas.addEventListener('stage-lost', () => {
-  backgroundPause(); $('graphics-fallback').hidden = false; $('quality').disabled = true;
+  backgroundPause(); showTrackFallback(); $('quality').disabled = true;
   $('drive-mode').value = 'step'; $('graphics-status').textContent = 'Graphics connection lost. Resume with step driving or reload graphics.'; sync();
 });

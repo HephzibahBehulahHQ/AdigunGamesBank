@@ -1,0 +1,35 @@
+#studio { background: #111f2e; }
+#studio > .game-play-surface { z-index: 1; }
+.apex-readouts, .apex-tools, .apex-controls { position: absolute; z-index: 2; pointer-events: none; }
+.apex-readouts, .apex-tools, .apex-orders, .apex-steer, .apex-pedals { display: flex; align-items: center; gap: 5px; }
+.apex-readouts { inset: 16px auto auto 16px; }
+.apex-tools { inset: 16px 16px auto auto; }
+.apex-readouts > span, .apex-tools button, .apex-controls button, .apex-step-panel { border: 1px solid #668496; border-radius: 9px; background: rgb(11 29 44 / 94%); color: #edfaff; }
+.apex-readouts > span { padding: 5px 7px; font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.apex-readouts i { color: #86e6f0; font-style: normal; }
+.apex-tools button, .apex-controls button { min-width: 44px; min-height: 44px; padding: 4px 7px; }
+.apex-controls { inset: auto 12px 80px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; }
+.apex-controls #message:not(.sr-only) { grid-column: 1 / -1; width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; border-radius: 6px; background: #143247; color: #edfaff; font-size: 12px; }
+.apex-orders { grid-area: auto / 2; justify-content: center; }
+.apex-orders :is(#start, #step, #next-level) { background: #9ce3ef; border-color: #bdeef6; color: #102733; }
+.apex-steer { grid-area: auto / 1; grid-row-end: span 1; justify-self: start; }
+.apex-pedals { grid-area: auto / 3; justify-self: end; }
+.apex-steer, .apex-pedals, .apex-orders { grid-row: 3; }
+.apex-pedals button, .apex-steer button { touch-action: none; }
+.apex-step-panel { grid-column: 1 / -1; grid-row: 2; padding: 4px 9px; width: min(96%, 350px); margin: 0 auto 5px; pointer-events: auto; }
+.apex-step-panel .pedal-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.apex-step-panel label { margin: 0; }
+.apex-step-panel .hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+#studio-help { z-index: 20; width: min(660px, calc(100% - 24px)); max-height: calc(100dvh - 24px); background: #122738; color: #edfaff; border: 1px solid #668496; border-radius: 14px; }
+#studio-help::backdrop { background: #08111acc; }
+.apex-close { float: inline-end; }
+#studio .graphics-fallback { padding: 12px; }
+#studio .graphics-fallback .map-panel { width: min(85%, 490px); }
+@media (max-width: 650px) {
+  .apex-readouts { inset: 8px auto auto 6px; gap: 2px; }
+  .apex-readouts > span { padding: 3px; font-size: 10px; }
+  .apex-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .apex-controls { row-gap: 4px; }
+  .apex-orders { grid-row: 3; grid-column: 1 / -1; }
+  .apex-steer, .apex-pedals { grid-row: 4; }
+}
