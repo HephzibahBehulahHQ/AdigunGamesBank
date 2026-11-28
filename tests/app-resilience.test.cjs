@@ -42,6 +42,8 @@ async function loadApp(game, { writeFails = false, readFails = false, completed 
     document: { getElementById: get, createElement: node, body: node(), addEventListener() {}, hidden: false },
     matchMedia: () => ({ matches: false, addEventListener() {} }),
     requestAnimationFrame: () => 1, cancelAnimationFrame() {},
+    // Timeouts only dismiss notices. Persistence assertions observe the notice before dismissal.
+    setTimeout: () => 1, clearTimeout() {},
     THREE: { Raycaster: class {}, Vector2: class {} },
     createStage: () => ({ render() {}, dispose() {} }),
     buildFootballScene: () => ({ update() {}, playerRoots: [] }),
