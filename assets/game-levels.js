@@ -25,7 +25,7 @@
     } catch {}
   };
   render();
-  document.body.prepend(bar);
+  if (!document.querySelector('#studio')) document.body.prepend(bar);
   window.HBGameLevels = {
     max,
     get current() { return level; },

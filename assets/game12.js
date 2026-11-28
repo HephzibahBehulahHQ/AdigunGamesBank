@@ -4,6 +4,15 @@
   const answer = document.getElementById("answer"), message = document.getElementById("msg");
   const title = document.getElementById("modeTitle"), instruction = document.getElementById("instruction");
   const submit = document.getElementById("submit");
+  const guide = document.getElementById("studio-help");
+  document.getElementById("help-open").addEventListener("click", () => guide.showModal());
+  let noticeTimer;
+  function showMessage(value) {
+    clearTimeout(noticeTimer);
+    message.textContent = value;
+    message.classList.toggle("studio-sr", !value);
+    if (value) noticeTimer = setTimeout(() => message.classList.add("studio-sr"), 3400);
+  }
   let mode = "sequence", solution = 0, streak = 0, solved = 0, seed = 0, pending = false;
   function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
   function generate() {
@@ -13,9 +22,9 @@
     pending = window.HBGameLevels.isMastered;
     submit.disabled = answer.disabled = pending;
     modes.forEach(button => { button.disabled = pending; });
-    if (pending) { message.textContent = "Final practice stage cleared."; return; }
+    if (pending) { showMessage("Final practice stage cleared."); return; }
     answer.value = "";
-    message.textContent = "A correct answer unlocks the next practice stage.";
+    showMessage("");
     message.style.color = "#5af3ef";
     if (mode === "sequence") {
       title.textContent = "SEQUENCE ENGINE";
@@ -54,7 +63,7 @@
   submit.onclick = () => {
     if (pending) return;
     if (!answer.value.trim() || !Number.isFinite(Number(answer.value))) {
-      message.textContent = "Enter a number before locking your answer.";
+      showMessage("Enter a number before locking your answer.");
       return;
     }
     if (Number(answer.value) === solution) {
@@ -67,13 +76,13 @@
       document.getElementById("solved").textContent = solved;
       document.getElementById("streak").textContent = streak;
       levelEl.textContent = next.toLocaleString();
-      message.textContent = window.HBGameLevels.isMastered ? "Final practice stage cleared." : "Correct. Stage " + next + " unlocked.";
+      showMessage(window.HBGameLevels.isMastered ? "Final practice stage cleared." : "Correct. Stage " + next + " unlocked.");
       message.style.color = "#b1ffcf";
       if (!window.HBGameLevels.isMastered) setTimeout(generate, 700);
     } else {
       streak = 0;
       document.getElementById("streak").textContent = streak;
-      message.textContent = "Not yet. Re-check the rule and try again; the stage stays open.";
+      showMessage("Try again.");
       message.style.color = "#ff8293";
     }
   };
