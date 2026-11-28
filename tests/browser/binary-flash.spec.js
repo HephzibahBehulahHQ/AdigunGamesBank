@@ -32,7 +32,9 @@ test('Binary Flash renders a real 4K register and saves an ordered packet throug
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame'))).toBeGreaterThan(0);
   const previous = Number(await canvas.getAttribute('data-frame'));
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame')), { timeout: 20000 }).toBeGreaterThan(previous);
   await canvas.screenshot({ path: testInfo.outputPath('binary-flash-4k.png') });
@@ -43,7 +45,9 @@ test('Binary Flash renders a real 4K register and saves an ordered packet throug
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('binary-flash-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
   await page.setViewportSize({ width: 800, height: 900 });
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.locator('#start').click();
   await expect(page.locator('#bit-3')).toBeFocused();
 

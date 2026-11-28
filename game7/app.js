@@ -5,6 +5,22 @@ import { validCampaignSave } from '../shared/progression.js';
 const $ = id => document.getElementById(id), canvas = $('binary-canvas'), campaign = createCampaign();
 let state = createGame(campaign.unlocked), selectedBit = state.config.width - 1, scene = null, frame = 0, recorded = false, suspended = false;
 const bits = [], receipts = [];
+let noticeTimer;
+function showNotice(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
+function revealFallback() {
+  const fallback = $('graphics-fallback');
+  fallback.append($('register-word'));
+  fallback.hidden = false;
+  $('quality').disabled = true;
+  $('view').disabled = true;
+}
 const phaseLabels = { ready: 'READY', working: 'LINK OPEN', paused: 'PAUSED', won: 'COMMISSIONED', lost: 'LINK FAILED' };
 
 function draw() {
@@ -47,7 +63,7 @@ function buildControls() {
   for (let bit = state.config.width - 1; bit >= 0; bit--) {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'bit-button'; button.id = `bit-${bit}`;
     const label = document.createElement('span'), value = document.createElement('strong'), weight = document.createElement('small');
-    label.textContent = `Bit ${bit}`; button.append(label, value, weight);
+    label.textContent = `B${bit}`; weight.className = 'sr-only'; button.append(label, value, weight);
     button.addEventListener('click', () => act({ type: 'bit', bit }));
     button.addEventListener('focus', () => { if (selectedBit !== bit) selectBit(bit); });
     button.addEventListener('keydown', event => { if (event.key.startsWith('Arrow')) { event.preventDefault(); moveSelection(event.key, true); } });
@@ -85,13 +101,17 @@ function sync() {
   $('frame-number').textContent = state.phase === 'won' ? 'Packet complete' : `Frame ${state.frameIndex + 1} of ${c.frames.length}`;
   $('target-value').textContent = String(target.target); $('frame-mode').textContent = `${target.signed ? 'Signed' : 'Unsigned'} · ${c.width} bits`;
   $('parity-rule').textContent = `${target.parity === 'even' ? 'Even' : 'Odd'} parity: total ones, including the parity bit, must be ${target.parity}.`;
-  $('parity').textContent = `Parity bit: ${state.parityBit}`; $('parity').setAttribute('aria-pressed', String(Boolean(state.parityBit)));
-  $('serial-data').textContent = `Serial input: ${state.serialBit}`; $('serial-data').setAttribute('aria-pressed', String(Boolean(state.serialBit)));
+  $('parity').textContent = `P${state.parityBit}`; $('parity').setAttribute('aria-label', `Parity bit P${state.parityBit}`); $('parity').setAttribute('aria-pressed', String(Boolean(state.parityBit)));
+  $('serial-data').textContent = `S${state.serialBit}`; $('serial-data').setAttribute('aria-label', `Serial input S${state.serialBit}`); $('serial-data').setAttribute('aria-pressed', String(Boolean(state.serialBit)));
   const ones = oneCount(state.word, c.width);
   $('parity-state').textContent = `Data ones: ${ones}. Total with parity: ${ones + state.parityBit} (${(ones + state.parityBit) % 2 ? 'odd' : 'even'}).`;
   for (const id of ['latch', 'serial-data', 'parity', 'clock', 'clear', 'shift-left', 'shift-right', 'rotate-left', 'rotate-right', 'transmit']) $(id).disabled = !working;
-  $('start').disabled = state.phase !== 'ready'; $('pause').disabled = !working && state.phase !== 'paused';
-  $('pause').textContent = state.phase === 'paused' ? 'Resume mission' : 'Pause mission';
+  $('start').disabled = $('start').hidden = state.phase !== 'ready';
+  $('input-controls').hidden = !working && state.phase !== 'paused';
+  for (const id of ['latch','serial-data','clock','parity','transmit']) $(id).hidden = !working && state.phase !== 'paused'; $('pause').disabled = !working && state.phase !== 'paused';
+  $('pause').textContent = state.phase === 'paused' ? '▶' : 'Ⅱ';
+  const label = state.phase === 'paused' ? 'Resume mission' : 'Pause mission';
+  $('pause').setAttribute('aria-label', label); $('pause').title = label;
   $('next-level').hidden = state.phase !== 'won' || c.level === LEVEL_COUNT;
   receipts.forEach((item, index) => {
     const received = index < state.received.length;
@@ -102,13 +122,13 @@ function sync() {
     const li = document.createElement('li'); li.textContent = item.operation === null ? item.action : `${item.operation}. ${item.action} → ${binaryWord(item.word, c.width)}`; return li;
   }));
   $('level').max = String(campaign.unlocked); $('unlock-status').textContent = campaign.mastered ? 'All 10,000 packets commissioned' : `Mission ${campaign.unlocked.toLocaleString()} of ${LEVEL_COUNT.toLocaleString()} unlocked`;
-  $('save-status').textContent = savedText(); $('message').textContent = state.message;
-  $('message').className = `message ${state.phase === 'won' ? 'success' : state.phase === 'lost' ? 'error' : ''}`;
+  $('save-status').textContent = savedText();
+  showNotice(state.phase === 'ready' ? '' : state.message);
   draw();
 }
 function loadMission(requested) {
   const level = Number(requested);
-  if (!Number.isInteger(level) || level < 1 || level > campaign.unlocked) { $('level').value = String(state.config.level); $('message').textContent = 'Commission the current unlocked packet before loading a later mission.'; return; }
+  if (!Number.isInteger(level) || level < 1 || level > campaign.unlocked) { $('level').value = String(state.config.level); showNotice('Commission the current unlocked packet before loading a later mission.'); return; }
   state = createGame(level); selectedBit = state.config.width - 1; recorded = false;
   $('level').value = String(level); $('tier').textContent = state.config.tier; $('mission-title').textContent = state.config.title;
   $('mission-brief').textContent = state.config.description; $('word-width').textContent = `${state.config.width}-bit register`; $('packet-size').textContent = `${state.config.frames.length} ordered frames`;
@@ -116,6 +136,7 @@ function loadMission(requested) {
 }
 for (const [id, type] of [['latch', 'latch'], ['serial-data', 'serial'], ['parity', 'parity'], ['clock', 'clock'], ['transmit', 'transmit'], ['clear', 'clear'], ['shift-left', 'shift-left'], ['shift-right', 'shift-right'], ['rotate-left', 'rotate-left'], ['rotate-right', 'rotate-right']]) $(id).addEventListener('click', () => act({ type }));
 $('start').addEventListener('click', () => { startGame(state); sync(); bits[selectedBit].button.focus(); });
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
 $('pause').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); else pauseGame(state); sync(); });
 $('retry').addEventListener('click', () => { state = retryGame(state); selectedBit = state.config.width - 1; recorded = false; buildControls(); sync(); $('start').focus(); });
 $('next-level').addEventListener('click', () => { loadMission(state.config.level + 1); $('start').focus(); });
@@ -131,7 +152,7 @@ canvas.addEventListener('keydown', event => {
 });
 canvas.addEventListener('stage-lost', () => {
   if (state.phase === 'working') pauseGame(state);
-  $('graphics-fallback').hidden = false; $('quality').disabled = true;
+  revealFallback();
   $('graphics-status').textContent = 'Graphics connection lost. Continue with the register controls or reload graphics.'; sync();
 });
 const resize = new ResizeObserver(draw); resize.observe(canvas);
@@ -144,6 +165,6 @@ try {
   scene = createRegisterScene({ canvas, qualitySelect: $('quality'), status: $('graphics-status'), action: act });
   scene.setView($('view').value); draw();
 } catch {
-  $('graphics-fallback').hidden = false; $('quality').disabled = true; $('view').disabled = true;
+  revealFallback();
   $('graphics-status').textContent = 'WebGL 2 unavailable. The register controls provide the same complete mission.';
 }
