@@ -1,4 +1,4 @@
-import { THREE, createStage, material, box, cylinder, line3 } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, material, box, cylinder, line3 } from '../shared/three-stage.js';
 import { binaryWord, decodeWord } from './campaign.js';
 import { currentFrame } from './engine.js';
 
@@ -103,7 +103,9 @@ export function createRegisterScene({ canvas, qualitySelect, status, action }) {
     const span = Math.min(state.config.width, 8) * 1.35 + 4, depth = 10 + (Math.ceil(state.config.width / 8) - 1) * 4;
     if (view === 'overhead') stage.camera.position.set(0, Math.max(span, depth) * 1.8, 0.01);
     else stage.camera.position.set(span * 0.72, Math.max(span, depth) * 1.28, depth * 1.65);
-    stage.camera.lookAt(0, 0.3, 0.25); stage.render(); canvas.dataset.frame = String((Number(canvas.dataset.frame) || 0) + 1);
+    stage.camera.lookAt(0, 0.3, 0.25);
+    fitStudioCamera(stage.camera, canvas);
+    stage.render(); canvas.dataset.frame = String((Number(canvas.dataset.frame) || 0) + 1);
   }
   const onPointer = event => {
     if (!rig || event.button > 0) return;
