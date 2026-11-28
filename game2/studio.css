@@ -1,0 +1,28 @@
+#studio { background: #0b1830; }
+#studio > .game-play-surface { z-index: 1; }
+.circuit-readouts, .circuit-tools, .circuit-controls { position: absolute; z-index: 2; pointer-events: none; }
+.circuit-readouts, .circuit-tools, .circuit-actions { display: flex; align-items: center; gap: 5px; }
+.circuit-readouts { inset: 16px auto auto 16px; }
+.circuit-tools { inset: 16px 16px auto auto; }
+.circuit-readouts > span, .circuit-tools button, .circuit-actions button { border: 1px solid #64819b; border-radius: 9px; background: rgb(12 31 49 / 93%); color: #e8f5ff; white-space: nowrap; }
+.circuit-readouts > span { padding: 5px 8px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.circuit-readouts i { color: #ffc67a; font-style: normal; }
+.circuit-tools button, .circuit-actions button { min-width: 40px; min-height: 40px; padding: 4px 8px; }
+.circuit-tools button[aria-pressed='true'] { border-color: #ffc67a; }
+.circuit-controls { inset: auto 16px 16px; }
+.circuit-actions { width: fit-content; margin: auto; }
+.circuit-actions .circuit-primary { background: #f0c38a; color: #251b11; border-color: #ffe3b9; }
+.circuit-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; border-radius: 6px; background: #142b3e; color: #effaff; font-size: 12px; }
+.circuit-board-mode { position: absolute; inset: 58px 8px 90px; display: grid; place-items: center; background: #0a1624; }
+.circuit-board-mode .board-scroll { width: min(100%, 600px); max-height: 100%; }
+.circuit-board-mode .terminal-cell { min-height: 62px; }
+#studio-help { z-index: 20; width: min(640px, calc(100% - 24px)); max-height: calc(100dvh - 24px); border: 1px solid #64819b; border-radius: 14px; background: #102435; color: #edf7ff; }
+#studio-help::backdrop { background: #071019cc; }
+.circuit-close { float: inline-end; }
+@media (max-width: 560px) {
+  .circuit-readouts { inset: 10px auto auto 6px; gap: 2px; }
+  .circuit-readouts > span { padding: 4px; font-size: 10px; }
+  .circuit-tools { inset: 8px 6px auto auto; gap: 3px; }
+  .circuit-controls { bottom: 77px; }
+  .circuit-board-mode { bottom: 127px; }
+}

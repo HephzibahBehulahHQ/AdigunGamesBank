@@ -4,6 +4,28 @@ import { validCampaignSave } from '../shared/progression.js';
 
 const $ = id => document.getElementById(id), canvas = $('circuit-canvas'), campaign = createCampaign();
 let state = createGame(campaign.unlocked), selected = 0, scene = null, frame = 0, recorded = false, suspended = false;
+let noticeTimer;
+function showNotice(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
+function setBoardMode(enabled) {
+  $('routing-controls').hidden = !enabled;
+  $('toggle-board').setAttribute('aria-pressed', String(enabled));
+  (enabled ? cells[selected]?.button : canvas)?.focus();
+}
+function useBoardFallback() {
+  $('graphics-fallback').hidden = false;
+  $('quality').disabled = true;
+  $('view').disabled = true;
+  $('toggle-board').disabled = true;
+  $('routing-controls').hidden = false;
+  $('toggle-board').setAttribute('aria-pressed', 'true');
+}
 const cells = [], loadRows = [], NS = 'http://www.w3.org/2000/svg';
 const typeNames = { wire: 'Wire', source: 'Supply', load: 'Required load', ground: 'Exposed return', spare: 'Parked load', blank: 'Blank' };
 const phaseNames = { ready: 'READY', editing: 'ISOLATED', paused: 'PAUSED', won: 'COMMISSIONED', lost: 'REWORK' };
@@ -95,6 +117,7 @@ function sync() {
   $('network-status').textContent = state.inspection ? statusNames[state.inspection.status] : 'PENDING';
   $('network-status').className = !state.inspection ? '' : state.inspection.ok ? 'success' : 'error';
   $('test-count').textContent = `${state.tests} ${state.tests === 1 ? 'test' : 'tests'}`;
+  $('current-terminal').textContent = cellName(selected, config.size);
   $('selected-label').textContent = `${cellName(selected, config.size)} · ${typeNames[tile.kind]}`;
   $('selected-heading').textContent = `${cellName(selected, config.size)} · ${tile.loadId || typeNames[tile.kind]}`;
   const mask = maskAt(state, selected), shape = bitCount(mask) === 2 ? mask === 5 || mask === 10 ? 'Straight conductor' : 'Elbow conductor' : bitCount(mask) === 3 ? 'Three-way junction' : 'Four-way junction';
@@ -102,17 +125,20 @@ function sync() {
   const canRotate = editing && tile.rotatable && state.moves < config.moveBudget;
   $('rotate-cw').disabled = $('rotate-ccw').disabled = !canRotate;
   $('rotation-help').textContent = !tile.rotatable ? 'This module is fixed. Select a rotatable wire.' : `Each quarter-turn costs one move. ${config.moveBudget - state.moves} remain.`;
-  $('start').disabled = state.phase !== 'ready'; $('commission').disabled = !editing;
-  $('pause').disabled = !editing && state.phase !== 'paused'; $('pause').textContent = state.phase === 'paused' ? 'Resume job' : 'Pause job';
+  $('start').disabled = $('start').hidden = state.phase !== 'ready';
+  $('commission').disabled = $('commission').hidden = !editing;
+  $('pause').disabled = !editing && state.phase !== 'paused'; const pauseLabel = state.phase === 'paused' ? 'Resume job' : 'Pause job';
+  $('pause').textContent = state.phase === 'paused' ? '▶' : 'Ⅱ';
+  $('pause').setAttribute('aria-label', pauseLabel); $('pause').title = pauseLabel;
   $('next-level').hidden = state.phase !== 'won' || config.level === LEVEL_COUNT;
   $('level').max = String(campaign.unlocked); $('unlock-status').textContent = campaign.mastered ? 'All 10,000 jobs commissioned' : `Job ${campaign.unlocked.toLocaleString()} of ${LEVEL_COUNT.toLocaleString()} unlocked`;
   $('save-status').textContent = savedText();
-  $('message').textContent = state.message; $('message').className = `message ${state.phase === 'won' ? 'success' : state.phase === 'lost' ? 'error' : ''}`;
+  showNotice(state.phase === 'ready' ? '' : state.message);
   draw();
 }
 function loadJob(requested) {
   const level = Number(requested);
-  if (!Number.isInteger(level) || level < 1 || level > campaign.unlocked) { $('level').value = String(state.config.level); $('message').textContent = 'Commission the current unlocked job before loading a later board.'; return; }
+  if (!Number.isInteger(level) || level < 1 || level > campaign.unlocked) { $('level').value = String(state.config.level); showNotice('Commission the current unlocked job before loading a later board.'); return; }
   state = createGame(level); selected = 0; recorded = false;
   $('level').value = String(level); $('tier').textContent = state.config.tier;
   $('job-title').textContent = state.config.title; $('mission-brief').textContent = state.config.description;
@@ -120,7 +146,9 @@ function loadJob(requested) {
   buildBoard(); sync();
 }
 
-$('start').addEventListener('click', () => { startGame(state); sync(); cells[selected].button.focus(); });
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
+$('toggle-board').addEventListener('click', () => setBoardMode($('routing-controls').hidden));
+$('start').addEventListener('click', () => { startGame(state); sync(); ($('routing-controls').hidden ? canvas : cells[selected].button).focus(); });
 $('rotate-cw').addEventListener('click', () => rotate(1)); $('rotate-ccw').addEventListener('click', () => rotate(-1));
 $('commission').addEventListener('click', () => { commission(state); sync(); });
 $('pause').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); else pauseGame(state); sync(); });
@@ -137,7 +165,7 @@ canvas.addEventListener('keydown', event => {
 });
 canvas.addEventListener('stage-lost', () => {
   if (state.phase === 'editing') pauseGame(state);
-  $('graphics-fallback').hidden = false; $('quality').disabled = true;
+  useBoardFallback();
   $('graphics-status').textContent = 'Graphics connection lost. Continue with the terminal board, or reload graphics.'; sync();
 });
 const resize = new ResizeObserver(draw); resize.observe(canvas);
@@ -150,6 +178,6 @@ try {
   scene = createCircuitScene({ canvas, qualitySelect: $('quality'), status: $('graphics-status'), select: index => selectCell(index) });
   scene.setView($('view').value); draw();
 } catch {
-  $('graphics-fallback').hidden = false; $('quality').disabled = true; $('view').disabled = true;
+  useBoardFallback();
   $('graphics-status').textContent = 'WebGL 2 unavailable. The terminal board provides the same complete game.';
 }
