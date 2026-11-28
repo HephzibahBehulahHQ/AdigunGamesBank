@@ -16,6 +16,8 @@
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
+<a class="game-control-jump" href="#resistor-controls">Jump to play controls</a>
+
 
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah"><span>Adigun Game Bank<small>BY HB ELEKTRONIKER</small></span></a>
@@ -49,7 +51,7 @@
         <div class="split"><h2>Build the circuit</h2><span id="circuit-state" class="badge">Supply off</span></div>
         <label for="topology">Patch-panel wiring</label><select id="topology"></select>
         <div class="control-grid"><div><label for="voltage">DC source (V)</label><select id="voltage"></select></div><div><label for="fuse">Fuse rating (mA)</label><select id="fuse"></select></div></div>
-        <fieldset id="resistor-controls"><legend>Resistors and patch leads</legend></fieldset>
+        <fieldset id="resistor-controls" tabindex="-1"><legend>Resistors and patch leads</legend></fieldset>
         <label for="contact-mode">Contact wiring</label><select id="contact-mode"><option value="bypass">Direct link · no contact logic</option><option value="and">Two series contacts · AND</option><option value="or">Two parallel contacts · OR</option></select>
         <div class="switch-row"><label><input id="contact-a" type="checkbox"> Contact A</label><label><input id="contact-b" type="checkbox"> Contact B</label></div>
         <div class="controls power-controls"><button id="power" type="button" class="primary" aria-pressed="false">Power on</button><button id="replace-fuse" type="button" disabled>Replace fuse</button></div>

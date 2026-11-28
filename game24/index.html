@@ -27,6 +27,8 @@
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
+<a class="game-control-jump" href="#bay-grid">Jump to play controls</a>
+
 
   <header class="game-header">
     <a class="identity" href="../">
@@ -63,7 +65,7 @@
         <section class="panel deck-panel" aria-labelledby="deck-title">
           <div class="section-heading"><h2 id="deck-title">Deck command grid</h2><span id="selected-bay-label">Select a bay</span></div>
           <div class="deck-directions" aria-hidden="true"><span>PORT</span><span>STARBOARD</span></div>
-          <div id="bay-grid" class="bay-grid" aria-label="Cargo deck bays"></div>
+          <div id="bay-grid" class="bay-grid" aria-label="Cargo deck bays" tabindex="-1"></div>
           <div class="controls"><button id="load-cargo" type="button" class="primary">Load selected cargo</button><button id="unload-cargo" type="button">Unload selected bay</button></div>
           <p class="hint" id="bay-help">Choose cargo from the manifest, then a deck bay. A filled bay can be unloaded and rearranged before launch.</p>
         </section>

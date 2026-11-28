@@ -6,6 +6,7 @@ body > .game-viewport {
   height: 100vh;
   height: 100dvh;
   max-width: none;
+  min-height: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -70,11 +71,45 @@ body > .game-viewport {
   overflow-wrap: anywhere;
 }
 
+.game-console:not(.game-dock) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.game-console > .game-console-nav {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 42px;
+  height: auto;
+  margin: 0;
+  padding: 4px 16px;
+  border-bottom: 1px solid #52637c;
+  background: rgb(11 18 32 / 96%);
+  color: #edf4ff;
+}
+
+.game-console-nav > a.brand { margin: 0 auto; padding: 2px 6px; }
+.game-console-nav > a.brand img { max-height: 26px; }
+.game-console:not(.game-dock) .game-console-content > :is(.hero, .intro) {
+  padding-block: 0 10px;
+  margin-block: 0;
+}
+
+.game-console:not(.game-dock) .game-console-content > :is(.hero, .intro) h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  margin-block: 4px;
+}
+
 .game-viewport > .game-dock {
   inset: 12px 12px auto auto;
   display: flex;
   flex-direction: column;
   width: min(42vw, 520px);
+  --dock-height: calc(100vh - 84px);
   --dock-height: calc(100dvh - 84px);
   max-height: var(--dock-height);
   border: 1px solid #52637c;
@@ -93,6 +128,15 @@ body > .game-viewport {
 }
 
 .game-dock > summary:focus-visible { outline: 2px solid #ebcd72; outline-offset: -3px; }
+.game-dock .game-control-jump {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: #91e7ff;
+  font: 600 13px/1.35 system-ui, sans-serif;
+  text-underline-offset: 3px;
+}
+
 .game-dock > .game-console-content {
   min-height: 0;
   max-height: calc(var(--dock-height) - 46px);

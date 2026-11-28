@@ -22,6 +22,8 @@
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
+<a class="game-control-jump" href="#race-controls">Jump to play controls</a>
+
 
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>SPORT · ORIGINAL CIRCUITS</small></span></a>
@@ -42,7 +44,7 @@
         <div class="view-toolbar"><p id="graphics-status" class="graphics-status" role="status">Preparing the 3D circuit…</p><label for="quality">Graphics <select id="quality"><option value="auto">Adaptive</option><option value="1080">1920 × 1080</option><option value="4k">4K · 3840 × 2160</option></select></label><label for="camera">Camera <select id="camera"><option value="chase">Chase</option><option value="circuit">Circuit overview</option></select></label></div>
 
         <div id="message" class="message" role="status" aria-live="polite">Set your controls, then start the qualifying run.</div>
-        <section id="race-controls" class="panel driving-panel" aria-labelledby="controls-heading">
+        <section id="race-controls" class="panel driving-panel" aria-labelledby="controls-heading" tabindex="-1">
           <h2 id="controls-heading">Driver controls</h2>
           <div class="pedal-settings"><div><label for="steering">Steering <output id="steering-value" for="steering">0%</output></label><input id="steering" type="range" min="-100" max="100" step="1" value="0" aria-describedby="steering-help"><p id="steering-help" class="hint">−100% left · 0% straight · +100% right</p></div><div><label for="throttle">Throttle <output id="throttle-value" for="throttle">0%</output></label><input id="throttle" type="range" min="0" max="100" step="5" value="0" aria-describedby="throttle-help"><p id="throttle-help" class="hint">Pedal stays at this setting until you change it.</p></div></div>
           <div class="touch-controls" aria-label="Hold-to-drive controls"><button id="steer-left" type="button" aria-label="Hold to steer left">← Left</button><button id="brake" type="button" aria-label="Hold to brake">Brake</button><button id="accelerate" type="button" aria-label="Hold to accelerate">Accelerate</button><button id="steer-right" type="button" aria-label="Hold to steer right">Right →</button></div>

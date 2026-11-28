@@ -44,12 +44,21 @@ for (let game = 1; game <= 24; game++) {
     }
 
     if (hasStage) {
+      const jump = dock.getByRole('link', { name: 'Jump to play controls' });
+      const target = await jump.getAttribute('href');
+      await expect(controls.locator(target)).toBeAttached();
+      await jump.click();
+      await expect.poll(() => new URL(page.url()).hash).toBe(target);
+      expect(await page.evaluate(() => [scrollX, scrollY])).toEqual([0, 0]);
+
       const toggle = dock.locator(':scope > summary');
       await toggle.focus();
       await page.keyboard.press('Enter');
       await expect(dock).not.toHaveAttribute('open', '');
       await page.keyboard.press('Enter');
       await expect(dock).toHaveAttribute('open', '');
+    } else {
+      await expect(main.locator('.game-console-nav a')).toBeInViewport();
     }
   });
 }

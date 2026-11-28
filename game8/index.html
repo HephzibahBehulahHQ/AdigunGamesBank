@@ -26,6 +26,8 @@
 <details class="game-console game-dock" open>
 <summary>Game controls and information</summary>
 <div class="game-console-content">
+<a class="game-control-jump" href="#branches">Jump to play controls</a>
+
 
   <header class="game-header">
     <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>ELEKTRONIKER · THE COMMISSIONING ROOM</small></span></a>
@@ -51,7 +53,7 @@
         <p id="graphics-status" class="graphics-status" role="status">Starting the 3D cabinet…</p>
 
         <div class="message" id="message" role="status" aria-live="polite">Supply isolated. Start with the load list.</div>
-        <section class="panel branch-panel" aria-labelledby="branches-title"><div class="section-heading"><h2 id="branches-title">Protected branches</h2><span class="hint">Current ≤ breaker ≤ cable</span></div><div id="branches" class="branch-grid"></div></section>
+        <section class="panel branch-panel" aria-labelledby="branches-title"><div class="section-heading"><h2 id="branches-title">Protected branches</h2><span class="hint">Current ≤ breaker ≤ cable</span></div><div id="branches" class="branch-grid" tabindex="-1"></div></section>
         <section class="panel loads-panel" aria-labelledby="loads-title"><div class="section-heading"><h2 id="loads-title">Workshop loads</h2><span class="hint">L / D / F = the three trial stages</span></div><div id="loads" class="load-grid"></div><div class="patch-summary"><span id="selected-load">Select a load</span><span aria-hidden="true">→</span><strong id="selected-branch">Branch A</strong></div><div class="controls"><button id="connect-load" class="primary" type="button">Connect selected load</button><button id="disconnect-load" type="button">Disconnect selected load</button></div></section>
       </section>
       <aside class="command-column" aria-label="Commissioning controls">
