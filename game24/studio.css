@@ -41,8 +41,8 @@
 }
 
 @media (max-width: 400px) {
-  .studio-actions { flex-wrap: wrap; justify-content: center; }
-  .studio-hotbar { flex: 0 0 100%; justify-content: center; }
+  .studio-actions { flex-direction: column; align-items: center; width: fit-content; max-width: 100%; margin-inline: auto; padding: 3px; }
+  .studio-hotbar { justify-content: center; }
   .studio-hotbar button { width: 38px; height: 40px; }
   .studio-orders { justify-content: center; }
 }
