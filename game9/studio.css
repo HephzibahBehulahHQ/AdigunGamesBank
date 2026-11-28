@@ -1,0 +1,31 @@
+#studio { background: #142537; }
+#studio > .game-play-surface { z-index: 1; }
+.goal-readouts, .goal-help, .goal-controls, .goal-fallback { position: absolute; z-index: 2; }
+.goal-readouts, .goal-actions, .goal-movement, .goal-angle { display: flex; align-items: center; gap: 5px; }
+.goal-readouts { inset: 16px auto auto 16px; pointer-events: none; }
+.goal-readouts > span, .goal-help, .goal-actions button, .goal-angle { border: 1px solid #728d9b; border-radius: 9px; background: rgb(10 34 44 / 92%); color: #eefaff; }
+.goal-readouts > span { padding: 5px 8px; white-space: nowrap; font-size: 13px; font-variant-numeric: tabular-nums; }
+.goal-readouts i { color: #8fe5b6; font-style: normal; }
+.goal-help { inset: 16px 16px auto auto; width: 40px; min-height: 40px; padding: 0; }
+.goal-controls { inset: auto 8px 16px; pointer-events: none; }
+.goal-actions { justify-content: center; }
+.goal-actions button { min-width: 38px; min-height: 40px; padding: 4px 8px; }
+.goal-actions #clear { background: #9ee3b6; color: #112913; border-color: #bdeed0; }
+.goal-actions #clear[data-ready='true'] { box-shadow: 0 0 15px #9cf5b877; }
+.goal-angle { padding: 0 5px; pointer-events: auto; }
+#studio #angle { width: clamp(54px, 13vw, 130px); min-height: 38px; margin: 0; padding: 0; }
+#angle-value { min-width: 27px; font-size: 12px; }
+.goal-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 5px; padding: 4px 8px; border-radius: 6px; background: #19364b; color: #eefaff; font-size: 12px; }
+.goal-fallback { inset: 60px 8px 135px; display: grid; place-items: center; pointer-events: none; }
+.goal-fallback .readings { max-width: min(95%, 520px); }
+#studio-help { z-index: 20; width: min(600px, calc(100% - 24px)); max-height: calc(100dvh - 24px); background: #132737; color: #eefaff; border: 1px solid #728d9b; border-radius: 14px; }
+#studio-help::backdrop { background: #08121ccc; }
+.goal-close { float: inline-end; }
+@media (max-width: 590px) {
+  .goal-readouts { inset: 8px auto auto 6px; gap: 2px; }
+  .goal-readouts > span { padding: 4px; font-size: 11px; }
+  .goal-help { inset: 8px 6px auto auto; }
+  .goal-controls { bottom: 76px; }
+  .goal-actions, .goal-movement, .goal-angle { gap: 3px; }
+  .goal-actions button { padding-inline: 5px; font-size: 12px; }
+}
