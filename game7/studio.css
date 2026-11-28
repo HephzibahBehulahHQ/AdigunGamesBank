@@ -31,3 +31,8 @@
   .register-actions { gap: 3px; }
   .register-actions button { min-width: 34px; padding-inline: 5px; font-size: 11px; }
 }
+
+@media (max-width: 360px) {
+  .register-bit-strip .bit-button { width: 37px; min-width: 37px; height: 38px; min-height: 38px; }
+  .register-actions button { min-height: 36px; }
+}
