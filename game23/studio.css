@@ -41,8 +41,10 @@ html, body, #studio { width:100vw; height:100vh; margin:0; padding:0; overflow:h
 }
 
 @media (max-width: 360px) {
-  #studio .aim-controls { width: min(234px, calc(100vw - 24px)); gap: 4px; }
+  #studio .aim-controls { width: min(216px, calc(100vw - 24px)); gap: 4px; }
   #studio .control-label { display: grid; gap: 0; }
   #studio .control-label label, #studio .control-label output { font-size: 10px; }
   .valley-hud > span { padding-inline: 3px; }
+  #studio .aim-controls input { height: 17px; }
+  .valley-controls button { padding-inline: 6px; }
 }
