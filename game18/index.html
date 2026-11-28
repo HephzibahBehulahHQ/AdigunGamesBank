@@ -1,10 +1,59 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111f"><title>DEBATE ARENA · Hephzibah Behulah</title><link rel="stylesheet" href="../game17/style.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="../shared/game-viewport.css">
-</head><body>
-<main class="game-viewport">
-
-<div class="game-console">
-<header class="game-console-nav"><a href="../" class="brand">HB <span>GAME BANK</span></a><span class="tag">INTELLIGENCE / 04</span></header>
-<div class="game-console-content"><section class="intro"><p class="eyebrow">AI ARGUMENT & REASONING · GAME 18</p><h1>DEBATE <em>ARENA</em></h1><p>Build a case, face a topic-specific counterargument, and earn a transparent three-part score. Three rounds decide the winner.</p><b class="mode">LOCAL REPLAY MODE · NO LIVE AI PROVIDER CONNECTED</b></section><section class="game-shell"><article class="board-wrap"><div class="board-top"><div><small>ROUND</small><b><span id="round">0</span> / 3</b></div><div class="score">YOU <b id="player-wins">0</b> : <b id="ai-wins">0</b> AI</div><button id="restart" class="quiet">New debate</button></div><div id="start" class="overlay"><span class="eyebrow">MATCH BRIEFING</span><h2>Make your case.</h2><p>Pick a real-world discussion topic. Write a specific argument, then compare its logic, evidence and rhetoric with a curated opponent response.</p><button id="begin" class="start">BEGIN DEBATE</button></div><section id="play" hidden><label for="topic">DEBATE TOPIC</label><select id="topic"></select><p id="question" class="question"></p><label for="argument">YOUR ARGUMENT · MINIMUM 20 CHARACTERS</label><textarea id="argument" rows="5" maxlength="1200" placeholder="State your position, explain why, and include evidence or an example."></textarea><div class="submitrow"><span id="validation" role="status"></span><button id="submit">SUBMIT ARGUMENT</button></div></section><section id="result" hidden><div id="round-result" class="round-result"></div><div class="comparison"><article><h3>YOUR CASE</h3><div id="player-score"></div></article><article><h3>OPPONENT COUNTERARGUMENT</h3><p id="ai-text"></p><div id="ai-score"></div></article></div><button id="next">NEXT ROUND</button></section><section id="finish" hidden><h2 id="finish-title"></h2><p id="finish-copy"></p><button id="again" class="start">PLAY AGAIN</button></section></article><aside class="intel"><div class="panel-head"><span>JUDGE RUBRIC</span><span class="live">● REPLAY</span></div><h2>How each case is scored</h2><dl><dt>Logic</dt><dd>Clear claim, connected reasoning and a coherent conclusion.</dd><dt>Evidence</dt><dd>Examples, data, research references or testable support.</dd><dt>Rhetoric</dt><dd>Readable structure, relevant detail and persuasive clarity.</dd></dl><p>Each category scores 0–100. The rubric shows its scoring signals; it does not verify factual claims.</p><div class="combat-rules"><h3>OPPONENT MODE</h3><p>Topic-specific replay responses are selected locally. This page does not call ChatGPT or another live model. Scores are rule-based estimates, not expert adjudication.</p></div><ol id="history" aria-live="polite"></ol></aside></section><footer class="bottom">HEPHZIBAH BEHULAH · GAME BANK · REPLAY DEBATE SIMULATION</footer>
-</div>
-</div>
-</main><script type="module" src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>Debate Arena | Game Bank</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main id="studio" class="game-viewport" aria-label="Debate Arena">
+  <section class="debate-field" aria-label="Debate">
+    <h1 id="start">Debate Arena</h1>
+    <form id="play" hidden>
+      <label class="sr-only" for="topic">Debate topic</label>
+      <select id="topic" aria-describedby="question"></select>
+      <p id="question"></p>
+      <label class="sr-only" for="argument">Your argument, at least 20 characters</label>
+      <textarea id="argument" maxlength="1200" placeholder="Write your argument" aria-describedby="validation"></textarea>
+      <p id="validation" role="status"></p>
+    </form>
+  </section>
+  <div class="debate-hud" aria-label="Debate score">
+    <span><i aria-hidden="true">⚑</i><span class="sr-only">Round</span> <b id="round">0</b>/3</span>
+    <span><i aria-hidden="true">◇</i><span class="sr-only">Your wins</span> <b id="player-wins">0</b></span>
+    <span><i aria-hidden="true">◎</i><span class="sr-only">Opponent wins</span> <b id="ai-wins">0</b></span>
+  </div>
+  <button class="debate-help" id="help-open" type="button" aria-label="Help" aria-haspopup="dialog">?</button>
+  <div class="debate-controls">
+    <button id="begin" type="button">Begin debate</button>
+    <button id="submit" type="submit" form="play" hidden>Submit argument</button>
+    <button id="review" type="button" hidden>Review result</button>
+  </div>
+  <dialog id="result" aria-labelledby="round-result">
+    <h2 id="round-result"></h2>
+    <div class="comparison">
+      <article><h3>Your case</h3><div id="player-score"></div></article>
+      <article><h3>Opponent counterargument</h3><p id="ai-text"></p><div id="ai-score"></div></article>
+    </div>
+    <button id="next" type="button" autofocus>Next round</button>
+  </dialog>
+  <dialog id="finish" aria-labelledby="finish-title">
+    <h2 id="finish-title"></h2>
+    <p id="finish-copy"></p>
+    <button id="again" type="button" autofocus>Play again</button>
+  </dialog>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">How to debate</h2>
+    <p>Pick a topic and make a case in at least 20 characters. Play three rounds against curated opponent responses. The local rubric scores logic, evidence and rhetoric from 0 to 100. It does not fact-check either argument.</p>
+    <h3>Round history</h3>
+    <ol id="history"></ol>
+    <button id="restart" type="button">New debate</button>
+    <a href="../">Game library</a>
+  </dialog>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
