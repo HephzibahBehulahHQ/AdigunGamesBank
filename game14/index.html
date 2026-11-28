@@ -1,12 +1,44 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080916"><title>BILLIONAIRE CHALLENGE | Game Bank</title><style>
-:root{color-scheme:dark;--gold:#ffd166;--cyan:#5af3ef;--bg:#070916;--muted:#b0b4d3}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 5%,#30256c,var(--bg) 66%);color:#f7f4ff;font:16px/1.5 system-ui,sans-serif;text-align:center}.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto;padding:8px;width:min(92%,500px);border:1px solid #ffd16655;border-radius:12px;background:#090b1b;color:#fff;text-decoration:none;font-weight:800;letter-spacing:.1em}.brand img{width:145px;max-height:42px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px}.wrap{width:min(1000px,96%);margin:18px auto}.tag{color:var(--gold);font:700 11px ui-monospace,monospace;letter-spacing:.2em}h1{font-size:clamp(30px,6vw,58px);line-height:1;margin:7px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px;align-items:start}.quiz{padding:20px;border:1px solid #ffd16688;border-radius:18px;background:linear-gradient(145deg,#17143c,#0b0e20);box-shadow:0 0 38px #ffd16615}.hud{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px}.pill{padding:7px 12px;border:1px solid #ffd16655;border-radius:99px;background:#090b1b}.question{margin:20px auto;padding:20px;border:1px solid #a78bfa66;border-radius:14px;background:#10112b;font-size:clamp(18px,3vw,26px);font-weight:760;min-height:90px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}.answers button{padding:13px;border:1px solid #5af3ef66;border-radius:10px;background:#111632;color:#f7f4ff;font-weight:700;cursor:pointer}.answers button:hover:not(:disabled){border-color:var(--gold);background:#27234c}.answers button.correct{border-color:#81ffbc;background:#123b35}.answers button.wrong{border-color:#ff6b81;background:#411c34}.answers button:disabled{cursor:default}.lifelines{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px}.lifelines button,.action{padding:9px 13px;border:1px solid #ffd16677;border-radius:9px;background:#211d4c;color:var(--gold);font-weight:800;cursor:pointer}.ladder{padding:14px;border:1px solid #a78bfa66;border-radius:16px;background:#0b0e20;text-align:left}.ladder h2{font-size:15px;color:var(--gold);margin:0 0 8px}.rung{padding:4px 8px;border-radius:6px;color:#aeb5d9;font:13px ui-monospace,monospace}.rung.current{background:#ffd166;color:#11132a;font-weight:900}.rung.safe{color:#7dffbf}.foot{font-size:12px;color:var(--muted)}#msg{min-height:25px;color:var(--cyan);font-weight:750}@media(max-width:700px){.layout{grid-template-columns:1fr}.ladder{order:-1}.answers{grid-template-columns:1fr}}
-</style><link rel="stylesheet" href="../shared/game-viewport.css">
-</head><body>
-<main class="game-viewport wrap">
-
-<div class="game-console">
-<div class="game-console-nav"><a class="brand" href="../"><img src="../assets/hb-logo.svg" alt="Hephzibah Behulah logo"><span>HEPHZIBAH BEHULAH™<small>GAME BANK · PLAY · LEARN</small></span></a></div>
-<div class="game-console-content"><p class="tag">GENERAL KNOWLEDGE · SCIENCE · LOGIC · CALCULATIONS</p><h1>BILLIONAIRE CHALLENGE</h1><p>Climb a 15-question prize ladder. Use three lifelines wisely and bank your winnings before the final question.</p><div class="hud"><span class="pill">Stage <b id="level">1</b>/10,000</span><span class="pill">Question <b id="qno">1</b>/15</span><span class="pill">Prize <b id="prize">£0</b></span><span class="pill">Best bank <b id="best">£0</b></span></div><div class="layout"><section class="quiz"><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="lifelines"><button id="fifty">50:50</button><button id="audience">Ask the audience</button><button id="switch">Switch question</button></div><button id="bank" class="action">BANK PRIZE</button><button id="next" class="action" hidden>NEW CHALLENGE</button><p id="msg" role="status" aria-live="polite">Choose carefully. A wrong answer ends the current ladder at your safety net.</p></section><aside class="ladder"><h2>THE PRIZE LADDER</h2><div id="rungs"></div></aside></div><p class="foot">Original Game Bank quiz format; not affiliated with a television quiz brand. Audience percentages are simulated game hints. Progress and best score are saved locally.</p>
-</div>
-</div>
-</main><script src="../assets/game-levels.js"></script><script src="../assets/game14.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080916">
+  <title>Billionaire Challenge | Game Bank</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main id="studio" class="game-viewport" aria-label="Billionaire Challenge">
+  <section class="quiz-field" aria-label="Question and answers">
+    <h1 id="question" tabindex="-1"></h1>
+    <div id="answers" aria-label="Answer choices"></div>
+    <p id="msg" role="status"></p>
+  </section>
+  <div class="quiz-hud" aria-label="Challenge progress">
+    <span title="Stage"><span aria-hidden="true">⚑</span><span class="sr-only">Stage</span> <b id="level">1</b></span>
+    <span title="Question"><span aria-hidden="true">?</span><span class="sr-only">Question</span> <b id="qno">1</b>/15</span>
+    <span title="Current prize"><span aria-hidden="true">◈</span><span class="sr-only">Current prize</span> <b id="prize">£0</b></span>
+    <span title="Best bank"><span aria-hidden="true">★</span><span class="sr-only">Best bank</span> <b id="best">£0</b></span>
+  </div>
+  <button id="help-open" class="quiz-help" type="button" aria-label="Help and prize ladder" aria-haspopup="dialog">?</button>
+  <div class="quiz-controls" aria-label="Lifelines and prize actions">
+    <button id="fifty" type="button" aria-label="Remove two wrong answers" title="Remove two wrong answers">½</button>
+    <button id="audience" type="button" aria-label="Ask the audience" title="Ask the audience">▥</button>
+    <button id="switch" type="button" aria-label="Switch question" title="Switch question">⇄</button>
+    <button id="bank" class="quiz-action" type="button">Bank prize</button>
+    <button id="next" class="quiz-action" type="button" hidden>New challenge</button>
+  </div>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="quiz-close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Help and prize ladder</h2>
+    <p>Answer 15 questions to advance. Bank your current prize at any time after your first correct answer. A wrong answer pays only the last safety net you reached.</p>
+    <p>Each lifeline can be used once per challenge. The audience poll is a simulated hint. Your best prize and unlocked stage are saved on this device.</p>
+    <h3>Prize ladder</h3>
+    <div id="rungs"></div>
+    <a href="../">Game library</a>
+  </dialog>
+</main>
+<script src="../assets/game-levels.js"></script>
+<script src="../assets/game14.js"></script>
+</body>
+</html>

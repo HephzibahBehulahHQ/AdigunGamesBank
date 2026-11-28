@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -134,4 +134,20 @@ test('Synapse Sprint displays numbered pulses and saves a keyboard recall', asyn
   await page.reload();
   await expect(page.locator('#level')).toHaveText('2');
   await expect(page.locator('#best')).toHaveText('1');
+});
+
+test('Billionaire Challenge can bank during feedback and restart without stale answers', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/game14/');
+  await page.locator('#answers [data-correct="true"]').click();
+  await page.getByRole('button', { name: 'Bank prize' }).click();
+  await expect(page.locator('#best')).toHaveText('£100');
+  await expect(page.getByRole('button', { name: 'New challenge' })).toBeFocused();
+  await page.getByRole('button', { name: 'New challenge' }).press('Enter');
+  await expect(page.locator('#question')).toBeFocused();
+  await expect(page.locator('#qno')).toHaveText('1');
+  await page.getByRole('button', { name: 'Remove two wrong answers' }).click();
+  await expect(page.locator('#answers button:disabled')).toHaveCount(2);
+  await page.reload();
+  await expect(page.locator('#best')).toHaveText('£100');
 });
