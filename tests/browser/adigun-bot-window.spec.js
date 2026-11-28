@@ -12,10 +12,11 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('floating Adigun BOT keeps the engineering canvas interactive and exposes window controls', async ({ page }) => {
-  await page.goto('/game3/');
+  await page.goto('/game3/', { waitUntil: 'commit' });
   await page.getByRole('button', { name: 'Open Adigun BOT' }).click();
   const panel = page.getByRole('region', { name: 'Adigun BOT' });
   await expect(panel).toBeVisible();
+  await expect(page.locator('#circuit-view')).toBeVisible();
 
   await page.evaluate(() => {
     window.__canvasPointerDowns = 0;
