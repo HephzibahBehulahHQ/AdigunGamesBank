@@ -2,6 +2,10 @@ name: Publish verified GamesBank to Cloudflare
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [Verify games]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: read
@@ -13,13 +17,21 @@ concurrency:
 
 jobs:
   publish:
-    if: github.ref == 'refs/heads/main'
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch == 'main' &&
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch'))
     runs-on: ubuntu-24.04
     environment: cloudflare-production
     timeout-minutes: 15
+    env:
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ env.RELEASE_SHA }}
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -28,7 +40,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          result=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/verify.yml/runs?branch=main&head_sha=$GITHUB_SHA&status=success" --jq '.total_count')
+          test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
+          result=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/verify.yml/runs?branch=main&head_sha=$RELEASE_SHA&status=success" --jq '.total_count')
           test "$result" -gt 0 || { echo "::error::Verify games must pass for this main revision."; exit 1; }
       - name: Build the account-enabled game catalog
         env:
@@ -45,14 +58,14 @@ jobs:
             exit 1
           }
           tip=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
-          test "$tip" = "$GITHUB_SHA" || { echo "::error::A newer main revision superseded this release."; exit 1; }
+          test "$tip" = "$RELEASE_SHA" || { echo "::error::A newer main revision superseded this release."; exit 1; }
           npm exec --yes --package=wrangler@4.166.0 -- wrangler deploy --config wrangler.toml --env production --keep-vars
       - name: Verify the live revision and account route
         run: |
           site=https://adigungamesbank.hephzibahbehulah.com
           for attempt in {1..8}; do
-            version=$(curl -fsS "$site/build-evidence.json?release=$GITHUB_SHA-$attempt" | jq -r '.baseCommit' || true)
-            if [ "$version" = "$GITHUB_SHA" ] &&
+            version=$(curl -fsS "$site/build-evidence.json?release=$RELEASE_SHA-$attempt" | jq -r '.baseCommit' || true)
+            if [ "$version" = "$RELEASE_SHA" ] &&
                curl -fsS -H "Origin: $site" -H 'Content-Type: application/json' \
                  --data '{"step":"guest","allowStart":false}' "$site/api/account" |
                  jq -e '.step == "guest" and .remainingMs == 0' >/dev/null; then

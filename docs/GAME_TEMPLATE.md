@@ -122,3 +122,13 @@ their applicability to the release revision.
 - Full game release: **NOT ACCEPTED** until all applicable requirements and
   evidence gates above are satisfied. Do not count this template in the
   2,000-game delivery target.
+# Required viewport layout
+
+Each game uses one fixed viewport with zero document scrolling. Set `html`,
+`body` and the main wrapper to `100vw` × `100vh` with zero margin and padding
+and hidden overflow. Where supported, use `100dvh` to follow the visible mobile
+viewport. A gameplay canvas fills that wrapper. Menus, HUDs, start and finish
+screens and controls are positioned layers over the play surface. Set
+`pointer-events: none` on passive HUDs and `pointer-events: auto` on controls.
+Keep long content in bounded panels. Verify touch, keyboard, focus and layout
+at desktop, phone portrait and phone landscape sizes.

@@ -50,6 +50,15 @@ owns final verification.
 
 ## Product honesty and release gates
 
+- Every game opens in a single viewport with zero document scrolling. Set the
+  root, body and game wrapper to viewport width and height, zero margin and
+  padding, and hidden overflow. Fill the viewport with the gameplay canvas
+  where the game uses one. Position menus, start and finish screens, HUDs and
+  player controls above the play surface. Decorative layers pass pointer events
+  through and interactive controls receive them. Keep long content in bounded
+  panels and verify controls remain reachable by touch and keyboard in portrait
+  and landscape before release.
+
 - A game is playable only when its controls, rules, progression, failure and
   completion states work. Never substitute a promotional screen or quiz shell
   for a requested simulation or match.

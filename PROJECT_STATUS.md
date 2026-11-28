@@ -1,6 +1,33 @@
 # Adigun Game Bank — current project status
 
-Updated **2026-11-25 (Europe/Berlin)**. This is the current acceptance record.
+Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
+
+## Single-viewport games
+
+PR [#10](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/10)
+updates all 24 game routes. The 17 gameplay canvases fill the viewport.
+Controls and menus sit in floating layers, with pointer-transparent stage
+readouts. The seven console-based games have fixed navigation and a bounded
+play area. Charts keep their role as instruments. The shared layout requirement
+is now in `AGENTS.md` and `docs/GAME_TEMPLATE.md`.
+
+- Windows Chrome passed the full 100-case Playwright suite on checkpoint
+  `066eddcbd71f66f9939fc5601400a46879047b26`. The next candidate
+  `cff2c3a698fec331db3e050ba4ab74a1cf281f6f` passed 47 focused Playwright cases
+  including one case per title at 1440×900, 390×844 and 844×390, 320px reflow,
+  accessible controls and last-stage menu toggling. An account-enabled local
+  build with the account Worker and loopback fixture bindings passed touch
+  emulation on each of the 24 titles. Phone screenshots exposed play controls
+  below the fold in games 12 and 14. Both now have a first-screen answer-control
+  regression case. The exact final candidate still needs its GitHub release gate.
+- The custom domain returned build revision
+  `c430a25c06a37bd293ba7cc3cd2e5e9b2ea3baa3` before this change. The manual
+  Cloudflare workflow file was present on `main` but absent from GitHub's
+  Actions registry. The candidate adds automatic publication from a successful
+  `Verify games` run for the exact current `main` SHA, under the existing
+  `cloudflare-production` environment. Verify the production revision and all
+  24 public routes after that workflow runs. Physical touch and screen-reader
+  sessions are **NOT TESTED**.
 
 ## Floating Adigun BOT window — verified candidate
 

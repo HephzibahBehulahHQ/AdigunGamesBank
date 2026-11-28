@@ -1,0 +1,249 @@
+html,
+body,
+body > .game-viewport {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow: clip;
+  overscroll-behavior: none;
+}
+
+body > .game-viewport {
+  position: fixed;
+  inset: 0;
+  display: block;
+  isolation: isolate;
+}
+
+.game-viewport > .game-play-surface {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #080f1d;
+}
+
+.game-viewport > .game-play-surface > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  touch-action: none;
+}
+
+.game-play-surface > canvas:focus-visible { outline-offset: -4px; }
+.game-viewport > .game-console {
+  position: absolute;
+  inset: var(--game-top, 0px) 0 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.game-console-content {
+  box-sizing: border-box;
+  max-height: 100%;
+  padding: 16px;
+  padding-bottom: 76px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-padding: 12px;
+  overflow-wrap: anywhere;
+}
+
+.game-console:not(.game-dock) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.game-console > .game-console-nav {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 42px;
+  height: auto;
+  margin: 0;
+  padding: 4px 16px;
+  border-bottom: 1px solid #52637c;
+  background: rgb(11 18 32 / 96%);
+  color: #edf4ff;
+}
+
+.game-console-nav > a.brand { margin: 0 auto; padding: 2px 6px; }
+.game-console-nav > a.brand img { max-height: 26px; }
+.game-console:not(.game-dock) .game-console-content > :is(.hero, .intro) {
+  padding-block: 0 10px;
+  margin-block: 0;
+}
+
+.game-console:not(.game-dock) .game-console-content > :is(.hero, .intro) h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  margin-block: 4px;
+}
+
+.game-viewport > .game-dock {
+  inset: 12px 12px auto auto;
+  display: flex;
+  flex-direction: column;
+  width: min(42vw, 520px);
+  --dock-height: calc(100vh - 84px);
+  --dock-height: calc(100dvh - 84px);
+  max-height: var(--dock-height);
+  border: 1px solid #52637c;
+  border-radius: 12px;
+  background: rgb(11 18 32 / 94%);
+  color: #edf4ff;
+}
+
+.game-dock > summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  flex: none;
+  padding: 11px 14px;
+  cursor: pointer;
+  font: 650 14px/1.55 system-ui, sans-serif;
+}
+
+.game-dock > summary:focus-visible { outline: 2px solid #ebcd72; outline-offset: -3px; }
+.game-dock .game-control-jump {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: #91e7ff;
+  font: 600 13px/1.35 system-ui, sans-serif;
+  text-underline-offset: 3px;
+}
+
+.game-dock > .game-console-content {
+  min-height: 0;
+  max-height: calc(var(--dock-height) - 46px);
+  padding-block: 0 16px;
+}
+.game-dock .game-header { padding: 10px 0; flex-wrap: wrap; }
+.game-dock :is(.layout, .help-grid, .command-column, .briefing) { grid-template-columns: minmax(0, 1fr); }
+.game-dock :is(.bench-controls, .aim-panel) { position: static; }
+.game-dock :is(.telemetry, .requirements) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.game-console-content > :is(.wrap, .race-layout, .game-shell) { max-width: 1200px; margin-inline: auto; }
+.game-console-content > .game-header + * { margin-top: 12px; }
+
+.game-viewport :is(.stats, .telemetry, .scoreboard, .hud, .scene-label, .scene-corner, .pitch-caption) {
+  pointer-events: none;
+}
+
+.game-viewport :is(a, button, input, select, textarea, label, summary, [role="button"]) {
+  pointer-events: auto;
+}
+
+.game-play-surface > :is(.graphics-fallback, .game-overlay, .match-overlay, .game-scene-menu) {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  padding-right: min(44vw, 540px);
+}
+
+.game-play-surface > .game-scene-menu {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  margin: 0;
+  padding-left: 6vw;
+  background: linear-gradient(90deg, rgb(8 15 29 / 94%), rgb(8 15 29 / 28%));
+}
+
+.game-play-surface > [hidden] { display: none; }
+
+.game-viewport > .game-stage-hud {
+  position: absolute;
+  inset: 42px auto auto 12px;
+  z-index: 1;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: min(50vw, 720px);
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #52637c;
+  border-radius: 8px;
+  background: rgb(11 18 32 / 91%);
+  color: #edf4ff;
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+
+.game-viewport > .game-stage-hud:is(.telemetry, .scoreboard, .readings) {
+  grid-template-columns: repeat(auto-fit, minmax(min(105px, 100%), 1fr));
+}
+
+.game-viewport > .game-stage-hud > div { min-width: 0; }
+.game-viewport > .game-stage-hud :is(dd, strong) { white-space: normal; }
+
+/* The legacy practice controller adds its own status strip above these games. */
+.game-viewport.wrap { --game-top: 48px; }
+
+#hb-level-bar {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  padding: 8px 14px;
+  border: 1px solid #55f5e577;
+  border-radius: 99px;
+  background: #071522;
+  color: #b1ffcf;
+  font: 700 12px ui-monospace, monospace;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) and (orientation: portrait) {
+  .game-viewport > .game-dock {
+    inset: auto 6px 66px;
+    width: auto;
+    --dock-height: min(calc(44dvh - 60px), 380px);
+  }
+
+  .game-play-surface > :is(.graphics-fallback, .game-overlay, .match-overlay, .game-scene-menu) {
+    padding: 12px 16px 44dvh;
+  }
+
+  .game-viewport > .game-stage-hud { inset: 30px 6px auto; width: auto; max-width: none; }
+  .game-viewport > .game-stage-hud > div { padding: 4px 6px; }
+
+  .game-viewport.wrap .game-console-content { padding: 10px 12px 76px; }
+  .game-viewport.wrap :is(.tag, .lead) { margin-block: 6px; }
+  .game-viewport.wrap h1 { font-size: clamp(24px, 7vw, 38px); }
+  .game-viewport.wrap :is(.stats, .hud, .panel) { margin-block: 10px; }
+  .game-viewport.wrap :is(.panel, .quiz) { padding: 12px; }
+  .game-viewport.wrap #puzzle { min-height: 0; margin-block: 12px; }
+  .game-viewport.wrap .ladder { order: 0; }
+}
+
+@media (orientation: landscape) and (max-height: 480px) {
+  .game-viewport > .game-dock { inset: 6px 6px auto auto; width: 46vw; --dock-height: calc(100dvh - 76px); }
+  .game-dock > summary { padding-block: 8px; }
+}
