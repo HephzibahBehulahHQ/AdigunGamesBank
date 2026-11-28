@@ -215,7 +215,8 @@ test('TACTICS GRID keeps visible keyboard command focus when WebGL is unavailabl
   await page.keyboard.press('1');
   await expect(page.locator('#unit-P1')).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('g');
-  await expect(page.locator('#unit-P1')).toContainText('ACTED');
+  await expect(page.locator('#unit-P1')).toBeDisabled();
+  await expect(page.locator('#unit-P1')).toHaveAccessibleName(/guarding/);
   await assertFocus();
 });
 

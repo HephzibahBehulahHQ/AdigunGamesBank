@@ -61,7 +61,10 @@ function render(){
     if(unit.team==='player'){
       const button=unitButtons.get(unit.id);button.disabled=!active||unit.acted||unit.hp===0;
       button.setAttribute('aria-pressed',String(unit.id===game.selected));
-      button.setAttribute("aria-label",`${unit.name}, ${unit.hp} hull`);button.firstElementChild.textContent=unit.id;
+      const readiness=unit.hp===0?'disabled':unit.guarded?'guarding':unit.acted?'activated':'ready';
+      button.setAttribute('aria-label',`${unit.name}, ${unit.hp} hull, ${readiness}`);
+      button.title=`${unit.name} · ${readiness}`;
+      button.firstElementChild.textContent=unit.id;
       button.lastElementChild.textContent=unit.hp?`${unit.hp}/${unit.maxHp}`:'DISABLED';
     }else{
       const item=opponents.get(unit.id);item.firstElementChild.textContent=`${unit.id} · ${unit.name}`;
