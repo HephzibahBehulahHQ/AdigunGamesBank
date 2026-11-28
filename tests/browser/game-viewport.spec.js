@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls, .market-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -217,4 +217,24 @@ test('Casefile interviews a suspect, preserves literal notes and resolves an acc
   await page.getByRole('button', { name: 'Next case', exact: true }).click();
   await expect(page.locator('#case-title')).toHaveText('Blackout at Meridian');
   await expect(page.locator('#left')).toHaveText('10');
+});
+
+test('Market Duel selects a stock, settles an order and completes the market', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/game20/');
+  await page.getByRole('button', { name: 'Open market' }).press('Enter');
+  await page.getByRole('button', { name: 'QuantaForge Systems' }).click();
+  await page.getByRole('button', { name: 'Trade shares' }).click();
+  await page.getByRole('spinbutton', { name: 'Shares' }).fill('2');
+  await page.getByRole('button', { name: 'Buy', exact: true }).click();
+  await expect(page.locator('#order-status')).toContainText('$78.20');
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: /Portfolio and market log/ }).click();
+  await expect(page.locator('#holdings')).toContainText('QuantaForge Systems · 2 shares');
+  await page.keyboard.press('Escape');
+  for (let day = 0; day < 30; day++) await page.getByRole('button', { name: 'Next day' }).click();
+  await expect(page.locator('#day')).toHaveText('30');
+  await expect(page.locator('#end-screen')).toBeVisible();
+  await page.getByRole('button', { name: 'Trade again' }).click();
+  await expect(page.locator('#day')).toHaveText('0');
 });

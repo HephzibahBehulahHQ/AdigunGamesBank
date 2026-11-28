@@ -1,10 +1,161 @@
-import{STOCKS,makeMarket,transact,advanceDay,netWorth}from"./engine.js";const $=s=>document.querySelector(s),c=$("#chart"),x=c.getContext("2d");let m=makeMarket();
-$("#stock").innerHTML=STOCKS.map(s=>'<option value="'+s.id+'">'+s.name+"</option>").join("");
-function draw(){const s=STOCKS.find(t=>t.id===$("#stock").value)||STOCKS[0],a=m.history[s.id],w=c.width,h=c.height;x.clearRect(0,0,w,h);x.fillStyle="#071320";x.fillRect(0,0,w,h);x.strokeStyle="#ffffff15";x.lineWidth=1;for(let i=0;i<6;i++){let y=20+i*(h-40)/5;x.beginPath();x.moveTo(50,y);x.lineTo(w-12,y);x.stroke()}const lo=Math.min(...a)*.94,hi=Math.max(...a)*1.06;for(let j=0;j<6;j++){const val=hi-(hi-lo)*j/5;x.fillStyle="#8ea4bb";x.font="12px monospace";x.fillText("$"+val.toFixed(0),5,24+j*(h-40)/5)}x.strokeStyle=s.color;x.lineWidth=3;x.beginPath();a.forEach((v,i)=>{const xx=50+i*(w-65)/Math.max(30,a.length-1),yy=20+(hi-v)*(h-40)/(hi-lo||1);i?x.lineTo(xx,yy):x.moveTo(xx,yy)});x.stroke();x.fillStyle=s.color;x.beginPath();const px=50+(a.length-1)*(w-65)/30,py=20+(hi-a.at(-1))*(h-40)/(hi-lo||1);x.arc(px,py,4,0,Math.PI*2);x.fill();$("#stock-name").textContent=s.name;$("#price").textContent="$"+m.prices[s.id].toFixed(2);$("#change").textContent="DAY "+m.day+" · "+a.length+" DATA POINTS"}
-function render(){const who=netWorth(m,"player"),ai=netWorth(m,"ai");$("#day").textContent=m.day;$("#player-value").textContent="$"+who.toFixed(2);$("#ai-value").textContent="$"+ai.toFixed(2);$("#player-cash").textContent="Cash $"+m.cash.player.toFixed(2);$("#ai-cash").textContent="Cash $"+m.cash.ai.toFixed(2);$("#holdings").innerHTML=STOCKS.map(s=>'<div class="holding"><span>'+s.name+'</span><b>'+m.shares.player[s.id]+' sh</b></div>').join("");$("#log").innerHTML=m.log.slice(0,40).map(t=>'<li class="'+(t.startsWith("AI ")?"ai":t.includes("news")||t.includes("DOWN")||t.includes("UP")?"news":"")+'">'+t+"</li>").join("");$("#advance").disabled=m.finished;draw();if(m.finished){$("#market").hidden=true;$("#end-screen").hidden=false;$("#end-title").textContent=m.winner==="player"?"YOU BEAT THE MARKET":m.winner==="ai"?"AI TAKES THE LEAD":"PORTFOLIOS TIED";$("#end-copy").textContent="After 30 days, your portfolio closed at $"+who.toFixed(2)+" and the AI closed at $"+ai.toFixed(2)+". "+(m.winner==="player"?"Your strategy finished ahead.":m.winner==="ai"?"The moving-average strategy finished ahead.":"Both portfolios have equal value.")}}
-$("#start").addEventListener("click",()=>{$("#start-screen").hidden=true;$("#market").hidden=false;render()});
-$("#stock").addEventListener("change",draw);
-function order(side){try{transact(m,"player",side,$("#stock").value,Number($("#quantity").value));$("#message").textContent="Order filled at $"+m.prices[$("#stock").value].toFixed(2)+" per share.";render()}catch(e){$("#message").textContent=e.message}}
-$("#buy").addEventListener("click",()=>order("buy"));$("#sell").addEventListener("click",()=>order("sell"));$("#advance").addEventListener("click",()=>{advanceDay(m);$("#message").textContent="Day "+m.day+" settled. "+(m.events.length?m.events.join(" · "):"No major company news.");render()});
-function reset(){m=makeMarket(Date.now()>>>0);$("#start-screen").hidden=false;$("#market").hidden=true;$("#end-screen").hidden=true;$("#message").textContent="";$("#stock").selectedIndex=0;render()}
-$("#restart").addEventListener("click",reset);$("#again").addEventListener("click",reset);render();
+import { DAYS, STOCKS, makeMarket, transact, advanceDay, netWorth } from "./engine.js";
+
+const $ = selector => document.querySelector(selector);
+const chart = $("#chart");
+const trade = $("#trade");
+const help = $("#studio-help");
+const result = $("#end-screen");
+const money = value => "$" + value.toFixed(2);
+const tickers = ["HLG", "QFS", "ORB", "GCM", "MNB"];
+let market = makeMarket();
+let stock = STOCKS[0];
+let opened = false;
+
+$("#stocks").replaceChildren(...STOCKS.map((item, index) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = tickers[index];
+  button.setAttribute("aria-label", item.name);
+  button.title = item.name;
+  button.addEventListener("click", () => {
+    stock = item;
+    renderQuote();
+  });
+  return button;
+}));
+
+function draw() {
+  const context = chart.getContext("2d");
+  if (!context) return;
+  const { width, height } = chart.getBoundingClientRect();
+  const density = Math.min(devicePixelRatio, 2);
+  chart.width = Math.round(width * density);
+  chart.height = Math.round(height * density);
+  context.scale(density, density);
+
+  const left = 47;
+  const right = width - 21;
+  const top = 105;
+  const bottom = height - (width <= 600 ? 120 : 77);
+  if (bottom <= top || right <= left) return;
+  const values = market.history[stock.id];
+  const low = Math.min(...values) * .94;
+  const high = Math.max(...values) * 1.06;
+  const xAt = index => left + index * (right - left) / DAYS;
+  const yAt = price => top + (high - price) * (bottom - top) / (high - low);
+
+  context.strokeStyle = "#294459";
+  context.fillStyle = "#bbd1df";
+  context.font = "11px ui-monospace, monospace";
+  for (let index = 0; index <= 5; index++) {
+    const value = high - (high - low) * index / 5;
+    const y = yAt(value);
+    context.beginPath();
+    context.moveTo(left, y);
+    context.lineTo(right, y);
+    context.stroke();
+    context.fillText("$" + value.toFixed(0), 5, y + 4);
+  }
+  for (let day = 0; day <= DAYS; day += 5) {
+    context.fillText(String(day), xAt(day) - 4, bottom + 21);
+  }
+  context.lineWidth = 2;
+  context.strokeStyle = context.fillStyle = stock.color;
+  context.beginPath();
+  values.forEach((value, index) => {
+    if (index) context.lineTo(xAt(index), yAt(value));
+    else context.moveTo(xAt(index), yAt(value));
+  });
+  context.stroke();
+  context.beginPath();
+  context.arc(xAt(values.length - 1), yAt(values.at(-1)), 4, 0, 2 * Math.PI);
+  context.fill();
+}
+
+function renderQuote() {
+  const price = market.prices[stock.id];
+  const previous = market.history[stock.id].at(-2);
+  $("#stock-name").textContent = stock.name;
+  $("#price").textContent = money(price);
+  $("#change").textContent = previous ? ((price / previous - 1) * 100).toFixed(2) + "%" : "";
+  $("#order-quote").textContent = stock.name + " · " + money(price);
+  for (const [index, button] of [...$("#stocks").children].entries()) {
+    button.setAttribute("aria-pressed", String(STOCKS[index] === stock));
+  }
+  draw();
+}
+
+function render() {
+  $("#day").textContent = market.day;
+  for (const [account, id] of [["player", "player"], ["ai", "ai"]]) {
+    $("#" + id + "-value").textContent = money(netWorth(market, account));
+    $("#" + id + "-cash").textContent = money(market.cash[account]);
+  }
+  $("#holdings").replaceChildren(...STOCKS.map(item => {
+    const row = document.createElement("div");
+    row.className = "holding";
+    row.textContent = item.name + " · " + market.shares.player[item.id] + " shares";
+    return row;
+  }));
+  $("#log").replaceChildren(...market.log.slice(0, 40).map(line => {
+    const row = document.createElement("li");
+    row.textContent = line;
+    return row;
+  }));
+  $("#stocks").hidden = $("#trade-open").hidden = $("#advance").hidden = !opened || market.finished;
+  $("#start").hidden = opened;
+  $("#results-open").hidden = !market.finished;
+  renderQuote();
+}
+
+function order(side) {
+  try {
+    transact(market, "player", side, stock.id, Number($("#quantity").value));
+    $("#order-status").textContent = "Filled at " + money(market.prices[stock.id]) + " per share.";
+    render();
+  } catch (error) {
+    $("#order-status").textContent = error.message;
+  }
+}
+
+$("#start").addEventListener("click", () => {
+  opened = true;
+  render();
+  $("#stocks").firstElementChild.focus();
+});
+$("#trade-open").addEventListener("click", () => {
+  $("#order-status").textContent = "";
+  trade.showModal();
+});
+$("#buy").addEventListener("click", () => order("buy"));
+$("#sell").addEventListener("click", () => order("sell"));
+$("#advance").addEventListener("click", () => {
+  advanceDay(market);
+  $("#message").textContent = `Day ${market.day} settled. ${market.events.join(" · ")}`;
+  render();
+  if (!market.finished) return;
+  $("#end-title").textContent = market.winner === "player" ? "You win" : market.winner === "ai" ? "Opponent wins" : "Market tied";
+  $("#end-copy").textContent = `Day ${DAYS} closed at ${money(netWorth(market, "player"))} for you and ${money(netWorth(market, "ai"))} for the opponent.`;
+  $("#results-open").focus();
+  result.showModal();
+});
+
+function reset() {
+  market = makeMarket(Date.now() >>> 0);
+  stock = STOCKS[0];
+  opened = false;
+  $("#message").textContent = "";
+  $("#quantity").value = 10;
+  result.close();
+  help.close();
+  render();
+  $("#start").focus();
+}
+
+$("#again").addEventListener("click", reset);
+$("#restart").addEventListener("click", reset);
+$("#results-open").addEventListener("click", () => result.showModal());
+$("#book-open").addEventListener("click", () => $("#book").showModal());
+$("#help-open").addEventListener("click", () => help.showModal());
+new ResizeObserver(draw).observe(chart);
+render();
