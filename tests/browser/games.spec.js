@@ -227,11 +227,16 @@ test('David chapter renders 4K and completes all targets using real aiming contr
   test.setTimeout(90000);
   const errors=[]; page.on('pageerror', error=>errors.push(error.message));
   await page.goto('/game23/'); await expect(page.locator('#start')).toBeEnabled();
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
   await expect(page.locator('#valley')).toHaveAttribute('data-resolution','3840x2160');
   expect(await page.locator('#valley').evaluate(c=>{ const g=c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
+  await page.keyboard.press('Escape');
   await page.screenshot({path:'test-results/bible-4k.png',fullPage:true});
-  await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
+  await page.locator('#help-open').click();
+  await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
+  await page.locator('#start').click();
   async function aimControl(id,value) {
     const slider=page.locator(`#${id}`);
     await expect(slider).toBeEnabled({timeout:15000});

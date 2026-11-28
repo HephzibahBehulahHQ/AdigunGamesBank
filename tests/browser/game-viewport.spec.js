@@ -14,7 +14,7 @@ for (let game = 1; game <= 24; game++) {
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
     const studio = (await main.getAttribute('id')) === 'studio';
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls, .market-controls, .signal-controls, .arena-controls' : '.game-console-content');
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls, .bench-studio-controls, .volt-controls, .tray-controls, .charge-controls, .register-studio-controls, .fuse-controls, .goal-controls, .apex-controls, .football-controls, .cortex-actions, .memory-controls, .quiz-controls, .tactics-controls, .strategy-controls, .pitch-action, .debate-controls, .case-controls, .market-controls, .signal-controls, .arena-controls, .valley-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);
@@ -74,6 +74,9 @@ for (let game = 1; game <= 24; game++) {
 test('Last Signal keeps help independent of the match and accepts touch input', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, hasTouch: true, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
+  // Seed the match so a random supply pickup cannot alter the first shot's ammo count.
+  await page.clock.setFixedTime(21001);
+  await page.addInitScript(() => { Math.random = () => 0; });
   await page.goto('/game21/');
   const toggle = page.getByRole('button', { name: 'Help and match information' });
   const start = page.getByRole('button', { name: 'Drop into the basin' });
@@ -251,4 +254,23 @@ test('Market Duel selects a stock, settles an order and completes the market', a
   await expect(page.locator('#end-screen')).toBeVisible();
   await page.getByRole('button', { name: 'Trade again' }).click();
   await expect(page.locator('#day')).toHaveText('0');
+});
+
+test('Valley of Elah can complete a shield attempt without WebGL', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+      return /webgl/i.test(kind) ? null : original.call(this, kind, ...args);
+    };
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game23/');
+  await expect(page.locator('#valley-fallback')).toBeVisible();
+  await page.getByRole('button', { name: 'Begin', exact: true }).press('Enter');
+  await page.getByRole('slider', { name: 'Direction', exact: true }).fill('-1.3');
+  await page.getByRole('slider', { name: 'Elevation', exact: true }).fill('44.9');
+  await page.getByRole('slider', { name: 'Release speed', exact: true }).fill('12.6');
+  await page.getByRole('button', { name: 'Throw stone', exact: true }).press('Enter');
+  await expect(page.locator('#stones-readout')).toHaveText('4');
+  await expect(page.locator('#hits-readout')).toHaveText('1 / 3');
 });

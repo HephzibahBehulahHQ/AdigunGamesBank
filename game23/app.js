@@ -1,4 +1,4 @@
-import { createStage } from '../shared/three-stage.js';
+import { createStage, fitStudioCamera } from '../shared/three-stage.js';
 import { campaign, validCampaignSave } from '../shared/progression.js';
 import { createGame, currentTarget, normalizeAim, pauseGame, predict, resumeGame, startGame, stepGame, throwStone } from './engine.js';
 import { buildValleyScene } from './scene.js';
@@ -6,7 +6,7 @@ import { buildValleyScene } from './scene.js';
 const $ = id => document.getElementById(id), canvas = $('valley');
 const progress = campaign('bible-valley-of-elah');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let game = createGame(progress.unlocked), aim = normalizeAim(), stage = null, visual = null, graphicsAvailable = false;
+let game = createGame(progress.unlocked), aim = normalizeAim(), stage = null, visual = null;
 let previousFrame = null, frameId = null, lastEvent = -1, recorded = false, dirty = true, drag = null;
 
 function message(text) { $('message').textContent = text; }
@@ -54,34 +54,33 @@ function updateUI() {
   $('target-height').textContent = `${target.y.toFixed(2)} m`;
   $('target-radius').textContent = `${target.radius.toFixed(2)} m`;
   $('target-wind').textContent = `${target.wind > 0 ? '+' : ''}${target.wind.toFixed(2)} m/s²`;
-  $('start').disabled = !graphicsAvailable || game.phase !== 'ready';
-  $('throw').disabled = !graphicsAvailable || game.phase !== 'aim';
-  $('pause').disabled = !graphicsAvailable || !isActive();
-  $('pause').textContent = game.phase === 'paused' ? 'Resume · Esc' : 'Pause · Esc';
-  for (const key of ['yaw', 'elevation', 'speed']) $(key).disabled = !graphicsAvailable || !['aim', 'ready'].includes(game.phase);
+  $('wind-readout').textContent = `${target.wind.toFixed(2)} m/s²`;
+  $('start').hidden = $('start').disabled = game.phase !== 'ready';
+  $('throw').hidden = $('throw').disabled = game.phase !== 'aim';
+  $('pause').disabled = !isActive();
+  $('pause').textContent = game.phase === 'paused' ? '▶' : 'Ⅱ';
+  $('pause').setAttribute('aria-label', game.phase === 'paused' ? 'Resume' : 'Pause');
+  for (const key of ['yaw', 'elevation', 'speed']) $(key).disabled = !['aim', 'ready'].includes(game.phase);
   $('load-level').disabled = isActive(); $('level').disabled = isActive();
   $('game-overlay').hidden = ['aim', 'flight', 'feedback'].includes(game.phase);
   if (game.phase === 'ready') {
-    $('overlay-kicker').textContent = 'Five stones. One encounter.';
-    $('overlay-title').textContent = 'Stand in the valley.';
-    $('overlay-copy').textContent = 'Select Begin. Adjust your aim and release speed, then throw.';
+    $('overlay-title').textContent = 'Valley of Elah';
+    $('overlay-copy').textContent = stage ? '' : '2D target view';
   } else if (game.phase === 'paused') {
-    $('overlay-kicker').textContent = 'Take a breath';
     $('overlay-title').textContent = 'Challenge paused.';
     $('overlay-copy').textContent = 'Your aim and any stone in flight are preserved. Resume when ready.';
   } else if (game.phase === 'won') {
     if (!recorded) { progress.complete(game.config.level); recorded = true; }
-    $('overlay-kicker').textContent = 'Encounter complete';
     $('overlay-title').textContent = 'The valley falls quiet.';
     $('overlay-copy').textContent = `All three targets struck in ${game.throws} throws. ${saveFeedback()}`;
   } else if (game.phase === 'lost') {
-    $('overlay-kicker').textContent = 'Five stones spent';
     $('overlay-title').textContent = 'Try a different aim.';
     $('overlay-copy').textContent = `${game.hits} of 3 targets struck. Retry this challenge; your earlier progress is safe.`;
   }
   $('campaign-status').textContent = (progress.mastered ? 'All 10,000 challenges cleared. Every level can be replayed.' : `${progress.completed.toLocaleString()} cleared · challenge ${progress.unlocked.toLocaleString()} unlocked.`) + (progress.completed > 0 ? ` ${saveFeedback()}` : ' Completed levels save here when browser storage is available.');
   $('level').max = String(progress.unlocked); $('level').value = String(game.config.level);
   $('next').hidden = !(game.phase === 'won' && game.config.level < progress.unlocked);
+  $('result-retry').hidden = game.phase !== 'lost' && (game.phase !== 'won' || !$('next').hidden);
   if (lastEvent !== game.event) { message(game.message); lastEvent = game.event; }
   aimTelemetry(); dirty = true;
 }
@@ -90,12 +89,11 @@ function reset(level = game.config.level) {
   for (const key of ['yaw', 'elevation', 'speed']) $(key).value = String(aim[key]);
   controlsToAim(); updateUI();
 }
-function begin() { if (graphicsAvailable && startGame(game)) { updateUI(); focusGame(); } }
+function begin() { if (startGame(game)) { updateUI(); focusGame(); } }
 function release() {
-  if (graphicsAvailable && throwStone(game, aim)) { drag = null; updateUI(); focusGame(); }
+  if (throwStone(game, aim)) { drag = null; updateUI(); focusGame(); }
 }
 function togglePause() {
-  if (!graphicsAvailable) return;
   if (game.phase === 'paused') resumeGame(game); else pauseGame(game);
   previousFrame = null; drag = null; updateUI(); focusGame();
 }
@@ -107,6 +105,11 @@ $('start').addEventListener('click', begin);
 $('throw').addEventListener('click', release);
 $('pause').addEventListener('click', togglePause);
 $('restart').addEventListener('click', () => { reset(); focusGame(); });
+$('result-retry').addEventListener('click', () => { reset(); $('start').focus(); });
+$('help-open').addEventListener('click', () => {
+  automaticPause();
+  $('studio-help').showModal();
+});
 $('next').addEventListener('click', () => { reset(Math.min(progress.unlocked, game.config.level + 1)); focusGame(); });
 $('level-form').addEventListener('submit', event => {
   event.preventDefault();
@@ -114,6 +117,8 @@ $('level-form').addEventListener('submit', event => {
   const level = Number($('level').value);
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked) return message(`Choose an unlocked challenge from 1 to ${progress.unlocked}.`);
   reset(level);
+  $('studio-help').close();
+  $('start').focus();
 });
 for (const key of ['yaw', 'elevation', 'speed']) $(key).addEventListener('input', controlsToAim);
 $('assist').addEventListener('change', () => { aimTelemetry(); dirty = true; });
@@ -123,7 +128,7 @@ window.addEventListener('resize', () => { dirty = true; });
 reducedMotion.addEventListener('change', () => { dirty = true; });
 window.addEventListener('blur', automaticPause);
 document.addEventListener('visibilitychange', () => { if (document.hidden) automaticPause(); });
-canvas.addEventListener('stage-lost', () => { graphicsAvailable = false; automaticPause(); updateUI(); message('Graphics connection lost. Reload to resume from your last saved challenge.'); });
+canvas.addEventListener('stage-lost', enableFallback);
 canvas.addEventListener('keydown', event => {
   const key = event.key.toLowerCase();
   const handled = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'z', 'x', ' ', 'enter', 'escape', 'r'];
@@ -152,15 +157,40 @@ canvas.addEventListener('pointermove', event => {
   controlsToAim();
 });
 for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(type, () => { drag = null; });
-$('year').textContent = new Date().getFullYear();
+
+function enableFallback() {
+  stage?.dispose(); stage = null;
+  $('valley-fallback').hidden = false;
+  $('quality').disabled = $('camera-view').disabled = true;
+  $('render-status').textContent = '2D target view';
+  updateUI();
+  message('3D graphics are unavailable. Continue the current challenge using the 2D target view.');
+}
+
+function renderFallback() {
+  const target = currentTarget(game);
+  const position = ['flight', 'feedback'].includes(game.phase) ? game.shot.position : null;
+  const projected = position ? null : predict(target, aim);
+  const dx = position ? position.x - target.x : projected.dx;
+  const dy = position ? position.y - target.y : projected.dy;
+  const bounded = (value, middle) => `${Math.max(10, Math.min(90, middle + value * 9))}%`;
+  const fallback = $('valley-fallback');
+  fallback.style.setProperty('--marker-x', bounded(dx, 50));
+  fallback.style.setProperty('--marker-y', bounded(-dy, 48));
+  fallback.classList.toggle('show-marker', !!position || $('assist').checked);
+}
 
 function frame(timestamp) {
   const dt = previousFrame === null ? 0 : Math.min(0.1, (timestamp - previousFrame) / 1000); previousFrame = timestamp;
   const moving = game.phase === 'flight' || game.phase === 'feedback';
   if (stepGame(game, dt) || lastEvent !== game.event) updateUI();
   if (dirty || moving) {
-    visual.update(game, aim, $('assist').checked, reducedMotion.matches, $('camera-view').value);
-    stage.render(); dirty = false;
+    if (stage) {
+      visual.update(game, aim, $('assist').checked, reducedMotion.matches, $('camera-view').value);
+      fitStudioCamera(stage.camera, canvas);
+      stage.render();
+    } else renderFallback();
+    dirty = false;
   }
   frameId = requestAnimationFrame(frame);
 }
@@ -168,15 +198,8 @@ function frame(timestamp) {
 try {
   stage = createStage({ canvas, qualitySelect: $('quality'), status: $('render-status'), position: [4.5, 4.2, -8], target: [0, 2, 12] });
   visual = buildValleyScene(stage);
-  graphicsAvailable = true;
-  controlsToAim(); updateUI(); frameId = requestAnimationFrame(frame);
-} catch (error) {
-  stage?.dispose(); stage = null; updateUI();
-  message('This game needs a working WebGL 2 renderer. Enable hardware acceleration or try a compatible browser.');
-  $('overlay-kicker').textContent = 'Graphics unavailable'; $('overlay-title').textContent = 'The 3D scene could not start.';
-  $('overlay-copy').textContent = 'Check WebGL 2 support and reload. Saved campaign progress is retained.';
-  $('render-status').textContent = '3D renderer unavailable';
-}
+} catch { enableFallback(); }
+controlsToAim(); updateUI(); frameId = requestAnimationFrame(frame);
 window.addEventListener('pagehide', event => {
   automaticPause();
   if (!event.persisted) { cancelAnimationFrame(frameId); stage?.dispose(); }

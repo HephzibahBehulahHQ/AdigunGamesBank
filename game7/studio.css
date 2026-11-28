@@ -31,3 +31,9 @@
   .register-actions { gap: 3px; }
   .register-actions button { min-width: 34px; padding-inline: 5px; font-size: 11px; }
 }
+
+@media (max-width: 360px) {
+  .register-pills > span { padding: 2px 3px; }
+  .register-actions button { min-height: 34px; padding-inline: 4px; }
+  #studio:has(#phase[data-phase='working']) #retry { display: none; }
+}
