@@ -50,6 +50,11 @@ function prepareSettings() {
   updateSettings();
 }
 function telemetry() {
+  const fallback = $('graphics-fallback');
+  if (!fallback.hidden) {
+    fallback.style.setProperty('--ball-x', `${clamp(50 + state.ball.x * 7, 8, 92)}%`);
+    fallback.style.setProperty('--ball-y', `${clamp(45 + state.ball.z * 2.65 - state.ball.y * 8, 12, 85)}%`);
+  }
   $('distance').textContent = `${Math.max(0, state.ball.z).toFixed(2)} m`;
   $('height').textContent = `${state.ball.y.toFixed(2)} m`;
   $('flight-time').textContent = `${state.elapsed.toFixed(2)} s`;
@@ -119,6 +124,11 @@ function sync() {
     else if (state.phase === 'result') showMessage(`${label[state.result.outcome]} — ${state.result.detail}. Score ${state.goals}–${state.opponentGoals}.${state.kickIndex === 5 ? ' Now take the gloves for five goalkeeper turns.' : ` ${10 - state.kickIndex} kicks remain.`}`, (keeping ? state.result.outcome !== 'goal' : state.result.outcome === 'goal') ? 'success' : 'error');
     lastEvent = state.event;
   }
+  const action = document.activeElement;
+  if ((action === $('shoot') || action === $('pause')) && (action.disabled || action.hidden)) {
+    const next = [$('next-kick'), $('next-level'), $('result-retry')].find(button => !button.hidden);
+    (next || canvas).focus({ preventScroll: true });
+  }
   renderHistory(); telemetry(); dirty = true;
 }
 function reset(level = state.config.level) {
@@ -154,6 +164,8 @@ $('load-level').addEventListener('click', () => {
   const level = Number($('level').value);
   if (!Number.isInteger(level) || level < 1 || level > progress.unlocked || level > LEVEL_COUNT) { showMessage(`Choose an unlocked challenge from 1 to ${progress.unlocked.toLocaleString()}.`, 'error'); return; }
   reset(level);
+  help.close();
+  shoot.focus({ preventScroll: true });
 });
 canvas.addEventListener('keydown', event => {
   if (event.repeat && [' ', 'Escape', 'r', 'R', 'n', 'N'].includes(event.key)) return;
@@ -175,6 +187,7 @@ canvas.addEventListener('keydown', event => {
 document.addEventListener('visibilitychange', () => { if (document.hidden && pauseShootout(state)) { previous = 0; sync(); } });
 window.addEventListener('storage', event => { if (event.key === saveKey) sync(); });
 $('quality').addEventListener('change', () => { dirty = true; });
+new ResizeObserver(() => { dirty = true; }).observe(canvas);
 canvas.addEventListener('stage-lost', () => {
   scene?.dispose(); scene = null; $('graphics-fallback').hidden = false;
   $('graphics-status').textContent = 'Graphics connection lost. Command controls continue the same shootout.';

@@ -7,7 +7,11 @@ const phase = page => page.locator('#phase');
 async function shootFive(page, { miss = false, keyboard = false, pauseFirst = false } = {}) {
   for (let kick = 0; kick < 5; kick++) {
     await expect(phase(page)).toHaveAttribute('data-role', 'shoot');
-    if (miss) await page.getByRole('slider', { name: 'Shot elevation', exact: true }).press('End');
+    if (miss) {
+      await page.locator('#aim-open').press('Enter');
+      await page.getByRole('slider', { name: 'Shot elevation', exact: true }).press('End');
+      await page.keyboard.press('Escape');
+    }
     else {
       const text = await page.locator('#keeper-tell').innerText();
       const preset = page.getByRole('button', { name: text.includes('left') ? 'Low right' : 'Low left', exact: true });
@@ -43,7 +47,9 @@ async function keepFive(page, { concede = false, keyboard = false, terminal = 'w
     const dive = page.getByRole('button', { name: `Dive ${selected}`, exact: true });
     if (keyboard) await dive.press('Enter'); else await dive.click();
     const high = (await page.locator('#keeper-detail').innerText()).startsWith('Chest-high');
+    await page.locator('#aim-open').press('Enter');
     await page.getByLabel('Dive height', { exact: true }).selectOption(high ? 'high' : 'low');
+    await page.keyboard.press('Escape');
     const face = page.getByRole('button', { name: 'Face penalty', exact: true });
     if (keyboard) await face.press('Enter'); else await face.click();
     await expect(phase(page)).toHaveAttribute('data-phase', kick === 4 ? terminal : 'result', { timeout: 20000 });
@@ -67,18 +73,22 @@ test('Penalty Pro renders actual 4K and wins through five shots and five goalkee
   await page.goto('/game17/');
   const canvas = page.locator('#penalty-canvas');
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('4k');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
+  await page.keyboard.press('Escape');
   await canvas.screenshot({ path: testInfo.outputPath('penalty-4k.png') });
   const buffer = await canvas.evaluate(element => { const gl = element.getContext('webgl2'); return { width: gl.drawingBufferWidth, height: gl.drawingBufferHeight, error: gl.getError() }; });
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('penalty-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics', exact: true }).selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.setViewportSize({ width: 800, height: 900 });
   await shootFive(page);
   await expect(page.locator('#goals')).toHaveText('5 / 5');
   await expect(page.locator('#opponent-goals')).toHaveText('0 / 5');
-  await expect(page.locator('#keeping-settings')).toBeVisible();
+  await expect(page.locator('#dive-presets')).toBeVisible();
   // The separate keeper controls must remain accessible when they replace
   // the shot controls; the repository's generic route audit only sees kickoff.
   await page.setViewportSize({ width: 320, height: 900 });
