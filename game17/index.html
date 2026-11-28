@@ -25,7 +25,7 @@
     <button id="help-open" type="button" aria-label="Help" aria-haspopup="dialog">?</button>
   </div>
   <div class="pitch-controls">
-    <div id="shot-presets"><div class="presets" role="group" aria-label="Placement shortcuts"><button type="button" data-aim="-14" data-elevation="14" aria-label="High left" title="High left">↖</button><button type="button" data-aim="0" data-elevation="14" aria-label="High centre" title="High centre">↑</button><button type="button" data-aim="14" data-elevation="14" aria-label="High right" title="High right">↗</button><button type="button" data-aim="-14" data-elevation="9" aria-label="Low left" title="Low left">↙</button><button type="button" data-aim="0" data-elevation="9" aria-label="Low centre" title="Low centre">↓</button><button type="button" data-aim="14" data-elevation="9" aria-label="Low right" title="Low right">↘</button></div></div>
+    <div id="shot-presets"><div class="presets" role="group" aria-label="Placement shortcuts"><button type="button" data-aim="-14" data-elevation="9" aria-label="Low left" title="Low left">↙</button><button type="button" data-aim="0" data-elevation="9" aria-label="Low centre" title="Low centre">↓</button><button type="button" data-aim="14" data-elevation="9" aria-label="Low right" title="Low right">↘</button></div></div>
     <div id="dive-presets" hidden><div class="presets" role="group" aria-label="Dive shortcuts"><button type="button" data-dive="-2.6" aria-label="Dive left" title="Dive left">←</button><button type="button" data-dive="0" aria-label="Hold centre" title="Hold centre">●</button><button type="button" data-dive="2.6" aria-label="Dive right" title="Dive right">→</button></div></div>
     <button id="aim-open" type="button" aria-label="Fine-tune penalty" aria-haspopup="dialog" title="Fine-tune penalty">⚙</button>
   </div>
@@ -45,10 +45,11 @@
         <div class="range-head"><label for="aim">Horizontal aim</label><output id="aim-value" for="aim">0°</output></div><input id="aim" type="range" min="-24" max="24" step="0.5" value="0" aria-describedby="aim-guide"><div id="aim-guide" class="range-guide"><span>−24° left</span><span>+24° right</span></div>
         <div class="range-head"><label for="elevation">Shot elevation</label><output id="elevation-value" for="elevation">9°</output></div><input id="elevation" type="range" min="0" max="28" step="0.5" value="9" aria-describedby="elevation-guide"><div id="elevation-guide" class="range-guide"><span>0° along the grass</span><span>28° rising</span></div>
         <div class="range-head"><label for="power">Shot power</label><output id="power-value" for="power">75%</output></div><input id="power" type="range" min="25" max="100" step="1" value="75" aria-describedby="power-guide"><div id="power-guide" class="range-guide"><span id="speed-readout">26.0 m/s</span><span id="power-limit">Kick limit: 100%</span></div>
-
+    <div id="high-presets" class="presets" aria-label="High placement shortcuts"><button type="button" data-aim="-14" data-elevation="14" aria-label="High left" title="High left">↖</button><button type="button" data-aim="0" data-elevation="14" aria-label="High centre" title="High centre">↑</button><button type="button" data-aim="14" data-elevation="14" aria-label="High right" title="High right">↗</button></div>
     </div>
     <div id="keeping-settings" hidden><div class="range-head"><label for="dive-position">Dive position</label><output id="dive-position-value" for="dive-position">0.0 m</output></div><input id="dive-position" type="range" min="-3.4" max="3.4" step="0.1" value="0" aria-describedby="dive-guide"><div id="dive-guide" class="range-guide"><span>−3.4 m left</span><span>+3.4 m right</span></div><label for="dive-height">Dive height</label><select id="dive-height"><option value="high">Chest high</option><option value="low">Low</option></select><div class="range-head"><label for="dive-delay">Dive delay</label><output id="dive-delay-value" for="dive-delay">80 ms</output></div><input id="dive-delay" type="range" min="50" max="300" step="10" value="80" aria-describedby="dive-delay-guide"><p id="dive-delay-guide" class="hint">Time after the kick before you commit. An early dive reaches the corner sooner.</p>
     </div>
+
     <p id="role-note"></p>
   </dialog>
   <dialog id="studio-help" aria-labelledby="help-title">
