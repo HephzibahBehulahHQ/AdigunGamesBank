@@ -31,3 +31,11 @@
   .football-controls .ball-controls { grid-row: 3; max-width: 145px; }
   .football-controls .ball-controls button { padding-inline: 4px; font-size: 11px; }
 }
+
+@media (max-width: 360px) {
+  .football-readouts > span { padding: 2px; }
+  .football-controls .direction-pad { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(2, 36px); }
+  .football-controls :is(.direction-pad, .ball-controls) button { min-width: 35px; min-height: 35px; padding: 2px 3px; }
+  .football-controls .ball-controls button { font-size: 10px; }
+  .football-controls .ball-controls { max-width: 128px; }
+}
