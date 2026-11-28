@@ -29,7 +29,9 @@ test('Goal Line renders actual 4K, recovers from failure and saves a complete ke
   await page.goto('/game9/');
   const pitch = page.locator('#pitch');
   await expect(pitch).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics' }).selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(pitch).toHaveAttribute('data-resolution', '3840x2160');
   const drawingBuffer = await pitch.evaluate((canvas) => {
     const gl = canvas.getContext('webgl2');
@@ -37,7 +39,9 @@ test('Goal Line renders actual 4K, recovers from failure and saves a complete ke
   });
   expect(drawingBuffer).toEqual([3840, 2160, 0]);
   await info.attach('goal-line-4k-pitch', { body: await pitch.screenshot(), contentType: 'image/png' });
+  await page.locator('#help-open').click();
   await page.getByRole('combobox', { name: 'Graphics' }).selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Clear ball', exact: true }).press('Enter');
   await expect(page.locator('#message')).toContainText('Missed contact');
   await expect(page.getByRole('button', { name: 'Restart drill' })).toBeFocused();

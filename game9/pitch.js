@@ -1,4 +1,4 @@
-import { THREE, box, createStage, material } from '../shared/three-stage.js';
+import { THREE, box, createStage, fitStudioCamera, material } from '../shared/three-stage.js';
 import { BALL_RADIUS, SAFETY_LINE, clearanceAt } from './clearance.js';
 
 export function createPitch(options) {
@@ -60,6 +60,7 @@ export function createPitch(options) {
         geometry.attributes.position.needsUpdate = true;
       }
       camera.lookAt(0, 0, 7 + Math.max(0, visibleBall.z - 14) * 0.2);
+      fitStudioCamera(camera, options.canvas);
       stage.render();
     }
   };

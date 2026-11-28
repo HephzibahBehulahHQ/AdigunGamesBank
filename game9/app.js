@@ -13,7 +13,15 @@ const quality = byId('quality');
 const graphics = byId('graphics');
 let level = save.unlocked;
 let state;
-let pitch;
+let pitch, noticeTimer;
+function showNotice(value) {
+  const notice = byId('message');
+  if (notice.textContent === value) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = value;
+  notice.classList.toggle('sr-only', !value);
+  if (value) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
 
 function sideways(x) {
   if (Math.abs(x) < 0.005) return 'centre';
@@ -34,12 +42,19 @@ function update(message) {
   byId('gate').textContent = sideways(feed.channel - safeEdge) + ' to ' + sideways(feed.channel + safeEdge);
   byId('projection').textContent = ball.z <= 2.3 ? sideways(projection.x) : 'Available inside contact zone';
   byId('angle-value').textContent = aiming + '°';
-  byId('contact').textContent = Math.abs(ball.x - state.defender) <= 0.62 && ball.z <= 2.3 && ready
-    ? 'Ball in reach.' : 'Close the gap before clearing.';
-  if (message !== undefined) byId('message').textContent = message;
+  byId('goal-aim').textContent = aiming + '°';
+  byId('goal-distance').textContent = ball.z.toFixed(1) + 'm';
+  byId('goal-position').textContent = state.defender.toFixed(1) + 'm';
+  const inReach = Math.abs(ball.x - state.defender) <= 0.62 && ball.z <= 2.3 && ready;
+  byId('contact').textContent = inReach ? 'Ball in reach.' : 'Close the gap before clearing.';
+  clearButton.dataset.ready = String(inReach);
+  if (message !== undefined) showNotice(message);
   levelInput.max = save.unlocked;
   buttons.forEach((button) => { button.disabled = !ready; });
   angle.disabled = clearButton.disabled = !ready;
+  clearButton.hidden = !ready;
+  document.querySelector('.goal-movement').hidden = !ready;
+  document.querySelector('.goal-angle').hidden = !ready;
   next.hidden = state.result !== 'cleared' || (finished && level === LEVEL_COUNT);
   next.textContent = finished ? 'Next drill' : 'Next ball';
   pitch?.draw(state, feed, ball, aiming);
@@ -91,12 +106,15 @@ next.addEventListener('click', () => {
   }
 });
 byId('retry').addEventListener('click', () => load(level, true));
+byId('help-open').addEventListener('click', () => byId('studio-help').showModal());
 byId('load').addEventListener('click', () => {
   levelInput.max = save.unlocked;
-  if (levelInput.reportValidity()) load(levelInput.valueAsNumber, true);
+  if (levelInput.reportValidity()) { byId('studio-help').close(); load(levelInput.valueAsNumber, true); }
 });
 
 function fallback() {
+  byId('goal-fallback').append(byId('detail-readings'));
+  byId('goal-fallback').hidden = false;
   canvas.hidden = true;
   quality.disabled = true;
   graphics.textContent = '3D unavailable. Use the drill controls and position readings to play.';

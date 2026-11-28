@@ -8,65 +8,56 @@
   <link rel="stylesheet" href="goal-line.css">
   <script type="module" src="app.js"></script>
 <link rel="stylesheet" href="../shared/game-viewport.css">
+  <link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#controls">Skip to drill controls</a>
-<main class="game-viewport">
-<div class="game-play-surface viewport"><canvas id="pitch" aria-hidden="true"></canvas></div>
-<dl class="game-stage-hud readings">
-          <div><dt>Ball</dt><dd id="ball"></dd></div>
-          <div><dt>Defender</dt><dd id="defender"></dd></div>
-          <div><dt>Clearance gate</dt><dd id="gate"></dd></div>
-          <div><dt>Projected clearance</dt><dd id="projection"></dd></div>
-        </dl>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#controls">Jump to play controls</a>
-
-
-  <header class="game-header">
-    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" width="150" height="54" alt="Hephzibah Behulah"><span>ADIGUN GAME BANK</span></a>
-    <a href="../">All games</a>
-  </header>
-
-    <h1>Goal Line</h1>
-    <p class="intro">Protect the goal. Meet the incoming ball and direct your clearance through the marked gate.</p>
+<body>
+<a class="skip-link" href="#controls">Skip to drill controls</a>
+<main class="game-viewport" id="studio">
+  <h1 class="sr-only">Goal Line</h1>
+  <div class="game-play-surface viewport"><canvas id="pitch" aria-hidden="true"></canvas></div>
+  <div class="goal-readouts" aria-label="Drill readings">
+    <span title="Ball distance"><i aria-hidden="true">⚽</i><span class="sr-only">Ball distance:</span> <strong id="goal-distance">—</strong></span>
+    <span title="Defender position"><i aria-hidden="true">↔</i><span class="sr-only">Defender position:</span> <strong id="goal-position">—</strong></span>
+    <span title="Clearance aim"><i aria-hidden="true">◢</i><span class="sr-only">Aim:</span> <strong id="goal-aim">0°</strong></span>
+  </div>
+  <button id="help-open" class="goal-help" type="button" aria-label="Help and drill settings" aria-haspopup="dialog">?</button>
+  <div id="goal-fallback" class="goal-fallback" hidden></div>
+  <div id="controls" class="goal-controls" tabindex="-1" aria-label="Clearance controls">
+    <p id="message" class="sr-only" role="status" aria-live="polite"></p>
+    <div class="goal-actions">
+      <div class="goal-movement" role="group" aria-label="Advance ball">
+        <button data-move="-1" type="button" aria-label="Left" title="Left">←</button>
+        <button data-move="0" type="button" aria-label="Hold" title="Hold">◷</button>
+        <button data-move="1" type="button" aria-label="Right" title="Right">→</button>
+      </div>
+      <div class="goal-angle"><label for="angle" class="sr-only">Clearance angle</label><input id="angle" type="range" min="-60" max="60" value="0"><output id="angle-value" for="angle">0°</output></div>
+      <button id="clear" type="button" aria-describedby="contact" aria-label="Clear ball">Clear</button>
+      <button id="next" type="button" hidden></button>
+      <button id="retry" type="button" aria-label="Restart drill" title="Restart drill">⟳</button>
+    </div>
+  </div>
+  <p id="contact" class="sr-only"></p><p id="graphics" class="sr-only" role="status">Loading pitch…</p>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="goal-close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Clearance drill guide</h2>
+    <p>Meet the incoming ball and clear it through the gate. Left, Hold and Right advance the ball by 0.1 seconds.</p>
     <div class="toolbar">
       <label for="level">Drill</label><input id="level" type="number" min="1" max="1" value="1" required>
       <button id="load" type="button">Load drill</button>
       <label for="quality">Graphics</label><select id="quality"><option value="auto">Adaptive 3D</option><option value="1080">1080p</option><option value="4k">4K UHD</option></select>
     </div>
     <p id="campaign"></p>
-    <div class="layout">
-      <section aria-label="Pitch and drill status">
-
-        <p id="graphics" role="status">Loading pitch…</p>
-        <p id="message" class="message" role="status"></p>
-
-      </section>
-      <section id="controls" class="panel" aria-labelledby="control-title" tabindex="-1">
-        <h2 id="control-title">Defend the line</h2>
-        <p>Each movement advances the ball by 0.1 seconds. Move across the goalmouth or hold your position.</p>
-        <div class="movement" role="group" aria-label="Advance ball">
-          <button data-move="-1" type="button">Left</button>
-          <button data-move="0" type="button">Hold</button>
-          <button data-move="1" type="button">Right</button>
-        </div>
-        <label for="angle">Clearance angle <output id="angle-value" for="angle">0°</output></label>
-        <input id="angle" type="range" min="-60" max="60" value="0">
-        <p id="contact"></p>
-        <button id="clear" class="primary" type="button">Clear ball</button>
-        <button id="next" type="button" hidden></button>
-        <button id="retry" type="button">Restart drill</button>
-        <details><summary>Drill rules</summary>
+    <dl class="readings" id="detail-readings">
+          <div><dt>Ball</dt><dd id="ball"></dd></div>
+          <div><dt>Defender</dt><dd id="defender"></dd></div>
+          <div><dt>Clearance gate</dt><dd id="gate"></dd></div>
+          <div><dt>Projected clearance</dt><dd id="projection"></dd></div>
+        </dl>
+    <details><summary>Drill rules</summary>
           <p>Make contact within 2.3 m of the line and within 0.62 m laterally. A clearance counts when the entire ball crosses the gate 8 m upfield. Every ball must be cleared to unlock the next drill.</p>
           <p>Use Tab and Enter for the buttons and arrow keys on the angle slider. All readings are in metres. Negative angles aim left.</p>
         </details>
-      </section>
-    </div>
-
-</div>
-</details>
+    <a href="../">Game library</a>
+  </dialog>
 </main>
-</body>
-</html>
+</body></html>
