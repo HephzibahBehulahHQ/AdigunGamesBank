@@ -18,7 +18,9 @@ test('APEX renders a real 4K frame and qualifies through keyboard and step drivi
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame'))).toBeGreaterThan(0);
   const frameBefore = Number(await canvas.getAttribute('data-frame'));
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame')), { timeout: 20000 }).toBeGreaterThan(frameBefore);
   await canvas.screenshot({ path: testInfo.outputPath('apex-4k.png') });
@@ -31,7 +33,9 @@ test('APEX renders a real 4K frame and qualifies through keyboard and step drivi
 
   // Software rendering verifies the drawing buffer, not physical-device frame rate.
   await page.setViewportSize({ width: 800, height: 900 });
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.locator('#start').click();
   await expect(canvas).toBeFocused();
   await page.keyboard.down('ArrowUp'); await page.keyboard.down('ArrowRight');
@@ -48,7 +52,9 @@ test('APEX renders a real 4K frame and qualifies through keyboard and step drivi
   await page.locator('#steering').press('End'); await page.locator('#throttle').press('End');
   await expect(page.locator('#steering-value')).toHaveText('+100%');
   await expect(page.locator('#throttle-value')).toHaveText('100%');
+  await page.locator('#help-open').click();
   await page.locator('#drive-mode').selectOption('step');
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Resume race', exact: true }).press('Enter');
   await finishThroughStepControls(page);
   await expect(page.locator('#gate-count')).toHaveText('12 / 12 gates');

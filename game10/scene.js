@@ -1,4 +1,4 @@
-import { THREE, createStage, material, box, cylinder } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, material, box, cylinder } from '../shared/three-stage.js';
 import { trackPoint } from './campaign.js';
 
 function ribbon(parent, config, left, right, height, color, alternating = false) {
@@ -140,7 +140,9 @@ export function createCircuitScene({ canvas, qualitySelect, status }) {
       lookAt.set(vehicle.x + Math.cos(vehicle.heading) * 9, 0.8, vehicle.z + Math.sin(vehicle.heading) * 9);
       stage.camera.lookAt(lookAt);
     }
-    cameraInitial = false; stage.render(); canvas.dataset.frame = String(++frameCount);
+    cameraInitial = false;
+    fitStudioCamera(stage.camera, canvas);
+    stage.render(); canvas.dataset.frame = String(++frameCount);
   }
   return {
     draw,
