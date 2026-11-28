@@ -27,9 +27,15 @@ Electronicer [PR #14](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull
 passed candidate and main verification and [Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46180535666)
 at `f1acaab6e839999ef23e0364f0b4da77f163af8a`. The live studio HTML, CSS and
 gameplay script matched the production manifest and inspected source.
-Volt Dodge (#15) passed exact-candidate verification and merged at
-`c7911499ee853d4b7667f46d17044cc520226a8b`. Production verification is pending.
-The later titles remain in scoped pull requests. Preserve each verified live
+Volt Dodge (#15) and Resistor Match (#16) passed candidate and main verification.
+The live HTML, CSS and gameplay scripts matched the production manifests at
+`c7911499ee853d4b7667f46d17044cc520226a8b`
+([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46181800422))
+and `6a166e8cb093b38616508552b249d670adf68d33`
+([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46182894865)).
+Capacitor Charge (#17) passed exact-candidate verification and merged at
+`34239b7de04c74024c643b276723e54c34aa8254`. Its production verification is pending.
+The remaining title redesigns are in scoped PRs #18–#34. Verify each live
 rollout before merging the next to avoid superseding a deployment.
 
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.

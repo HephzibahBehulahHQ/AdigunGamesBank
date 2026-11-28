@@ -252,3 +252,22 @@ test('Market Duel selects a stock, settles an order and completes the market', a
   await page.getByRole('button', { name: 'Trade again' }).click();
   await expect(page.locator('#day')).toHaveText('0');
 });
+
+test('Valley of Elah can complete a shield attempt without WebGL', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+      return /webgl/i.test(kind) ? null : original.call(this, kind, ...args);
+    };
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game23/');
+  await expect(page.locator('#valley-fallback')).toBeVisible();
+  await page.getByRole('button', { name: 'Begin', exact: true }).press('Enter');
+  await page.getByRole('slider', { name: 'Direction', exact: true }).fill('-1.3');
+  await page.getByRole('slider', { name: 'Elevation', exact: true }).fill('44.9');
+  await page.getByRole('slider', { name: 'Release speed', exact: true }).fill('12.6');
+  await page.getByRole('button', { name: 'Throw stone', exact: true }).press('Enter');
+  await expect(page.locator('#stones-readout')).toHaveText('4');
+  await expect(page.locator('#hits-readout')).toHaveText('1 / 3');
+});
