@@ -74,6 +74,9 @@ for (let game = 1; game <= 24; game++) {
 test('Last Signal keeps help independent of the match and accepts touch input', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, hasTouch: true, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
+  // Seed the match so a random supply pickup cannot alter the first shot's ammo count.
+  await page.clock.setFixedTime(21001);
+  await page.addInitScript(() => { Math.random = () => 0; });
   await page.goto('/game21/');
   const toggle = page.getByRole('button', { name: 'Help and match information' });
   const start = page.getByRole('button', { name: 'Drop into the basin' });
