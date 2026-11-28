@@ -44,9 +44,11 @@ verification, and its HTML, CSS and script matched the live build manifest
 Fuse Box (#19) passed candidate and main verification. Its HTML, CSS and script
 matched the live manifest at `27eca355d82958638d910503b11ecb4d983c50bd`
 ([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46187119775)).
-Goal Line (#20) passed candidate verification and merged at
-`d7415a484f2e488c3e8ae26f935b3192d3eaeef1`. Its studio interface awaits the
-[main verification run](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46187239079).
+Goal Line (#20) passed candidate and main verification. Its HTML, CSS, gameplay
+script and pitch code matched the live manifest at `d7415a484f2e488c3e8ae26f935b3192d3eaeef1`
+([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46188206606)).
+APEX Circuit (#21) passed candidate verification and merged at
+`2d3692a9e533726ab04d1e0b86529f0c33564ba9`. Its main verification is pending.
 Ark's narrow-phone cargo dock correction passed candidate verification in #35.
 On the cumulative candidate, Windows Chrome passed all 34 viewport and game-flow
 cases before the narrow-screen corrections. The affected layouts passed targeted
@@ -58,6 +60,10 @@ The cumulative candidate at `4ec73be0904ab80f741df066734067623a1d40d0` passed
 fallback, and fixture-only gateway contract suites. The separate accessibility
 run passed 15 cases, and all four initially failing routes passed their recheck
 after restoring the keyboard skip links.
+An active-play 320 × 568 Chrome touch audit at `c136fc158fb6590d355cdb132253019276f94bd2`
+measured 14.85% for Binary Flash, 14.77% for World Football, 11.07% for
+Synapse Sprint, 14.85% for Debate Arena and 14.88% for Valley of Elah, with no
+measured center-point hit conflicts. Binary Flash's correction is queued in #36.
 The remaining title redesigns are in scoped PRs #18–#34. Verify each live
 rollout before merging the next to avoid superseding a deployment.
 
