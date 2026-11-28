@@ -1,10 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111f"><title>MARKET DUEL · Hephzibah Behulah</title><link rel="stylesheet" href="../game17/style.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="../shared/game-viewport.css">
-</head><body>
-<main class="game-viewport">
-
-<div class="game-console">
-<header class="game-console-nav"><a href="../" class="brand">HB <span>GAME BANK</span></a><span class="tag">MARKET INTELLIGENCE / 06</span></header>
-<div class="game-console-content"><section class="intro"><p class="eyebrow">AI STOCK TRADER SHOWDOWN · GAME 20</p><h1>MARKET <em>DUEL</em></h1><p>Trade five fictional companies against a moving-average AI. Read market swings, manage cash, and finish with the highest portfolio value after 30 days.</p><b class="mode">SIMULATION ONLY · NO REAL MONEY OR LIVE STOCK PRICES</b></section><section class="game-shell"><article class="board-wrap"><div class="board-top"><div><small>TRADING DAY</small><b>DAY <span id="day">0</span> / 30</b></div><button id="restart" class="quiet">New market</button></div><div id="start-screen" class="overlay"><span class="eyebrow">MARKET BRIEFING</span><h2>Beat the crossover.</h2><p>You and the AI start with $10,000. Trade five fictional stocks. The AI follows a visible 3-day/6-day moving-average crossover; news and random price movement change market conditions each day.</p><button id="start" class="start">OPEN MARKET</button></div><div id="market" hidden><canvas id="chart" width="900" height="300" aria-label="Price history for selected fictional stock"></canvas><div class="quote"><b id="stock-name"></b><span id="price"></span><span id="change"></span></div><div class="trade"><label for="stock">COMPANY</label><select id="stock"></select><label for="quantity">SHARES</label><input id="quantity" type="number" min="1" value="10"><button id="buy" class="buy">BUY</button><button id="sell" class="sell">SELL</button><span id="message" role="status"></span></div><div class="portfolios"><div><small>YOUR PORTFOLIO</small><b id="player-value">$10,000</b><span id="player-cash"></span></div><div><small>AI PORTFOLIO</small><b id="ai-value">$10,000</b><span id="ai-cash"></span></div></div><div class="holdings"><h3>YOUR HOLDINGS</h3><div id="holdings"></div></div><button id="advance" class="advance">ADVANCE TO NEXT DAY</button></div><div id="end-screen" class="overlay" hidden><span class="eyebrow">DAY 30 · MARKET CLOSE</span><h2 id="end-title"></h2><p id="end-copy"></p><button id="again" class="start">TRADE AGAIN</button></div></article><aside class="intel"><div class="panel-head"><span>MARKET INTELLIGENCE</span><span class="live">● SIM ACTIVE</span></div><h2>AI trade log</h2><p class="muted">The opponent uses a 3-day and 6-day average crossover: buy on a positive trend, reduce holdings on a negative trend. All orders are shown below.</p><ol id="log" aria-live="polite"></ol><div class="combat-rules"><h3>MARKET NOTES</h3><p>Prices follow seeded random daily movement plus company news shocks. They are fictional and have no connection to securities markets.</p></div></aside></section><footer class="bottom">HEPHZIBAH BEHULAH · GAME BANK · EDUCATIONAL MARKET SIMULATION</footer>
-</div>
-</div>
-</main><script type="module" src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#081622">
+  <title>Market Duel | Game Bank</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main id="studio" class="game-viewport" aria-label="Market Duel">
+  <section class="market-field" aria-label="Simulated stock price history">
+    <canvas id="chart" role="img" aria-label="Selected stock price history" aria-describedby="change"></canvas>
+    <div class="quote"><b id="stock-name"></b> <span id="price"></span> <span id="change"></span></div>
+  </section>
+  <div class="market-hud" aria-label="Market progress">
+    <span><i aria-hidden="true">⚑</i><span class="sr-only">Trading day</span> <b id="day">0</b>/30</span>
+    <span><i aria-hidden="true">◇</i><span class="sr-only">Your portfolio</span> <b id="player-value"></b></span>
+    <span><i aria-hidden="true">◎</i><span class="sr-only">Opponent portfolio</span> <b id="ai-value"></b></span>
+  </div>
+  <div class="market-menu">
+    <button id="book-open" type="button" aria-label="Portfolio and market log" title="Portfolio and market log" aria-haspopup="dialog">▤</button>
+    <button id="help-open" type="button" aria-label="Help" aria-haspopup="dialog">?</button>
+  </div>
+  <div class="market-controls">
+    <div id="stocks" aria-label="Select stock"></div>
+    <button id="start" type="button">Open market</button>
+    <button id="trade-open" type="button" aria-label="Trade shares" title="Trade shares" aria-haspopup="dialog" hidden>⇄</button>
+    <button id="advance" type="button" hidden>Next day</button>
+    <button id="results-open" type="button" hidden>Market result</button>
+  </div>
+  <p id="message" class="sr-only" role="status"></p>
+  <dialog id="trade" aria-labelledby="trade-title">
+    <form method="dialog"><button class="close" aria-label="Close trade">×</button></form>
+    <h2 id="trade-title">Trade shares</h2>
+    <p id="order-quote"></p>
+    <label for="quantity">Shares</label>
+    <input id="quantity" type="number" min="1" step="1" value="10" autofocus>
+    <div class="order-actions"><button id="buy" type="button">Buy</button><button id="sell" type="button">Sell</button></div>
+    <p id="order-status" role="status"></p>
+  </dialog>
+  <dialog id="book" aria-labelledby="book-title">
+    <form method="dialog"><button class="close" aria-label="Close portfolio" autofocus>×</button></form>
+    <h2 id="book-title">Portfolio and market log</h2>
+    <p>Your cash <b id="player-cash"></b> · Opponent cash <b id="ai-cash"></b></p>
+    <div id="holdings"></div>
+    <h3>Market log</h3>
+    <ol id="log"></ol>
+  </dialog>
+  <dialog id="end-screen" aria-labelledby="end-title">
+    <h2 id="end-title"></h2>
+    <p id="end-copy"></p>
+    <button id="again" type="button" autofocus>Trade again</button>
+  </dialog>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Market Duel</h2>
+    <p>Trade five fictional stocks with $10,000. Select a ticker, place an order, then advance the day. The opponent trades on a 3-day and 6-day moving-average crossover. The highest portfolio value after 30 days wins.</p>
+    <p>Company news and seeded price changes drive the simulation. All prices and funds are fictional.</p>
+    <button id="restart" type="button">New market</button>
+    <a href="../">Game library</a>
+  </dialog>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
