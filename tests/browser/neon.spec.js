@@ -1,15 +1,35 @@
 import { test, expect } from '@playwright/test';
 
+test('Neon Pulse leaves the portrait studio open and accepts a direct touch pulse', async ({ browser, baseURL }) => {
+  const page = await browser.newPage({ baseURL, viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  try {
+    await page.goto('/game1/');
+    const canvas = page.locator('#neon-canvas');
+    await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2');
+    await expect(page.locator('#studio-help')).toBeHidden();
+    const area = await page.evaluate(() => [...document.querySelectorAll('.neon-readouts > span, .neon-tools button, .neon-action-row, .gamesbank-bot-launch')]
+      .reduce((sum, element) => { const { width, height } = element.getBoundingClientRect(); return sum + width * height; }, 0) / (innerWidth * innerHeight));
+    expect(area).toBeLessThanOrEqual(0.15);
+    await canvas.tap({ position: { x: 195, y: 411 } });
+    await expect(page.locator('#moves')).toHaveText('1 / 9');
+    await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'won');
+  } finally { await page.close(); }
+});
+
 test('Neon Pulse renders actual 4K, commissions a board through controls and resumes progress', async ({ page }, testInfo) => {
   await page.goto('/game1/');
   await expect(page.locator('#neon-canvas')).toHaveAttribute('data-renderer','WebGL2');
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(page.locator('#neon-canvas')).toHaveAttribute('data-resolution','3840x2160');
   const buffer=await page.locator('#neon-canvas').evaluate(canvas=>{const gl=canvas.getContext('webgl2');return {width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,error:gl.getError()};});
   expect(buffer).toEqual({width:3840,height:2160,error:0});
   await testInfo.attach('neon-render-buffer',{body:JSON.stringify(buffer),contentType:'application/json'});
   await page.screenshot({path:'test-results/neon-4k.png',fullPage:true});
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.getByRole('button',{name:'Show a hint',exact:true}).click();
   await expect(page.locator('#message')).toContainText('B2');
   await page.getByRole('button',{name:'Pulse selected signal',exact:true}).click();
@@ -21,6 +41,7 @@ test('Neon Pulse renders actual 4K, commissions a board through controls and res
   await page.reload();
   await expect(page.locator('#level')).toHaveValue('2');
   await expect(page.locator('#save-status')).toContainText('1 board commissioned');
+  await page.locator('#help-open').click();
   await page.locator('#level').fill('10000'); await page.locator('#load-level').click();
   await expect(page.locator('#message')).toContainText('Complete the current unlocked board');
   await expect(page.locator('#level')).toHaveValue('2');
@@ -43,6 +64,7 @@ test('Neon Pulse keyboard boundaries, pause, budget failure, undo and retry work
   await expect(page.locator('#moves')).toHaveText('8 / 9');
   await page.getByRole('button',{name:'Restart board',exact:true}).click();
   await expect(page.locator('#moves')).toHaveText('0 / 9');
+  await page.locator('#help-open').click();
   await page.locator('#signal-4').click();
   await expect(page.locator('#phase')).toHaveAttribute('data-phase','won');
 });

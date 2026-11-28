@@ -1,0 +1,34 @@
+#studio { background: #09131f; }
+#studio > .game-play-surface { z-index: 1; }
+.neon-readouts, .neon-tools, .neon-controls { position: absolute; z-index: 2; pointer-events: none; }
+.neon-readouts, .neon-tools, .neon-action-row { display: flex; align-items: center; gap: 6px; }
+.neon-readouts { inset: 16px auto auto 16px; }
+.neon-tools { inset: 16px 16px auto auto; }
+.neon-readouts > span, .neon-tools button, .neon-action-row button {
+  border: 1px solid #507891;
+  border-radius: 10px;
+  color: #effaff;
+  background: rgb(11 28 42 / 94%);
+  box-shadow: inset 0 0 9px #65d6f32a;
+  white-space: nowrap;
+}
+.neon-readouts > span { padding: 5px 8px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.neon-readouts i { color: #8df0f7; font-style: normal; }
+.neon-tools button, .neon-action-row button { min-width: 40px; min-height: 40px; padding: 5px 8px; }
+.neon-controls { inset: auto 16px 16px 16px; }
+.neon-action-row { width: fit-content; margin: 0 auto; }
+.neon-action-row #pulse { background: #5de8ec; color: #092126; border-color: #aeffff; }
+.neon-controls #message:not(.sr-only) { width: fit-content; max-width: 100%; margin: 0 auto 6px; padding: 4px 9px; background: #0a2635; border-radius: 6px; font-size: 12px; }
+#studio-help { z-index: 20; width: min(600px, calc(100% - 24px)); max-height: calc(100dvh - 24px); background: #102334; color: #effaff; border: 1px solid #507891; border-radius: 14px; }
+#studio-help::backdrop { background: #06111cbb; }
+.neon-close { float: inline-end; }
+.neon-fallback { position: absolute; inset: 55px 12px 86px; display: grid; place-items: center; }
+.neon-fallback[hidden] { display: none; }
+.neon-fallback .signal-grid { width: min(100%, 440px); }
+.neon-fallback .signal { min-height: 44px; }
+@media (max-width: 550px) {
+  .neon-readouts { inset: 10px auto auto 8px; gap: 3px; }
+  .neon-tools { inset: 8px 8px auto auto; gap: 4px; }
+  .neon-readouts > span { padding: 4px 5px; font-size: 11px; }
+  .neon-controls { bottom: 78px; }
+}

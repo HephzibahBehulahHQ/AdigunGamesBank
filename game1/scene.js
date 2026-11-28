@@ -26,10 +26,18 @@ export function createScene(canvas, qualitySelect, status, onSelect) {
     }
   }
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+  function fitBoard() {
+    if (!canvas.clientWidth || !canvas.clientHeight) return;
+    const aspect = canvas.clientWidth / canvas.clientHeight;
+    const verticalTangent = Math.tan(THREE.MathUtils.degToRad(21)) * Math.max(1, 0.85 / aspect);
+    camera.aspect = aspect;
+    camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(verticalTangent));
+    camera.updateProjectionMatrix();
+  }
   function pointerDown(event){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(cells)[0];if(hit)onSelect(hit.object.userData.index);}
   canvas.addEventListener('pointerdown',pointerDown);
   return {
-    update(state){if(activeSize!==state.config.size)rebuild(state.config.size);cells.forEach((lamp,i)=>{lamp.material.color.set(colors[state.cells[i]]);lamp.material.emissive.set(colors[state.cells[i]]);lamp.material.emissiveIntensity=state.cells[i]===0?.05:.85;highlights[i].material.color.set(colors[state.config.target[i]]);});const lamp=cells[state.selected];selected.position.set(lamp.position.x,.13,lamp.position.z);selected.visible=state.phase!=='won';stage.render();},
+    update(state){if(activeSize!==state.config.size)rebuild(state.config.size);fitBoard();cells.forEach((lamp,i)=>{lamp.material.color.set(colors[state.cells[i]]);lamp.material.emissive.set(colors[state.cells[i]]);lamp.material.emissiveIntensity=state.cells[i]===0?.05:.85;highlights[i].material.color.set(colors[state.config.target[i]]);});const lamp=cells[state.selected];selected.position.set(lamp.position.x,.13,lamp.position.z);selected.visible=state.phase!=='won';stage.render();},
     render:()=>stage.render(),
     dispose(){canvas.removeEventListener('pointerdown',pointerDown);stage.dispose();}
   };
