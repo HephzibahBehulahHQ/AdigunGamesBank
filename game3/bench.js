@@ -68,7 +68,20 @@ export function createBench({ canvas, qualitySelect, status, onToggleLead }) {
   }
 
   let azimuth = 0.32, elevation = 0.95, distance = 15.4, frame = 0, count = 2;
-  const requestRender = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; stage.render(); }); };
+  function requestRender() {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      if (canvas.clientWidth && canvas.clientHeight) {
+        const aspect = canvas.clientWidth / canvas.clientHeight;
+        const tangent = Math.tan(THREE.MathUtils.degToRad(21)) * Math.max(1, 0.9 / aspect);
+        stage.camera.aspect = aspect;
+        stage.camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
+        stage.camera.updateProjectionMatrix();
+      }
+      stage.render();
+    });
+  }
   function camera() {
     stage.camera.position.set(Math.sin(azimuth) * Math.cos(elevation) * distance, Math.sin(elevation) * distance + 0.4, Math.cos(azimuth) * Math.cos(elevation) * distance);
     stage.camera.lookAt(0, 0.4, 0); requestRender();

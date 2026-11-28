@@ -8,7 +8,7 @@ let storage;
 try { storage = globalThis.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Storage unavailable'); } }; }
 const progress = campaign('electronicer', storage);
 let level = progress.unlocked, challenge = challengeFor(level), setup = initialSetup(), solved = false, persistent = true;
-let bench;
+let bench, noticeTimer;
 
 const option = (value, text) => { const element = document.createElement('option'); element.value = value; element.textContent = text; return element; };
 for (const [key, value] of Object.entries(TOPOLOGIES)) $('topology').append(option(key, value.name));
@@ -16,8 +16,11 @@ for (const voltage of VOLTAGES) $('voltage').append(option(voltage, `${voltage} 
 for (const fuse of FUSES) $('fuse').append(option(fuse, `${Math.round(fuse * 1000)} mA`));
 for (let i = 0; i < 4; i++) {
   const row = document.createElement('div'); row.className = 'resistor-row'; row.id = `resistor-row-${i}`;
-  row.innerHTML = `<div><label for="r${i + 1}">R${i + 1} resistance (Ω)</label><select id="r${i + 1}"></select></div><label class="lead-label"><input id="link${i + 1}" type="checkbox"> R${i + 1} lead</label>`;
+  row.innerHTML = `<div><label for="r${i + 1}">R${i + 1} resistance (Ω)</label><select id="r${i + 1}"></select></div>`;
   $('resistor-controls').append(row);
+  const lead = document.createElement('label');
+  lead.innerHTML = `<span>R${i + 1}</span><input id="link${i + 1}" type="checkbox" aria-label="Connect R${i + 1} lead">`;
+  $('lead-controls').append(lead);
   for (const resistance of RESISTORS) $(`r${i + 1}`).append(option(resistance, `${resistance.toLocaleString()} Ω`));
 }
 
@@ -26,7 +29,13 @@ function labelFor(key) {
   const [kind, index] = key.split(':'); return `${kind === 'voltage' ? 'Voltage across' : 'Current through'} R${Number(index) + 1}`;
 }
 function measurement(value, unit) { return unit === 'A' ? `${(value * 1000).toFixed(3)} mA` : `${value.toFixed(3)} V`; }
-function announce(text, success = false) { $('message').textContent = text; $('message').className = `message${success ? ' success' : ''}`; }
+function announce(text, success = false) {
+  const notice = $('message');
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.className = success ? 'success' : '';
+  noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 4200);
+}
 
 function save() {
   try {
@@ -64,8 +73,9 @@ function syncInputs() {
   }
   $('level').value = level; $('level').max = progress.unlocked;
   $('power').textContent = setup.power ? 'Power off' : 'Power on'; $('power').setAttribute('aria-pressed', String(setup.power));
-  $('replace-fuse').disabled = !setup.blown || setup.power;
+  $('replace-fuse').disabled = $('replace-fuse').hidden = !setup.blown || setup.power;
   $('next-level').disabled = !solved || level === 10000;
+  $('next-level').hidden = !solved;
   $('next-level').textContent = level === 10000 ? (solved ? 'Campaign complete' : 'Final level') : 'Next level →';
 }
 
@@ -78,7 +88,7 @@ function update() {
   syncInputs();
   $('meter-voltage').textContent = measurement(result.supplyVoltage, 'V');
   $('meter-current').textContent = measurement(result.current, 'A');
-  $('meter-resistance').textContent = Number.isFinite(result.equivalentResistance) ? `${result.equivalentResistance.toFixed(2)} Ω` : 'Open circuit';
+  $('meter-resistance').textContent = Number.isFinite(result.equivalentResistance) ? `${result.equivalentResistance.toFixed(2)} Ω` : 'OPEN';
   $('meter-power').textContent = `${result.power.toFixed(3)} W`;
   $('circuit-state').textContent = result.status === 'off' && setup.power ? 'Contacts open' : { running: 'Circuit live', off: 'Supply off', open: 'Open lead', tripped: 'Fuse tripped' }[result.status];
   $('circuit-state').className = `badge ${result.status}`;
@@ -143,18 +153,26 @@ $('verify').addEventListener('click', () => {
     announce(`${checked.result.tripped ? 'Fuse is open. Turn the supply off and replace it after correcting the circuit. ' : ''}Still to resolve: ${failed.join('; ')}.`);
   }
 });
-$('next-level').addEventListener('click', () => { if (solved && level < 10000) { loadLevel(level + 1); $('topology').focus(); } });
+$('next-level').addEventListener('click', () => { if (solved && level < 10000) { loadLevel(level + 1); $('help-open').focus(); } });
 $('retry').addEventListener('click', () => loadLevel(level));
 $('load-level').addEventListener('click', () => loadLevel(Number($('level').value)));
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
+$('fallback-setup').addEventListener('click', () => $('studio-help').showModal());
 $('show-guide').addEventListener('click', () => { const showing = $('guide').hidden; $('guide').hidden = !showing; $('show-guide').setAttribute('aria-expanded', String(showing)); $('show-guide').textContent = showing ? 'Hide wiring guidance' : 'Show wiring guidance'; });
 $('view-top').addEventListener('click', () => bench?.view('top'));
 $('view-angle').addEventListener('click', () => bench?.view('bench'));
 
+function useBenchFallback() {
+  $('quality').disabled = true;
+  $('view-top').disabled = $('view-angle').disabled = true;
+  $('bench-fallback').hidden = false;
+}
+$('circuit-view').addEventListener('stage-lost', useBenchFallback);
 try {
   bench = createBench({ canvas: $('circuit-view'), qualitySelect: $('quality'), status: $('render-status'), onToggleLead: index => { setup.links[index] = !setup.links[index]; edited(`R${index + 1} lead ${setup.links[index] ? 'connected' : 'disconnected'}.`); } });
 } catch (error) {
   $('render-status').textContent = `3D rendering unavailable: ${error.message}. Circuit controls and meters still work.`;
-  $('quality').disabled = true;
+  useBenchFallback();
 }
 const restored = restore();
 brief(); update();
