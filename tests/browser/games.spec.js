@@ -158,11 +158,14 @@ test('TACTICS GRID renders 4K and wins a mission through real command controls w
   test.setTimeout(120000);
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/game15/'); await expect(page.locator('#board')).toHaveAttribute('data-renderer', 'WebGL2');
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(page.locator('#board')).toHaveAttribute('data-resolution', '3840x2160');
   expect(await page.locator('#board').evaluate(c => { const g = c.getContext('webgl2'); return [g.drawingBufferWidth,g.drawingBufferHeight,g.getError()]; })).toEqual([3840,2160,0]);
   await page.screenshot({ path: 'test-results/tactics-4k.png', fullPage: true });
-  await page.locator('#quality').selectOption('auto'); await page.locator('#start').click();
+  await page.locator('#start').click();
+  await page.locator('#map-toggle').click();
   const actions = [
     ['P1','move','2,2'], ['P2','move','3,5'], ['P3','move','2,3'],
     ['P1','attack','E1'], ['P2','attack','E2'], ['P3','move','1,2'],
@@ -174,8 +177,10 @@ test('TACTICS GRID renders 4K and wins a mission through real command controls w
   for (const [unit, command, target] of actions) {
     await expect(page.locator('#phase')).toHaveText('Your turn');
     await page.locator(`#unit-${unit}`).click();
-    await page.locator(command === 'move' ? '#move-to' : '#target-select').selectOption(target);
-    await page.locator(`#${command}`).click();
+    const destination = command === 'move'
+      ? page.locator(`[data-sector="${String.fromCharCode(65 + Number(target[2]))}${Number(target[0]) + 1}"]`)
+      : page.locator(`[role=gridcell][aria-label*="(${target})"]`);
+    await destination.click();
   }
   await expect(page.locator('#phase')).toHaveText('Mission cleared');
   await expect(page.locator('#next')).toBeVisible();

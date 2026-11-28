@@ -1,0 +1,37 @@
+html, body, #studio { width: 100vw; height: 100vh; margin: 0; padding: 0; overflow: hidden; }
+#studio { position: fixed; inset: 0; height: 100dvh; isolation: isolate; }
+#studio .viewport { position: absolute; inset: 0; z-index: 1; margin: 0; border: 0; border-radius: 0; background: #091321; }
+#studio canvas { display: block; width: 100%; height: 100%; aspect-ratio: auto; touch-action: manipulation; }
+#studio .overlay { background: none; }
+#studio .overlay p { max-width: min(48ch, 88vw); }
+#studio:has(#map-details:not([hidden])) .overlay { justify-content: flex-start; padding-top: 62px; }
+#studio:has(#map-details:not([hidden])) .overlay h2 { font-size: 16px; }
+#studio:has(#map-details:not([hidden])) #overlay-kicker,
+#studio:has(#map-details:not([hidden])) #overlay-copy { display: none; }
+.tactics-hud, .tactics-menu, .tactics-controls { position: fixed; display: flex; align-items: center; gap: 4px; z-index: 3; }
+.tactics-hud { top: 16px; left: 16px; pointer-events: none; }
+.tactics-hud > span { padding: 3px 6px; border: 1px solid #ac96ea66; border-radius: 99px; white-space: nowrap; font-size: 12px; background: #171a32d9; }
+.tactics-menu { top: 16px; right: 16px; }
+.tactics-menu button, .tactics-controls button { min-height: 40px; min-width: 40px; padding: 0 6px; }
+.tactics-controls { bottom: max(16px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: max-content; pointer-events: none; }
+.tactics-controls button { pointer-events: auto; }
+.tactics-controls .squad { display: flex; margin: 0; gap: 4px; }
+.tactics-controls .squad button { padding: 0 4px; text-align: center; line-height: 1.2; }
+.tactics-controls .squad button small { font-size: 10px; }
+#studio [hidden] { display: none !important; }
+#map-details { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(ellipse, #20243e, #091321 80%); }
+#studio .command-grid { width: min(94vw, 68dvh, 570px); padding: 4px; }
+#studio .command-grid [role=gridcell] { height: clamp(19px, 6.5dvh, 46px); padding: 0; }
+#studio .command-grid [role=gridcell] span { margin: 0; }
+#studio-help { z-index: 20; width: min(560px, calc(100vw - 28px)); max-height: calc(100dvh - 28px); border: 1px solid #a78bfa88; border-radius: 16px; background: #131c30; color: #f1ecff; }
+#studio-help::backdrop { background: #070a16bd; }
+#studio-help h1 { font-size: 22px; }
+#studio-help a { color: #d9cbff; }
+.tactics-close { float: right; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; white-space: nowrap; clip-path: inset(50%); }
+@media (max-width: 600px) {
+  .tactics-controls { bottom: max(62px, env(safe-area-inset-bottom)); }
+  .tactics-hud { left: 8px; top: 8px; }
+  .tactics-hud > span { padding: 3px 4px; }
+  .tactics-menu { right: 8px; top: 8px; }
+}

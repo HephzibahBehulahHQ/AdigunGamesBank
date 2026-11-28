@@ -1,31 +1,60 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0B1220"><title>Tactics Grid · Adigun Game Bank</title><link rel="stylesheet" href="../shared/game.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="../shared/game-viewport.css">
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Tactics Grid · Adigun Game Bank</title>
+  <link rel="stylesheet" href="../shared/game.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#commands">Skip to tactical commands</a>
-<main class="game-viewport">
-<div class="game-play-surface viewport"><canvas id="board" tabindex="0" role="img" aria-label="Interactive three-dimensional tactical sector" aria-describedby="controls-help sector-readout"></canvas><div id="overlay" class="overlay"><p class="eyebrow" id="overlay-kicker">SQUAD READY</p><h2 id="overlay-title">Secure the grid.</h2><p id="overlay-copy">Begin the mission. Select a drone, then move, attack or guard. The command map provides the same actions as the 3D scene.</p></div></div>
-<div class="game-stage-hud stats"><span>Round <strong id="round">1 / 40</strong></span><span>Phase <strong id="phase">Awaiting command</strong></span><span>Squad <strong id="squad-count">3</strong></span><span>Opponents <strong id="enemy-count">3</strong></span></div>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#commands">Jump to play controls</a>
-
-
-<header class="game-header"><a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" width="160" height="58" alt="Hephzibah Behulah"><span>Adigun Game Bank<small>ARTIFICIAL INTELLIGENCE</small></span></a><a class="back-link" href="../">← Game library</a></header>
-<div class="split"><div><p class="eyebrow">TACTICAL SYSTEMS · ORIGINAL 3D STRATEGY</p><h1>Tactics Grid</h1><p class="muted">Command three industrial drones. Plan a route, break a line of sight and make each activation count.</p></div><span class="badge">In progress · Browser edition</span></div>
-<div class="toolbar"><strong id="level-readout">Mission 1 / 10,000</strong><span class="badge" id="tier">Beginner</span><label for="quality">Rendering <select id="quality"><option value="auto">Auto</option><option value="1080">1920 × 1080</option><option value="4k">3840 × 2160</option></select></label><label for="camera">View <select id="camera"><option value="isometric">Command view</option><option value="overhead">Overhead</option><option value="east">West approach</option></select></label><span class="hint" id="render-status" role="status">Preparing the 3D sector…</span></div>
-<div class="layout"><section aria-label="Tactical play area">
-
-<p id="message" class="message" role="status" aria-live="polite">Select Begin to deploy your squad.</p>
-<div class="controls"><button id="start" class="primary">Begin mission · Enter</button><button id="pause" disabled>Pause · Esc</button><button id="restart">Retry mission · R</button><button id="next" class="primary" hidden>Next mission →</button></div>
-<section class="panel command-panel" id="commands" tabindex="-1" aria-labelledby="command-heading"><div class="split"><h2 id="command-heading">Squad commands</h2><span class="hint">One action per drone, per round</span></div><div id="squad" class="squad"></div><p id="selected-readout" class="selected-readout">Select a ready drone.</p><div class="command-rows"><div><label for="move-to">Move to sector</label><select id="move-to" disabled><option>No drone selected</option></select><button id="move" disabled>Move · M</button></div><div><label for="target-select">Attack visible opponent</label><select id="target-select" disabled><option>No target available</option></select><button id="attack" disabled>Fire pulse · F</button></div></div><div class="controls"><button id="guard" disabled>Guard · G</button><button id="collect" hidden disabled>Collect data core · C</button><button id="end-turn" disabled>End turn · E</button></div><p id="legal-summary" class="hint">Move routes and visible targets appear after selection. Guard absorbs one incoming pulse.</p></section>
-<details id="map-details" open><summary>Accessible sector command map</summary><p class="hint">Select a friendly drone, then choose its destination or a visible opponent. Arrow keys move the map cursor; Enter activates the sector.</p><div id="command-grid" class="command-grid" role="grid" aria-label="Eight by eight tactical command map"></div><p id="sector-readout" class="hint" aria-live="polite">Sector B1. Vanguard is ready.</p></details>
-<p id="controls-help" class="instructions"><b>Keyboard:</b> focus the 3D sector or command map. <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move the cursor; <kbd>Enter</kbd> selects or acts. <kbd>1</kbd>–<kbd>3</kbd> select a drone. <kbd>G</kbd> guards, <kbd>C</kbd> collects the core, <kbd>E</kbd> ends the turn, <kbd>Esc</kbd> pauses and <kbd>R</kbd> retries. Mouse and touch can use the scene, map or labelled command controls.</p>
-</section>
-<aside><section class="panel"><p class="eyebrow">MISSION BRIEFING</p><h2 id="mission-title">Secure the sector</h2><p id="objective"></p><p id="mission-progress" class="objective-progress"></p><p class="hint">Violet identifies your squad; copper identifies the opposition. Solid barriers and intervening drones block shots. Diagonal moves cannot cut through blocked corners.</p><h3>Opposition telemetry</h3><ul id="opponents" class="opponents"></ul></section><section class="panel progress-panel"><h2>Your campaign</h2><p id="campaign-status" class="hint"></p><label for="level">Replay an unlocked mission</label><input id="level" type="number" min="1" max="1" value="1" step="1"><button id="load-level">Load mission</button><p class="hint">Beginner → Apprentice → Skilled → Expert → Professional Master. Completed missions save locally; an active mission restarts after reload.</p></section><section class="panel feed-panel"><h2>Mission log</h2><ol id="feed"></ol></section></aside></div>
-<details><summary>Rules, original assets and release scope</summary><p>This is a deterministic tactical game with a local heuristic opponent. It uses no live model API. Each drone can move, fire, collect or guard once per round. End turn guards your remaining ready drones. Hard cover blocks movement and sight; guard absorbs one pulse before the next activation. Disabled wrecks do not block movement.</p><p>Secure missions require all opponents to be disabled. Uplink missions require uncontested control at each round boundary. Recovery missions require collecting the data core and carrying it back to column 1. Losing every drone, exhausting the round budget, or losing an uplink ends the mission. Retry does not erase earlier campaign progress.</p><p>All models, geometry, interface and game content are original to this repository. Three.js is MIT licensed. The catalog's 2,000-game target and production hardware/accessibility qualification remain unfinished. <a href="README.md">Game design and testing record</a>.</p></details>
-<footer><p>© 2026 Hephzibah Behulah · Adigun Game Bank · One Company. Five Brands.</p><a href="../">Game library</a><a href="../PROJECT_STATUS.md">Project status</a><a href="README.md">Game documentation</a></footer>
-</div>
-</details>
-</main><script type="module" src="app.js"></script>
-</body></html>
+<body>
+<main id="studio" class="game-viewport" aria-label="Tactics Grid">
+  <div class="game-play-surface viewport">
+    <canvas id="board" tabindex="0" role="img" aria-label="Interactive three-dimensional tactical sector" aria-describedby="controls-help sector-readout"></canvas>
+    <section id="map-details" aria-label="Accessible sector command map" hidden>
+      <div id="command-grid" class="command-grid" role="grid" aria-label="Eight by eight tactical command map"></div>
+    </section>
+    <div id="overlay" class="overlay"><p class="eyebrow" id="overlay-kicker">SQUAD READY</p><h2 id="overlay-title">Secure the grid.</h2><p id="overlay-copy">Begin the mission. Select a drone, then move, attack or guard. The command map provides the same actions as the 3D scene.</p></div>
+  </div>
+  <div class="tactics-hud" aria-label="Mission status">
+    <span><span aria-hidden="true">↻</span><span class="sr-only">Round</span> <strong id="round">1 / 40</strong></span>
+    <span><strong id="phase">Ready</strong></span>
+    <span><span aria-hidden="true">◇</span><span class="sr-only">Squad</span> <strong id="squad-count">3</strong></span>
+    <span><span aria-hidden="true">◎</span><span class="sr-only">Opponents</span> <strong id="enemy-count">3</strong></span>
+  </div>
+  <div class="tactics-menu">
+    <button id="map-toggle" type="button" title="Switch board view" aria-label="Switch board view" aria-controls="map-details" aria-pressed="false">▦</button>
+    <button id="pause" type="button" title="Pause" aria-label="Pause" disabled>Ⅱ</button>
+    <button id="help-open" type="button" aria-label="Help and mission settings" aria-haspopup="dialog">?</button>
+  </div>
+  <div class="tactics-controls" aria-label="Squad controls">
+    <div id="squad" class="squad" aria-label="Select a drone"></div>
+    <button id="guard" type="button" title="Guard" aria-label="Guard" disabled>◇</button>
+    <button id="collect" type="button" title="Collect data core" aria-label="Collect data core" hidden disabled>⬡</button>
+    <button id="start" class="primary" type="button">Begin mission</button>
+    <button id="end-turn" class="primary" type="button" disabled hidden>End turn</button>
+    <button id="next" class="primary" type="button" hidden>Next mission</button>
+    <button id="result-retry" class="primary" type="button" hidden>Retry mission</button>
+  </div>
+  <p id="message" class="sr-only" role="status"></p>
+  <p id="sector-readout" class="sr-only" aria-live="polite"></p>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="tactics-close" aria-label="Close help" autofocus>×</button></form>
+    <h1 id="help-title">Tactics Grid</h1>
+    <p id="controls-help" class="instructions"><b>Keyboard:</b> focus the 3D sector or command map. <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move the cursor; <kbd>Enter</kbd> selects or acts. <kbd>1</kbd>–<kbd>3</kbd> select a drone. <kbd>G</kbd> guards, <kbd>C</kbd> collects the core, <kbd>E</kbd> ends the turn, <kbd>Esc</kbd> pauses and <kbd>R</kbd> retries. Mouse and touch can use the scene, map or labelled command controls.</p>
+    <div class="toolbar"><strong id="level-readout">Mission 1 / 10,000</strong><span class="badge" id="tier">Beginner</span><label for="quality">Rendering <select id="quality"><option value="auto">Auto</option><option value="1080">1920 × 1080</option><option value="4k">3840 × 2160</option></select></label><label for="camera">View <select id="camera"><option value="isometric">Command view</option><option value="overhead">Overhead</option><option value="east">West approach</option></select></label><span class="hint" id="render-status" role="status">Preparing the 3D sector…</span></div>
+    <button id="restart" type="button">Retry mission</button>
+    <details id="command-options"><summary>Labelled move and attack commands</summary>
+      <p id="selected-readout"></p>
+      <div class="command-rows"><div><label for="move-to">Move to sector</label><select id="move-to" disabled><option>No drone selected</option></select><button id="move" disabled>Move · M</button></div><div><label for="target-select">Attack visible opponent</label><select id="target-select" disabled><option>No target available</option></select><button id="attack" disabled>Fire pulse · F</button></div></div>
+      <p id="legal-summary"></p>
+    </details>
+    <aside><section class="panel"><p class="eyebrow">MISSION BRIEFING</p><h2 id="mission-title">Secure the sector</h2><p id="objective"></p><p id="mission-progress" class="objective-progress"></p><p class="hint">Violet identifies your squad; copper identifies the opposition. Solid barriers and intervening drones block shots. Diagonal moves cannot cut through blocked corners.</p><h3>Opposition telemetry</h3><ul id="opponents" class="opponents"></ul></section><section class="panel progress-panel"><h2>Your campaign</h2><p id="campaign-status" class="hint"></p><label for="level">Replay an unlocked mission</label><input id="level" type="number" min="1" max="1" value="1" step="1"><button id="load-level">Load mission</button><p class="hint">Beginner → Apprentice → Skilled → Expert → Professional Master. Completed missions save locally; an active mission restarts after reload.</p></section><section class="panel feed-panel"><h2>Mission log</h2><ol id="feed"></ol></section></aside>
+    <a href="../">Game library</a>
+  </dialog>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
