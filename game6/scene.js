@@ -1,4 +1,4 @@
-import { THREE, createStage, box, cylinder, material } from '../shared/three-stage.js';
+import { THREE, createStage, fitStudioCamera, box, cylinder, material } from '../shared/three-stage.js';
 import { electrical, selectedParts } from './engine.js';
 
 // These ideal scenario values can have more than two significant figures.
@@ -139,5 +139,9 @@ export function createScene({ canvas, qualitySelect, status, onAction }) {
     const activeCommand = phase === 'charging' ? 'charge' : phase === 'holding' || phase === 'ready' ? 'hold' : phase === 'discharging' ? 'discharge' : '';
     buttons.forEach(button => { button.mesh.position.y = button.command === activeCommand ? .6 : .66; button.mesh.material.emissiveIntensity = button.command === activeCommand ? .65 : .03; });
   }
-  return { rebuild, update, setView, render: () => stage.render(), dispose() { canvas.removeEventListener('pointerup', onPointer); release(root); stage.dispose(); } };
+  return {
+    rebuild, update, setView,
+    render() { fitStudioCamera(stage.camera, canvas); stage.render(); },
+    dispose() { canvas.removeEventListener('pointerup', onPointer); release(root); stage.dispose(); }
+  };
 }

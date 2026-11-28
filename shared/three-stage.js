@@ -2,6 +2,18 @@ import * as THREE from '../vendor/three/three.module.js';
 
 export { THREE };
 
+/** Frame a studio scene for the visible canvas, independent of buffer quality. */
+export function fitStudioCamera(camera, canvas, { verticalFov = 42, minimumAspect = 0.9 } = {}) {
+  if (!canvas.clientWidth || !canvas.clientHeight) return;
+  const aspect = canvas.clientWidth / canvas.clientHeight;
+  const tangent = Math.tan(THREE.MathUtils.degToRad(verticalFov / 2)) * Math.max(1, minimumAspect / aspect);
+  const fov = THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
+  if (camera.aspect === aspect && camera.fov === fov) return;
+  camera.aspect = aspect;
+  camera.fov = fov;
+  camera.updateProjectionMatrix();
+}
+
 /** A real WebGL render surface. Resolution labels always describe its drawing buffer. */
 export function createStage({ canvas, qualitySelect, status, position = [12, 15, 18], target = [0, 0, 0], shadows = true }) {
   let renderer;
