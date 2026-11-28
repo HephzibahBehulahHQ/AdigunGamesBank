@@ -1,10 +1,58 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06101c"><title>APEX STRATEGY · Hephzibah Behulah</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="../shared/game-viewport.css">
-</head><body>
-<main class="game-viewport">
-
-<div class="game-console">
-<header class="game-console-nav"><a class="brand" href="../">HB <span>GAME BANK</span></a><span class="tag">RACE CONTROL / 02</span></header>
-<div class="game-console-content"><section class="hero"><p class="eyebrow">AI RACING MANAGER · GAME 16</p><h1>APEX <em>STRATEGY</em></h1><p>You are the race engineer. Set tyre, fuel and aggression before every lap. Your drivers and their rivals race under changing weather, safety cars, wear and incident risk.</p><div class="stats"><span>10 LAPS</span><span>6 DRIVERS</span><span>3 DRIVER STRATEGIES</span><span>LOCAL RACE AI</span></div></section><section class="race-layout"><div class="race-main"><article class="panel track-panel"><div class="panel-head"><div><small>TRACK FEED</small><h2>Helios Grand Prix Circuit</h2></div><button id="restart" class="quiet">New race</button></div><canvas id="chart" width="900" height="250" aria-label="Lap time chart comparing all six drivers"></canvas><div class="track-foot"><span id="weather">PRE-RACE CONDITIONS</span><span>5.2 KM · 14 TURNS</span><span id="race-status">GARAGE</span></div></article><article class="panel setup-panel"><div class="panel-head"><div><small>ENGINEER'S CONSOLE</small><h2>Driver strategy</h2></div><span id="lap-label" class="lap">RACE NOT STARTED</span></div><p class="hint">Set the plan for each HB Racing driver before running the next lap. A tyre change or adding fuel during a race makes a pit stop.</p><div id="drivers" class="driver-setups"></div><button id="run-lap" class="run" disabled>START RACE</button><p id="message" class="message" role="status" aria-live="polite">Prepare strategy, then start the race.</p></article><article class="panel standings-panel"><div class="panel-head"><div><small>LIVE CLASSIFICATION</small><h2>Race standings</h2></div><span id="position-summary" class="lap">6 CARS</span></div><div class="table-wrap"><table><thead><tr><th>POS</th><th>DRIVER / TEAM</th><th>LAST LAP</th><th>FUEL</th><th>TYRE</th><th>STATUS</th></tr></thead><tbody id="standings"></tbody></table></div></article></div><aside class="race-side"><article class="panel"><small class="section-label">RACE CONTROL</small><h2>Live event log</h2><ol id="events" class="events" aria-live="polite"></ol></article><article class="panel"><small class="section-label">STRATEGY NOTES</small><h2>Make the call</h2><ul class="notes"><li><b>Soft:</b> fastest in dry air, but wears quickly.</li><li><b>Medium:</b> balanced pace and durability.</li><li><b>Hard:</b> slower, lasts longer.</li><li><b>Wet:</b> strongest grip in rain; slow on a dry track.</li><li>Higher aggression improves pace but raises incident risk.</li><li>Added fuel or a tyre change costs pit-lane time.</li></ul><p class="fine">All drivers, teams and results are fictional simulation content. No real-money betting.</p></article></aside></section><div id="overlay" class="overlay" hidden><section class="finish-card"><small>CHEQUERED FLAG · LAP 10</small><h2 id="finish-title"></h2><p id="finish-copy"></p><button id="again" class="run">RACE AGAIN</button></section></div><footer>HEPHZIBAH BEHULAH · GAME BANK · SIMULATION MODE</footer>
-</div>
-</div>
-</main><script type="module" src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#06101c">
+  <title>APEX Strategy | Game Bank</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<main id="studio" class="game-viewport" aria-label="APEX Strategy">
+  <section class="race-field" aria-label="Lap timing">
+    <canvas id="chart" role="img" aria-label="Lap times by driver. Open race data for the classification."></canvas>
+    <ul id="chart-legend" aria-label="Driver color legend"></ul>
+  </section>
+  <div class="race-hud" aria-label="Race progress">
+    <span><span aria-hidden="true">⚑</span><span class="sr-only">Lap</span> <b id="lap-label">0 / 10</b></span>
+    <span><span aria-hidden="true">◒</span><span class="sr-only">Weather</span> <b id="weather">—</b></span>
+    <span><b id="race-status">Garage</b></span>
+  </div>
+  <div class="race-menu">
+    <button id="race-data-open" type="button" aria-label="Race data" title="Race data" aria-haspopup="dialog">▤</button>
+    <button id="help-open" type="button" aria-label="Help" aria-haspopup="dialog">?</button>
+  </div>
+  <div class="strategy-controls">
+    <button id="setup-open" type="button" aria-label="Driver strategy" title="Driver strategy" aria-haspopup="dialog">⚙</button>
+    <button id="race-replay" class="run" type="button" hidden>New race</button>
+    <button id="run-lap" class="run" type="button">Start race</button>
+  </div>
+  <p id="message" class="sr-only" role="status"></p>
+  <dialog id="setup" aria-labelledby="setup-title">
+    <form method="dialog"><button class="close" aria-label="Close strategy" autofocus>×</button></form>
+    <h1 id="setup-title">Driver strategy</h1>
+    <div id="drivers" class="driver-setups"></div>
+  </dialog>
+  <dialog id="race-data" aria-labelledby="data-title">
+    <form method="dialog"><button class="close" aria-label="Close race data" autofocus>×</button></form>
+    <h1 id="data-title">Race classification</h1>
+    <p id="position-summary"></p>
+    <div class="table-wrap"><table><thead><tr><th>POS</th><th>DRIVER / TEAM</th><th>LAST LAP</th><th>FUEL</th><th>TYRE</th><th>STATUS</th></tr></thead><tbody id="standings"></tbody></table></div>
+    <h2>Race control log</h2>
+    <ol id="events" class="events"></ol>
+  </dialog>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="close" aria-label="Close help" autofocus>×</button></form>
+    <h1 id="help-title">APEX Strategy</h1>
+    <p>Set tyre, fuel and aggression for each HB Racing driver in Driver strategy. Run one lap at a time and follow the live chart and race data across all ten laps.</p>
+    <ul class="notes"><li><b>Soft:</b> fastest in dry air, but wears quickly.</li><li><b>Medium:</b> balanced pace and durability.</li><li><b>Hard:</b> slower, lasts longer.</li><li><b>Wet:</b> strongest grip in rain; slow on a dry track.</li><li>Higher aggression improves pace but raises incident risk.</li><li>Added fuel or a tyre change costs pit-lane time.</li></ul>
+    <p>This race uses fictional drivers and a local simulation.</p>
+    <button id="restart" type="button">New race</button>
+    <a href="../">Game library</a>
+  </dialog>
+  <dialog id="overlay" aria-labelledby="finish-title"><section class="finish-card"><small>CHEQUERED FLAG · LAP 10</small><h2 id="finish-title"></h2><p id="finish-copy"></p><button id="again" class="run">RACE AGAIN</button></section></dialog>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
