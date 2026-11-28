@@ -41,8 +41,12 @@ Binary Flash (#18) passed its seven focused Windows Chrome checks and the
 Binary Flash merged at `7b193373b9266e341118c68e074c5cbde8d277d8`, passed main
 verification, and its HTML, CSS and script matched the live build manifest
 ([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46186031754)).
-Fuse Box (#19) passed candidate verification and merged at
-`27eca355d82958638d910503b11ecb4d983c50bd`. Its production verification is pending.
+Fuse Box (#19) passed candidate and main verification. Its HTML, CSS and script
+matched the live manifest at `27eca355d82958638d910503b11ecb4d983c50bd`
+([publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46187119775)).
+Goal Line (#20) passed candidate verification and merged at
+`d7415a484f2e488c3e8ae26f935b3192d3eaeef1`. Its studio interface awaits the
+[main verification run](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46187239079).
 Ark's narrow-phone cargo dock correction passed candidate verification in #35.
 On the cumulative candidate, Windows Chrome passed all 34 viewport and game-flow
 cases before the narrow-screen corrections. The affected layouts passed targeted
