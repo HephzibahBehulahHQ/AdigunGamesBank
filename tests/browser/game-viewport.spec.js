@@ -76,3 +76,11 @@ test('Last Signal keeps its controls toggle and start button independent', async
   await expect(start).toBeHidden();
   await expect(page.locator('canvas#arena')).toBeFocused();
 });
+
+test('Cortex Prime and Billionaire Challenge put answers before reference content on phones', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/game12/');
+  await expect(page.getByRole('button', { name: 'Lock answer' })).toBeInViewport({ ratio: 1 });
+  await page.goto('/game14/');
+  await expect(page.locator('#answers button').first()).toBeInViewport({ ratio: 1 });
+});

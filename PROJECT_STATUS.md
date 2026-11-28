@@ -11,12 +11,15 @@ readouts. The seven console-based games have fixed navigation and a bounded
 play area. Charts keep their role as instruments. The shared layout requirement
 is now in `AGENTS.md` and `docs/GAME_TEMPLATE.md`.
 
-- Candidate `066eddcbd71f66f9939fc5601400a46879047b26` passed all 24 local
-  Chrome viewport cases at 1440×900, 390×844 and 844×390, the Last Signal start
-  and keyboard-toggle check, and the 19-case accessibility suite including
-  320px reflow. The previous checkpoint passed local static-build and release
-  integrity checks and 277 JavaScript tests with one skipped. Updated play
-  links and fixed navigation require the exact final candidate gate.
+- Windows Chrome passed the full 100-case Playwright suite on checkpoint
+  `066eddcbd71f66f9939fc5601400a46879047b26`. The next candidate
+  `cff2c3a698fec331db3e050ba4ab74a1cf281f6f` passed 47 focused Playwright cases
+  including one case per title at 1440×900, 390×844 and 844×390, 320px reflow,
+  accessible controls and last-stage menu toggling. An account-enabled local
+  build with the account Worker and loopback fixture bindings passed touch
+  emulation on each of the 24 titles. Phone screenshots exposed play controls
+  below the fold in games 12 and 14. Both now have a first-screen answer-control
+  regression case. The exact final candidate still needs its GitHub release gate.
 - The custom domain returned build revision
   `c430a25c06a37bd293ba7cc3cd2e5e9b2ea3baa3` before this change. The manual
   Cloudflare workflow file was present on `main` but absent from GitHub's

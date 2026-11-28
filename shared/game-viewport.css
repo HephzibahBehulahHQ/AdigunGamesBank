@@ -233,6 +233,14 @@ body > .game-viewport {
 
   .game-viewport > .game-stage-hud { inset: 30px 6px auto; width: auto; max-width: none; }
   .game-viewport > .game-stage-hud > div { padding: 4px 6px; }
+
+  .game-viewport.wrap .game-console-content { padding: 10px 12px 76px; }
+  .game-viewport.wrap :is(.tag, .lead) { margin-block: 6px; }
+  .game-viewport.wrap h1 { font-size: clamp(24px, 7vw, 38px); }
+  .game-viewport.wrap :is(.stats, .hud, .panel) { margin-block: 10px; }
+  .game-viewport.wrap :is(.panel, .quiz) { padding: 12px; }
+  .game-viewport.wrap #puzzle { min-height: 0; margin-block: 12px; }
+  .game-viewport.wrap .ladder { order: 0; }
 }
 
 @media (orientation: landscape) and (max-height: 480px) {
