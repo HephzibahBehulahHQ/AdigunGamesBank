@@ -13,8 +13,8 @@ for (let game = 1; game <= 24; game++) {
     const hasStage = !consoleOnly.has(game);
     await page.goto(`/game${game}/`);
     const main = page.locator('main.game-viewport');
-    const studio = game === 1 || game === 24;
-    const controls = main.locator(studio ? '.studio-dock, .neon-controls' : '.game-console-content');
+    const studio = (await main.getAttribute('id')) === 'studio';
+    const controls = main.locator(studio ? '.studio-dock, .neon-controls, .circuit-controls' : '.game-console-content');
     const canvas = main.locator('.game-play-surface > canvas');
     const dock = main.locator('.game-dock');
     await expect(canvas).toHaveCount(hasStage ? 1 : 0);

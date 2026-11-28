@@ -3,6 +3,29 @@ import { test, expect } from '@playwright/test';
 const SAVE_KEY = 'adigun.campaign.v1.circuit-rush';
 const FIRST_ROUTE = [1, 2, 7, 12, 13, 14, 19];
 
+test('Circuit Rush keeps the phone playfield open and selects a terminal by touch', async ({ browser, baseURL }) => {
+  const page = await browser.newPage({ baseURL, viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  try {
+    await page.goto('/game2/');
+    const canvas = page.locator('#circuit-canvas');
+    await expect.poll(async () => Number(await canvas.getAttribute('data-frame'))).toBeGreaterThan(0);
+    await page.locator('#start').tap();
+    await canvas.tap({ position: { x: 195, y: 411 } });
+    await expect(page.locator('#current-terminal')).toHaveText('C3');
+    await page.locator('#rotate-cw').tap();
+    await expect(page.locator('#turns-used')).toHaveText('1 quarter-turns used');
+    const coverage = await page.evaluate(() => {
+      const area = [...document.querySelectorAll('.circuit-readouts > span, .circuit-tools button, .circuit-actions button, .gamesbank-bot-launch')]
+        .reduce((sum, element) => {
+          const { width, height } = element.getBoundingClientRect();
+          return sum + width * height;
+        }, 0);
+      return area / (innerWidth * innerHeight);
+    });
+    expect(coverage).toBeLessThanOrEqual(0.15);
+  } finally { await page.close(); }
+});
+
 async function solveFirstJob(page, keyboard = false) {
   for (const index of FIRST_ROUTE) {
     if (keyboard) await page.locator(`#cell-${index}`).press('r');
@@ -20,7 +43,9 @@ test('Circuit Rush renders a real 4K frame and commissions a saved job through a
   await expect(canvas).toHaveAttribute('data-renderer', 'WebGL2', { timeout: 20000 });
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame'))).toBeGreaterThan(0);
   const previous = Number(await canvas.getAttribute('data-frame'));
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('4k');
+  await page.keyboard.press('Escape');
   await expect(canvas).toHaveAttribute('data-resolution', '3840x2160');
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame')), { timeout: 20000 }).toBeGreaterThan(previous);
   await canvas.screenshot({ path: testInfo.outputPath('circuit-rush-4k.png') });
@@ -30,7 +55,9 @@ test('Circuit Rush renders a real 4K frame and commissions a saved job through a
   expect(buffer).toEqual({ width: 3840, height: 2160, error: 0 });
   await testInfo.attach('circuit-rush-4k-drawing-buffer', { body: JSON.stringify(buffer), contentType: 'application/json' });
   await page.setViewportSize({ width: 800, height: 900 });
+  await page.locator('#help-open').click();
   await page.locator('#quality').selectOption('auto');
+  await page.keyboard.press('Escape');
   await page.getByRole('button', { name: 'Begin job', exact: true }).click();
   await page.getByRole('button', { name: 'Test circuit', exact: true }).click();
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'editing');
@@ -49,6 +76,7 @@ test('Circuit Rush renders a real 4K frame and commissions a saved job through a
   await page.getByRole('button', { name: 'Pause job', exact: true }).click();
   await expect(page.locator('#phase')).toHaveAttribute('data-phase', 'paused');
   await expect(page.locator('#rotate-cw')).toBeDisabled();
+  await page.locator('#toggle-board').click();
   await page.locator('#cell-1').press('r');
   await expect(page.locator('#turns-used')).toHaveText('2 quarter-turns used');
   await page.getByRole('button', { name: 'Resume job', exact: true }).press('Enter');
@@ -131,8 +159,9 @@ test('Circuit Rush keeps a seven-column saved-layout fixture inside 390 and 320 
   await page.goto('/game2/');
   await expect(page.locator('.terminal-cell')).toHaveCount(49);
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Skip to routing controls', exact: true })).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Skip to job controls', exact: true })).toBeFocused();
   expect(await page.locator(':focus').evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe('none');
+  await page.locator('#toggle-board').click();
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 844 });
     const bounds = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));

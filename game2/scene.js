@@ -124,7 +124,15 @@ export function createCircuitScene({ canvas, qualitySelect, status, select }) {
     const span = state.config.size * SPACING;
     if (view === 'overhead') stage.camera.position.set(0, span * 2.25, 0.01);
     else stage.camera.position.set(span * 0.8, span * 1.25, span * 1.45);
-    stage.camera.lookAt(0, 0.35, 0); stage.render(); canvas.dataset.frame = String((Number(canvas.dataset.frame) || 0) + 1);
+    stage.camera.lookAt(0, 0.35, 0);
+    if (canvas.clientWidth && canvas.clientHeight) {
+      const aspect = canvas.clientWidth / canvas.clientHeight;
+      const tangent = Math.tan(THREE.MathUtils.degToRad(21)) * Math.max(1, 0.9 / aspect);
+      stage.camera.aspect = aspect;
+      stage.camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(tangent));
+      stage.camera.updateProjectionMatrix();
+    }
+    stage.render(); canvas.dataset.frame = String((Number(canvas.dataset.frame) || 0) + 1);
   }
   return { draw, setView(value) { view = value === 'overhead' ? 'overhead' : 'bench'; }, dispose() { canvas.removeEventListener('pointerdown', onPointer); atlas?.dispose(); stage.dispose(); } };
 }
