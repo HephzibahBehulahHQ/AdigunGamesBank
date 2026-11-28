@@ -205,6 +205,15 @@ export function createScene(canvas, { onSelectBay = () => {}, onSelectCargo = ()
     if (disposed || !state?.config) return;
     latestState = state;
     if (currentConfig !== state.config) build(state.config);
+    if (canvas.clientWidth && canvas.clientHeight) {
+      const aspect = canvas.clientWidth / canvas.clientHeight;
+      const fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(21 * RAD) * Math.max(1, 0.9 / aspect)));
+      if (camera.aspect !== aspect || camera.fov !== fov) {
+        camera.aspect = aspect;
+        camera.fov = fov;
+        camera.updateProjectionMatrix();
+      }
+    }
     if (Number.isInteger(state.selectedBay) && state.selectedBay >= 0 && state.selectedBay < 6) selectedBay = state.selectedBay;
     const reducedMotion = Boolean(motionQuery?.matches);
     const underway = state.phase === 'sailing' || state.phase === 'won' || state.phase === 'lost' || (state.phase === 'paused' && state.previousPhase === 'sailing');

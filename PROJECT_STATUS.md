@@ -1,5 +1,17 @@
 # Adigun Game Bank — current project status
 
+## Universal Game Studio redesign
+
+The permanent studio rules are in `AGENTS.md` and `docs/GAME_TEMPLATE.md`.
+Ark is the first title under redesign on `codex/ark-studio`. The candidate
+replaces the scrolling dashboard with a four-pill HUD, cargo hotbar, direct
+3D deck placement and an on-demand voyage guide. The seven Ark numerical
+tests passed. Windows Chrome verified actual WebGL2 4K, click-to-load and
+unload, launch/retry, saved progression, keyboard play without WebGL, and
+the 15% UI coverage cap at 320px and 390px portrait. Exact-candidate CI and
+production verification are pending. The remaining 23 studios need custom
+design and release checks for their own gameplay.
+
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
 
 ## Single-viewport games
@@ -19,15 +31,24 @@ is now in `AGENTS.md` and `docs/GAME_TEMPLATE.md`.
   build with the account Worker and loopback fixture bindings passed touch
   emulation on each of the 24 titles. Phone screenshots exposed play controls
   below the fold in games 12 and 14. Both now have a first-screen answer-control
-  regression case. The exact final candidate still needs its GitHub release gate.
+  regression case. The final candidate `04455165f8bf7fd41f65746a4b6daeb2bebc918a`
+  passed [PR verification](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46168828465)
+  and local Chrome touch emulation on every route in the production-mode build.
 - The custom domain returned build revision
   `c430a25c06a37bd293ba7cc3cd2e5e9b2ea3baa3` before this change. The manual
   Cloudflare workflow file was present on `main` but absent from GitHub's
   Actions registry. The candidate adds automatic publication from a successful
   `Verify games` run for the exact current `main` SHA, under the existing
-  `cloudflare-production` environment. Verify the production revision and all
-  24 public routes after that workflow runs. Physical touch and screen-reader
-  sessions are **NOT TESTED**.
+  `cloudflare-production` environment.
+- Main revision `8a1dcb465ec3356f08b56f6303dd4a9e9ae951d7` exactly matches the
+  tested source tree. [Main verification](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46169905929)
+  and [Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46170952900)
+  passed on 2026-11-28 (Europe/Berlin). All 24 public game routes and the shared
+  viewport stylesheet returned HTTP 200, matched their production manifest
+  SHA-256 values, and matched the tested Windows build after normalizing line
+  endings. The live build fingerprint is
+  `3dc5cd09cb596b92297eb7252df62b5e1491d02f9a2baf61f79b19f1366abb84`.
+  Physical touch and screen-reader sessions are **NOT TESTED**.
 
 ## Floating Adigun BOT window — verified candidate
 

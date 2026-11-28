@@ -8,10 +8,18 @@ const progress = createCampaign();
 const deckOrder = [4, 5, 2, 3, 0, 1];
 let state, selectedBay = 0, selectedCargo = 0, scene = null, recorded = false;
 let frameId = 0, previousTime = 0, lastUI = 0, dirty = true, stopped = false;
+let noticeTimer;
 const bayButtons = [], cargoButtons = [], ballastInputs = [], ballastButtons = [];
 const number = (value, digits = 2) => value.toFixed(digits);
 
-function message(text) { $('message').textContent = text; }
+function message(text) {
+  const notice = $('message');
+  if (notice.textContent === text) return;
+  clearTimeout(noticeTimer);
+  notice.textContent = text;
+  notice.classList.toggle('sr-only', !text);
+  if (text) noticeTimer = setTimeout(() => notice.classList.add('sr-only'), 3400);
+}
 function saved() {
   try {
     const value = JSON.parse(localStorage.getItem(`adigun.campaign.v1.${CAMPAIGN_ID}`) || 'null');
@@ -30,6 +38,12 @@ function selectBay(index) {
 function selectCargo(index) {
   if (!Number.isInteger(index) || index < 0 || index >= 6) return;
   selectedCargo = index; sync();
+}
+function placeInBay(index) {
+  selectedBay = index;
+  if (state.phase === 'loading' && !state.placement.includes(index)) {
+    command(() => loadCargo(state, selectedCargo, index));
+  } else sync();
 }
 function command(action) {
   const changed = action(); sync();
@@ -53,9 +67,10 @@ function buildControls() {
   for (let index = 0; index < 6; index++) {
     const cargo = state.config.cargo[index];
     const button = document.createElement('button'); button.type = 'button'; button.id = `cargo-${index}`; button.className = 'cargo-button';
-    const title = document.createElement('strong'), description = document.createElement('small'), mass = document.createElement('span');
-    title.textContent = cargo.name; mass.textContent = `${number(cargo.mass, 1)} t`; mass.className = 'cargo-mass';
-    button.append(title, description, mass); button.addEventListener('click', () => selectCargo(index));
+    const icon = document.createElement('span'), mass = document.createElement('span');
+    icon.textContent = ['▧', '▤', '▥', '◈', '▦', '▣'][index]; icon.setAttribute('aria-hidden', 'true');
+    mass.textContent = `${Number(number(cargo.mass, 1))}t`;
+    button.append(icon, mass); button.addEventListener('click', () => selectCargo(index));
     $('manifest').append(button); cargoButtons[index] = button;
 
     const row = document.createElement('div'); row.className = 'ballast-row';
@@ -94,7 +109,9 @@ function sync() {
     const cargoButton = cargoButtons[i], assigned = state.placement[i];
     cargoButton.setAttribute('aria-pressed', String(i === selectedCargo));
     cargoButton.classList.toggle('loaded', assigned >= 0);
-    cargoButton.children[1].textContent = `${c.cargo[i].stationLabel} · ${assigned < 0 ? 'on quay' : c.slots[assigned].name}`;
+    const cargoLabel = `${c.cargo[i].name}, ${cargoButton.children[1].textContent}, ${assigned < 0 ? 'on quay' : c.slots[assigned].name}`;
+    cargoButton.setAttribute('aria-label', cargoLabel);
+    cargoButton.title = cargoLabel;
     if (document.activeElement !== ballastInputs[i]) ballastInputs[i].value = String(state.ballast[i]);
     ballastInputs[i].disabled = !loading;
     ballastButtons[i][0].disabled = !loading || state.ballast[i] === 0;
@@ -103,6 +120,10 @@ function sync() {
   $('load-cargo').disabled = !loading || state.placement[selectedCargo] === selectedBay;
   $('unload-cargo').disabled = !loading || !state.placement.includes(selectedBay);
   $('launch').disabled = !loading;
+  $('launch').hidden = !loading;
+  $('unload-cargo').hidden = !loading;
+  $('pause').hidden = !sailing;
+  $('retry').hidden = loading || sailing || (state.phase === 'won' && c.level < progress.unlocked);
   $('pause').disabled = !sailing; $('pause').textContent = state.phase === 'paused' ? 'Resume trial' : 'Pause trial';
   $('retry').disabled = state.phase === 'loading'; $('retry').textContent = 'Return to quay';
   $('next-level').hidden = !(state.phase === 'won' && c.level < progress.unlocked);
@@ -112,8 +133,8 @@ function sync() {
   $('launch-checks').replaceChildren(...(inspection.ok ? ['Manifest and loading checks passed. The water trial still tests balance and freeboard.'] : inspection.reasons).map(reason => {
     const p = document.createElement('p'); p.textContent = reason; return p;
   }));
-  $('message').className = `message ${state.phase === 'won' ? 'success' : state.phase === 'lost' ? 'error' : ''}`;
-  message(state.message); telemetry(); dirty = true;
+  message(loading && !state.placement.some(slot => slot >= 0) ? '' : state.message);
+  telemetry(); dirty = true;
 }
 function telemetry() {
   const m = state.metrics, c = state.config, preflight = state.phase === 'loading';
@@ -141,11 +162,17 @@ function togglePause() { if (state.phase === 'paused') resumeGame(state); else i
 function automaticPause() { if (state.phase === 'sailing') { pauseGame(state); previousTime = 0; sync(); } }
 $('load-cargo').addEventListener('click', () => command(() => loadCargo(state, selectedCargo, selectedBay)));
 $('unload-cargo').addEventListener('click', () => command(() => unloadCargo(state, state.placement.indexOf(selectedBay))));
-$('launch').addEventListener('click', () => { launch(state); previousTime = 0; sync(); });
+$('launch').addEventListener('click', () => {
+  const launched = launch(state);
+  previousTime = 0;
+  sync();
+  if (!launched) message(state.message);
+});
 $('pause').addEventListener('click', togglePause);
 $('retry').addEventListener('click', () => { if (state.phase === 'paused') resumeGame(state); retryGame(state); previousTime = 0; sync(); });
 $('load-level').addEventListener('click', () => loadLevel($('level').value));
 $('next-level').addEventListener('click', () => loadLevel(state.config.level + 1));
+$('help-open').addEventListener('click', () => $('studio-help').showModal());
 // The shared stage owns resizing and reflects hardware limits in this selector.
 $('quality').addEventListener('change', () => { dirty = true; });
 canvas.addEventListener('keydown', event => {
@@ -179,7 +206,7 @@ frameId = requestAnimationFrame(frame);
 // The heavy renderer is deferred until the accessible command interface is ready.
 import('./scene.js').then(({ createScene }) => {
   if (stopped) return;
-  scene = createScene(canvas, { onSelectBay: selectBay, onSelectCargo: selectCargo });
+  scene = createScene(canvas, { onSelectBay: placeInBay, onSelectCargo: selectCargo });
   scene.setQuality($('quality').value); dirty = true;
 }).catch(() => {
   $('quality').disabled = true;
