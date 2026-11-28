@@ -39,3 +39,10 @@
   .studio-hotbar button { width: 42px; height: 44px; flex: none; }
   .studio-orders { flex: none; }
 }
+
+@media (max-width: 400px) {
+  .studio-actions { flex-wrap: wrap; justify-content: center; }
+  .studio-hotbar { flex: 0 0 100%; justify-content: center; }
+  .studio-hotbar button { width: 38px; height: 40px; }
+  .studio-orders { justify-content: center; }
+}
