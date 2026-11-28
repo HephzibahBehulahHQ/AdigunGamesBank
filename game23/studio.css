@@ -39,3 +39,10 @@ html, body, #studio { width:100vw; height:100vh; margin:0; padding:0; overflow:h
   .valley-menu { top:8px; right:8px; }
   .valley-hud > span { font-size:11px; padding:2px 4px; }
 }
+
+@media (max-width: 360px) {
+  #studio .aim-controls { width: min(234px, calc(100vw - 24px)); gap: 4px; }
+  #studio .control-label { display: grid; gap: 0; }
+  #studio .control-label label, #studio .control-label output { font-size: 10px; }
+  .valley-hud > span { padding-inline: 3px; }
+}
