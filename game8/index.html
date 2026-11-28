@@ -10,32 +10,43 @@
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
 <link rel="stylesheet" href="../shared/game-viewport.css">
+  <link rel="stylesheet" href="studio.css">
 </head>
-<body><a class="skip-link" href="#game">Skip to game controls</a>
-<main class="game-viewport" id="game">
-<div class="game-play-surface viewport">
-          <canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas>
-          <div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div>
-        </div>
-<div class="game-stage-hud telemetry" aria-label="Board measurements">
-          <div><span>Supply</span><strong id="voltage">24 V</strong><small>DC nominal</small></div>
-          <div><span>Connected loads</span><strong id="connected">0 / 6</strong><small id="supply-status">Supply isolated</small></div>
-          <div><span>Trial progress</span><strong id="trial-progress">0%</strong><small id="stage-name">Awaiting trial</small></div>
-          <div><span>Energy in trial</span><strong id="energy">0.000 Wh</strong><small>Ideal load consumption</small></div>
-        </div>
-<details class="game-console game-dock" open>
-<summary>Game controls and information</summary>
-<div class="game-console-content">
-<a class="game-control-jump" href="#branches">Jump to play controls</a>
-
-
-  <header class="game-header">
-    <a class="identity" href="../"><img src="../assets/corporate/hephzibah-behulah-official.jpg" alt="Hephzibah Behulah" width="160" height="58"><span>Adigun Game Bank<small>ELEKTRONIKER · THE COMMISSIONING ROOM</small></span></a>
-    <a class="back-link" href="../">← Game library</a>
-  </header>
-
-    <div class="title-row"><div><p class="eyebrow">Workshop 08 · DC distribution</p><h1>Fuse Box</h1><p class="subtitle">Every load has a place. Every circuit has a limit.</p></div><div class="workshop-mark" aria-hidden="true">DC<br><b>08</b></div></div>
-    <p class="model-note">An extra-low-voltage teaching simulation with ideal resettable breakers. All currents and cable limits are game parameters.</p>
+<body>
+<a class="skip-link" href="#loads">Skip to game controls</a>
+<main id="studio" class="game-viewport">
+  <h1 class="sr-only">Fuse Box</h1>
+  <div class="game-play-surface viewport"><canvas id="fusebox-canvas" tabindex="0" role="img" aria-label="3D DC distribution cabinet. Left and right select a branch; Enter connects the selected load." aria-describedby="scene-description graphics-status"></canvas><div id="graphics-fallback" class="graphics-fallback" hidden><strong>Graphics unavailable</strong><p>The board remains fully playable with the branch and load controls below.</p><a href="./">Reload graphics</a></div><div id="branch-view" class="fuse-branch-view" hidden><div id="branches" class="branch-grid" aria-label="Cabinet branch controls"></div></div></div>
+  <div class="fuse-readouts telemetry" aria-label="Cabinet readings">
+    <span title="Supply voltage"><i aria-hidden="true">ϟ</i><span class="sr-only">Supply voltage:</span> <strong id="voltage">—</strong></span>
+    <span title="Connected loads"><i aria-hidden="true">⌁</i><span class="sr-only">Connected loads:</span> <strong id="connected">—</strong></span>
+    <span title="Trial progress"><i aria-hidden="true">◷</i><span class="sr-only">Trial progress:</span> <strong id="trial-progress">—</strong></span>
+    <span title="Energy used"><i aria-hidden="true">◇</i><span class="sr-only">Energy used:</span> <strong id="energy">—</strong></span>
+  </div>
+  <div class="fuse-tools">
+    <button id="toggle-branches" type="button" aria-label="Breaker panel" aria-pressed="false" title="Breaker panel">▦</button>
+    <button id="pause-trial" type="button" aria-label="Pause trial" disabled>Ⅱ</button>
+    <button id="help-open" type="button" aria-label="Help and board settings" aria-haspopup="dialog">?</button>
+  </div>
+  <div class="fuse-controls">
+    <p id="message" role="status" aria-live="polite"></p>
+    <div id="loads" class="fuse-loads" aria-label="Load tools" tabindex="-1"></div>
+    <div class="fuse-orders">
+      <button id="connect-load" type="button" aria-label="Connect selected load" title="Connect selected load">↧</button>
+      <button id="disconnect-load" type="button" aria-label="Disconnect selected load" title="Disconnect selected load">↥</button>
+      <button id="start-trial" type="button" aria-label="Energize and test">Energize</button>
+      <button id="isolate" type="button" aria-label="Isolate supply" disabled hidden>Isolate</button>
+      <button id="reset-trip" type="button" hidden disabled>Reset trip</button>
+      <button id="clear-board" type="button" aria-label="Clear board" title="Clear board">⟳</button>
+      <button id="next-level" type="button" hidden>Next board →</button>
+    </div>
+  </div>
+  <span id="phase" class="sr-only" data-phase="isolated">ISOLATED</span>
+  <p id="graphics-status" class="sr-only" role="status"></p><p id="save-status" class="sr-only" role="status"></p>
+  <p id="scene-description" class="sr-only">An open metal distribution enclosure with a DC supply, copper bus, individual resettable breakers and connected workshop loads. The branch controls provide the same selection as the 3D cabinet.</p>
+  <dialog id="studio-help" aria-labelledby="help-title">
+    <form method="dialog"><button class="fuse-close" aria-label="Close help" autofocus>×</button></form>
+    <h2 id="help-title">Cabinet setup and guide</h2>
     <div class="toolbar">
       <label for="level">Board <input id="level" type="number" min="1" max="1" value="1" inputmode="numeric" aria-describedby="unlock-status"></label>
       <button id="load-level" type="button">Load board</button><span id="tier" class="badge">Beginner</span><span id="unlock-status">Board 1 of 10,000 unlocked</span>
@@ -45,28 +56,11 @@
       <div><p class="eyebrow">Commissioning order</p><h2 id="briefing-title">Protect the workshop. Prove the plan.</h2><p id="brief">Distribute the loads and fit protection before energizing.</p></div>
       <details open><summary>How to commission this board</summary><ol><li>Select a load and a branch, then <strong>Connect selected load</strong>.</li><li>Fit a breaker on every branch. Its rating must cover the planned current and stay within the cable limit. Stock and credits are finite.</li><li>Run all three operating profiles. A trip must be isolated, reset and corrected before trying again.</li></ol><p class="hint">Use Tab, Enter and the labelled controls throughout. On the 3D cabinet, left/right selects a branch and Enter connects the selected load. No time limit applies while planning.</p></details>
     </section>
-    <div class="layout">
-      <section class="board-column" aria-labelledby="cabinet-title">
-        <div class="section-heading"><h2 id="cabinet-title">Distribution cabinet</h2><span id="phase" class="phase-tag" data-phase="isolated">ISOLATED</span></div>
-
-        <p id="scene-description" class="sr-only">An open metal distribution enclosure with a DC supply, copper bus, individual resettable breakers and connected workshop loads. The branch controls provide the same selection as the 3D cabinet.</p>
-        <p id="graphics-status" class="graphics-status" role="status">Starting the 3D cabinet…</p>
-
-        <div class="message" id="message" role="status" aria-live="polite">Supply isolated. Start with the load list.</div>
-        <section class="panel branch-panel" aria-labelledby="branches-title"><div class="section-heading"><h2 id="branches-title">Protected branches</h2><span class="hint">Current ≤ breaker ≤ cable</span></div><div id="branches" class="branch-grid" tabindex="-1"></div></section>
-        <section class="panel loads-panel" aria-labelledby="loads-title"><div class="section-heading"><h2 id="loads-title">Workshop loads</h2><span class="hint">L / D / F = the three trial stages</span></div><div id="loads" class="load-grid"></div><div class="patch-summary"><span id="selected-load">Select a load</span><span aria-hidden="true">→</span><strong id="selected-branch">Branch A</strong></div><div class="controls"><button id="connect-load" class="primary" type="button">Connect selected load</button><button id="disconnect-load" type="button">Disconnect selected load</button></div></section>
-      </section>
-      <aside class="command-column" aria-label="Commissioning controls">
-        <section class="panel" aria-labelledby="stock-title"><p class="eyebrow">Workshop stock</p><h2 id="stock-title">Protection inventory</h2><ul id="inventory" class="inventory"></ul><p id="budget" class="budget">0 credits used</p><p class="hint">A removed breaker returns to stock. Credits are a puzzle constraint, not real prices.</p></section>
-        <section class="panel" aria-labelledby="inspection-title"><h2 id="inspection-title">Plan inspection</h2><div id="inspection" class="inspection"></div><p id="main-limit" class="hint"></p></section>
-        <section class="panel trial-panel" aria-labelledby="trial-title"><h2 id="trial-title">Commissioning trial</h2><ol id="trial-stages" class="trial-stages"></ol><button id="start-trial" class="primary" type="button">Energize and test</button><button id="pause-trial" type="button" disabled>Pause trial</button><button id="isolate" type="button" disabled>Isolate supply</button><button id="reset-trip" type="button" hidden disabled>Reset trip</button><button id="clear-board" type="button">Clear board</button><button id="next-level" class="primary" type="button" hidden>Next board →</button><p id="save-status" class="hint" role="status">Completed boards save on this device.</p></section>
-      </aside>
-    </div>
-    <details class="model-notes"><summary>What the electrical model includes</summary><p>Each load draws I = P ÷ V at the stated DC voltage. Branch currents are added for each operating profile. A breaker above the branch cable limit fails inspection; current above a fitted breaker's rating trips the test immediately. Real breakers have time-current curves: this game uses an ideal instantaneous threshold.</p><p>The model omits cable resistance, voltage drop, temperature, short-circuit capacity, earthing and shock protection. Its 12–48 V scenarios are original puzzles, not wiring instructions or a compliance assessment for a real installation.</p><p><a href="https://openstax.org/books/physics/pages/19-4-electric-power">OpenStax: electric power</a> · <a href="https://www.se.com/hk/en/faqs/FAQ000283711/">Schneider Electric: load, breaker and cable current</a> · <a href="README.md">Game guide and evidence</a></p></details>
-  <footer><p>10,000 DC commissioning challenges · Beginner to Professional Master</p><p>© 2026 Hephzibah Behulah · Elektroniker</p><a href="../">Game Bank</a><a href="https://hephzibahbehulah.com/">Corporate home</a></footer>
-</div>
-</details>
+    <p>Choose a load, select a branch, and connect it. Use the Breaker panel icon to install breakers. On the cabinet, arrow keys select a branch and Enter connects the chosen load.</p>
+    <p><span id="selected-load"></span> · <span id="selected-branch"></span></p>
+    <p id="supply-status"></p><p id="stage-name"></p><ol id="trial-stages"></ol>
+    <section class="panel" aria-labelledby="stock-title"><p class="eyebrow">Workshop stock</p><h2 id="stock-title">Protection inventory</h2><ul id="inventory" class="inventory"></ul><p id="budget" class="budget">0 credits used</p><p class="hint">A removed breaker returns to stock. Credits are a puzzle constraint, not real prices.</p></section><section class="panel" aria-labelledby="inspection-title"><h2 id="inspection-title">Plan inspection</h2><div id="inspection" class="inspection"></div><p id="main-limit" class="hint"></p></section><details class="model-notes"><summary>What the electrical model includes</summary><p>Each load draws I = P ÷ V at the stated DC voltage. Branch currents are added for each operating profile. A breaker above the branch cable limit fails inspection; current above a fitted breaker's rating trips the test immediately. Real breakers have time-current curves: this game uses an ideal instantaneous threshold.</p><p>The model omits cable resistance, voltage drop, temperature, short-circuit capacity, earthing and shock protection. Its 12–48 V scenarios are original puzzles, not wiring instructions or a compliance assessment for a real installation.</p><p><a href="https://openstax.org/books/physics/pages/19-4-electric-power">OpenStax: electric power</a> · <a href="https://www.se.com/hk/en/faqs/FAQ000283711/">Schneider Electric: load, breaker and cable current</a> · <a href="README.md">Game guide and evidence</a></p></details>
+    <a href="../">Game library</a>
+  </dialog>
 </main>
-
-</body>
-</html>
+</body></html>

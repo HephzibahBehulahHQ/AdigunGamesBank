@@ -16,9 +16,14 @@ and inspected source on 2026-11-28. Physical touch is **NOT TESTED**.
 
 Neon Pulse [PR #12](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/12)
 passed candidate verification and merged at `1258dca6d2f6139cff0d676bc38bafbc3998c6eb`.
-Its production verification is pending. Circuit Rush (#13), Electronicer (#14)
-and Volt Dodge (#15) have separate locally verified candidates. Preserve each
-verified live rollout before merging the next to avoid superseding a deployment.
+[Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46177369709)
+passed, and the live studio HTML, CSS and gameplay script matched the production
+manifest and inspected source. Circuit Rush (#13) passed candidate verification
+and merged at `644ea4da69e97777353fc220294e1adf62751fe6`. Its production
+verification is pending. Electronicer (#14), Volt Dodge (#15), Resistor Match
+(#16), Capacitor Charge (#17) and Binary Flash (#18) have separate locally
+verified candidates. Preserve each verified live rollout before merging the
+next to avoid superseding a deployment.
 
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
 
