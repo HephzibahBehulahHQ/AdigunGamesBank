@@ -23,14 +23,14 @@ verification and [Cloudflare publication](https://github.com/HephzibahBehulahHQ/
 at `644ea4da69e97777353fc220294e1adf62751fe6`. The live Circuit Rush HTML, CSS,
 and gameplay script matched the production manifest and inspected source.
 
-Electronicer (#14) is next. The initial CI run failed because the synthetic
-storage-test DOM lacked `clearTimeout`. The fixture now includes notice timers,
-and all nine local storage and history resilience checks pass. The repaired
-candidate is in exact-candidate CI. Volt Dodge (#15), Resistor Match (#16),
-Capacitor Charge (#17), Binary Flash (#18), Fuse Box (#19), Goal Line (#20),
-and APEX Circuit (#21) have individual locally verified candidates queued.
-Preserve each verified live rollout before merging the next to avoid
-superseding a deployment.
+Electronicer [PR #14](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/pull/14)
+passed candidate and main verification and [Cloudflare publication](https://github.com/HephzibahBehulahHQ/AdigunGamesBank/actions/runs/46180535666)
+at `f1acaab6e839999ef23e0364f0b4da77f163af8a`. The live studio HTML, CSS and
+gameplay script matched the production manifest and inspected source.
+Volt Dodge (#15) passed exact-candidate verification and merged at
+`c7911499ee853d4b7667f46d17044cc520226a8b`. Production verification is pending.
+The later titles remain in scoped pull requests. Preserve each verified live
+rollout before merging the next to avoid superseding a deployment.
 
 Updated **2026-11-28 (Europe/Berlin)**. This is the current acceptance record.
 
